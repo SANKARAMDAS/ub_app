@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
               },
             ),
           ),
@@ -254,12 +254,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                         Navigator.of(context).pop();
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                          content: Text(e.toString()),
+                                          content: Text('This mobile is already registered with us, please Login with this number.'),
                                         ));
                                         if (e.toString().contains('registered'))
                                           Future.delayed(Duration(seconds: 2),
                                               () {
-                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
                                           });
                                         return false;
                                       }))
