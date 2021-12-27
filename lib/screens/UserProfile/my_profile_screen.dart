@@ -611,71 +611,74 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         ]),
                   ),
                   Spacer(),
-                  Row(children: [
-                    Repository().hiveQueries.userData.premiumStatus != 0
-                        ? Container(
-                      margin: EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 18),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      // width: 126,
-                      height: 27,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Color(0xffebebeb),
-                          width: 1,
-                        ),
-                        color: AppTheme.electricBlue,
-                      ),
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              child: Container(
-                                child: Image.asset(
-                                  'assets/images/crown.png',
-                                  height: 15,
-                                  width: 15,
-                                ),
+                  Row(
+                    children: [
+                      Repository().hiveQueries.userData.premiumStatus != 0
+                          ? Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 18),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
                               ),
-                            ),
-                            SizedBox(width: 3),
-                            FittedBox(
-                              child: Container(
-                                child: Text(
-                                  'Premium',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'SFProDisplay',
-                                      fontWeight:
-                                      FontWeight.w500, //FontWeight.w500
-                                      fontSize: 16),
+                              // width: 126,
+                              height: 27,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: Color(0xffebebeb),
+                                  width: 1,
                                 ),
+                                color: AppTheme.electricBlue,
                               ),
-                            ),
-
-                          ]),
-                    )
-                        : Container(),
-                    Consumer<NotificationListProvider>(
-                        child: IconButton(icon: Icon(Icons.circle_notifications,color: AppTheme.electricBlue,//Colors.black,
-                            size: 32), onPressed: (){
-                          showNotificationListDialog(context);
-
-                        }),
-                        builder: (ctx, notifProv, ch) =>
-                            Badge(
-                              child: ch,
-                              value: notifProv.notificationList.length.toString() ?? '0',
-                              color: Colors.red,
-                              countColor: Colors.white,
-                            ))
-                  ],)
-
+                              child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      child: Container(
+                                        child: Image.asset(
+                                          'assets/images/crown.png',
+                                          height: 15,
+                                          width: 15,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 3),
+                                    FittedBox(
+                                      child: Container(
+                                        child: Text(
+                                          'Premium',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'SFProDisplay',
+                                              fontWeight: FontWeight
+                                                  .w500, //FontWeight.w500
+                                              fontSize: 16),
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                            )
+                          : Container(),
+                      Consumer<NotificationListProvider>(
+                          child: IconButton(
+                              icon: Icon(Icons.circle_notifications,
+                                  color: AppTheme.electricBlue, //Colors.black,
+                                  size: 32),
+                              onPressed: () {
+                                showNotificationListDialog(context);
+                              }),
+                          builder: (ctx, notifProv, ch) => Badge(
+                                child: ch,
+                                value: notifProv.notificationList.length
+                                        .toString() ??
+                                    '0',
+                                color: Colors.red,
+                                countColor: Colors.white,
+                              ))
+                    ],
+                  )
                 ],
               ),
             ),
@@ -1138,7 +1141,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             .pushNamed(AppRoutes.savedCardsRoute);*/
                           /*Navigator.of(context).push(
                               MaterialPageRoute(builder: (_) => CardList()));*/
-                          Navigator.of(context).pushNamed(AppRoutes.cardListRoute);
+                          Navigator.of(context)
+                              .pushNamed(AppRoutes.cardListRoute);
                           CustomLoadingDialog.showLoadingDialog(context, key);
                         },
                       ),
@@ -1439,6 +1443,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 'chatSync', false);
                             await CustomSharedPreferences.remove(
                                 'primaryBusiness');
+                            repository.hiveQueries.insertUnAuthData(
+                                repository.hiveQueries.unAuthData.copyWith(seen: true));
                             // await repository.loginApi.logout();
                             // restartAppNotifier.value = !restartAppNotifier.value;
                             RestartWidget.restartApp(context);
@@ -2338,8 +2344,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         height: 20,
       );
 
-  showNotificationListDialog(BuildContext context){
-    return  showGeneralDialog(
+  showNotificationListDialog(BuildContext context) {
+    return showGeneralDialog(
       barrierLabel: "Barrier",
       barrierDismissible: true,
       barrierColor: Colors.black.withOpacity(0.5),
@@ -2349,9 +2355,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         return Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: MediaQuery.of(context).size.height*0.9 ,
-            child: SizedBox.expand(child: ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),child: UserNotifications())),
+            height: MediaQuery.of(context).size.height * 0.9,
+            child: SizedBox.expand(
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: UserNotifications())),
             margin: EdgeInsets.only(bottom: 12, left: 16, right: 16),
             decoration: BoxDecoration(
               color: Colors.white,
