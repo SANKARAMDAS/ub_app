@@ -12,6 +12,7 @@ import 'package:urbanledger/chat_module/data/repositories/login_repository.dart'
 import 'package:urbanledger/main.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 import 'package:urbanledger/screens/Components/text_formatter.dart';
+import 'package:urbanledger/screens/UserProfile/inappbrowser.dart';
 import 'package:urbanledger/screens/mobile_analytics/analytics_events.dart';
 import 'package:uuid/uuid.dart';
 
@@ -73,8 +74,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -125,7 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   });
                                   return;
                                 }
-                           /*     var resultText = value;
+                                /*     var resultText = value;
                                 List<String> text = value.split(' ');
                                 for(int i = 0;i<text.length;i++){
                                 String innerText = text[i].characters.first.toUpperCase();
@@ -133,8 +132,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 }
 
                                 _firstNameController.text = resultText;*/
-
-
 
                                 firstNameError = validateFirstName(value);
                                 setState(() {});
@@ -482,7 +479,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           });
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
-                                            content: CustomText(e.toString()),
+                                            content: CustomText('Please check internet connectivity and try again.'),
                                           ));
                                           return false;
                                         }));
@@ -659,14 +656,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                           ),
                         ),
-                        Center(
-                          child: CustomText(
-                              'By clicking the register button,\n you agree to our Terms and Conditions',
-                              centerAlign: true,
-                              color: AppTheme.greyish,
-                              bold: FontWeight.w500,
-                              size: (15)),
-                        ),
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => UlAppBrowser(
+                                          url: 'https://urbanledger.app/terms-and-conditions',
+                                          title: 'Terms & Conditions',
+                                        ),
+                                      ),
+                                    );
+                          },
+                          child: Center(
+                            child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  children: [
+                              TextSpan(
+                                text:
+                                    'By clicking the register button,\n you agree to our ',
+                                style: TextStyle(
+                                  color: AppTheme.greyish,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              TextSpan(
+                                text: 'Terms and Conditions',
+                                style: TextStyle(
+                                  color: AppTheme.electricBlue,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              )
+                            ])),
+                          ),
+                        )
+                        // Center(
+                        //   child: CustomText(
+                        //       'By clicking the register button,\n you agree to our Terms and Conditions',
+                        //       centerAlign: true,
+                        //       color: AppTheme.greyish,
+                        //       bold: FontWeight.w500,
+                        //       size: (15)),
+                        // ),
                       ],
                     ),
                   ),
@@ -678,8 +713,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-
-
 
   String? validateEmail(value) {
     if (value!.isEmpty) return 'Please enter your Email ID';

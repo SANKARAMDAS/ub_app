@@ -913,23 +913,24 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                 width: 24,
                                               ),
                                               onPressed: () async {
-                                                if (BlocProvider.of<
-                                                                ImportContactsCubit>(
-                                                            context)
-                                                        .state
-                                                        .runtimeType ==
-                                                    SearchedImportedContacts)
-                                                  BlocProvider.of<
-                                                              ImportContactsCubit>(
-                                                          context)
-                                                      .searchImportedContacts(
-                                                          '');
-                                                Navigator.of(context).pushNamed(
-                                                    AppRoutes.addCustomerRoute);
+                                                // if (BlocProvider.of<
+                                                //                 ImportContactsCubit>(
+                                                //             context)
+                                                //         .state
+                                                //         .runtimeType ==
+                                                //     SearchedImportedContacts)
+                                                //   BlocProvider.of<
+                                                //               ImportContactsCubit>(
+                                                //           context)
+                                                //       .searchImportedContacts(
+                                                //           '');
+                                                // Navigator.of(context).pushNamed(
+                                                //     AppRoutes.addCustomerRoute);
                                                 // bool isBankAccount = (await CustomSharedPreferences.get("isBankAccount"));
                                                 //     debugPrint(isBankAccount.toString());
                                                 // Navigator.of(context).pushNamed(
                                                 //     AppRoutes.introscreenRoute);
+                                                debugPrint(repository.hiveQueries.unAuthData.seen.toString());
                                               },
                                             ),
                                           ),
@@ -1143,17 +1144,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     width: 24,
                   ),
                   onPressed: () async {
-                    if (BlocProvider.of<ImportContactsCubit>(context)
-                            .state
-                            .runtimeType ==
-                        SearchedImportedContacts)
-                      BlocProvider.of<ImportContactsCubit>(context)
-                          .searchImportedContacts('');
-                    Navigator.of(context).pushNamed(AppRoutes.addCustomerRoute);
+                    // if (BlocProvider.of<ImportContactsCubit>(context)
+                    //         .state
+                    //         .runtimeType ==
+                    //     SearchedImportedContacts)
+                    //   BlocProvider.of<ImportContactsCubit>(context)
+                    //       .searchImportedContacts('');
+                    // Navigator.of(context).pushNamed(AppRoutes.addCustomerRoute);
                     // final loginTime =
                     //     repository.hiveQueries.unAuthData.loginTime;
                     // final diff = DateTime.now().difference(loginTime!).inDays;
                     // debugPrint(diff.toString());
+                    debugPrint(repository.hiveQueries.unAuthData.seen.toString());
                   },
                 ),
               ),

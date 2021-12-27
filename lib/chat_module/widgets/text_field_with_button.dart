@@ -1610,7 +1610,11 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                                   context, key);
                               var Cid = await repository.customerApi
                                   .getCustomerID(mobileNumber: phone.toString())
-                                  .timeout(Duration(seconds: 30),
+                                  .catchError((e) {
+                                Navigator.of(context).pop();
+                                'Please check internet connectivity and try again.'
+                                    .showSnackBar(context);
+                              }).timeout(Duration(seconds: 30),
                                       onTimeout: () async {
                                 Navigator.of(context).pop();
                                 return Future.value(null);
@@ -1711,7 +1715,12 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                                 // );
                                 Map<String, dynamic> isTransaction =
                                     await repository.paymentThroughQRApi
-                                        .getTransactionLimit(context);
+                                        .getTransactionLimit(context)
+                                        .catchError((e) {
+                                  Navigator.of(context).pop();
+                                  'Please check internet connectivity and try again.'
+                                      .showSnackBar(context);
+                                });
                                 if (!(isTransaction)['isError']) {
                                   Navigator.of(context).pop(true);
                                   // showBankAccountDialog();
@@ -1887,7 +1896,6 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                                   // Navigator.of(context).pop(true);
                                   _customerModel.chatId = widget.chatId;
 
-
                                   var anaylticsEvents =
                                       AnalyticsEvents(context);
                                   await anaylticsEvents.initCurrentUser();
@@ -1897,7 +1905,7 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                                   Navigator.of(context).popAndPushNamed(
                                       AppRoutes.requestTransactionRoute,
                                       arguments: ReceiveTransactionArgs(
-                                          _customerModel,widget.customerId!));
+                                          _customerModel, widget.customerId!));
                                   // Navigator.push(
                                   //   context,
                                   //   MaterialPageRoute(

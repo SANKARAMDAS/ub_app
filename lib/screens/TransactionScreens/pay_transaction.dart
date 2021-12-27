@@ -884,7 +884,20 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
                                               Navigator.of(context).pop();
                                               return Future.value(null);
                                             });
-
+                                            List<CustomerModel> customerModel =
+                                            await repository.queries
+                                                .getCustomerDetails(widget.mobileNo ?? widget.model!.mobileNo!,
+                                                    Provider.of<BusinessProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .selectedBusiness
+                                                        .businessId);
+                                        debugPrint('ss ::' +
+                                            customerModel.first
+                                                .toJson()
+                                                .toString());
+                                        CustomerModel _customerModel =
+                                            customerModel.first;
                                             final _transactionModel =
                                                 TransactionModel()
                                                   ..transactionId = Uuid().v1()
@@ -893,7 +906,7 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
                                                   ..transactionType =
                                                       TransactionType.Pay
                                                   ..customerId =
-                                                      widget.customerId
+                                                      _customerModel.customerId
                                                   ..date = DateTime.now()
                                                   ..attachments = []
                                                   ..balanceAmount = amt - amount
