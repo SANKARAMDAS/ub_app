@@ -479,7 +479,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           });
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
-                                            content: CustomText(e.toString()),
+                                            content: CustomText('Please check internet connectivity and try again.'),
                                           ));
                                           return false;
                                         }));
