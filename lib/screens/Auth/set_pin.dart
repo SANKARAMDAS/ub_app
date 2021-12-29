@@ -106,9 +106,9 @@ class _SetPinScreenState extends State<SetPinScreen> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              SizedBox(
-                                height: 12,
-                              ),
+                              // SizedBox(
+                              //   height: 7,
+                              // ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -174,9 +174,9 @@ class _SetPinScreenState extends State<SetPinScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(AppAssets.lock1Icon),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
+                                  // SizedBox(
+                                  //   width: 8,
+                                  // ),
                                   Text(
                                     'Confirm PIN',
                                     style: TextStyle(
@@ -378,10 +378,16 @@ class _SetPinScreenState extends State<SetPinScreen> {
                 : AppRoutes.mainRoute);
             // Navigator.of(context).pushNamed(AppRoutes.introscreenRoute, arguments: IntroRouteArgs(widget.isRegister));
           } else {
-            confirmPinNotifier.value = '';
-            setState(() {
+            
+            Future.delayed(Duration(milliseconds: 300),
+                                              () {
+                                                confirmPinNotifier.value = '';
+                                                setState(() {
               showError = true;
             });
+                                            // Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
+                                          });
+            
           }
         }
       }
@@ -437,15 +443,16 @@ class PinField extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         // padding: const EdgeInsets.only(left: 15.0, right: 15),
-        padding: EdgeInsets.all(22),
+        padding: EdgeInsets.all(10),
         child: new Container(
-          height: 20,
-          width: 20,
+          height: 75,
+          width: 50,
           alignment: Alignment.center,
           decoration: new BoxDecoration(
               color: Colors.white,
               border: new Border.all(width: 2.0, color: Colors.white),
-              borderRadius: new BorderRadius.circular(20)),
+              borderRadius: new BorderRadius.circular(7)
+              ),
           child: Container(
             height: 18,
             width: 18,
