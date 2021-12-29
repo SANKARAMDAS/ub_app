@@ -354,29 +354,13 @@ class _SetPinScreenState extends State<SetPinScreen> {
         setPinNotifier.value = setPinNotifier.value + str;
         if (setPinNotifier.value.length == 4) {
           if(PincodeStrenth().checkPincodeStrenth(setPinNotifier.value)){
-            setPinNotifier.value = '';
             setState(() {
               showError = true;
             });
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                margin: const EdgeInsets.all(60),
-                backgroundColor: Colors.white,
-                behavior: SnackBarBehavior.floating,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomText(
-                      'This PIN Can Be Easily Guessed. Please try again with a different PIN',
-                      size: 16,
-                      bold: FontWeight.w500,
-                      color: AppTheme.brownishGrey,
-                    ),
-                    // Image.asset(AppAssets.thumbsIcon)
-                  ],
-                )));
-          }else{
+            showWeakPinDialog(context);
+
+          }
+          else{
             Navigator.of(context).pushNamed(AppRoutes.setPinRoute,
                 arguments: SetPinRouteArgs(setPinNotifier.value, true,
                     widget.isResetPinState, widget.isRegister));
@@ -413,6 +397,114 @@ class _SetPinScreenState extends State<SetPinScreen> {
         }
       }
     }
+  }
+
+  showWeakPinDialog(BuildContext ctx){
+    return  showGeneralDialog(
+      barrierLabel: "Barrier",
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: Duration(milliseconds: 300),
+      context: context,
+      pageBuilder: (_, __, ___) {
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            height: MediaQuery.of(context).size.height*0.3 ,
+            child: SizedBox.expand(child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),child: Scaffold(body: Container(child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+              Container(
+                  padding: EdgeInsets.only(top:16),
+                  alignment: Alignment.center,
+                  child:  Text('Weak PIN',style: TextStyle(color: Colors.red,fontSize: 20,fontWeight: FontWeight.w500))),
+                SizedBox(height: 8,),
+                Image.asset(
+                  AppAssets.weak_pin,
+                  height: 50,
+                  width: 50,
+                ),
+                SizedBox(height: 8,),
+
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal:40),
+                child: CustomText('This PIN Can Be Easily Guessed. Please try again with a different PIN'
+                ,
+                  size: 18,
+                  centerAlign: true,
+                  color: AppTheme.brownishGrey,
+                  bold: FontWeight.w400,
+                ),
+              ),
+              SizedBox(height: 8,),
+
+            ],)),
+              bottomNavigationBar: Row(children: [
+                Expanded(
+                child: Padding(
+                padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                  onPressed: () {
+
+
+                    Navigator.of(context).pushNamed(AppRoutes.setPinRoute,
+                        arguments: SetPinRouteArgs(setPinNotifier.value, true,
+                            widget.isResetPinState, widget.isRegister));
+                  },
+                  child: CustomText(
+                    'Proceed',
+                    size: (18),
+                    bold: FontWeight.w500,
+                    color: AppTheme.electricBlue,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(15),
+                    primary: Colors.grey[200],
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),side:BorderSide(color: AppTheme.electricBlue,width: 1)),
+                  )),
+            ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: () {
+                      setPinNotifier.value = '';
+                      Navigator.of(context).pop();
+                    },
+                    child: CustomText(
+                      'Change PIN',
+                      size: (18),
+                      bold: FontWeight.w500,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    )),
+              ),
+            )
+            ],)
+
+              ,))),
+            margin: EdgeInsets.only(bottom: 12, left: 16, right: 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: new BorderRadius.all(new Radius.circular(12.0)),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (_, anim, __, child) {
+        return SlideTransition(
+          position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim),
+          child: child,
+        );
+      },
+    );
   }
 
   void deleteText() {
