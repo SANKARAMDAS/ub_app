@@ -260,11 +260,18 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   initMethod() async {
-    repository.hiveQueries.insertUnAuthData(
-        repository.hiveQueries.unAuthData.copyWith(loginTime: DateTime.now()));
+    // repository.hiveQueries.insertUnAuthData(
+    //     repository.hiveQueries.unAuthData.copyWith(loginTime: DateTime.now()));
+    debugPrint(repository.hiveQueries.unAuthData.loginTime.toString());
+    debugPrint(repository.hiveQueries.unAuthData.seen.toString());
     timer = Timer(Duration(milliseconds: 2000), () async {
       final loginTime = repository.hiveQueries.unAuthData.loginTime;
       final diff = DateTime.now().difference(loginTime!).inDays;
+      if (diff == 30 && repository.hiveQueries.unAuthData.seen == true) {
+        repository.hiveQueries.insertUnAuthData(repository
+            .hiveQueries.unAuthData
+            .copyWith(loginTime: DateTime.now(), seen: false));
+      }
       if (repository.hiveQueries.isAuthenticated!) {
         if (repository.hiveQueries.userPin.length == 0) {
           Navigator.of(context).pushReplacementNamed(AppRoutes.setPinRoute,
@@ -272,11 +279,10 @@ class _SplashScreenState extends State<SplashScreen> {
         } else {
           if (repository.hiveQueries.pinStatus ||
               repository.hiveQueries.fingerPrintStatus) {
-                final loginTime = repository.hiveQueries.unAuthData.loginTime;
-      final diff = DateTime.now().difference(loginTime!).inDays;
+            final loginTime = repository.hiveQueries.unAuthData.loginTime;
+            final diff = DateTime.now().difference(loginTime!).inDays;
             debugPrint(diff.toString());
-            if (diff < 30 && repository
-                  .hiveQueries.unAuthData.seen == true) {
+            if (diff < 30 && repository.hiveQueries.unAuthData.seen == true) {
               debugPrint('diff.toString() 1');
               Navigator.of(context)
                   .pushReplacementNamed(AppRoutes.pinLoginRoute);
@@ -294,16 +300,15 @@ class _SplashScreenState extends State<SplashScreen> {
           }
         }
       } else {
-        if (diff < 30 && repository
-                  .hiveQueries.unAuthData.seen == true) {
+        if (diff < 30 && repository.hiveQueries.unAuthData.seen == true) {
           Navigator.of(context)
               .pushReplacementNamed(AppRoutes.welcomescreenRoute);
         } else {
           Navigator.of(context).pushReplacementNamed(AppRoutes.introscreenRoute,
               arguments: IntroRouteArgs(true));
           repository.hiveQueries.insertUnAuthData(repository
-                  .hiveQueries.unAuthData
-                  .copyWith(loginTime: DateTime.now(), seen: true));
+              .hiveQueries.unAuthData
+              .copyWith(loginTime: DateTime.now(), seen: true));
         }
       }
       timer.cancel();

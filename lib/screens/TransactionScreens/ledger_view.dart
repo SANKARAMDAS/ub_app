@@ -787,6 +787,10 @@ class _LedgerViewState extends State<LedgerView> {
                               .getCustomerID(
                                   mobileNumber:
                                       widget.customerModel.mobileNo.toString())
+                                      .catchError((e){
+                                        Navigator.of(context).pop();
+                                        'Please check internet connectivity and try again.'.showSnackBar(context);
+                                      })
                               .timeout(Duration(seconds: 30),
                                   onTimeout: () async {
                             Navigator.of(context).pop();
@@ -868,7 +872,10 @@ class _LedgerViewState extends State<LedgerView> {
                           } else {
                             Map<String, dynamic> isTransaction =
                                 await repository.paymentThroughQRApi
-                                    .getTransactionLimit(context);
+                                    .getTransactionLimit(context).catchError((e){
+                                        Navigator.of(context).pop();
+                                        'Please check internet connectivity and try again.'.showSnackBar(context);
+                                      });
                             if (!(isTransaction)['isError']) {
                               Navigator.of(context).pop(true);
                               // showBankAccountDialog();

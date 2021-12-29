@@ -59,6 +59,7 @@ class _UlAppBrowserState extends State<UlAppBrowser> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
           appBar: AppBar(
             title: Text(

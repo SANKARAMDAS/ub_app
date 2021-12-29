@@ -154,7 +154,7 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
                           CustomText(
                             incorrectPinCount > 3
                                 ? 'Too many incorrect attempts.'
-                                : 'Wrong PIN. ${4 - incorrectPinCount} attempts left',
+                                : 'You have entered an invalid PIN. You have ${4 - incorrectPinCount} more attempts left.',
                             size: 16,
                             bold: FontWeight.w400,
                             color: AppTheme.brownishGrey,

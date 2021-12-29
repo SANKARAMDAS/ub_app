@@ -125,8 +125,9 @@ class LedgerAPI {
 
   Future<String> networkImageToFile2(String fileName) async {
     var response = await http.get(Uri.parse(baseImageUrl + fileName));
-    var documentDirectory = await (getExternalStorageDirectory());
-    String path = documentDirectory!.path + "/filereader/files/";
+    if(isPlatformiOS()){
+      var documentDirectory = await (getApplicationDocumentsDirectory());
+      String path = documentDirectory!.path;
     // Directory documentDirectory = await getApplicationDocumentsDirectory();
     // File file = File(join(path, fileName));
     File file = File(join(path, fileName));
@@ -134,6 +135,18 @@ class LedgerAPI {
     // debugPrint('asdfg'+file.path);
     file.writeAsBytesSync(response.bodyBytes);
     return file.path;
+    } else {
+    var documentDirectory = await (getExternalStorageDirectory());
+    String path = documentDirectory!.path;
+    // Directory documentDirectory = await getApplicationDocumentsDirectory();
+    // File file = File(join(path, fileName));
+    File file = File(join(path, fileName));
+    await file.create(recursive: true);
+    // debugPrint('asdfg'+file.path);
+    file.writeAsBytesSync(response.bodyBytes);
+    return file.path;
+    }
+    
   }
 
   Future<String> networkImageToFile3(String fileName) async {
