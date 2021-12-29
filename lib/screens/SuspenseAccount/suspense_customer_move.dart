@@ -1433,6 +1433,7 @@ class _SuspenseAccountCustomerScreenState
                       onTap: () {
                         _selectedSortOption = 1;
                         _selectedFilterOption = 1;
+                        isTagCustomerClickable= false;
                         Navigator.of(context).pop();
                         Provider.of<BusinessProvider>(context, listen: false)
                             .getSelectedBusinessForUnrecognized(index: index);

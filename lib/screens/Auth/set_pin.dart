@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
+import 'package:urbanledger/Utility/pin_code_strenth.dart';
 import '../Components/extensions.dart';
 // import 'package:local_auth/local_auth.dart';
 // import 'package:urbanledger/Models/routeArgs.dart';
@@ -352,9 +353,35 @@ class _SetPinScreenState extends State<SetPinScreen> {
       if (setPinNotifier.value.length < 4) {
         setPinNotifier.value = setPinNotifier.value + str;
         if (setPinNotifier.value.length == 4) {
-          Navigator.of(context).pushNamed(AppRoutes.setPinRoute,
-              arguments: SetPinRouteArgs(setPinNotifier.value, true,
-                  widget.isResetPinState, widget.isRegister));
+          if(PincodeStrenth().checkPincodeStrenth(setPinNotifier.value)){
+            setPinNotifier.value = '';
+            setState(() {
+              showError = true;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                margin: const EdgeInsets.all(60),
+                backgroundColor: Colors.white,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CustomText(
+                      'This PIN Can Be Easily Guessed. Please try again with a different PIN',
+                      size: 16,
+                      bold: FontWeight.w500,
+                      color: AppTheme.brownishGrey,
+                    ),
+                    // Image.asset(AppAssets.thumbsIcon)
+                  ],
+                )));
+          }else{
+            Navigator.of(context).pushNamed(AppRoutes.setPinRoute,
+                arguments: SetPinRouteArgs(setPinNotifier.value, true,
+                    widget.isResetPinState, widget.isRegister));
+          }
+
         }
       }
     } else {

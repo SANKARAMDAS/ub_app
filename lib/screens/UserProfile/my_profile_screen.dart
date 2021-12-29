@@ -4,11 +4,14 @@ import 'dart:typed_data';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 // import 'package:share_plus/share_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
+import 'package:urbanledger/Cubits/Notifications/notificationlist_cubit.dart';
+import 'package:urbanledger/Models/notification_list_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Services/APIs/kyc_api.dart';
 import 'package:urbanledger/Services/repository.dart';
@@ -29,7 +32,6 @@ import 'package:urbanledger/screens/Components/custom_widgets.dart';
 import 'package:urbanledger/screens/UserProfile/MyLedger/business_provider.dart';
 import 'package:urbanledger/screens/UserProfile/inappbrowser.dart';
 import 'package:urbanledger/screens/UserProfile/notifications_module/badge.dart';
-import 'package:urbanledger/screens/UserProfile/notifications_module/notificationlist_provider.dart';
 import 'package:urbanledger/screens/UserProfile/notifications_module/user_notifications.dart';
 import 'package:urbanledger/screens/UserProfile/user_profile_new.dart';
 import 'package:urbanledger/screens/mobile_analytics/analytics_events.dart';
@@ -133,6 +135,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     fileName = (fileName.split('/').last);
     uniquePaymentLink =
         Repository().hiveQueries.userData.paymentLink.toString();
+    getNotificationListData();
+  }
+  getNotificationListData() async {
+    await BlocProvider.of<NotificationListCubit>(context).getNotificationListData();
   }
 
   bool isEmiratesIdDone = false;
@@ -471,20 +477,20 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 .hiveQueries
                 .userData
                 .copyWith(
-                    kycStatus:
-                        (value['emirates'] == true && value['tl'] == true) &&
-                                value['isVerified'] == false
-                            ? 2
-                            : (value['isVerified'] == true &&
-                                    value['status'] == true)
-                                ? 1
-                                : 0,
-                    premiumStatus:
-                        value['planDuration'].toString() == 0.toString()
-                            ? 0
-                            : int.tryParse(value['planDuration']),
-                    isEmiratesIdDone: value['emirates'] ?? false,
-                    isTradeLicenseDone: value['tl'] ?? false));
+                kycStatus:
+                (value['emirates'] == true && value['tl'] == true) &&
+                    value['isVerified'] == false
+                    ? 2
+                    : (value['isVerified'] == true &&
+                    value['status'] == true)
+                    ? 1
+                    : 0,
+                premiumStatus:
+                value['planDuration'].toString() == 0.toString()
+                    ? 0
+                    : int.tryParse(value['planDuration']),
+                isEmiratesIdDone: value['emirates'] ?? false,
+                isTradeLicenseDone: value['tl'] ?? false));
 
             // Need to set emirates iD and TradeLicense ID Values
             // isEmiratesIdDone = value['emirates'] ?? false;
@@ -565,9 +571,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 children: [
                   Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+                    const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
                     decoration: BoxDecoration(
-                        // color: Colors.white,
+                      // color: Colors.white,
                         borderRadius: BorderRadius.circular(30)),
                     // child: CircleAvatar(
                     //   radius: 22,
@@ -661,19 +667,48 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           ]),
                     )
                         : Container(),
-                    Consumer<NotificationListProvider>(
-                        child: IconButton(icon: Icon(Icons.circle_notifications,color: AppTheme.electricBlue,//Colors.black,
-                            size: 32), onPressed: (){
-                          showNotificationListDialog(context);
 
-                        }),
-                        builder: (ctx, notifProv, ch) =>
-                            Badge(
-                              child: ch,
-                              value: notifProv.notificationList.length.toString() ?? '0',
-                              color: Colors.red,
-                              countColor: Colors.white,
-                            ))
+                    BlocConsumer<NotificationListCubit, NotificationListState>(
+                      listener: (context, state) {
+                        // do stuff here based on BlocA's state
+                      },
+                      builder: (context, state) {
+
+                        if (state is FetchedNotificationListState) {
+                          List<NotificationData> data =  state.notificationList;
+                          return Badge(
+                            child: InkWell(
+                              child: Image.asset(
+                                AppAssets.notification_bell,
+                                height: 50,
+                                width:50,
+                              ),
+                              onTap: (){
+                                showNotificationListDialog(context,data);
+                              },
+                            )
+
+                            ,
+                            value: data.length.toString() ?? '0',
+                            color: Colors.grey,
+                            countColor: Colors.white,
+                          );
+                        }
+
+                        return Container();
+
+
+                        // return widget here based on BlocA's state
+                      },
+
+
+                    ),
+
+                    /*BlocBuilder<NotificationListCubit,
+                  NotificationListState>(
+                  builder: (context, state) {
+
+                  })*/
                   ],)
 
                 ],
@@ -681,340 +716,340 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             ),
             body: loading == true
                 ? Center(
-                    child: CircularProgressIndicator(),
-                  )
+              child: CircularProgressIndicator(),
+            )
                 : ListView(
-                    children: [
-                      appBar,
-                      // userDetails,
-                      const SizedBox(height: 30),
+              children: [
+                appBar,
+                // userDetails,
+                const SizedBox(height: 30),
 
-                      CustomList(
-                        icon: theImage,
-                        text: 'Complete Your KYC',
-                        onSubmit: () {
-                          //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.manageKyc1Route);
+                CustomList(
+                  icon: theImage,
+                  text: 'Complete Your KYC',
+                  onSubmit: () {
+                    //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
+                    Navigator.pushReplacementNamed(
+                        context, AppRoutes.manageKyc1Route);
+                  },
+                ),
+                divider,
+
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.068,
+                      right: MediaQuery.of(context).size.width * 0.05),
+                  child: CustomExpansionTile(
+                    initiallyExpanded: false,
+                    key: key1,
+                    childrenPadding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.16,
+                        right: 20),
+                    trailingIconSize: 30,
+                    title: CustomText('My Ledger',
+                        color: AppTheme.brownishGrey,
+                        size: 16,
+                        bold: FontWeight.bold),
+                    leading: theImage2,
+                    children: [
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: CustomText(
+                          'Backup Information',
+                          bold: FontWeight.w400,
+                          color: AppTheme.brownishGrey,
+                        ),
+                        trailing: Icon(Icons.chevron_right_rounded),
+                        onTap: () {
+                          Navigator.pushNamed(context,
+                              AppRoutes.backUpInformationRoute)
+                              .then((value) {
+                            key1.currentState!.initState();
+                            key1.currentState!.build(context);
+                          });
                         },
                       ),
-                      divider,
-
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.068,
-                            right: MediaQuery.of(context).size.width * 0.05),
-                        child: CustomExpansionTile(
-                          initiallyExpanded: false,
-                          key: key1,
-                          childrenPadding: EdgeInsets.only(
-                              left: MediaQuery.of(context).size.width * 0.16,
-                              right: 20),
-                          trailingIconSize: 30,
-                          title: CustomText('My Ledger',
-                              color: AppTheme.brownishGrey,
-                              size: 16,
-                              bold: FontWeight.bold),
-                          leading: theImage2,
-                          children: [
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: CustomText(
-                                'Backup Information',
-                                bold: FontWeight.w400,
-                                color: AppTheme.brownishGrey,
-                              ),
-                              trailing: Icon(Icons.chevron_right_rounded),
-                              onTap: () {
-                                Navigator.pushNamed(context,
-                                        AppRoutes.backUpInformationRoute)
-                                    .then((value) {
-                                  key1.currentState!.initState();
-                                  key1.currentState!.build(context);
-                                });
-                              },
-                            ),
-                            Divider(
-                              color: AppTheme.coolGrey,
-                            ),
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: const CustomText(
-                                'Manage Ledgers',
-                                bold: FontWeight.w400,
-                                color: AppTheme.brownishGrey,
-                              ),
-                              trailing: Icon(Icons.chevron_right_rounded),
-                              onTap: (Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .kycStatus ==
-                                              0 ||
-                                          Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .kycStatus ==
-                                              2) ||
-                                      Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .premiumStatus ==
-                                          0
-                                  ? () async {
-                                      if (Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .kycStatus ==
-                                          2) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        //If KYC is Verification is Pending
-                                        debugPrint('adf');
-                                        await getKyc()
-                                            .then((value) => MerchantBankNotAdded
-                                                .showBankNotAddedDialog(context,
-                                                    'userKYCVerificationPending'))
-                                            .then((value) => setState(() {
-                                                  loading = false;
-                                                }));
-                                      } else if (Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .kycStatus ==
-                                          0) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                                        MerchantBankNotAdded
-                                                .showBankNotAddedDialog(
-                                                    context, 'userKYCPending')
-                                            .then((value) => setState(() {
-                                                  loading = false;
-                                                }));
-                                      } else if (Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .kycStatus ==
-                                              0 &&
-                                          Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .isEmiratesIdDone ==
-                                              false) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                        MerchantBankNotAdded
-                                                .showBankNotAddedDialog(context,
-                                                    'EmiratesIdPending')
-                                            .then((value) => setState(() {
-                                                  loading = false;
-                                                }));
-                                      } else if (Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .kycStatus ==
-                                              0 &&
-                                          Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .isTradeLicenseDone ==
-                                              false) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                        MerchantBankNotAdded
-                                                .showBankNotAddedDialog(context,
-                                                    'TradeLicensePending')
-                                            .then((value) => setState(() {
-                                                  loading = false;
-                                                }));
-                                      } else if (Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .kycStatus ==
-                                              1 &&
-                                          Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .premiumStatus ==
-                                              0) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        MerchantBankNotAdded
-                                                .showBankNotAddedDialog(
-                                                    context, 'upgradePremium')
-                                            .then((value) => setState(() {
-                                                  loading = false;
-                                                }));
-                                      } else {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        Navigator.pushNamed(context,
-                                                AppRoutes.myBusinessRoute)
-                                            .then((value) {
-                                          key1.currentState!.initState();
-                                          key1.currentState!.build(context);
-                                        }).then((value) => loading = true);
-                                      }
-                                    }
-                                  : () {
-                                      Navigator.pushNamed(context,
-                                              AppRoutes.myBusinessRoute)
-                                          .then((value) {
-                                        key1.currentState!.initState();
-                                        key1.currentState!.build(context);
-                                      });
-                                    },
-                            ),
-                            Divider(
-                              color: AppTheme.coolGrey,
-                            ),
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: CustomText(
-                                'Global Report',
-                                bold: FontWeight.w400,
-                                color: AppTheme.brownishGrey,
-                              ),
-                              trailing: Icon(Icons.chevron_right_rounded),
-                              onTap: (Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .kycStatus ==
-                                              0 ||
-                                          Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .kycStatus ==
-                                              2) ||
-                                      Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .premiumStatus ==
-                                          0
-                                  ? () async {
-                                      if (Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .kycStatus ==
-                                          2) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        //If KYC is Verification is Pending
-                                        debugPrint('adf');
-                                        await getKyc()
-                                            .then((value) => MerchantBankNotAdded
-                                                .showBankNotAddedDialog(context,
-                                                    'userKYCVerificationPending'))
-                                            .then((value) => setState(() {
-                                                  loading = false;
-                                                }));
-                                      } else if (Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .kycStatus ==
-                                          0) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                                        MerchantBankNotAdded
-                                                .showBankNotAddedDialog(
-                                                    context, 'userKYCPending')
-                                            .then((value) => setState(() {
-                                                  loading = false;
-                                                }));
-                                      } else if (Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .kycStatus ==
-                                              0 &&
-                                          Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .isEmiratesIdDone ==
-                                              false) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                        MerchantBankNotAdded
-                                                .showBankNotAddedDialog(context,
-                                                    'EmiratesIdPending')
-                                            .then((value) => setState(() {
-                                                  loading = false;
-                                                }));
-                                      } else if (Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .kycStatus ==
-                                              0 &&
-                                          Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .isTradeLicenseDone ==
-                                              false) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                        MerchantBankNotAdded
-                                                .showBankNotAddedDialog(context,
-                                                    'TradeLicensePending')
-                                            .then((value) => setState(() {
-                                                  loading = false;
-                                                }));
-                                      } else if (Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .kycStatus ==
-                                              1 &&
-                                          Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .premiumStatus ==
-                                              0) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        MerchantBankNotAdded
-                                                .showBankNotAddedDialog(
-                                                    context, 'upgradePremium')
-                                            .then((value) => setState(() {
-                                                  loading = false;
-                                                }));
-                                      } else {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        Navigator.of(context)
-                                            .pushNamed(
-                                                AppRoutes.globalReportRoute)
-                                            .then((value) {
-                                          key1.currentState!.initState();
-                                          key1.currentState!.build(context);
-                                        }).then((value) => loading = true);
-                                      }
-                                    }
-                                  : () {
-                                      Navigator.of(context)
-                                          .pushNamed(
-                                              AppRoutes.globalReportRoute)
-                                          .then((value) {
-                                        key1.currentState!.initState();
-                                        key1.currentState!.build(context);
-                                      });
-                                    },
-                            ),
-                            /* Divider(
+                      Divider(
+                        color: AppTheme.coolGrey,
+                      ),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: const CustomText(
+                          'Manage Ledgers',
+                          bold: FontWeight.w400,
+                          color: AppTheme.brownishGrey,
+                        ),
+                        trailing: Icon(Icons.chevron_right_rounded),
+                        onTap: (Repository()
+                            .hiveQueries
+                            .userData
+                            .kycStatus ==
+                            0 ||
+                            Repository()
+                                .hiveQueries
+                                .userData
+                                .kycStatus ==
+                                2) ||
+                            Repository()
+                                .hiveQueries
+                                .userData
+                                .premiumStatus ==
+                                0
+                            ? () async {
+                          if (Repository()
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
+                              2) {
+                            setState(() {
+                              loading = true;
+                            });
+                            //If KYC is Verification is Pending
+                            debugPrint('adf');
+                            await getKyc()
+                                .then((value) => MerchantBankNotAdded
+                                .showBankNotAddedDialog(context,
+                                'userKYCVerificationPending'))
+                                .then((value) => setState(() {
+                              loading = false;
+                            }));
+                          } else if (Repository()
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
+                              0) {
+                            setState(() {
+                              loading = true;
+                            });
+                            //KYC WHEN USER STARTS A NEW KYC JOURNEY
+                            MerchantBankNotAdded
+                                .showBankNotAddedDialog(
+                                context, 'userKYCPending')
+                                .then((value) => setState(() {
+                              loading = false;
+                            }));
+                          } else if (Repository()
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
+                              0 &&
+                              Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .isEmiratesIdDone ==
+                                  false) {
+                            setState(() {
+                              loading = true;
+                            });
+                            //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                            MerchantBankNotAdded
+                                .showBankNotAddedDialog(context,
+                                'EmiratesIdPending')
+                                .then((value) => setState(() {
+                              loading = false;
+                            }));
+                          } else if (Repository()
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
+                              0 &&
+                              Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .isTradeLicenseDone ==
+                                  false) {
+                            setState(() {
+                              loading = true;
+                            });
+                            //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                            MerchantBankNotAdded
+                                .showBankNotAddedDialog(context,
+                                'TradeLicensePending')
+                                .then((value) => setState(() {
+                              loading = false;
+                            }));
+                          } else if (Repository()
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
+                              1 &&
+                              Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .premiumStatus ==
+                                  0) {
+                            setState(() {
+                              loading = true;
+                            });
+                            MerchantBankNotAdded
+                                .showBankNotAddedDialog(
+                                context, 'upgradePremium')
+                                .then((value) => setState(() {
+                              loading = false;
+                            }));
+                          } else {
+                            setState(() {
+                              loading = true;
+                            });
+                            Navigator.pushNamed(context,
+                                AppRoutes.myBusinessRoute)
+                                .then((value) {
+                              key1.currentState!.initState();
+                              key1.currentState!.build(context);
+                            }).then((value) => loading = true);
+                          }
+                        }
+                            : () {
+                          Navigator.pushNamed(context,
+                              AppRoutes.myBusinessRoute)
+                              .then((value) {
+                            key1.currentState!.initState();
+                            key1.currentState!.build(context);
+                          });
+                        },
+                      ),
+                      Divider(
+                        color: AppTheme.coolGrey,
+                      ),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: CustomText(
+                          'Global Report',
+                          bold: FontWeight.w400,
+                          color: AppTheme.brownishGrey,
+                        ),
+                        trailing: Icon(Icons.chevron_right_rounded),
+                        onTap: (Repository()
+                            .hiveQueries
+                            .userData
+                            .kycStatus ==
+                            0 ||
+                            Repository()
+                                .hiveQueries
+                                .userData
+                                .kycStatus ==
+                                2) ||
+                            Repository()
+                                .hiveQueries
+                                .userData
+                                .premiumStatus ==
+                                0
+                            ? () async {
+                          if (Repository()
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
+                              2) {
+                            setState(() {
+                              loading = true;
+                            });
+                            //If KYC is Verification is Pending
+                            debugPrint('adf');
+                            await getKyc()
+                                .then((value) => MerchantBankNotAdded
+                                .showBankNotAddedDialog(context,
+                                'userKYCVerificationPending'))
+                                .then((value) => setState(() {
+                              loading = false;
+                            }));
+                          } else if (Repository()
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
+                              0) {
+                            setState(() {
+                              loading = true;
+                            });
+                            //KYC WHEN USER STARTS A NEW KYC JOURNEY
+                            MerchantBankNotAdded
+                                .showBankNotAddedDialog(
+                                context, 'userKYCPending')
+                                .then((value) => setState(() {
+                              loading = false;
+                            }));
+                          } else if (Repository()
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
+                              0 &&
+                              Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .isEmiratesIdDone ==
+                                  false) {
+                            setState(() {
+                              loading = true;
+                            });
+                            //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                            MerchantBankNotAdded
+                                .showBankNotAddedDialog(context,
+                                'EmiratesIdPending')
+                                .then((value) => setState(() {
+                              loading = false;
+                            }));
+                          } else if (Repository()
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
+                              0 &&
+                              Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .isTradeLicenseDone ==
+                                  false) {
+                            setState(() {
+                              loading = true;
+                            });
+                            //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                            MerchantBankNotAdded
+                                .showBankNotAddedDialog(context,
+                                'TradeLicensePending')
+                                .then((value) => setState(() {
+                              loading = false;
+                            }));
+                          } else if (Repository()
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
+                              1 &&
+                              Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .premiumStatus ==
+                                  0) {
+                            setState(() {
+                              loading = true;
+                            });
+                            MerchantBankNotAdded
+                                .showBankNotAddedDialog(
+                                context, 'upgradePremium')
+                                .then((value) => setState(() {
+                              loading = false;
+                            }));
+                          } else {
+                            setState(() {
+                              loading = true;
+                            });
+                            Navigator.of(context)
+                                .pushNamed(
+                                AppRoutes.globalReportRoute)
+                                .then((value) {
+                              key1.currentState!.initState();
+                              key1.currentState!.build(context);
+                            }).then((value) => loading = true);
+                          }
+                        }
+                            : () {
+                          Navigator.of(context)
+                              .pushNamed(
+                              AppRoutes.globalReportRoute)
+                              .then((value) {
+                            key1.currentState!.initState();
+                            key1.currentState!.build(context);
+                          });
+                        },
+                      ),
+                      /* Divider(
                       color: AppTheme.coolGrey,
                     ),
                     ListTile(
@@ -1034,438 +1069,438 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         });
                       },
                     ), */
-                            // 20.0.heightBox,
-                          ],
-                        ),
-                      ),
-                      divider,
-                      CustomList(
-                        icon: theImage9,
-                        text: 'Account Insights',
-                        onSubmit: () async {
-                          if ((Repository().hiveQueries.userData.kycStatus ==
-                                      0 ||
-                                  Repository().hiveQueries.userData.kycStatus ==
-                                      1 ||
-                                  Repository().hiveQueries.userData.kycStatus ==
-                                      2) ||
-                              (Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .premiumStatus ==
-                                  0)) {
-                            if (Repository().hiveQueries.userData.kycStatus ==
-                                2) {
-                              //If KYC is Verification is Pending
-                              await getKyc().then((value) =>
-                                  MerchantBankNotAdded.showBankNotAddedDialog(
-                                      context, 'userKYCVerificationPending'));
-                            } else if (Repository()
-                                    .hiveQueries
-                                    .userData
-                                    .kycStatus ==
-                                0) {
-                              //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                              MerchantBankNotAdded.showBankNotAddedDialog(
-                                  context, 'userKYCPending');
-                            } else if (Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus ==
-                                    0 &&
-                                Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .isEmiratesIdDone ==
-                                    false) {
-                              //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                              MerchantBankNotAdded.showBankNotAddedDialog(
-                                  context, 'EmiratesIdPending');
-                            } else if (Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus ==
-                                    0 &&
-                                Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .isTradeLicenseDone ==
-                                    false) {
-                              //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                              MerchantBankNotAdded.showBankNotAddedDialog(
-                                  context, 'TradeLicensePending');
-                            } else if (Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus ==
-                                    1 &&
-                                Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .premiumStatus ==
-                                    0) {
-                              MerchantBankNotAdded.showBankNotAddedDialog(
-                                  context, 'upgradePremium');
-                            } else {
-                              CustomLoadingDialog.showLoadingDialog(
-                                  context, key);
-                              Navigator.popAndPushNamed(
-                                  context, AppRoutes.mobileAnalyticsRoute);
-                            }
-                          }
-                        },
-                      ),
+                      // 20.0.heightBox,
+                    ],
+                  ),
+                ),
+                divider,
+                CustomList(
+                  icon: theImage9,
+                  text: 'Account Insights',
+                  onSubmit: () async {
+                    if ((Repository().hiveQueries.userData.kycStatus ==
+                        0 ||
+                        Repository().hiveQueries.userData.kycStatus ==
+                            1 ||
+                        Repository().hiveQueries.userData.kycStatus ==
+                            2) ||
+                        (Repository()
+                            .hiveQueries
+                            .userData
+                            .premiumStatus ==
+                            0)) {
+                      if (Repository().hiveQueries.userData.kycStatus ==
+                          2) {
+                        //If KYC is Verification is Pending
+                        await getKyc().then((value) =>
+                            MerchantBankNotAdded.showBankNotAddedDialog(
+                                context, 'userKYCVerificationPending'));
+                      } else if (Repository()
+                          .hiveQueries
+                          .userData
+                          .kycStatus ==
+                          0) {
+                        //KYC WHEN USER STARTS A NEW KYC JOURNEY
+                        MerchantBankNotAdded.showBankNotAddedDialog(
+                            context, 'userKYCPending');
+                      } else if (Repository()
+                          .hiveQueries
+                          .userData
+                          .kycStatus ==
+                          0 &&
+                          Repository()
+                              .hiveQueries
+                              .userData
+                              .isEmiratesIdDone ==
+                              false) {
+                        //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                        MerchantBankNotAdded.showBankNotAddedDialog(
+                            context, 'EmiratesIdPending');
+                      } else if (Repository()
+                          .hiveQueries
+                          .userData
+                          .kycStatus ==
+                          0 &&
+                          Repository()
+                              .hiveQueries
+                              .userData
+                              .isTradeLicenseDone ==
+                              false) {
+                        //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                        MerchantBankNotAdded.showBankNotAddedDialog(
+                            context, 'TradeLicensePending');
+                      } else if (Repository()
+                          .hiveQueries
+                          .userData
+                          .kycStatus ==
+                          1 &&
+                          Repository()
+                              .hiveQueries
+                              .userData
+                              .premiumStatus ==
+                              0) {
+                        MerchantBankNotAdded.showBankNotAddedDialog(
+                            context, 'upgradePremium');
+                      } else {
+                        CustomLoadingDialog.showLoadingDialog(
+                            context, key);
+                        Navigator.popAndPushNamed(
+                            context, AppRoutes.mobileAnalyticsRoute);
+                      }
+                    }
+                  },
+                ),
 
-                      divider,
-                      CustomList(
-                        icon: theImage10,
-                        text: 'Unrecognized Transaction',
-                        onSubmit: () {
-                          //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
-                          Navigator.pushNamed(
-                              context, AppRoutes.suspenseAccountRoute);
-                        },
-                      ),
+                divider,
+                CustomList(
+                  icon: theImage10,
+                  text: 'Unrecognized Transaction',
+                  onSubmit: () {
+                    //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
+                    Navigator.pushNamed(
+                        context, AppRoutes.suspenseAccountRoute);
+                  },
+                ),
 
-                      // Padding
+                // Padding
 
-                      divider,
-                      CustomList(
-                        icon: theImage3,
-                        text: 'My Saved Cards',
-                        onSubmit: () {
-                          /* Navigator.of(context)
+                divider,
+                CustomList(
+                  icon: theImage3,
+                  text: 'My Saved Cards',
+                  onSubmit: () {
+                    /* Navigator.of(context)
                             .pushNamed(AppRoutes.savedCardsRoute);*/
-                          /*Navigator.of(context).push(
+                    /*Navigator.of(context).push(
                               MaterialPageRoute(builder: (_) => CardList()));*/
-                          Navigator.of(context).pushNamed(AppRoutes.cardListRoute);
-                          CustomLoadingDialog.showLoadingDialog(context, key);
-                        },
-                      ),
-                      divider,
+                    Navigator.of(context).pushNamed(AppRoutes.cardListRoute);
+                    CustomLoadingDialog.showLoadingDialog(context, key);
+                  },
+                ),
+                divider,
 
-                      CustomList(
-                        icon: theImage4,
-                        text: 'My Bank Account',
-                        onSubmit: () {
-                          debugPrint('Bank status from Local DB: ' +
-                              Repository()
-                                  .hiveQueries
-                                  .userData
-                                  .bankStatus
-                                  .toString());
-                          Navigator.of(context)
-                              .pushNamed(AppRoutes.profileBankAccountRoute);
-                          CustomLoadingDialog.showLoadingDialog(context, key);
-                        },
-                      ),
-                      divider,
+                CustomList(
+                  icon: theImage4,
+                  text: 'My Bank Account',
+                  onSubmit: () {
+                    debugPrint('Bank status from Local DB: ' +
+                        Repository()
+                            .hiveQueries
+                            .userData
+                            .bankStatus
+                            .toString());
+                    Navigator.of(context)
+                        .pushNamed(AppRoutes.profileBankAccountRoute);
+                    CustomLoadingDialog.showLoadingDialog(context, key);
+                  },
+                ),
+                divider,
 
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.068,
-                            right: MediaQuery.of(context).size.width * 0.05),
-                        child: CustomExpansionTile(
-                            initiallyExpanded: false,
-                            key: key2,
-                            childrenPadding:
-                                EdgeInsets.only(left: 70, right: 20),
-                            trailingIconSize: 30,
-                            title: CustomText('Settings',
-                                color: AppTheme.brownishGrey,
-                                size: 16,
-                                bold: FontWeight.bold),
-                            leading: theImage5,
-                            children: [
-                              ListTile(
-                                contentPadding: EdgeInsets.zero,
-                                title: CustomText(
-                                  'App Lock and Security',
-                                  bold: FontWeight.w400,
-                                  color: AppTheme.brownishGrey,
-                                ),
-                                trailing: Icon(Icons.chevron_right_rounded),
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .pushNamed(AppRoutes.pinSetupRoute);
-                                  key2.currentState!.initState();
-                                  key2.currentState!.build(context);
-                                },
-                              ),
-                              Divider(
-                                color: Colors.grey,
-                                indent: 0,
-                              ),
-                              ListTile(
-                                contentPadding: EdgeInsets.zero,
-                                title: CustomText(
-                                  'App Update',
-                                  bold: FontWeight.w400,
-                                  color: AppTheme.brownishGrey,
-                                ),
-                                trailing: Icon(Icons.chevron_right_rounded),
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .pushNamed(AppRoutes.appUpdateRoute);
-                                  key2.currentState!.initState();
-                                  key2.currentState!.build(context);
-                                },
-                              ),
-                            ]),
-                      ),
-
-                      divider,
-
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).size.width * 0.068,
-                              right: MediaQuery.of(context).size.width * 0.05),
-                          child: CustomExpansionTile(
-                              initiallyExpanded: false,
-                              key: key3,
-                              childrenPadding:
-                                  EdgeInsets.only(left: 70, right: 20),
-                              trailingIconSize: 30,
-                              title: CustomText('Help Center',
-                                  color: AppTheme.brownishGrey,
-                                  size: 16,
-                                  bold: FontWeight.bold),
-                              leading: theImage8,
-                              children: [
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: CustomText(
-                                    'Help Topics',
-                                    bold: FontWeight.w400,
-                                    color: AppTheme.brownishGrey,
-                                  ),
-                                  trailing: Icon(Icons.chevron_right_rounded),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => UlAppBrowser(
-                                          url: 'https://urbanledger.app/help',
-                                          title: 'Help',
-                                        ),
-                                      ),
-                                    );
-                                    key3.currentState!.initState();
-                                    key3.currentState!.build(context);
-                                  },
-                                ),
-                                Divider(
-                                  color: Colors.grey,
-                                  indent: 0,
-                                ),
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: CustomText(
-                                    'Contact Us',
-                                    bold: FontWeight.w400,
-                                    color: AppTheme.brownishGrey,
-                                  ),
-                                  trailing: Icon(Icons.chevron_right_rounded),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => UlAppBrowser(
-                                          url:
-                                              'https://urbanledger.app/contact/',
-                                          title: 'Contact Us',
-                                        ),
-                                      ),
-                                    );
-                                    key3.currentState!.initState();
-                                    key3.currentState!.build(context);
-                                  },
-                                ),
-                              ])),
-
-                      divider,
-                      CustomList(
-                        icon: theImage12,
-                        text: 'Settlement History',
-                        onSubmit: () {
-                          //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
-                          Navigator.pushNamed(
-                              context, AppRoutes.settlementHistoryRoute);
-                        },
-                      ),
-
-                      divider,
-
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.068,
-                            right: MediaQuery.of(context).size.width * 0.05),
-                        child: CustomExpansionTile(
-                          initiallyExpanded: false,
-                          key: key4,
-                          childrenPadding: EdgeInsets.only(left: 70, right: 20),
-                          trailingIconSize: 30,
-                          title: CustomText('About Us',
-                              color: AppTheme.brownishGrey,
-                              size: 16,
-                              bold: FontWeight.bold),
-                          leading: theImage6,
-                          children: [
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: CustomText(
-                                'About Urban Ledger',
-                                bold: FontWeight.w400,
-                                color: AppTheme.brownishGrey,
-                              ),
-                              trailing: Icon(Icons.chevron_right_rounded),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UlAppBrowser(
-                                      url: 'https://urbanledger.app/help/about',
-                                      title: 'About Urban Ledger',
-                                    ),
-                                  ),
-                                );
-                                key4.currentState!.initState();
-                                key4.currentState!.build(context);
-                              },
-                            ),
-                            Divider(
-                              color: Colors.grey,
-                              indent: 0,
-                            ),
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: CustomText(
-                                'Privacy Policy',
-                                bold: FontWeight.w400,
-                                color: AppTheme.brownishGrey,
-                              ),
-                              trailing: Icon(Icons.chevron_right_rounded),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UlAppBrowser(
-                                      url:
-                                          'https://urbanledger.app/cookie-policy',
-                                      title: 'Privacy Policy',
-                                    ),
-                                  ),
-                                );
-                                key4.currentState!.initState();
-                                key4.currentState!.build(context);
-                              },
-                            ),
-                            Divider(
-                              color: Colors.grey,
-                              indent: 0,
-                            ),
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: CustomText(
-                                'Terms and Conditions',
-                                bold: FontWeight.w400,
-                                color: AppTheme.brownishGrey,
-                              ),
-                              trailing: Icon(Icons.chevron_right_rounded),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UlAppBrowser(
-                                      url:
-                                          'https://urbanledger.app/terms-and-conditions',
-                                      title: 'Terms and Conditions',
-                                    ),
-                                  ),
-                                );
-                                key1.currentState!.initState();
-                                key1.currentState!.build(context);
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      //   padding: EdgeInsets.only(
-                      //       top: 7, left: 30, bottom: 7, right: 20),
-                      //   child: ListTile(
-                      //     onTap: () async {
-                      //       Navigator.pushNamed(context, AppRoutes.suspenseAccountRoute);
-
-                      //       // await repository.loginApi.logout();
-                      //       // restartAppNotifier.value = !restartAppNotifier.value;
-
-                      //     },
-                      //     dense: true,
-                      //     leading: Row(
-                      //       mainAxisSize: MainAxisSize.min,
-                      //       children: [
-                      //         // CircleAvatar(
-                      //         //   radius: 22,
-                      //         Container(
-                      //           child: theImage9,
-                      //         ),
-                      //         // ),
-                      //       ],
-                      //     ),
-                      //     title: Text(
-                      //       'Transactions',
-                      //       style: TextStyle(
-                      //           color: AppTheme.brownishGrey,
-                      //           fontSize: 16,
-                      //           fontWeight: FontWeight.bold),
-                      //     ),
-                      //   ),
-                      // ),
-
-                      divider,
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 7,
-                            left: MediaQuery.of(context).size.width * 0.068,
-                            bottom: 7,
-                            right: MediaQuery.of(context).size.width * 0.05),
-                        child: ListTile(
-                          onTap: () async {
-                            await repository.hiveQueries.clearHiveData();
-                            await repository.queries.clearULTables();
-                            await DBProvider.db.clearDatabase();
-                            await CustomSharedPreferences.setBool(
-                                'chatSync', false);
-                            await CustomSharedPreferences.remove(
-                                'primaryBusiness');
-                            // await repository.loginApi.logout();
-                            // restartAppNotifier.value = !restartAppNotifier.value;
-                            RestartWidget.restartApp(context);
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.068,
+                      right: MediaQuery.of(context).size.width * 0.05),
+                  child: CustomExpansionTile(
+                      initiallyExpanded: false,
+                      key: key2,
+                      childrenPadding:
+                      EdgeInsets.only(left: 70, right: 20),
+                      trailingIconSize: 30,
+                      title: CustomText('Settings',
+                          color: AppTheme.brownishGrey,
+                          size: 16,
+                          bold: FontWeight.bold),
+                      leading: theImage5,
+                      children: [
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: CustomText(
+                            'App Lock and Security',
+                            bold: FontWeight.w400,
+                            color: AppTheme.brownishGrey,
+                          ),
+                          trailing: Icon(Icons.chevron_right_rounded),
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamed(AppRoutes.pinSetupRoute);
+                            key2.currentState!.initState();
+                            key2.currentState!.build(context);
                           },
-                          dense: true,
-                          leading: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // CircleAvatar(
-                              //   radius: 22,
-                              Container(
-                                child: theImage7,
-                              ),
-                              // ),
-                            ],
-                          ),
-                          title: Text(
-                            'Signout',
-                            style: TextStyle(
-                                color: AppTheme.brownishGrey,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
                         ),
-                      ),
+                        Divider(
+                          color: Colors.grey,
+                          indent: 0,
+                        ),
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: CustomText(
+                            'App Update',
+                            bold: FontWeight.w400,
+                            color: AppTheme.brownishGrey,
+                          ),
+                          trailing: Icon(Icons.chevron_right_rounded),
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamed(AppRoutes.appUpdateRoute);
+                            key2.currentState!.initState();
+                            key2.currentState!.build(context);
+                          },
+                        ),
+                      ]),
+                ),
 
-                      /* Container(
+                divider,
+
+                Padding(
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.068,
+                        right: MediaQuery.of(context).size.width * 0.05),
+                    child: CustomExpansionTile(
+                        initiallyExpanded: false,
+                        key: key3,
+                        childrenPadding:
+                        EdgeInsets.only(left: 70, right: 20),
+                        trailingIconSize: 30,
+                        title: CustomText('Help Center',
+                            color: AppTheme.brownishGrey,
+                            size: 16,
+                            bold: FontWeight.bold),
+                        leading: theImage8,
+                        children: [
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: CustomText(
+                              'Help Topics',
+                              bold: FontWeight.w400,
+                              color: AppTheme.brownishGrey,
+                            ),
+                            trailing: Icon(Icons.chevron_right_rounded),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UlAppBrowser(
+                                    url: 'https://urbanledger.app/help',
+                                    title: 'Help',
+                                  ),
+                                ),
+                              );
+                              key3.currentState!.initState();
+                              key3.currentState!.build(context);
+                            },
+                          ),
+                          Divider(
+                            color: Colors.grey,
+                            indent: 0,
+                          ),
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: CustomText(
+                              'Contact Us',
+                              bold: FontWeight.w400,
+                              color: AppTheme.brownishGrey,
+                            ),
+                            trailing: Icon(Icons.chevron_right_rounded),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UlAppBrowser(
+                                    url:
+                                    'https://urbanledger.app/contact/',
+                                    title: 'Contact Us',
+                                  ),
+                                ),
+                              );
+                              key3.currentState!.initState();
+                              key3.currentState!.build(context);
+                            },
+                          ),
+                        ])),
+
+                divider,
+                CustomList(
+                  icon: theImage12,
+                  text: 'Settlement History',
+                  onSubmit: () {
+                    //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
+                    Navigator.pushNamed(
+                        context, AppRoutes.settlementHistoryRoute);
+                  },
+                ),
+
+                divider,
+
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.068,
+                      right: MediaQuery.of(context).size.width * 0.05),
+                  child: CustomExpansionTile(
+                    initiallyExpanded: false,
+                    key: key4,
+                    childrenPadding: EdgeInsets.only(left: 70, right: 20),
+                    trailingIconSize: 30,
+                    title: CustomText('About Us',
+                        color: AppTheme.brownishGrey,
+                        size: 16,
+                        bold: FontWeight.bold),
+                    leading: theImage6,
+                    children: [
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: CustomText(
+                          'About Urban Ledger',
+                          bold: FontWeight.w400,
+                          color: AppTheme.brownishGrey,
+                        ),
+                        trailing: Icon(Icons.chevron_right_rounded),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UlAppBrowser(
+                                url: 'https://urbanledger.app/help/about',
+                                title: 'About Urban Ledger',
+                              ),
+                            ),
+                          );
+                          key4.currentState!.initState();
+                          key4.currentState!.build(context);
+                        },
+                      ),
+                      Divider(
+                        color: Colors.grey,
+                        indent: 0,
+                      ),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: CustomText(
+                          'Privacy Policy',
+                          bold: FontWeight.w400,
+                          color: AppTheme.brownishGrey,
+                        ),
+                        trailing: Icon(Icons.chevron_right_rounded),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UlAppBrowser(
+                                url:
+                                'https://urbanledger.app/cookie-policy',
+                                title: 'Privacy Policy',
+                              ),
+                            ),
+                          );
+                          key4.currentState!.initState();
+                          key4.currentState!.build(context);
+                        },
+                      ),
+                      Divider(
+                        color: Colors.grey,
+                        indent: 0,
+                      ),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: CustomText(
+                          'Terms and Conditions',
+                          bold: FontWeight.w400,
+                          color: AppTheme.brownishGrey,
+                        ),
+                        trailing: Icon(Icons.chevron_right_rounded),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UlAppBrowser(
+                                url:
+                                'https://urbanledger.app/terms-and-conditions',
+                                title: 'Terms and Conditions',
+                              ),
+                            ),
+                          );
+                          key1.currentState!.initState();
+                          key1.currentState!.build(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+
+                //   padding: EdgeInsets.only(
+                //       top: 7, left: 30, bottom: 7, right: 20),
+                //   child: ListTile(
+                //     onTap: () async {
+                //       Navigator.pushNamed(context, AppRoutes.suspenseAccountRoute);
+
+                //       // await repository.loginApi.logout();
+                //       // restartAppNotifier.value = !restartAppNotifier.value;
+
+                //     },
+                //     dense: true,
+                //     leading: Row(
+                //       mainAxisSize: MainAxisSize.min,
+                //       children: [
+                //         // CircleAvatar(
+                //         //   radius: 22,
+                //         Container(
+                //           child: theImage9,
+                //         ),
+                //         // ),
+                //       ],
+                //     ),
+                //     title: Text(
+                //       'Transactions',
+                //       style: TextStyle(
+                //           color: AppTheme.brownishGrey,
+                //           fontSize: 16,
+                //           fontWeight: FontWeight.bold),
+                //     ),
+                //   ),
+                // ),
+
+                divider,
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: 7,
+                      left: MediaQuery.of(context).size.width * 0.068,
+                      bottom: 7,
+                      right: MediaQuery.of(context).size.width * 0.05),
+                  child: ListTile(
+                    onTap: () async {
+                      await repository.hiveQueries.clearHiveData();
+                      await repository.queries.clearULTables();
+                      await DBProvider.db.clearDatabase();
+                      await CustomSharedPreferences.setBool(
+                          'chatSync', false);
+                      await CustomSharedPreferences.remove(
+                          'primaryBusiness');
+                      // await repository.loginApi.logout();
+                      // restartAppNotifier.value = !restartAppNotifier.value;
+                      RestartWidget.restartApp(context);
+                    },
+                    dense: true,
+                    leading: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // CircleAvatar(
+                        //   radius: 22,
+                        Container(
+                          child: theImage7,
+                        ),
+                        // ),
+                      ],
+                    ),
+                    title: Text(
+                      'Signout',
+                      style: TextStyle(
+                          color: AppTheme.brownishGrey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+
+                /* Container(
                       height: 380,
                       decoration: BoxDecoration(
                           image: DecorationImage(
@@ -1491,320 +1526,186 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 },
                               ),
                             ), */
-                      // SizedBox(height: 20),
-                      bottom
-                      //       ]),
-                      // ),
+                // SizedBox(height: 20),
+                bottom
+                //       ]),
+                // ),
 
-                      // Stack(
-                      //   alignment: AlignmentDirectional.topCenter,
-                      //   children: [
-                      //     Padding(
-                      //       padding: EdgeInsets.only(top: 10),
-                      //       child: CustomList(
-                      //         icon: AppAssets.referIcon,
-                      //         text: 'Refer a Friend',
-                      //         onSubmit: () {},
-                      //       ),
-                      //     ),
-                      //     Image.asset(
-                      //       AppAssets.referBackgroundIcon,
-                      //       fit: BoxFit.fitWidth,
-                      //     ),
-                      //     Spacer(),
-                      //
-                      //   ],
-                      // ),
-                    ],
-                  ),
+                // Stack(
+                //   alignment: AlignmentDirectional.topCenter,
+                //   children: [
+                //     Padding(
+                //       padding: EdgeInsets.only(top: 10),
+                //       child: CustomList(
+                //         icon: AppAssets.referIcon,
+                //         text: 'Refer a Friend',
+                //         onSubmit: () {},
+                //       ),
+                //     ),
+                //     Image.asset(
+                //       AppAssets.referBackgroundIcon,
+                //       fit: BoxFit.fitWidth,
+                //     ),
+                //     Spacer(),
+                //
+                //   ],
+                // ),
+              ],
+            ),
           ),
         ));
   }
 
   Widget get appBar => Padding(
-        padding: const EdgeInsets.only(top: 5.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: screenWidth(context) * 0.5,
-              padding: EdgeInsets.only(top: 0),
-              margin: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.1,
-                  vertical: 0),
-              child: Consumer<BusinessProvider>(builder: (context, value, _) {
-                return Text(
-                  value.selectedBusiness.businessName,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: AppTheme.electricBlue,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
+    padding: const EdgeInsets.only(top: 5.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: screenWidth(context) * 0.5,
+          padding: EdgeInsets.only(top: 0),
+          margin: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.1,
+              vertical: 0),
+          child: Consumer<BusinessProvider>(builder: (context, value, _) {
+            return Text(
+              value.selectedBusiness.businessName,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: AppTheme.electricBlue,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            );
+          }),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => UserProfileNew()),
+            ).then((value) {
+              if (value != null) {
+                if (value) setState(() {});
+              }
+            });
+          },
+          child: Container(
+            margin: EdgeInsets.only(
+                left: MediaQuery.of(context).size.width * 0.1, right: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.white.withOpacity(0.5),
+                  radius: MediaQuery.of(context).size.height * 0.05,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: (fileName == 'null') ||
+                        (repository.hiveQueries.userData.profilePic
+                            .toString()
+                            .isEmpty &&
+                            repository.hiveQueries.userData.profilePic
+                                .isEmpty)
+                        ? Image.asset(
+                      'assets/icons/my-account.png',
+                      // height:
+                      //     MediaQuery.of(context).size.height * 0.05,
+                    )
+                        : Container(
+                      width: 200,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100.0),
+                        child: Image.file(
+                          File(repository
+                              .hiveQueries.userData.profilePic),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
                   ),
-                );
-              }),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserProfileNew()),
-                ).then((value) {
-                  if (value != null) {
-                    if (value) setState(() {});
-                  }
-                });
-              },
-              child: Container(
-                margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.1, right: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.white.withOpacity(0.5),
-                      radius: MediaQuery.of(context).size.height * 0.05,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: (fileName == 'null') ||
-                                (repository.hiveQueries.userData.profilePic
-                                        .toString()
-                                        .isEmpty &&
-                                    repository.hiveQueries.userData.profilePic
-                                        .isEmpty)
-                            ? Image.asset(
-                                'assets/icons/my-account.png',
-                                // height:
-                                //     MediaQuery.of(context).size.height * 0.05,
-                              )
-                            : Container(
-                                width: 200,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100.0),
-                                  child: Image.file(
-                                    File(repository
-                                        .hiveQueries.userData.profilePic),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                      ),
-                    ),
+                ),
 
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      width: screenWidth(context) * 0.37,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        // mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${repository.hiveQueries.userData.firstName} ${repository.hiveQueries.userData.lastName}',
-                            style: TextStyle(
-                                color: AppTheme.brownishGrey,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            '+${repository.hiveQueries.userData.mobileNo.replaceAll('+', '')}',
-                            style: TextStyle(
-                                color: AppTheme.brownishGrey,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            '${repository.hiveQueries.userData.email}',
-                            style: TextStyle(
-                                color: AppTheme.brownishGrey,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  width: screenWidth(context) * 0.37,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${repository.hiveQueries.userData.firstName} ${repository.hiveQueries.userData.lastName}',
+                        style: TextStyle(
+                            color: AppTheme.brownishGrey,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        '+${repository.hiveQueries.userData.mobileNo.replaceAll('+', '')}',
+                        style: TextStyle(
+                            color: AppTheme.brownishGrey,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        '${repository.hiveQueries.userData.email}',
+                        style: TextStyle(
+                            color: AppTheme.brownishGrey,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                // SizedBox(
+                //   width: 30,
+                // ),
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5, left: 5),
+                      child: Text(
+                        'Unique QR Code',
+                        style: TextStyle(
+                            color: AppTheme.brownishGrey,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14),
                       ),
                     ),
-                    // SizedBox(
-                    //   width: 30,
-                    // ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 5, left: 5),
-                          child: Text(
-                            'Unique QR Code',
-                            style: TextStyle(
-                                color: AppTheme.brownishGrey,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            if (Repository().hiveQueries.userData.bankStatus ==
-                                false) {
-                              MerchantBankNotAdded.showBankNotAddedDialog(
-                                  context, 'userBankNotAdded');
-                            } else if ((Repository()
-                                            .hiveQueries
-                                            .userData
-                                            .kycStatus ==
-                                        0 ||
-                                    Repository()
-                                            .hiveQueries
-                                            .userData
-                                            .kycStatus ==
-                                        1 ||
-                                    Repository()
-                                            .hiveQueries
-                                            .userData
-                                            .kycStatus ==
-                                        2) ||
-                                (Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .premiumStatus ==
-                                    0)) {
-                              if (Repository().hiveQueries.userData.kycStatus ==
-                                  2) {
-                                //If KYC is Verification is Pending
-                                await getKyc().then((value) =>
-                                    MerchantBankNotAdded.showBankNotAddedDialog(
-                                        context, 'userKYCVerificationPending'));
-                              } else if (Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .kycStatus ==
-                                  0) {
-                                //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                                MerchantBankNotAdded.showBankNotAddedDialog(
-                                    context, 'userKYCPending');
-                              } else if (Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .kycStatus ==
-                                      0 &&
-                                  Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .isEmiratesIdDone ==
-                                      false) {
-                                //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                MerchantBankNotAdded.showBankNotAddedDialog(
-                                    context, 'EmiratesIdPending');
-                              } else if (Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .kycStatus ==
-                                      0 &&
-                                  Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .isTradeLicenseDone ==
-                                      false) {
-                                //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                MerchantBankNotAdded.showBankNotAddedDialog(
-                                    context, 'TradeLicensePending');
-                              } else if (Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .kycStatus ==
-                                      1 &&
-                                  Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .premiumStatus ==
-                                      0) {
-                                MerchantBankNotAdded.showBankNotAddedDialog(
-                                    context, 'upgradePremium');
-                              } else {
-                                CustomLoadingDialog.showLoadingDialog(
-                                    context, key);
-                                Uint8List qrData = await repository
-                                    .paymentThroughQRApi
-                                    .getQRCode()
-                                    .timeout(Duration(seconds: 30),
-                                        onTimeout: () async {
-                                  Navigator.of(context).pop();
-                                  return Future.value(null);
-                                });
-                                if (qrData.isNotEmpty) {
-                                  var anaylticsEvents =
-                                      AnalyticsEvents(context);
-                                  await anaylticsEvents.initCurrentUser();
-                                  await anaylticsEvents
-                                      .generateGlobalQrcodeEvent();
-                                  Navigator.of(context).pop(true);
-                                  Navigator.of(context).pushNamed(
-                                    AppRoutes.profileQRRoute,
-                                    arguments: UserQRArgs(qrCode: qrData),
-                                  );
-                                }
-                              }
-                            }
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 5, left: 3),
-                            child: Image.asset(
-                              AppAssets.qrCode,
-                              width: 99,
-                            ),
-                          ),
-                        ),
-                      ],
+                    SizedBox(
+                      height: 10,
                     ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.13, right: 25),
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(
-                'Unique Payment Link',
-                style: TextStyle(
-                  color: AppTheme.brownishGrey,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                ),
-                textAlign: TextAlign.left,
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(left: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(width: 0.5, color: AppTheme.coolGrey),
-                      color: Color.fromRGBO(236, 236, 236, 1),
-                    ),
-                    child: GestureDetector(
+                    GestureDetector(
                       onTap: () async {
                         if (Repository().hiveQueries.userData.bankStatus ==
                             false) {
                           MerchantBankNotAdded.showBankNotAddedDialog(
                               context, 'userBankNotAdded');
                         } else if ((Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus ==
-                                    0 ||
-                                Repository().hiveQueries.userData.kycStatus ==
-                                    1) ||
-                            (Repository().hiveQueries.userData.premiumStatus !=
+                            .hiveQueries
+                            .userData
+                            .kycStatus ==
+                            0 ||
+                            Repository()
+                                .hiveQueries
+                                .userData
+                                .kycStatus ==
+                                1 ||
+                            Repository()
+                                .hiveQueries
+                                .userData
+                                .kycStatus ==
+                                2) ||
+                            (Repository()
+                                .hiveQueries
+                                .userData
+                                .premiumStatus ==
                                 0)) {
                           if (Repository().hiveQueries.userData.kycStatus ==
                               2) {
@@ -1813,369 +1714,339 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 MerchantBankNotAdded.showBankNotAddedDialog(
                                     context, 'userKYCVerificationPending'));
                           } else if (Repository()
-                                  .hiveQueries
-                                  .userData
-                                  .kycStatus ==
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
                               0) {
                             //KYC WHEN USER STARTS A NEW KYC JOURNEY
                             MerchantBankNotAdded.showBankNotAddedDialog(
                                 context, 'userKYCPending');
                           } else if (Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .kycStatus ==
-                                  0 &&
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
+                              0 &&
                               Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .isEmiratesIdDone ==
+                                  .hiveQueries
+                                  .userData
+                                  .isEmiratesIdDone ==
                                   false) {
                             //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
                             MerchantBankNotAdded.showBankNotAddedDialog(
                                 context, 'EmiratesIdPending');
                           } else if (Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .kycStatus ==
-                                  0 &&
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
+                              0 &&
                               Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .isTradeLicenseDone ==
+                                  .hiveQueries
+                                  .userData
+                                  .isTradeLicenseDone ==
                                   false) {
                             //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
                             MerchantBankNotAdded.showBankNotAddedDialog(
                                 context, 'TradeLicensePending');
                           } else if (Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .kycStatus ==
-                                  1 &&
-                              Repository().hiveQueries.userData.premiumStatus ==
+                              .hiveQueries
+                              .userData
+                              .kycStatus ==
+                              1 &&
+                              Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .premiumStatus ==
                                   0) {
                             MerchantBankNotAdded.showBankNotAddedDialog(
                                 context, 'upgradePremium');
                           } else {
-                            FlutterClipboard.copy(
-                                    'https:ul.co/payinvite/l2g363')
-                                .then((value) => print('Link copied'));
-                          }
-                        } else {
-                          FlutterClipboard.copy('https:ul.co/payinvite/l2g363')
-                              .then((value) => print('Link copied'));
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.41,
-                            padding: EdgeInsets.symmetric(horizontal: 5),
-                            child: Text(
-                              uniquePaymentLink!,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: AppTheme.brownishGrey,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              debugPrint('KYC:' +
-                                  Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .kycStatus
-                                      .toString());
-                              debugPrint('Premium:' +
-                                  Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .premiumStatus
-                                      .toString());
-                              if (Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .bankStatus ==
-                                  false) {
-                                MerchantBankNotAdded.showBankNotAddedDialog(
-                                    context, 'userBankNotAdded');
-                              } else {
-                                if ((Repository()
-                                            .hiveQueries
-                                            .userData
-                                            .kycStatus !=
-                                        1) ||
-                                    (Repository()
-                                            .hiveQueries
-                                            .userData
-                                            .premiumStatus ==
-                                        0)) {
-                                  if (Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .kycStatus ==
-                                      2) {
-                                    //If KYC is Verification is Pending
-                                    await getKyc().then((value) =>
-                                        MerchantBankNotAdded
-                                            .showBankNotAddedDialog(context,
-                                                'userKYCVerificationPending'));
-                                  } else if (Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .kycStatus ==
-                                      0) {
-                                    //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                                    MerchantBankNotAdded.showBankNotAddedDialog(
-                                        context, 'userKYCPending');
-                                  } else if (Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .kycStatus ==
-                                          0 &&
-                                      Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .isEmiratesIdDone ==
-                                          false) {
-                                    //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                    MerchantBankNotAdded.showBankNotAddedDialog(
-                                        context, 'EmiratesIdPending');
-                                  } else if (Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .kycStatus ==
-                                          0 &&
-                                      Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .isTradeLicenseDone ==
-                                          false) {
-                                    //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                    MerchantBankNotAdded.showBankNotAddedDialog(
-                                        context, 'TradeLicensePending');
-                                  } else if (Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .kycStatus ==
-                                          1 &&
-                                      Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .premiumStatus ==
-                                          0) {
-                                    MerchantBankNotAdded.showBankNotAddedDialog(
-                                        context, 'upgradePremium');
-                                  } else {
-                                    debugPrint('Link copied');
-                                    Clipboard.setData(ClipboardData(
-                                            text: Repository()
-                                                .hiveQueries
-                                                .userData
-                                                .paymentLink
-                                                .toString()))
-                                        .then((result) {
-                                      // show toast or snackbar after successfully save
-                                      // Fluttertoast.showToast(
-                                      //     msg: "Link copied");
-                                      'Link copied'.showSnackBar(context);
-                                    });
-                                  }
-                                } else {
-                                  debugPrint('Link copied');
-                                  Clipboard.setData(ClipboardData(
-                                          text: Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .paymentLink
-                                              .toString()))
-                                      .then((result) {
-                                    // show toast or snackbar after successfully save
-                                    // Fluttertoast.showToast(
-                                    //     msg: "Link copied");
-                                    'Link copied'.showSnackBar(context);
-                                  });
-                                }
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(9),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                ),
-                                color: (AppTheme.electricBlue),
-                              ),
-                              child: Text(
-                                'COPY LINK',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  TapDebouncer(
-                    cooldown: const Duration(milliseconds: 1000),
-                    onTap: () async {
-                      debugPrint('KYC:' +
-                          Repository()
-                              .hiveQueries
-                              .userData
-                              .kycStatus
-                              .toString());
-                      debugPrint('Premium:' +
-                          Repository()
-                              .hiveQueries
-                              .userData
-                              .premiumStatus
-                              .toString());
-
-                      if (Repository().hiveQueries.userData.bankStatus ==
-                          false) {
-                        MerchantBankNotAdded.showBankNotAddedDialog(
-                            context, 'userBankNotAdded');
-                      } else if ((Repository().hiveQueries.userData.kycStatus !=
-                              1) ||
-                          (Repository().hiveQueries.userData.premiumStatus ==
-                              0)) {
-                        if (Repository().hiveQueries.userData.kycStatus == 2) {
-                          //If KYC is Verification is Pending
-                          debugPrint('Checking pop');
-                          await getKyc().then((value) =>
-                              MerchantBankNotAdded.showBankNotAddedDialog(
-                                  context, 'userKYCVerificationPending'));
-                        } else if (Repository()
-                                .hiveQueries
-                                .userData
-                                .kycStatus ==
-                            0) {
-                          //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                          MerchantBankNotAdded.showBankNotAddedDialog(
-                              context, 'userKYCPending');
-                        } else if (Repository()
-                                    .hiveQueries
-                                    .userData
-                                    .kycStatus ==
-                                0 &&
-                            Repository()
-                                    .hiveQueries
-                                    .userData
-                                    .isEmiratesIdDone ==
-                                false) {
-                          //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                          MerchantBankNotAdded.showBankNotAddedDialog(
-                              context, 'EmiratesIdPending');
-                        } else if (Repository()
-                                    .hiveQueries
-                                    .userData
-                                    .kycStatus ==
-                                0 &&
-                            Repository()
-                                    .hiveQueries
-                                    .userData
-                                    .isTradeLicenseDone ==
-                                false) {
-                          //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                          MerchantBankNotAdded.showBankNotAddedDialog(
-                              context, 'TradeLicensePending');
-                        } else if (Repository()
-                                    .hiveQueries
-                                    .userData
-                                    .kycStatus ==
-                                1 &&
-                            Repository().hiveQueries.userData.premiumStatus ==
-                                0) {
-                          MerchantBankNotAdded.showBankNotAddedDialog(
-                              context, 'upgradePremium');
-                        } else {
-                          debugPrint('loading status:' + loading.toString());
-                          if (loading == false) {
-                            setState(() {
-                              loading = true;
-                            });
-                            final RenderBox box =
-                                context.findRenderObject() as RenderBox;
-
-                            Share.share(
-                                    Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .paymentLink
-                                        .toString(),
-                                    subject: Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .paymentLink
-                                        .toString(),
-                                    sharePositionOrigin:
-                                        box.localToGlobal(Offset.zero) &
-                                            box.size)
-                                .then((value) async {
-                              var anaylticsEvents = AnalyticsEvents(context);
+                            CustomLoadingDialog.showLoadingDialog(
+                                context, key);
+                            Uint8List qrData = await repository
+                                .paymentThroughQRApi
+                                .getQRCode()
+                                .timeout(Duration(seconds: 30),
+                                onTimeout: () async {
+                                  Navigator.of(context).pop();
+                                  return Future.value(null);
+                                });
+                            if (qrData.isNotEmpty) {
+                              var anaylticsEvents =
+                              AnalyticsEvents(context);
                               await anaylticsEvents.initCurrentUser();
                               await anaylticsEvents
-                                  .shareGlobalPaymentLinkEvent();
-                              setState(() {
-                                loading = false;
-                              });
-                            });
+                                  .generateGlobalQrcodeEvent();
+                              Navigator.of(context).pop(true);
+                              Navigator.of(context).pushNamed(
+                                AppRoutes.profileQRRoute,
+                                arguments: UserQRArgs(qrCode: qrData),
+                              );
+                            }
                           }
                         }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 5, left: 3),
+                        child: Image.asset(
+                          AppAssets.qrCode,
+                          width: 99,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(
+              left: MediaQuery.of(context).size.width * 0.13, right: 25),
+          padding: EdgeInsets.symmetric(vertical: 5),
+          child: Text(
+            'Unique Payment Link',
+            style: TextStyle(
+              color: AppTheme.brownishGrey,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.left,
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(width: 0.5, color: AppTheme.coolGrey),
+                  color: Color.fromRGBO(236, 236, 236, 1),
+                ),
+                child: GestureDetector(
+                  onTap: () async {
+                    if (Repository().hiveQueries.userData.bankStatus ==
+                        false) {
+                      MerchantBankNotAdded.showBankNotAddedDialog(
+                          context, 'userBankNotAdded');
+                    } else if ((Repository()
+                        .hiveQueries
+                        .userData
+                        .kycStatus ==
+                        0 ||
+                        Repository().hiveQueries.userData.kycStatus ==
+                            1) ||
+                        (Repository().hiveQueries.userData.premiumStatus !=
+                            0)) {
+                      if (Repository().hiveQueries.userData.kycStatus ==
+                          2) {
+                        //If KYC is Verification is Pending
+                        await getKyc().then((value) =>
+                            MerchantBankNotAdded.showBankNotAddedDialog(
+                                context, 'userKYCVerificationPending'));
+                      } else if (Repository()
+                          .hiveQueries
+                          .userData
+                          .kycStatus ==
+                          0) {
+                        //KYC WHEN USER STARTS A NEW KYC JOURNEY
+                        MerchantBankNotAdded.showBankNotAddedDialog(
+                            context, 'userKYCPending');
+                      } else if (Repository()
+                          .hiveQueries
+                          .userData
+                          .kycStatus ==
+                          0 &&
+                          Repository()
+                              .hiveQueries
+                              .userData
+                              .isEmiratesIdDone ==
+                              false) {
+                        //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                        MerchantBankNotAdded.showBankNotAddedDialog(
+                            context, 'EmiratesIdPending');
+                      } else if (Repository()
+                          .hiveQueries
+                          .userData
+                          .kycStatus ==
+                          0 &&
+                          Repository()
+                              .hiveQueries
+                              .userData
+                              .isTradeLicenseDone ==
+                              false) {
+                        //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                        MerchantBankNotAdded.showBankNotAddedDialog(
+                            context, 'TradeLicensePending');
+                      } else if (Repository()
+                          .hiveQueries
+                          .userData
+                          .kycStatus ==
+                          1 &&
+                          Repository().hiveQueries.userData.premiumStatus ==
+                              0) {
+                        MerchantBankNotAdded.showBankNotAddedDialog(
+                            context, 'upgradePremium');
                       } else {
-                        debugPrint('loading status:' + loading.toString());
-                        if (loading == false) {
-                          setState(() {
-                            loading = true;
-                          });
-                          final RenderBox box =
-                              context.findRenderObject() as RenderBox;
-
-                          Share.share(
+                        FlutterClipboard.copy(
+                            'https:ul.co/payinvite/l2g363')
+                            .then((value) => print('Link copied'));
+                      }
+                    } else {
+                      FlutterClipboard.copy('https:ul.co/payinvite/l2g363')
+                          .then((value) => print('Link copied'));
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.41,
+                        padding: EdgeInsets.symmetric(horizontal: 5),
+                        child: Text(
+                          uniquePaymentLink!,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: AppTheme.brownishGrey,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          debugPrint('KYC:' +
+                              Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .kycStatus
+                                  .toString());
+                          debugPrint('Premium:' +
+                              Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .premiumStatus
+                                  .toString());
+                          if (Repository()
+                              .hiveQueries
+                              .userData
+                              .bankStatus ==
+                              false) {
+                            MerchantBankNotAdded.showBankNotAddedDialog(
+                                context, 'userBankNotAdded');
+                          } else {
+                            if ((Repository()
+                                .hiveQueries
+                                .userData
+                                .kycStatus !=
+                                1) ||
+                                (Repository()
+                                    .hiveQueries
+                                    .userData
+                                    .premiumStatus ==
+                                    0)) {
+                              if (Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .kycStatus ==
+                                  2) {
+                                //If KYC is Verification is Pending
+                                await getKyc().then((value) =>
+                                    MerchantBankNotAdded
+                                        .showBankNotAddedDialog(context,
+                                        'userKYCVerificationPending'));
+                              } else if (Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .kycStatus ==
+                                  0) {
+                                //KYC WHEN USER STARTS A NEW KYC JOURNEY
+                                MerchantBankNotAdded.showBankNotAddedDialog(
+                                    context, 'userKYCPending');
+                              } else if (Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .kycStatus ==
+                                  0 &&
                                   Repository()
                                       .hiveQueries
                                       .userData
-                                      .paymentLink
-                                      .toString(),
-                                  subject: Repository()
+                                      .isEmiratesIdDone ==
+                                      false) {
+                                //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                                MerchantBankNotAdded.showBankNotAddedDialog(
+                                    context, 'EmiratesIdPending');
+                              } else if (Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .kycStatus ==
+                                  0 &&
+                                  Repository()
+                                      .hiveQueries
+                                      .userData
+                                      .isTradeLicenseDone ==
+                                      false) {
+                                //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                                MerchantBankNotAdded.showBankNotAddedDialog(
+                                    context, 'TradeLicensePending');
+                              } else if (Repository()
+                                  .hiveQueries
+                                  .userData
+                                  .kycStatus ==
+                                  1 &&
+                                  Repository()
+                                      .hiveQueries
+                                      .userData
+                                      .premiumStatus ==
+                                      0) {
+                                MerchantBankNotAdded.showBankNotAddedDialog(
+                                    context, 'upgradePremium');
+                              } else {
+                                debugPrint('Link copied');
+                                Clipboard.setData(ClipboardData(
+                                    text: Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .paymentLink
+                                        .toString()))
+                                    .then((result) {
+                                  // show toast or snackbar after successfully save
+                                  // Fluttertoast.showToast(
+                                  //     msg: "Link copied");
+                                  'Link copied'.showSnackBar(context);
+                                });
+                              }
+                            } else {
+                              debugPrint('Link copied');
+                              Clipboard.setData(ClipboardData(
+                                  text: Repository()
                                       .hiveQueries
                                       .userData
                                       .paymentLink
-                                      .toString(),
-                                  sharePositionOrigin:
-                                      box.localToGlobal(Offset.zero) & box.size)
-                              .then((value) async {
-                            var anaylticsEvents = AnalyticsEvents(context);
-                            await anaylticsEvents.initCurrentUser();
-                            await anaylticsEvents.shareGlobalPaymentLinkEvent();
-                            setState(() {
-                              loading = false;
-                            });
-                          });
-                        }
-                      }
-                    },
-                    // your tap handler moved here
-                    builder: (BuildContext context, TapDebouncerFunc? onTap) {
-                      return GestureDetector(
-                        onTap: onTap,
+                                      .toString()))
+                                  .then((result) {
+                                // show toast or snackbar after successfully save
+                                // Fluttertoast.showToast(
+                                //     msg: "Link copied");
+                                'Link copied'.showSnackBar(context);
+                              });
+                            }
+                          }
+                        },
                         child: Container(
-                          padding: EdgeInsets.all(10),
+                          padding: EdgeInsets.all(9),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: AppTheme.electricBlue,
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
+                            ),
+                            color: (AppTheme.electricBlue),
                           ),
                           child: Text(
-                            'SHARE',
+                            'COPY LINK',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
@@ -2183,162 +2054,326 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             ),
                           ),
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   ),
-
-                  // isLoading == true
-                  //     ? Center(
-                  //         child: CircularProgressIndicator(),
-                  //       )
-                  //     : GestureDetector(
-                  //         onTap: () async {
-                  //           if (Repository().hiveQueries.userData.bankStatus ==
-                  //               false) {
-                  //             MerchantBankNotAdded.showBankNotAddedDialog(
-                  //                 context, 'userBankNotAdded');
-                  //           } else if ((Repository()
-                  //                       .hiveQueries
-                  //                       .userData
-                  //                       .kycStatus !=
-                  //                   1) ||
-                  //               (Repository()
-                  //                       .hiveQueries
-                  //                       .userData
-                  //                       .premiumStatus !=
-                  //                   0)) {
-                  //             if (Repository().hiveQueries.userData.kycStatus ==
-                  //                 2) {
-                  //               //If KYC is Verification is Pending
-                  //               debugPrint('Checking pop');
-                  //               await getKyc().then((value) =>
-                  //                   MerchantBankNotAdded.showBankNotAddedDialog(
-                  //                       context, 'userKYCVerificationPending'));
-                  //             } else if (Repository()
-                  //                     .hiveQueries
-                  //                     .userData
-                  //                     .kycStatus ==
-                  //                 0) {
-                  //               //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                  //               MerchantBankNotAdded.showBankNotAddedDialog(
-                  //                   context, 'userKYCPending');
-                  //             } else if (Repository()
-                  //                         .hiveQueries
-                  //                         .userData
-                  //                         .kycStatus ==
-                  //                     0 &&
-                  //                 Repository()
-                  //                         .hiveQueries
-                  //                         .userData
-                  //                         .isEmiratesIdDone ==
-                  //                     false) {
-                  //               //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                  //               MerchantBankNotAdded.showBankNotAddedDialog(
-                  //                   context, 'EmiratesIdPending');
-                  //             } else if (Repository()
-                  //                         .hiveQueries
-                  //                         .userData
-                  //                         .kycStatus ==
-                  //                     0 &&
-                  //                 Repository()
-                  //                         .hiveQueries
-                  //                         .userData
-                  //                         .isTradeLicenseDone ==
-                  //                     false) {
-                  //               //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                  //               MerchantBankNotAdded.showBankNotAddedDialog(
-                  //                   context, 'TradeLicensePending');
-                  //             } else if (Repository()
-                  //                         .hiveQueries
-                  //                         .userData
-                  //                         .kycStatus ==
-                  //                     1 &&
-                  //                 Repository()
-                  //                         .hiveQueries
-                  //                         .userData
-                  //                         .premiumStatus ==
-                  //                     0) {
-                  //               MerchantBankNotAdded.showBankNotAddedDialog(
-                  //                   context, 'upgradePremium');
-                  //             } else {
-                  //               debugPrint(
-                  //                   'loading status:' + loading.toString());
-                  //               if (loading == false) {
-                  //                 setState(() {
-                  //                   loading = true;
-                  //                 });
-                  //                 final RenderBox box =
-                  //                     context.findRenderObject() as RenderBox;
-
-                  //                 Share.share('https:ul.co/payinvite/l2g363',
-                  //                         subject:
-                  //                             'https:ul.co/payinvite/l2g363',
-                  //                         sharePositionOrigin:
-                  //                             box.localToGlobal(Offset.zero) &
-                  //                                 box.size)
-                  //                     .then((value) {
-                  //                   setState(() {
-                  //                     loading = false;
-                  //                   });
-                  //                 });
-                  //               }
-                  //             }
-                  //           }
-                  //         },
-                  //         child: Container(
-                  //           padding: EdgeInsets.all(10),
-                  //           decoration: BoxDecoration(
-                  //             borderRadius: BorderRadius.circular(20),
-                  //             color: AppTheme.electricBlue,
-                  //           ),
-                  //           child: Text(
-                  //             'SHARE',
-                  //             style: TextStyle(
-                  //               color: Colors.white,
-                  //               fontWeight: FontWeight.w500,
-                  //               fontSize: 14,
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                ],
+                ),
               ),
-            ),
-          ],
+              TapDebouncer(
+                cooldown: const Duration(milliseconds: 1000),
+                onTap: () async {
+                  debugPrint('KYC:' +
+                      Repository()
+                          .hiveQueries
+                          .userData
+                          .kycStatus
+                          .toString());
+                  debugPrint('Premium:' +
+                      Repository()
+                          .hiveQueries
+                          .userData
+                          .premiumStatus
+                          .toString());
+
+                  if (Repository().hiveQueries.userData.bankStatus ==
+                      false) {
+                    MerchantBankNotAdded.showBankNotAddedDialog(
+                        context, 'userBankNotAdded');
+                  } else if ((Repository().hiveQueries.userData.kycStatus !=
+                      1) ||
+                      (Repository().hiveQueries.userData.premiumStatus ==
+                          0)) {
+                    if (Repository().hiveQueries.userData.kycStatus == 2) {
+                      //If KYC is Verification is Pending
+                      debugPrint('Checking pop');
+                      await getKyc().then((value) =>
+                          MerchantBankNotAdded.showBankNotAddedDialog(
+                              context, 'userKYCVerificationPending'));
+                    } else if (Repository()
+                        .hiveQueries
+                        .userData
+                        .kycStatus ==
+                        0) {
+                      //KYC WHEN USER STARTS A NEW KYC JOURNEY
+                      MerchantBankNotAdded.showBankNotAddedDialog(
+                          context, 'userKYCPending');
+                    } else if (Repository()
+                        .hiveQueries
+                        .userData
+                        .kycStatus ==
+                        0 &&
+                        Repository()
+                            .hiveQueries
+                            .userData
+                            .isEmiratesIdDone ==
+                            false) {
+                      //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                      MerchantBankNotAdded.showBankNotAddedDialog(
+                          context, 'EmiratesIdPending');
+                    } else if (Repository()
+                        .hiveQueries
+                        .userData
+                        .kycStatus ==
+                        0 &&
+                        Repository()
+                            .hiveQueries
+                            .userData
+                            .isTradeLicenseDone ==
+                            false) {
+                      //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                      MerchantBankNotAdded.showBankNotAddedDialog(
+                          context, 'TradeLicensePending');
+                    } else if (Repository()
+                        .hiveQueries
+                        .userData
+                        .kycStatus ==
+                        1 &&
+                        Repository().hiveQueries.userData.premiumStatus ==
+                            0) {
+                      MerchantBankNotAdded.showBankNotAddedDialog(
+                          context, 'upgradePremium');
+                    } else {
+                      debugPrint('loading status:' + loading.toString());
+                      if (loading == false) {
+                        setState(() {
+                          loading = true;
+                        });
+                        final RenderBox box =
+                        context.findRenderObject() as RenderBox;
+
+                        Share.share(
+                            Repository()
+                                .hiveQueries
+                                .userData
+                                .paymentLink
+                                .toString(),
+                            subject: Repository()
+                                .hiveQueries
+                                .userData
+                                .paymentLink
+                                .toString(),
+                            sharePositionOrigin:
+                            box.localToGlobal(Offset.zero) &
+                            box.size)
+                            .then((value) async {
+                          var anaylticsEvents = AnalyticsEvents(context);
+                          await anaylticsEvents.initCurrentUser();
+                          await anaylticsEvents
+                              .shareGlobalPaymentLinkEvent();
+                          setState(() {
+                            loading = false;
+                          });
+                        });
+                      }
+                    }
+                  } else {
+                    debugPrint('loading status:' + loading.toString());
+                    if (loading == false) {
+                      setState(() {
+                        loading = true;
+                      });
+                      final RenderBox box =
+                      context.findRenderObject() as RenderBox;
+
+                      Share.share(
+                          Repository()
+                              .hiveQueries
+                              .userData
+                              .paymentLink
+                              .toString(),
+                          subject: Repository()
+                              .hiveQueries
+                              .userData
+                              .paymentLink
+                              .toString(),
+                          sharePositionOrigin:
+                          box.localToGlobal(Offset.zero) & box.size)
+                          .then((value) async {
+                        var anaylticsEvents = AnalyticsEvents(context);
+                        await anaylticsEvents.initCurrentUser();
+                        await anaylticsEvents.shareGlobalPaymentLinkEvent();
+                        setState(() {
+                          loading = false;
+                        });
+                      });
+                    }
+                  }
+                },
+                // your tap handler moved here
+                builder: (BuildContext context, TapDebouncerFunc? onTap) {
+                  return GestureDetector(
+                    onTap: onTap,
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: AppTheme.electricBlue,
+                      ),
+                      child: Text(
+                        'SHARE',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+
+              // isLoading == true
+              //     ? Center(
+              //         child: CircularProgressIndicator(),
+              //       )
+              //     : GestureDetector(
+              //         onTap: () async {
+              //           if (Repository().hiveQueries.userData.bankStatus ==
+              //               false) {
+              //             MerchantBankNotAdded.showBankNotAddedDialog(
+              //                 context, 'userBankNotAdded');
+              //           } else if ((Repository()
+              //                       .hiveQueries
+              //                       .userData
+              //                       .kycStatus !=
+              //                   1) ||
+              //               (Repository()
+              //                       .hiveQueries
+              //                       .userData
+              //                       .premiumStatus !=
+              //                   0)) {
+              //             if (Repository().hiveQueries.userData.kycStatus ==
+              //                 2) {
+              //               //If KYC is Verification is Pending
+              //               debugPrint('Checking pop');
+              //               await getKyc().then((value) =>
+              //                   MerchantBankNotAdded.showBankNotAddedDialog(
+              //                       context, 'userKYCVerificationPending'));
+              //             } else if (Repository()
+              //                     .hiveQueries
+              //                     .userData
+              //                     .kycStatus ==
+              //                 0) {
+              //               //KYC WHEN USER STARTS A NEW KYC JOURNEY
+              //               MerchantBankNotAdded.showBankNotAddedDialog(
+              //                   context, 'userKYCPending');
+              //             } else if (Repository()
+              //                         .hiveQueries
+              //                         .userData
+              //                         .kycStatus ==
+              //                     0 &&
+              //                 Repository()
+              //                         .hiveQueries
+              //                         .userData
+              //                         .isEmiratesIdDone ==
+              //                     false) {
+              //               //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+              //               MerchantBankNotAdded.showBankNotAddedDialog(
+              //                   context, 'EmiratesIdPending');
+              //             } else if (Repository()
+              //                         .hiveQueries
+              //                         .userData
+              //                         .kycStatus ==
+              //                     0 &&
+              //                 Repository()
+              //                         .hiveQueries
+              //                         .userData
+              //                         .isTradeLicenseDone ==
+              //                     false) {
+              //               //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+              //               MerchantBankNotAdded.showBankNotAddedDialog(
+              //                   context, 'TradeLicensePending');
+              //             } else if (Repository()
+              //                         .hiveQueries
+              //                         .userData
+              //                         .kycStatus ==
+              //                     1 &&
+              //                 Repository()
+              //                         .hiveQueries
+              //                         .userData
+              //                         .premiumStatus ==
+              //                     0) {
+              //               MerchantBankNotAdded.showBankNotAddedDialog(
+              //                   context, 'upgradePremium');
+              //             } else {
+              //               debugPrint(
+              //                   'loading status:' + loading.toString());
+              //               if (loading == false) {
+              //                 setState(() {
+              //                   loading = true;
+              //                 });
+              //                 final RenderBox box =
+              //                     context.findRenderObject() as RenderBox;
+
+              //                 Share.share('https:ul.co/payinvite/l2g363',
+              //                         subject:
+              //                             'https:ul.co/payinvite/l2g363',
+              //                         sharePositionOrigin:
+              //                             box.localToGlobal(Offset.zero) &
+              //                                 box.size)
+              //                     .then((value) {
+              //                   setState(() {
+              //                     loading = false;
+              //                   });
+              //                 });
+              //               }
+              //             }
+              //           }
+              //         },
+              //         child: Container(
+              //           padding: EdgeInsets.all(10),
+              //           decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(20),
+              //             color: AppTheme.electricBlue,
+              //           ),
+              //           child: Text(
+              //             'SHARE',
+              //             style: TextStyle(
+              //               color: Colors.white,
+              //               fontWeight: FontWeight.w500,
+              //               fontSize: 14,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+            ],
+          ),
         ),
-      );
+      ],
+    ),
+  );
 
   Widget get bottom => Container(
-        // width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text(
-              'V.1.0.0',
-              style: TextStyle(color: AppTheme.brownishGrey),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 5, bottom: 2),
-              child: SvgPicture.asset(
-                AppAssets.logo,
-                height: 40,
-                color: AppTheme.brownishGrey,
-              ),
-            ),
-            const Text(
-              'Track. Remind. Pay.',
-              style: TextStyle(color: AppTheme.brownishGrey, fontSize: 12),
-            ),
-          ],
+    // width: double.infinity,
+    padding: EdgeInsets.symmetric(vertical: 20),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Text(
+          'V.1.0.0',
+          style: TextStyle(color: AppTheme.brownishGrey),
         ),
-      );
+        Padding(
+          padding: const EdgeInsets.only(top: 5, bottom: 2),
+          child: SvgPicture.asset(
+            AppAssets.logo,
+            height: 40,
+            color: AppTheme.brownishGrey,
+          ),
+        ),
+        const Text(
+          'Track. Remind. Pay.',
+          style: TextStyle(color: AppTheme.brownishGrey, fontSize: 12),
+        ),
+      ],
+    ),
+  );
 
   Widget get divider => const SizedBox(
-        height: 20,
-      );
+    height: 20,
+  );
 
-  showNotificationListDialog(BuildContext context){
+  showNotificationListDialog(BuildContext context,List<NotificationData> dataList){
     return  showGeneralDialog(
       barrierLabel: "Barrier",
       barrierDismissible: true,
@@ -2351,7 +2386,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           child: Container(
             height: MediaQuery.of(context).size.height*0.9 ,
             child: SizedBox.expand(child: ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),child: UserNotifications())),
+                borderRadius: BorderRadius.circular(12.0),child: UserNotifications(dataList: dataList,))),
             margin: EdgeInsets.only(bottom: 12, left: 16, right: 16),
             decoration: BoxDecoration(
               color: Colors.white,

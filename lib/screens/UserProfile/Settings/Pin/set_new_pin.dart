@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Utility/app_services.dart';
 import 'package:urbanledger/Services/repository.dart';
+import 'package:urbanledger/Utility/pin_code_strenth.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
 import 'package:urbanledger/screens/mobile_analytics/analytics_events.dart';
 
@@ -357,9 +358,36 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
       if (setPinNotifier.value.length < 4) {
         setPinNotifier.value = setPinNotifier.value + str;
         if (setPinNotifier.value.length == 4) {
-          Navigator.of(context).pushNamed(AppRoutes.setNewPinRoute,
-              arguments: SetPinRouteArgs(
-                  setPinNotifier.value, true, widget.isResetPinState, false));
+          if(PincodeStrenth().checkPincodeStrenth(setPinNotifier.value)){
+            setPinNotifier.value = '';
+            setState(() {
+              showError = true;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                margin: const EdgeInsets.all(60),
+                backgroundColor: Colors.white,
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CustomText(
+                      'This PIN Can Be Easily Guessed. Please try again with a different PIN',
+                      size: 16,
+                      bold: FontWeight.w500,
+                      color: AppTheme.brownishGrey,
+                    ),
+                    // Image.asset(AppAssets.thumbsIcon)
+                  ],
+                )));
+          }
+          else{
+            Navigator.of(context).pushNamed(AppRoutes.setNewPinRoute,
+                arguments: SetPinRouteArgs(
+                    setPinNotifier.value, true, widget.isResetPinState, false));
+          }
+
         }
       }
     } else {

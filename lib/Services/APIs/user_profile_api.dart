@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:urbanledger/Models/user_model.dart';
+import 'package:urbanledger/Models/user_profile_model.dart';
 import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/apiCalls.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
@@ -19,6 +20,7 @@ var bodyMap = {
   "last_name":signUpModel.lastName,
   "email_id":signUpModel.email
 };
+print(jsonEncode(bodyMap));
     final response = await postRequest(
         endpoint: url,
         headers: apiAuthHeaderWithOnlyToken(),
@@ -81,7 +83,9 @@ var bodyMap = {
 
     if (responseAPI.statusCode == 200) {
       debugPrint('Check' + responseAPI.body.toString());
-      return jsonDecode(responseAPI.body.toString());
+      UserProfileModel data = userProfileModelFromJson(responseAPI.body.toString());
+
+      return data;
     } else {
       print(responseAPI.statusCode.toString());
       return Future.error('Unexpected Error occured');

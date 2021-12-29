@@ -1,4 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,7 +33,7 @@ class VerificationScreen extends StatefulWidget {
   _VerificationScreenState createState() => _VerificationScreenState();
 }
 
-class _VerificationScreenState extends State<VerificationScreen> {
+class _VerificationScreenState extends State<VerificationScreen> with SingleTickerProviderStateMixin {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Repository repository = Repository();
   String? _digit1, _digit2, _digit3, _digit4, _digit5, _digit6;
@@ -51,7 +53,12 @@ class _VerificationScreenState extends State<VerificationScreen> {
   final GlobalKey<State> key = GlobalKey<State>();
   late bool _serviceEnabled;
   final location = Location();
- // final FirebaseAnalytics analytics = FirebaseAnalytics();
+  bool isResendOtpClickable = true;
+  int _resendOtpCount = 30;
+ // late Timer _timer;
+
+  late AnimationController _controller;
+  // final FirebaseAnalytics analytics = FirebaseAnalytics();
 
   @override
   void initState() {
@@ -66,6 +73,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
     fourController.text = ' ';
     fiveController.text = ' ';
     sixController.text = ' ';
+
+    _controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 30));
 
   }
 
@@ -83,6 +93,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
     fourthFocusNode.dispose();
     fifthFocusNode.dispose();
     sixthFocusNode.dispose();
+   // _timer.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -112,28 +124,29 @@ class _VerificationScreenState extends State<VerificationScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               (screenWidth(context) * 0.035).widthBox,
-              Expanded(
+             /* Expanded(
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     padding: EdgeInsets.all(15),
-                    side: BorderSide(color: Color(0xff1058ff), width: 2),
+                    side: BorderSide(color: isResendOtpClickable?Color(0xff1058ff):Colors.grey, width: 2),
                     // color: Colors.white,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
                   onPressed: () async {
                     clearTextControllers();
+                    isResendOtpClickable = false;
                     // _sendVerificationCode(widget.phoneNo.replaceAll(' ', ''));
                   },
                   child: CustomText(
                     'RESEND OTP',
                     size: (18),
-                    color: AppTheme.electricBlue,
+                    color: isResendOtpClickable?AppTheme.electricBlue:Colors.grey,
                     bold: FontWeight.w500,
                   ),
                 ),
               ),
-              (screenWidth(context) * 0.07).widthBox,
+              (screenWidth(context) * 0.07).widthBox,*/
               Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -142,121 +155,121 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     padding: EdgeInsets.only(
                         bottom: 15, top: 15, left: 30, right: 30),
                     primary: validate() == true
-                          ? AppTheme.electricBlue
-                          : AppTheme.coolGrey,
+                        ? AppTheme.electricBlue
+                        : AppTheme.coolGrey,
                   ),
                   child: CustomText(
-                    'VERIFY',
+                    'VERIFY OTP',
                     size: (18),
                     bold: FontWeight.w500,
                     color: Colors.white,
                   ),
                   onPressed: validate() == true
-                        ? () async {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              //TODO: To handle location permission when denied.
+                      ? () async {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      //TODO: To handle location permission when denied.
 
-                              // await checkService();
-                              // final _location = await location.getLocation();
-                              CustomLoadingDialog.showLoadingDialog(
-                                  context, key);
-                              final status = widget.isRegister
-                                  ? await (repository.registerApi
-                                          .registerOtpVerification(
-                                              _digit1! +
-                                                  _digit2! +
-                                                  _digit3! +
-                                                  _digit4!,
-                                              // _location.latitude,
-                                              // _location.longitude,
-                                              0,
-                                              0))
-                                      .timeout(Duration(seconds: 30),
-                                          onTimeout: () async {
-                                      Navigator.of(context).pop();
-                                      return Future.value(null);
-                                    }).catchError((e) {
-                                      oneController.text = ' ';
-                                      twoController.text = ' ';
-                                      threeController.text = ' ';
-                                      fourController.text = ' ';
-                                      fiveController.text = ' ';
-                                      sixController.text = ' ';
-                                      setState(() {});
-                                      e.toString().showSnackBar(context);
-                                      Navigator.of(context).pop();
-                                      return 'Incorrect';
-                                    })
-                                  : await (repository.loginApi
-                                          .loginOtpVerification(
-                                              _digit1! +
-                                                  _digit2! +
-                                                  _digit3! +
-                                                  _digit4!,
-                                              // _location.latitude,
-                                              // _location.longitude,
-                                              0,
-                                              0))
-                                      .catchError((e) {
-                                        oneController.text = ' ';
-                                      twoController.text = ' ';
-                                      threeController.text = ' ';
-                                      fourController.text = ' ';
-                                      fiveController.text = ' ';
-                                      sixController.text = ' ';
-                                      debugPrint('KKKKKKKKKKKKK');
-                                      setState(() {});
-                                      e.toString().showSnackBar(context);
-                                      Navigator.of(context).pop();
-                                      return 'Incorrect';
-                                    });
-                              if (status.isNotEmpty) {
-                                if (status == 'Incorrect') return;
-                                _formKey.currentState!.reset();
-                                if (!widget.isRegister) {
-                                  // await analytics.logLogin();
-                                  LoginRepository().login(
-                                      widget.phoneNo.replaceAll(' ', ''),
-                                      context);
-                                  repository.hiveQueries
-                                      .insertIsAuthenticated(true);
-                                  Navigator.of(context)
-                                    ..pop()
-                                    ..pop()
-                                    ..pushReplacementNamed(
-                                        repository.hiveQueries.userPin.isEmpty
-                                            ? AppRoutes.setPinRoute
-                                            : AppRoutes.pinLoginRoute,
-                                        arguments: repository
-                                                .hiveQueries.userPin.isEmpty
-                                            ? SetPinRouteArgs(
-                                                '', false, false, false)
-                                            : null);
-                                } else {
-                                  //  await analytics.logSignUp(signUpMethod: 'SignUp');
-                                  /*    var anaylticsEvents = await AnalyticsEvents(context);
+                      // await checkService();
+                      // final _location = await location.getLocation();
+                      CustomLoadingDialog.showLoadingDialog(
+                          context, key);
+                      final status = widget.isRegister
+                          ? await (repository.registerApi
+                          .registerOtpVerification(
+                          _digit1! +
+                              _digit2! +
+                              _digit3! +
+                              _digit4!,
+                          // _location.latitude,
+                          // _location.longitude,
+                          0,
+                          0))
+                          .timeout(Duration(seconds: 30),
+                          onTimeout: () async {
+                            Navigator.of(context).pop();
+                            return Future.value(null);
+                          }).catchError((e) {
+                        oneController.text = ' ';
+                        twoController.text = ' ';
+                        threeController.text = ' ';
+                        fourController.text = ' ';
+                        fiveController.text = ' ';
+                        sixController.text = ' ';
+                        setState(() {});
+                        e.toString().showSnackBar(context);
+                        Navigator.of(context).pop();
+                        return 'Incorrect';
+                      })
+                          : await (repository.loginApi
+                          .loginOtpVerification(
+                          _digit1! +
+                              _digit2! +
+                              _digit3! +
+                              _digit4!,
+                          // _location.latitude,
+                          // _location.longitude,
+                          0,
+                          0))
+                          .catchError((e) {
+                        oneController.text = ' ';
+                        twoController.text = ' ';
+                        threeController.text = ' ';
+                        fourController.text = ' ';
+                        fiveController.text = ' ';
+                        sixController.text = ' ';
+                        debugPrint('KKKKKKKKKKKKK');
+                        setState(() {});
+                        e.toString().showSnackBar(context);
+                        Navigator.of(context).pop();
+                        return 'Incorrect';
+                      });
+                      if (status.isNotEmpty) {
+                        if (status == 'Incorrect') return;
+                        _formKey.currentState!.reset();
+                        if (!widget.isRegister) {
+                          // await analytics.logLogin();
+                          LoginRepository().login(
+                              widget.phoneNo.replaceAll(' ', ''),
+                              context);
+                          repository.hiveQueries
+                              .insertIsAuthenticated(true);
+                          Navigator.of(context)
+                            ..pop()
+                            ..pop()
+                            ..pushReplacementNamed(
+                                repository.hiveQueries.userPin.isEmpty
+                                    ? AppRoutes.setPinRoute
+                                    : AppRoutes.pinLoginRoute,
+                                arguments: repository
+                                    .hiveQueries.userPin.isEmpty
+                                    ? SetPinRouteArgs(
+                                    '', false, false, false)
+                                    : null);
+                        } else {
+                          //  await analytics.logSignUp(signUpMethod: 'SignUp');
+                          /*    var anaylticsEvents = await AnalyticsEvents(context);
                             anaylticsEvents.signUpEvent(withReferral);*/
 
-                                  Navigator.of(context)
-                                    ..pop()
-                                    ..pop()
-                                    ..pushReplacementNamed(
-                                        AppRoutes.signupRoute,
-                                        arguments:
-                                            widget.phoneNo.replaceAll(' ', ''));
-                                }
-                              } else {
-                                Navigator.of(context)
-                                  ..pop()
-                                  ..pop()
-                                  ..pushReplacementNamed(AppRoutes.signupRoute,
-                                      arguments:
-                                          widget.phoneNo.replaceAll(' ', ''));
-                              }
-                            }
-                          }
-                        : () {},
+                          Navigator.of(context)
+                            ..pop()
+                            ..pop()
+                            ..pushReplacementNamed(
+                                AppRoutes.signupRoute,
+                                arguments:
+                                widget.phoneNo.replaceAll(' ', ''));
+                        }
+                      } else {
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop()
+                          ..pushReplacementNamed(AppRoutes.signupRoute,
+                              arguments:
+                              widget.phoneNo.replaceAll(' ', ''));
+                      }
+                    }
+                  }
+                      : () {},
 
                 ),
               ),
@@ -371,6 +384,47 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       ],
                     ),
                   ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 40.0, vertical: 15.0),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          child: CustomText(
+                            isResendOtpClickable?'RESEND CODE':'RESEND CODE IN ',
+                            size: (18),
+                            color: isResendOtpClickable?AppTheme.electricBlue:Colors.grey,
+                            bold: FontWeight.w800,
+                          ),
+                          onTap:isResendOtpClickable? (){
+                            clearTextControllers();
+                            setState(() {
+                              isResendOtpClickable = false;
+                              _resendOtpCount = 30;
+                            });
+                            //startTimer();
+
+                            _controller.forward();
+                          }:(){},
+                        ),
+                        if(!isResendOtpClickable)
+                          Countdown(
+                            animation: StepTween(
+                              begin: 30,
+                              end: 0,
+                            ).animate(_controller)..addStatusListener((status) {
+                              if(status == AnimationStatus.completed){
+                                _controller.reset();
+                                setState(() {
+                                isResendOtpClickable = true;
+                              });
+                              }
+                            }),
+                          )
+                      ],
+                    ),
+                  ),
                   (deviceHeight * 0.09).heightBox,
                   Center(
                     child: CustomText(
@@ -391,14 +445,33 @@ class _VerificationScreenState extends State<VerificationScreen> {
     );
   }
 
+ /* void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+          (Timer timer) {
+        if (_resendOtpCount == 0) {
+          setState(() {
+            timer.cancel();
+            isResendOtpClickable = true;
+          });
+        } else {
+          setState(() {
+            _resendOtpCount--;
+          });
+        }
+      },
+    );
+  }*/
+
 
 
   Widget otpTextField(
       {required FocusNode focusNode,
-      required void Function(String?) onSaved,
-      FocusNode? nextFocusNode,
-      FocusNode? previousFocusNode,
-      required TextEditingController controller}) {
+        required void Function(String?) onSaved,
+        FocusNode? nextFocusNode,
+        FocusNode? previousFocusNode,
+        required TextEditingController controller}) {
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -422,12 +495,12 @@ class _VerificationScreenState extends State<VerificationScreen> {
         onChanged: nextFocusNode == null
             ? null
             : (value) {
-                if (value.length > 0 && value !="") {
-                  FocusScope.of(context).requestFocus(nextFocusNode);
-                } else {
-                  FocusScope.of(context).requestFocus(previousFocusNode);
-                }
-              },
+          if (value.length > 0 && value !="") {
+            FocusScope.of(context).requestFocus(nextFocusNode);
+          } else {
+            FocusScope.of(context).requestFocus(previousFocusNode);
+          }
+        },
         keyboardType: TextInputType.phone,
         maxLength: 1,
         cursorColor: AppTheme.coolGrey,
@@ -486,7 +559,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
 
 
-  /* Future<void> _sendVerificationCode(String phone) async {
+/* Future<void> _sendVerificationCode(String phone) async {
     try {
       await _auth.verifyPhoneNumber(
           phoneNumber: phone,
@@ -585,10 +658,39 @@ class _VerificationScreenState extends State<VerificationScreen> {
     }
   } */
 
-  /* Future<bool> checkUserAvailability() async {
+/* Future<bool> checkUserAvailability() async {
     final response = await Repository()
         .registerApi
         .checkUserAvailability(widget.phoneNo.replaceAll(' ', ''));
     return response;
   } */
+}
+
+class Countdown extends AnimatedWidget {
+  Countdown({Key? key, this.animation}) : super(key: key, listenable: animation!);
+  Animation<int>? animation;
+
+  
+  @override
+  build(BuildContext context) {
+    Duration clockTimer = Duration(seconds: animation!.value);
+
+    String timerText =
+        '0${clockTimer.inMinutes.remainder(60).toString()}:${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')} secs';
+
+    /*return Text(
+      "$timerText",
+      style: TextStyle(
+        fontSize: 110,
+        color: Theme.of(context).primaryColor,
+      ),
+    );*/
+
+   return CustomText(
+      '${timerText}',
+      size: (18),
+      color: AppTheme.electricBlue,
+      bold: FontWeight.w800,
+    );
+  }
 }

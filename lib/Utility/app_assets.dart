@@ -102,6 +102,8 @@ class AppAssets {
   static const String info_01 = 'assets/icons/info_01.png';
   static const String warning = 'assets/icons/Warning-01.png';
 
+  static const String notification_bell = 'assets/icons/notification_bell.png';
+
   static const String sd_message_icon = 'assets/icons/sd_message_icon.png';
 
   static const String sd_id_icon = 'assets/icons/sd_id_icon.png';
