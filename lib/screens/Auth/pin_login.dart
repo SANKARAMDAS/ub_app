@@ -490,7 +490,7 @@ class PinLoginPageState extends State<PinLoginScreen> {
                   )
                 : Column(
                     children: <Widget>[
-                      15.0.heightBox,
+                      // 15.0.heightBox,
                       commonLogoWithTagline(height),
                       Text(
                         'Enter Urban Ledger PIN',
@@ -693,15 +693,16 @@ class PinLoginPageState extends State<PinLoginScreen> {
       );
 
   Widget pinBox(bool value) => Padding(
-        padding: EdgeInsets.all(22),
+        padding: EdgeInsets.all(10),
         child: new Container(
-            height: 20,
-            width: 20,
-            alignment: Alignment.center,
-            decoration: new BoxDecoration(
-                color: Colors.white,
-                border: new Border.all(width: 2.0, color: Colors.white),
-                borderRadius: new BorderRadius.circular(20)),
+          height: 75,
+          width: 50,
+          alignment: Alignment.center,
+          decoration: new BoxDecoration(
+              color: Colors.white,
+              border: new Border.all(width: 2.0, color: Colors.white),
+              borderRadius: new BorderRadius.circular(7)
+              ),
             child: Container(
               height: 18,
               width: 18,
