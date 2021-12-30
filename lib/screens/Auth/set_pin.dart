@@ -126,7 +126,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                                 ],
                               ),
                               SizedBox(
-                                height: 10,
+                                height: 6,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -157,7 +157,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                       }),
                 if (!widget.showConfirmPinState)
                   SizedBox(
-                    height: 12,
+                    height: 10,
                   ),
                 if (widget.showConfirmPinState)
                   ValueListenableBuilder<String>(
@@ -168,15 +168,15 @@ class _SetPinScreenState extends State<SetPinScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               SizedBox(
-                                height: 12,
+                                height: 4,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(AppAssets.lock1Icon),
-                                  // SizedBox(
-                                  //   width: 8,
-                                  // ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
                                   Text(
                                     'Confirm PIN',
                                     style: TextStyle(
@@ -187,7 +187,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                                 ],
                               ),
                               SizedBox(
-                                height: 10,
+                                height: 6,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -378,16 +378,13 @@ class _SetPinScreenState extends State<SetPinScreen> {
                 : AppRoutes.mainRoute);
             // Navigator.of(context).pushNamed(AppRoutes.introscreenRoute, arguments: IntroRouteArgs(widget.isRegister));
           } else {
-            
-            Future.delayed(Duration(milliseconds: 300),
-                                              () {
-                                                confirmPinNotifier.value = '';
-                                                setState(() {
-              showError = true;
+            Future.delayed(Duration(milliseconds: 300), () {
+              confirmPinNotifier.value = '';
+              setState(() {
+                showError = true;
+              });
+              // Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
             });
-                                            // Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
-                                          });
-            
           }
         }
       }
@@ -436,23 +433,26 @@ class PinField extends StatelessWidget {
     required this.isSetField,
   }) : super(key: key);
 
-  final bool showError; ///
+  final bool showError;
+
+  ///
   final bool isFilled;
-  final bool isSetField; ///
+  final bool isSetField;
+
+  ///
 
   @override
   Widget build(BuildContext context) => Padding(
         // padding: const EdgeInsets.only(left: 15.0, right: 15),
         padding: EdgeInsets.all(10),
         child: new Container(
-          height: 75,
+          height: 60,
           width: 50,
           alignment: Alignment.center,
           decoration: new BoxDecoration(
               color: Colors.white,
               border: new Border.all(width: 2.0, color: Colors.white),
-              borderRadius: new BorderRadius.circular(7)
-              ),
+              borderRadius: new BorderRadius.circular(7)),
           child: Container(
             height: 18,
             width: 18,
