@@ -44,6 +44,40 @@ class ShimmerListTile extends StatelessWidget {
   }
 }
 
+class ShimmerListTile5 extends StatelessWidget {
+  const ShimmerListTile5({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.8,
+      height: 100.0,
+      child: Shimmer.fromColors(
+        baseColor: AppTheme.baseColor,
+        highlightColor: AppTheme.highlightColor,
+        child: ListTile(
+          leading: Container(
+            height: 50,
+            width: 50,
+            decoration: BoxDecoration(
+                color: AppTheme.greyish,
+                borderRadius: BorderRadius.circular(50)),
+          ),
+          title: Container(
+            height: 20,
+            width: MediaQuery.of(context).size.width * 0.7,
+            // margin:
+            //     EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.7),
+            decoration: BoxDecoration(
+                color: AppTheme.greyish,
+                borderRadius: BorderRadius.circular(0)),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class ShimmerListTile3 extends StatelessWidget {
   const ShimmerListTile3({Key? key}) : super(key: key);
 
