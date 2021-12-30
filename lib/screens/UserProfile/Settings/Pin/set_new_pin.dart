@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Utility/app_services.dart';
 import 'package:urbanledger/Services/repository.dart';
@@ -378,6 +379,12 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
               ));
               await Future.delayed(Duration(seconds: 1));
             } */
+            LoginModel loginModel = LoginModel(
+                mobileNo: repository.hiveQueries.userData.mobileNo,
+                pin: confirmPinNotifier.value,
+                status: true,
+              );
+              repository.queries.checkLoginUser(loginModel);
             var anaylticsEvents = AnalyticsEvents(context);
             await anaylticsEvents.initCurrentUser();
             await anaylticsEvents.changePinEvent();

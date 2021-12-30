@@ -226,10 +226,9 @@ class LocalDb {
       ${LoginModel.column_id} integer primary key autoincrement,
       ${LoginModel.column_user_id} text unique,
       ${LoginModel.column_user_name} text not null,
-      ${LoginModel.column_pin} integer not null,
-      ${LoginModel.column_login_date} text not null,
-      ${LoginModel.column_updated_date} text not null,
-      ${LoginModel.column_status} integer default 1,
+      ${LoginModel.column_mobile_no} integer not null,
+      ${LoginModel.column_pin} integer,
+      ${LoginModel.column_status} integer default 1
     )''');
 
     await batch.commit(noResult: true);

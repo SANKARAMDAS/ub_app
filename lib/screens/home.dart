@@ -14,6 +14,7 @@ import 'package:urbanledger/Cubits/Contacts/contacts_cubit.dart';
 import 'package:urbanledger/Cubits/ImportContacts/import_contacts_cubit.dart';
 import 'package:urbanledger/Cubits/Ledger/ledger_cubit.dart';
 import 'package:urbanledger/Models/customer_model.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Models/transaction_model.dart';
 import 'package:urbanledger/Models/user_model.dart';
@@ -913,24 +914,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                 width: 24,
                                               ),
                                               onPressed: () async {
-                                                // if (BlocProvider.of<
-                                                //                 ImportContactsCubit>(
-                                                //             context)
-                                                //         .state
-                                                //         .runtimeType ==
-                                                //     SearchedImportedContacts)
-                                                //   BlocProvider.of<
-                                                //               ImportContactsCubit>(
-                                                //           context)
-                                                //       .searchImportedContacts(
-                                                //           '');
-                                                // Navigator.of(context).pushNamed(
-                                                //     AppRoutes.addCustomerRoute);
-                                                // bool isBankAccount = (await CustomSharedPreferences.get("isBankAccount"));
-                                                //     debugPrint(isBankAccount.toString());
-                                                // Navigator.of(context).pushNamed(
-                                                //     AppRoutes.introscreenRoute);
-                                                debugPrint(repository.hiveQueries.unAuthData.seen.toString());
+                                                if (BlocProvider.of<
+                                                                ImportContactsCubit>(
+                                                            context)
+                                                        .state
+                                                        .runtimeType ==
+                                                    SearchedImportedContacts)
+                                                  BlocProvider.of<
+                                                              ImportContactsCubit>(
+                                                          context)
+                                                      .searchImportedContacts(
+                                                          '');
+                                                Navigator.of(context).pushNamed(
+                                                    AppRoutes.addCustomerRoute);
                                               },
                                             ),
                                           ),
@@ -1144,18 +1140,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     width: 24,
                   ),
                   onPressed: () async {
-                    // if (BlocProvider.of<ImportContactsCubit>(context)
-                    //         .state
-                    //         .runtimeType ==
-                    //     SearchedImportedContacts)
-                    //   BlocProvider.of<ImportContactsCubit>(context)
-                    //       .searchImportedContacts('');
-                    // Navigator.of(context).pushNamed(AppRoutes.addCustomerRoute);
-                    // final loginTime =
-                    //     repository.hiveQueries.unAuthData.loginTime;
-                    // final diff = DateTime.now().difference(loginTime!).inDays;
-                    // debugPrint(diff.toString());
-                    debugPrint(repository.hiveQueries.unAuthData.seen.toString());
+                    if (BlocProvider.of<ImportContactsCubit>(context)
+                            .state
+                            .runtimeType ==
+                        SearchedImportedContacts)
+                      BlocProvider.of<ImportContactsCubit>(context)
+                          .searchImportedContacts('');
+                    Navigator.of(context).pushNamed(AppRoutes.addCustomerRoute);
                   },
                 ),
               ),
@@ -2769,12 +2760,12 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                     ..avatar = widget._customerList[index].avatar
                     ..chatId = widget._customerList[index].chatId;
                   final localCustId = await repository.queries
-                      .getCustomerId(widget._customerList[index].mobileNo!).catchError((e) {
+                      .getCustomerId(widget._customerList[index].mobileNo!)
+                      .catchError((e) {
                     Navigator.of(context).pop();
                     'Something went wrong. Please try again later.'
                         .showSnackBar(context);
-                  })
-                      .timeout(Duration(seconds: 30), onTimeout: () async {
+                  }).timeout(Duration(seconds: 30), onTimeout: () async {
                     Navigator.of(context).pop();
                     return Future.value(null);
                   });
@@ -2793,12 +2784,12 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       ..chatId = widget._customerList[index].chatId
                       ..isChanged = true;
                     await repository.queries
-                        .insertCustomer(customer).catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  })
-                        .timeout(Duration(seconds: 30), onTimeout: () async {
+                        .insertCustomer(customer)
+                        .catchError((e) {
+                      Navigator.of(context).pop();
+                      'Something went wrong. Please try again later.'
+                          .showSnackBar(context);
+                    }).timeout(Duration(seconds: 30), onTimeout: () async {
                       Navigator.of(context).pop();
                       return Future.value(null);
                     });
@@ -2810,10 +2801,10 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         Navigator.of(context).pop();
                         return Future.value(null);
                       }).catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  }));
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      }));
                       // if (apiResponse.isNotEmpty) {
                       //   ///update chat id here
                       //   await repository.queries
@@ -2855,9 +2846,9 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         }
                       }
                     } else {
-                          'Please check your internet connection or try again later.'
-                              .showSnackBar(context);
-                        }
+                      'Please check your internet connection or try again later.'
+                          .showSnackBar(context);
+                    }
                     BlocProvider.of<ContactsCubit>(context).getContacts(
                         Provider.of<BusinessProvider>(context, listen: false)
                             .selectedBusiness
@@ -2894,15 +2885,17 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         widget._customerList[index].transactionAmount == 0) {
                       var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
-                      await anaylticsEvents.customerDetailsPayEvent().catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
+                      await anaylticsEvents
+                          .customerDetailsPayEvent()
+                          .catchError((e) {
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
                       // Navigator.push(
                       //   context,
                       //   MaterialPageRoute(
@@ -2942,15 +2935,17 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         TransactionType.Pay) {
                       var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
-                      await anaylticsEvents.customerDetailsPayEvent().catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
+                      await anaylticsEvents
+                          .customerDetailsPayEvent()
+                          .catchError((e) {
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
                       // Navigator.push(
                       //   context,
                       //   MaterialPageRoute(
@@ -2989,15 +2984,17 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                     } else {
                       var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
-                      await anaylticsEvents.customerDetailsPayEvent().catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
+                      await anaylticsEvents
+                          .customerDetailsPayEvent()
+                          .catchError((e) {
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
                       // Navigator.push(
                       //   context,
                       //   MaterialPageRoute(
@@ -3016,11 +3013,12 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       // );
                       Map<String, dynamic> isTransaction = await repository
                           .paymentThroughQRApi
-                          .getTransactionLimit(context).catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
+                          .getTransactionLimit(context)
+                          .catchError((e) {
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
                       if (!(isTransaction)['isError']) {
                         Navigator.of(context).pop(true);
                         // showBankAccountDialog();
@@ -3275,7 +3273,6 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       arguments: TransactionListArgs(
                           false, widget._customerList[index]));
                   await fetchContacts();
-
                 },
               ),
             ),
@@ -3286,25 +3283,24 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
   }
 
   Future<void> fetchContacts() async {
-    String selectedBusinessId = Provider.of<BusinessProvider>(context, listen: false)
-        .selectedBusiness
-        .businessId;
+    String selectedBusinessId =
+        Provider.of<BusinessProvider>(context, listen: false)
+            .selectedBusiness
+            .businessId;
     final _customerList =
         await repository.customerApi.getAllCustomers(selectedBusinessId);
 
     await Future.forEach<CustomerModel>(_customerList,
-            (element) async => await repository.queries.insertCustomer(element));
-    BlocProvider.of<ContactsCubit>(context,listen: false).getContacts(selectedBusinessId
-        );
-    setState(() {
-
-    });
+        (element) async => await repository.queries.insertCustomer(element));
+    BlocProvider.of<ContactsCubit>(context, listen: false)
+        .getContacts(selectedBusinessId);
+    setState(() {});
     _customerList.forEach((e) async {
       final _ledgerTransactionList =
-      await repository.ledgerApi.getLedger(e.customerId);
+          await repository.ledgerApi.getLedger(e.customerId);
       _ledgerTransactionList.forEach(
-            (e) async =>
-        await repository.queries.insertLedgerTransaction(e).catchError((e) {
+        (e) async =>
+            await repository.queries.insertLedgerTransaction(e).catchError((e) {
           debugPrint(e);
           recordError(e, StackTrace.current);
         }),

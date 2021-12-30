@@ -2,50 +2,60 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/user_model.dart';
 import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/apiCalls.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
+import 'package:urbanledger/main.dart';
 
 class UserProfileAPI {
   UserProfileAPI._();
 
   static final UserProfileAPI userProfileAPI = UserProfileAPI._();
 
-  Future<bool> userProfileApi(SignUpModel signUpModel,BuildContext context) async {
+  Future<bool> userProfileApi(
+      SignUpModel signUpModel, BuildContext context) async {
     const url = "userProfile/addOrEdit";
-var bodyMap = {
-  "first_name":signUpModel.firstName,
-  "last_name":signUpModel.lastName,
-  "email_id":signUpModel.email
-};
+    var bodyMap = {
+      "first_name": "${signUpModel.firstName}",
+      "last_name": "${signUpModel.lastName}",
+      "email_id": "${signUpModel.email}"
+    };
     final response = await postRequest(
-        endpoint: url,
-        headers: apiAuthHeaderWithOnlyToken(),
-        body: jsonEncode(bodyMap)).timeout(Duration(seconds: 30), onTimeout: () async{
-          Navigator.of(context).pop();
-          return Future.value(null);
-    });
+            endpoint: url,
+            headers: apiAuthHeaderWithOnlyToken(),
+            body: bodyMap);
     if (response.statusCode == 200) {
       debugPrint(response.body);
       final map = jsonDecode(response.body);
+      LoginModel loginModel = LoginModel(
+        userId: map['customerData']['_id'],
+        userName: map['customerData']['first_name'] +
+            ' ' +
+            map['customerData']['last_name'],
+        mobileNo: map['customerData']['mobile_no'],
+        status: true,
+      );
+      debugPrint('dddd:' + loginModel.toJson().toString());
+      Repository().queries.checkLoginUser(loginModel);
       return map['status'];
     }
     return Future.error('Unexpected Error occured');
   }
 
-
-  Future<Map<String, dynamic>> userEmailAuthentication(String userId,BuildContext context) async {
+  Future<Map<String, dynamic>> userEmailAuthentication(
+      String userId, BuildContext context) async {
     const url = "auth/customer/emailverification";
-    Map<String, dynamic> bodyData = {"_id":userId};
-    Map<String, dynamic> map= {};
+    Map<String, dynamic> bodyData = {"_id": userId};
+    Map<String, dynamic> map = {};
     final response = await postRequest(
         endpoint: url,
-       // headers: apiAuthHeaderWithOnlyToken(),
+        // headers: apiAuthHeaderWithOnlyToken(),
         body: bodyData);
     if (response.statusCode == 200) {
       debugPrint(response.body);
-    map = jsonDecode(response.body);
+      map = jsonDecode(response.body);
     }
     return map;
   }
@@ -77,7 +87,7 @@ var bodyMap = {
     const url = "userProfile/get";
 
     final responseAPI =
-    await postRequest(endpoint: url, headers: apiAuthHeaderWithOnlyToken());
+        await postRequest(endpoint: url, headers: apiAuthHeaderWithOnlyToken());
 
     if (responseAPI.statusCode == 200) {
       debugPrint('Check' + responseAPI.body.toString());

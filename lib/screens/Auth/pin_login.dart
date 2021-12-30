@@ -12,6 +12,7 @@ import 'package:responsive_framework/responsive_wrapper.dart';
 import 'package:urbanledger/Cubits/Contacts/contacts_cubit.dart';
 import 'package:urbanledger/Cubits/ImportContacts/import_contacts_cubit.dart';
 import 'package:urbanledger/Models/customer_model.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/app_services.dart';
@@ -26,6 +27,11 @@ import 'package:urbanledger/screens/mobile_analytics/analytics_events.dart';
 import 'package:uuid/uuid.dart';
 
 class PinLoginScreen extends StatefulWidget {
+  final String mobileNo;
+  final bool isLogin;
+  const PinLoginScreen(
+      {Key? key, required this.mobileNo, required this.isLogin})
+      : super(key: key);
   @override
   PinLoginPageState createState() => PinLoginPageState();
 }
@@ -100,138 +106,147 @@ class PinLoginPageState extends State<PinLoginScreen> {
             // if (Navigator.of(context).canPop()) Navigator.of(context).pop();
 
             bool isStatic =
-            await (CustomSharedPreferences.contains('StaticQRData'));
-        bool isDynamic =
-            await (CustomSharedPreferences.contains('DynamicQRData'));
-        bool isMerchant =
-            await (CustomSharedPreferences.contains('MerchantQRData'));
-        bool isKYC = (await CustomSharedPreferences.get("isKYC")) ?? false;
-        bool isBankAccount = (await CustomSharedPreferences.get("isBankAccount")) ?? false;
-        if (isStatic) {
-          CustomLoadingDialog.showLoadingDialog(context, key);
-          debugPrint('isStatic : ' + isStatic.toString());
-          String data1 = await (CustomSharedPreferences.get('StaticQRData'));
-          Map<String, dynamic> staticQRData = jsonDecode(data1);
-          Provider.of<BusinessProvider>(context, listen: false)
-              .updateSelectedBusiness();
-          final id = await getlocalCustId(
-                  (staticQRData)['customerProfile']['mobile_no'],
-                  (staticQRData)['customerProfile']['first_name'] +
-                      ' ' +
-                      (staticQRData)['customerProfile']['last_name'])
-              .timeout(Duration(seconds: 30), onTimeout: () async {
-            // Navigator.of(context).pop();
-            return Future.value(null);
-          });
-          // debugPrint('aas: ${id.toString()}');
-          Navigator.of(context).pop();
-          Navigator.pushReplacementNamed(context, AppRoutes.payTransactionRoute,
-              arguments: QRDataArgs(
-                  customerModel: CustomerModel()
-                    ..customerId = id
-                    ..name = (staticQRData)['customerProfile']['first_name'] +
-                        ' ' +
-                        (staticQRData)['customerProfile']['last_name']
-                    ..mobileNo = (staticQRData)['customerProfile']['mobile_no'],
-                  customerId: (staticQRData)['customerProfile']['_id'],
-                  type: 'QRCODE',
-                  suspense: true,
-                  through: 'STATICQRCODE'));
-          // } else {
-          //   Navigator.of(context).pop(true);
-          //   '${(isTransaction)['message']}'.showSnackBar(context);
-          // }
-        } else if (isDynamic) {
-          CustomLoadingDialog.showLoadingDialog(context, key);
-          final data2 = await (CustomSharedPreferences.get('DynamicQRData'));
-          Map<String, dynamic> dynamicQRData = jsonDecode(data2);
-          Provider.of<BusinessProvider>(context, listen: false)
-              .updateSelectedBusiness();
-          final id = await getlocalCustId(
-                  (dynamicQRData)['mobileNo'],
-                  (dynamicQRData)['firstName'] +
-                      ' ' +
-                      (dynamicQRData)['lastName'])
-              .timeout(Duration(seconds: 30), onTimeout: () async {
-            // Navigator.of(context).pop();
-            return Future.value(null);
-          });
-          // Navigator.pop(context);
-          debugPrint('AAAAAAAA'+dynamicQRData.toString());
-          // Map<String, dynamic> isTransaction =
-          //     await repository.paymentThroughQRApi.getTransactionLimit();
-          // if (!(isTransaction)['isError']) {
-          Navigator.of(context).pop();
-          Navigator.pushReplacementNamed(
-            context,
-            AppRoutes.payTransactionRoute,
-            arguments: QRDataArgs(
-                customerModel: CustomerModel()
-                  ..ulId = (dynamicQRData)['customer_id']
-                  ..name = (dynamicQRData)['firstName'] +
-                      ' ' +
-                      (dynamicQRData)['lastName']
-                  ..mobileNo = (dynamicQRData)['mobileNo'],
-                customerId: id,
-                requestId: (dynamicQRData)['request_id'],
-                amount: (dynamicQRData)['amount'].toString(),
-                currency: (dynamicQRData)['currency'],
-                note: (dynamicQRData)['note'],
-                type: 'QRCODE',
-                suspense: false,
-                through: 'DYNAMICQRCODE'),
-          );
-          // } else {
-          //   Navigator.of(context).pop(true);
-          //   '${(isTransaction)['message']}'.showSnackBar(context);
-          // }
-        } else if (isMerchant) {
-          CustomLoadingDialog.showLoadingDialog(context, key);
-          String data2 = await (CustomSharedPreferences.get('MerchantQRData'));
-          Map<String, dynamic> merchantQRData = jsonDecode(data2);
-          Provider.of<BusinessProvider>(context, listen: false)
-              .updateSelectedBusiness();
-          final id = await getlocalCustId(
-                  (merchantQRData)['mobileNo'],
-                  (merchantQRData)['firstName'] +
-                      ' ' +
-                      (merchantQRData)['lastName'])
-              .timeout(Duration(seconds: 30), onTimeout: () async {
-            // Navigator.of(context).pop();
-            return Future.value(null);
-          });
-          // Uri paths = Uri.parse((merchantQRData)['url'].toString());
-          // (path.split('.').last)
-          // debugPrint('requested id : '+(merchantQRData)['url'].split('=').last);
-          Navigator.of(context).pop();
-          Navigator.pushReplacementNamed(
-            context,
-            AppRoutes.payTransactionRoute,
-            arguments: QRDataArgs(
-                customerModel: CustomerModel()
-                  ..ulId = (merchantQRData)['customer_id']
-                  ..name = (merchantQRData)['firstName'] +
-                      ' ' +
-                      (merchantQRData)['lastName']
-                  ..mobileNo = (merchantQRData)['mobileNo'],
-                customerId: id,
-                amount: (merchantQRData)['amount'].toString(),
-                currency: (merchantQRData)['currency'],
-                note: (merchantQRData)['note'],
-                type: 'QRCODE',
-                suspense: true,
-                requestId: (merchantQRData)['url'].split('=').last,
-                through: 'APIQRCODE'),
-          );
-          // }
-        } else if (isKYC) {
-          Navigator.of(context).pushReplacementNamed(AppRoutes.manageKyc1Route);
-        } else if (isBankAccount) {
-          Navigator.of(context).pushReplacementNamed(AppRoutes.profileBankAccountRoute);
-          CustomLoadingDialog.showLoadingDialog(context, key);
-        } else {
-          Navigator.of(context).pushNamed(AppRoutes.mainRoute);
-        }
+                await (CustomSharedPreferences.contains('StaticQRData'));
+            bool isDynamic =
+                await (CustomSharedPreferences.contains('DynamicQRData'));
+            bool isMerchant =
+                await (CustomSharedPreferences.contains('MerchantQRData'));
+            bool isKYC = (await CustomSharedPreferences.get("isKYC")) ?? false;
+            bool isBankAccount =
+                (await CustomSharedPreferences.get("isBankAccount")) ?? false;
+            if (isStatic) {
+              CustomLoadingDialog.showLoadingDialog(context, key);
+              debugPrint('isStatic : ' + isStatic.toString());
+              String data1 =
+                  await (CustomSharedPreferences.get('StaticQRData'));
+              Map<String, dynamic> staticQRData = jsonDecode(data1);
+              Provider.of<BusinessProvider>(context, listen: false)
+                  .updateSelectedBusiness();
+              final id = await getlocalCustId(
+                      (staticQRData)['customerProfile']['mobile_no'],
+                      (staticQRData)['customerProfile']['first_name'] +
+                          ' ' +
+                          (staticQRData)['customerProfile']['last_name'])
+                  .timeout(Duration(seconds: 30), onTimeout: () async {
+                // Navigator.of(context).pop();
+                return Future.value(null);
+              });
+              // debugPrint('aas: ${id.toString()}');
+              Navigator.of(context).pop();
+              Navigator.pushReplacementNamed(
+                  context, AppRoutes.payTransactionRoute,
+                  arguments: QRDataArgs(
+                      customerModel: CustomerModel()
+                        ..customerId = id
+                        ..name = (staticQRData)['customerProfile']
+                                ['first_name'] +
+                            ' ' +
+                            (staticQRData)['customerProfile']['last_name']
+                        ..mobileNo =
+                            (staticQRData)['customerProfile']['mobile_no'],
+                      customerId: (staticQRData)['customerProfile']['_id'],
+                      type: 'QRCODE',
+                      suspense: true,
+                      through: 'STATICQRCODE'));
+              // } else {
+              //   Navigator.of(context).pop(true);
+              //   '${(isTransaction)['message']}'.showSnackBar(context);
+              // }
+            } else if (isDynamic) {
+              CustomLoadingDialog.showLoadingDialog(context, key);
+              final data2 =
+                  await (CustomSharedPreferences.get('DynamicQRData'));
+              Map<String, dynamic> dynamicQRData = jsonDecode(data2);
+              Provider.of<BusinessProvider>(context, listen: false)
+                  .updateSelectedBusiness();
+              final id = await getlocalCustId(
+                      (dynamicQRData)['mobileNo'],
+                      (dynamicQRData)['firstName'] +
+                          ' ' +
+                          (dynamicQRData)['lastName'])
+                  .timeout(Duration(seconds: 30), onTimeout: () async {
+                // Navigator.of(context).pop();
+                return Future.value(null);
+              });
+              // Navigator.pop(context);
+              debugPrint('AAAAAAAA' + dynamicQRData.toString());
+              // Map<String, dynamic> isTransaction =
+              //     await repository.paymentThroughQRApi.getTransactionLimit();
+              // if (!(isTransaction)['isError']) {
+              Navigator.of(context).pop();
+              Navigator.pushReplacementNamed(
+                context,
+                AppRoutes.payTransactionRoute,
+                arguments: QRDataArgs(
+                    customerModel: CustomerModel()
+                      ..ulId = (dynamicQRData)['customer_id']
+                      ..name = (dynamicQRData)['firstName'] +
+                          ' ' +
+                          (dynamicQRData)['lastName']
+                      ..mobileNo = (dynamicQRData)['mobileNo'],
+                    customerId: id,
+                    requestId: (dynamicQRData)['request_id'],
+                    amount: (dynamicQRData)['amount'].toString(),
+                    currency: (dynamicQRData)['currency'],
+                    note: (dynamicQRData)['note'],
+                    type: 'QRCODE',
+                    suspense: false,
+                    through: 'DYNAMICQRCODE'),
+              );
+              // } else {
+              //   Navigator.of(context).pop(true);
+              //   '${(isTransaction)['message']}'.showSnackBar(context);
+              // }
+            } else if (isMerchant) {
+              CustomLoadingDialog.showLoadingDialog(context, key);
+              String data2 =
+                  await (CustomSharedPreferences.get('MerchantQRData'));
+              Map<String, dynamic> merchantQRData = jsonDecode(data2);
+              Provider.of<BusinessProvider>(context, listen: false)
+                  .updateSelectedBusiness();
+              final id = await getlocalCustId(
+                      (merchantQRData)['mobileNo'],
+                      (merchantQRData)['firstName'] +
+                          ' ' +
+                          (merchantQRData)['lastName'])
+                  .timeout(Duration(seconds: 30), onTimeout: () async {
+                // Navigator.of(context).pop();
+                return Future.value(null);
+              });
+              // Uri paths = Uri.parse((merchantQRData)['url'].toString());
+              // (path.split('.').last)
+              // debugPrint('requested id : '+(merchantQRData)['url'].split('=').last);
+              Navigator.of(context).pop();
+              Navigator.pushReplacementNamed(
+                context,
+                AppRoutes.payTransactionRoute,
+                arguments: QRDataArgs(
+                    customerModel: CustomerModel()
+                      ..ulId = (merchantQRData)['customer_id']
+                      ..name = (merchantQRData)['firstName'] +
+                          ' ' +
+                          (merchantQRData)['lastName']
+                      ..mobileNo = (merchantQRData)['mobileNo'],
+                    customerId: id,
+                    amount: (merchantQRData)['amount'].toString(),
+                    currency: (merchantQRData)['currency'],
+                    note: (merchantQRData)['note'],
+                    type: 'QRCODE',
+                    suspense: true,
+                    requestId: (merchantQRData)['url'].split('=').last,
+                    through: 'APIQRCODE'),
+              );
+              // }
+            } else if (isKYC) {
+              Navigator.of(context)
+                  .pushReplacementNamed(AppRoutes.manageKyc1Route);
+            } else if (isBankAccount) {
+              Navigator.of(context)
+                  .pushReplacementNamed(AppRoutes.profileBankAccountRoute);
+              CustomLoadingDialog.showLoadingDialog(context, key);
+            } else {
+              Navigator.of(context).pushNamed(AppRoutes.mainRoute);
+            }
           }
         }
       } else {
@@ -308,9 +323,9 @@ class PinLoginPageState extends State<PinLoginScreen> {
           }
         }
       } else {
-                          'Please check your internet connection or try again later.'
-                              .showSnackBar(context);
-                        }
+        'Please check your internet connection or try again later.'
+            .showSnackBar(context);
+      }
       // BlocProvider.of<ContactsCubit>(context)
       //     .getContacts(businessId)
       //     .timeout(Duration(seconds: 30), onTimeout: () async {
@@ -554,7 +569,8 @@ class PinLoginPageState extends State<PinLoginScreen> {
                                 10.0.heightBox,
                                 TextButton(
                                     onPressed: () async {
-                                      CustomLoadingDialog.showLoadingDialog(context);
+                                      CustomLoadingDialog.showLoadingDialog(
+                                          context);
                                       final token = await _repository
                                           .changePinApi
                                           .changePinRequest();
@@ -716,7 +732,10 @@ class PinLoginPageState extends State<PinLoginScreen> {
       pinNotifier.value = pinNotifier.value + str;
     }
     if (pinNotifier.value.length == 4) {
-      if (_repository.hiveQueries.userPin == pinNotifier.value) {
+      LoginModel loginModel = LoginModel(mobileNo: Repository().hiveQueries.userData.mobileNo, pin: pinNotifier.value);
+      bool isLogin = await Repository().queries.fetchLoginUser(loginModel);
+      if (isLogin) {
+        repository.hiveQueries.setPinStatus(true);
         if (Navigator.of(context).canPop()) Navigator.of(context).pop();
         if (Navigator.of(context).canPop()) Navigator.of(context).pop();
         if (Navigator.of(context).canPop()) Navigator.of(context).pop();
@@ -727,7 +746,8 @@ class PinLoginPageState extends State<PinLoginScreen> {
         bool isMerchant =
             await (CustomSharedPreferences.contains('MerchantQRData'));
         bool isKYC = (await CustomSharedPreferences.get("isKYC")) ?? false;
-        bool isBankAccount = (await CustomSharedPreferences.get("isBankAccount")) ?? false;
+        bool isBankAccount =
+            (await CustomSharedPreferences.get("isBankAccount")) ?? false;
         if (isStatic) {
           CustomLoadingDialog.showLoadingDialog(context, key);
           debugPrint('isStatic : ' + isStatic.toString());
@@ -848,7 +868,8 @@ class PinLoginPageState extends State<PinLoginScreen> {
         } else if (isKYC) {
           Navigator.of(context).pushNamed(AppRoutes.manageKyc1Route);
         } else if (isBankAccount) {
-          Navigator.of(context).pushReplacementNamed(AppRoutes.profileBankAccountRoute);
+          Navigator.of(context)
+              .pushReplacementNamed(AppRoutes.profileBankAccountRoute);
           CustomLoadingDialog.showLoadingDialog(context, key);
         } else {
           Navigator.of(context).pushReplacementNamed(AppRoutes.mainRoute);
