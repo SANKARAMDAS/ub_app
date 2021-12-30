@@ -464,6 +464,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   } else {
                     FocusScope.of(context).requestFocus(previousFocusNode);
                   }
+                  if(validate()){
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  }
                 },
           keyboardType: TextInputType.phone,
           // obscureText: true,
