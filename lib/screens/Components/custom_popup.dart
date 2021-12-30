@@ -230,14 +230,14 @@ class MerchantBankNotAdded {
                                                                 FontWeight.bold,
                                                             height: 1.2),
                                                       )
-                                                    : type == 'userBankNotAdded'
+                                                    : type == 'userKYCExpired'
                                                         ? Text(
-                                                            'No Bank Account Found.',
+                                                            'Your KYC has expired or rejected. Please submit your document again. ',
                                                             textAlign: TextAlign
                                                                 .center,
                                                             style: TextStyle(
                                                                 color: AppTheme
-                                                                    .tomato,
+                                                                    .brownishGrey,
                                                                 fontFamily:
                                                                     'SFProDisplay',
                                                                 fontSize: 18,
@@ -248,14 +248,37 @@ class MerchantBankNotAdded {
                                                                         .bold,
                                                                 height: 1.2),
                                                           )
-                                                        : Container(),
+                                                        : type ==
+                                                                'userBankNotAdded'
+                                                            ? Text(
+                                                                'No Bank Account Found.',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    color: AppTheme
+                                                                        .tomato,
+                                                                    fontFamily:
+                                                                        'SFProDisplay',
+                                                                    fontSize:
+                                                                        18,
+                                                                    letterSpacing:
+                                                                        0 /*percentages not used in flutter. defaulting to zero*/,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    height:
+                                                                        1.2),
+                                                              )
+                                                            : Container(),
                       ],
                     ),
                   ),
                   type == 'userNotRegistered' ||
                           type == 'userKYCPending' ||
                           type == 'TradeLicensePending' ||
-                          type == 'EmiratesIdPending'
+                          type == 'EmiratesIdPending' ||
+                          type == 'userKYCExpired'
                       ? Container()
                       : type == 'userBankNotAdded'
                           ? CustomText(
@@ -406,9 +429,15 @@ class MerchantBankNotAdded {
                                           // CustomLoadingDialog.showLoadingDialog(
                                           //     context, key);
                                         }
-                                      : () {
-                                          Navigator.pop(context, true);
-                                        },
+                                      : type == 'userKYCExpired'
+                                          ? () {
+                                              Navigator.pushReplacementNamed(
+                                                  context,
+                                                  AppRoutes.manageKyc3Route);
+                                            }
+                                          : () {
+                                              Navigator.pop(context, true);
+                                            },
                           text: type == 'userBankNotAdded'
                               ? 'Add Account'.toUpperCase()
                               : type == 'userKYCPending' ||
@@ -417,7 +446,9 @@ class MerchantBankNotAdded {
                                   ? 'Cancel'.toUpperCase()
                                   : type == 'upgradePremium'
                                       ? 'Upgrade Now'.toUpperCase()
-                                      : 'Got it'.toUpperCase(),
+                                      : type == 'userKYCExpired'
+                                          ? 'Complete your KYC now'
+                                          : 'Got it'.toUpperCase(),
                           textColor: Colors.white,
                           backgroundColor: AppTheme.electricBlue,
                           textSize: 15.0,

@@ -42,8 +42,12 @@ class SignUpModel extends Equatable {
   final String kycID;
   @HiveField(17)
   final bool email_status;
-  @HiveField(17)
-  final DateTime? loginTime;
+  @HiveField(18)
+  final String? kycStatus2;
+  @HiveField(19)
+  final String? emiratesIdVerified;
+  @HiveField(20)
+  final String? tradeLicenseVerified;
 
   SignUpModel(
       {required this.firstName,
@@ -64,7 +68,9 @@ class SignUpModel extends Equatable {
       this.referral_link: '',
       this.kycID: '',
         this.email_status:false,
-      this.loginTime
+      this.kycStatus2,
+      this.emiratesIdVerified,
+      this.tradeLicenseVerified
       });
 
   SignUpModel copyWith(
@@ -86,7 +92,9 @@ class SignUpModel extends Equatable {
           String? kycID,
           String? paymentLink,
           bool? email_status,
-          DateTime? loginTime,
+          String? kycStatus2,
+          String? emiratesIdVerified,
+          String? tradeLicenseVerified
          }) =>
       SignUpModel(
         email: email ?? this.email,
@@ -107,7 +115,9 @@ class SignUpModel extends Equatable {
         referral_link: referral_link ?? this.referral_link,
         kycID: kycID ?? this.kycID,
         email_status: email_status?? this.email_status,
-        loginTime: loginTime??this.loginTime,
+        kycStatus2: kycStatus2 ?? this.kycStatus2,
+        emiratesIdVerified: emiratesIdVerified ?? this.emiratesIdVerified,
+        tradeLicenseVerified: tradeLicenseVerified ?? this.tradeLicenseVerified,
       );
 
   factory SignUpModel.fromJson(

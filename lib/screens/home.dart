@@ -546,65 +546,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   //       });
   // }
 
-  Future getKyc() async {
-    if (mounted) {
-      setState(() {
-        loading = true;
-      });
-    }
+Future getKyc() async {
+    setState(() {
+      loading = true;
+    });
     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      // Navigator.of(context).pop();
       setState(() {
         loading = false;
       });
       'Something went wrong. Please try again later.'.showSnackBar(context);
     }).then((value) {
-      debugPrint('Check the value : ' + value['status'].toString());
-
-      if (value != null && value.toString().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            Repository().hiveQueries.insertUserData(Repository()
-                .hiveQueries
-                .userData
-                .copyWith(
-                    kycStatus:
-                        (value['emirates'] == true && value['tl'] == true) &&
-                                value['isVerified'] == false
-                            ? 2
-                            : (value['isVerified'] == true &&
-                                    value['status'] == true)
-                                ? 1
-                                : 0,
-                    premiumStatus:
-                        value['planDuration'].toString() == 0.toString()
-                            ? 0
-                            : int.tryParse(value['planDuration']),
-                    isEmiratesIdDone: value['emirates'] ?? false,
-                    isTradeLicenseDone: value['tl'] ?? false,
-                    paymentLink: value['link'] ?? ''));
-
-            // Need to set emirates iD and TradeLicense ID Values
-            // isEmiratesIdDone = value['emirates'] ?? false;
-            // isTradeLicenseDone = value['tl'] ?? false;
-            // status = value['status'] ?? false;
-            // isPremium = value['premium'] ?? false;
-            // debugPrint('check1' + status.toString());
-            // debugPrint('check' + isEmiratesIdDone.toString());
-          });
-          return true;
-        }
-      }
-    });
-    calculatePremiumDate();
-
-    if (mounted) {
       setState(() {
         loading = false;
       });
-    }
+    });
+    calculatePremiumDate();
+    setState(() {
+      loading = false;
+    });
   }
-
   getAllCards() async {
     Provider.of<AddCardsProvider>(context, listen: false).getCard();
   }
@@ -913,24 +873,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                 width: 24,
                                               ),
                                               onPressed: () async {
-                                                // if (BlocProvider.of<
-                                                //                 ImportContactsCubit>(
-                                                //             context)
-                                                //         .state
-                                                //         .runtimeType ==
-                                                //     SearchedImportedContacts)
-                                                //   BlocProvider.of<
-                                                //               ImportContactsCubit>(
-                                                //           context)
-                                                //       .searchImportedContacts(
-                                                //           '');
-                                                // Navigator.of(context).pushNamed(
-                                                //     AppRoutes.addCustomerRoute);
-                                                // bool isBankAccount = (await CustomSharedPreferences.get("isBankAccount"));
-                                                //     debugPrint(isBankAccount.toString());
-                                                // Navigator.of(context).pushNamed(
-                                                //     AppRoutes.introscreenRoute);
-                                                debugPrint(repository.hiveQueries.unAuthData.seen.toString());
+                                                if (BlocProvider.of<
+                                                                ImportContactsCubit>(
+                                                            context)
+                                                        .state
+                                                        .runtimeType ==
+                                                    SearchedImportedContacts)
+                                                  BlocProvider.of<
+                                                              ImportContactsCubit>(
+                                                          context)
+                                                      .searchImportedContacts(
+                                                          '');
+                                                Navigator.of(context).pushNamed(
+                                                    AppRoutes.addCustomerRoute);
                                               },
                                             ),
                                           ),
@@ -1144,18 +1099,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     width: 24,
                   ),
                   onPressed: () async {
-                    // if (BlocProvider.of<ImportContactsCubit>(context)
-                    //         .state
-                    //         .runtimeType ==
-                    //     SearchedImportedContacts)
-                    //   BlocProvider.of<ImportContactsCubit>(context)
-                    //       .searchImportedContacts('');
-                    // Navigator.of(context).pushNamed(AppRoutes.addCustomerRoute);
-                    // final loginTime =
-                    //     repository.hiveQueries.unAuthData.loginTime;
-                    // final diff = DateTime.now().difference(loginTime!).inDays;
-                    // debugPrint(diff.toString());
-                    debugPrint(repository.hiveQueries.unAuthData.seen.toString());
+                    if (BlocProvider.of<ImportContactsCubit>(context)
+                            .state
+                            .runtimeType ==
+                        SearchedImportedContacts)
+                      BlocProvider.of<ImportContactsCubit>(context)
+                          .searchImportedContacts('');
+                    Navigator.of(context).pushNamed(AppRoutes.addCustomerRoute);
                   },
                 ),
               ),
@@ -1355,7 +1305,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       .userData
                                       .kycStatus
                                       .toString());
-                              if (Repository().hiveQueries.userData.kycStatus ==
+                              if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository().hiveQueries.userData.kycStatus ==
                                   2) {
                                 await getKyc();
                                 MerchantBankNotAdded.showBankNotAddedDialog(
@@ -2662,13 +2622,11 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
 
   bool isLoading = false;
 
-  Future getKyc() async {
+Future getKyc() async {
     setState(() {
       isLoading = true;
     });
-
     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      // Navigator.of(context).pop();
       setState(() {
         isLoading = false;
       });
@@ -2677,45 +2635,8 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
       setState(() {
         isLoading = false;
       });
-      debugPrint('Check the value : ' + value['status'].toString());
-
-      if (value != null && value.toString().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            Repository().hiveQueries.insertUserData(Repository()
-                .hiveQueries
-                .userData
-                .copyWith(
-                    kycStatus:
-                        (value['isVerified'] == true && value['status'] == true)
-                            ? 1
-                            : (value['emirates'] &&
-                                    value['tl'] == true &&
-                                    value['status'] == false)
-                                ? 2
-                                : 0,
-                    premiumStatus:
-                        value['planDuration'].toString() == 0.toString()
-                            ? 0
-                            : int.tryParse(value['planDuration']),
-                    isEmiratesIdDone: value['emirates'] ?? false,
-                    isTradeLicenseDone: value['tl'] ?? false,
-                    paymentLink: value['link'] ?? ''));
-
-            //TODO Need to set emirates iD and TradeLicense ID Values
-            // isEmiratesIdDone = value['emirates'] ?? false;
-            // isTradeLicenseDone = value['tl'] ?? false;
-            // status = value['status'] ?? false;
-            // isPremium = value['premium'] ?? false;
-
-            // debugPrint('check1' + status.toString());
-            // debugPrint('check' + isEmiratesIdDone.toString());
-          });
-          return;
-        }
-      }
     });
-
+    calculatePremiumDate();
     setState(() {
       isLoading = false;
     });
@@ -3054,7 +2975,17 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                   if (Repository().hiveQueries.userData.bankStatus == false) {
                     MerchantBankNotAdded.showBankNotAddedDialog(
                         context, 'userBankNotAdded');
-                  } else if (Repository().hiveQueries.userData.kycStatus == 2) {
+                  } else if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository().hiveQueries.userData.kycStatus == 2) {
                     //If KYC is Verification is Pending
                     CustomLoadingDialog.showLoadingDialog(context, key);
                     await getKyc().then((value) {

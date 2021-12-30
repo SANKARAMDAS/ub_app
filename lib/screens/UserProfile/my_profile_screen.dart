@@ -450,60 +450,23 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   //     context: context);
 
   Future getKyc() async {
-    if (mounted) {
-      setState(() {
-        loading = true;
-      });
-    }
-    await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      // Navigator.of(context).pop();
-      setState(() {
-        isLoading = false;
-      });
-      'Something went wrong. Please try again later.'.showSnackBar(context);
-    }).then((value) {
-      debugPrint('Check the value : ' + value['status'].toString());
-
-      if (value != null && value.toString().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            Repository().hiveQueries.insertUserData(Repository()
-                .hiveQueries
-                .userData
-                .copyWith(
-                    kycStatus:
-                        (value['emirates'] == true && value['tl'] == true) &&
-                                value['isVerified'] == false
-                            ? 2
-                            : (value['isVerified'] == true &&
-                                    value['status'] == true)
-                                ? 1
-                                : 0,
-                    premiumStatus:
-                        value['planDuration'].toString() == 0.toString()
-                            ? 0
-                            : int.tryParse(value['planDuration']),
-                    isEmiratesIdDone: value['emirates'] ?? false,
-                    isTradeLicenseDone: value['tl'] ?? false));
-
-            // Need to set emirates iD and TradeLicense ID Values
-            // isEmiratesIdDone = value['emirates'] ?? false;
-            // isTradeLicenseDone = value['tl'] ?? false;
-            // status = value['status'] ?? false;
-            // isPremium = value['premium'] ?? false;
-            // debugPrint('check1' + status.toString());
-            // debugPrint('check' + isEmiratesIdDone.toString());
-          });
-          return true;
-        }
-      }
+    setState(() {
+      loading = true;
     });
-
-    if (mounted) {
+    await KycAPI.kycApiProvider.kycCheker().catchError((e) {
       setState(() {
         loading = false;
       });
-    }
+      'Something went wrong. Please try again later.'.showSnackBar(context);
+    }).then((value) {
+      setState(() {
+        loading = false;
+      });
+    });
+    calculatePremiumDate();
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -764,7 +727,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               .premiumStatus ==
                                           0
                                   ? () async {
-                                      if (Repository()
+                                      if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository()
                                               .hiveQueries
                                               .userData
                                               .kycStatus ==
@@ -903,7 +876,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               .premiumStatus ==
                                           0
                                   ? () async {
-                                      if (Repository()
+                                      if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository()
                                               .hiveQueries
                                               .userData
                                               .kycStatus ==
@@ -1057,7 +1040,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                       .userData
                                       .premiumStatus ==
                                   0)) {
-                            if (Repository().hiveQueries.userData.kycStatus ==
+                            if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository().hiveQueries.userData.kycStatus ==
                                 2) {
                               //If KYC is Verification is Pending
                               await getKyc().then((value) =>
@@ -1443,8 +1436,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 'chatSync', false);
                             await CustomSharedPreferences.remove(
                                 'primaryBusiness');
-                            repository.hiveQueries.insertUnAuthData(
-                                repository.hiveQueries.unAuthData.copyWith(seen: true));
+                            repository.hiveQueries.insertUnAuthData(repository
+                                .hiveQueries.unAuthData
+                                .copyWith(seen: true));
                             // await repository.loginApi.logout();
                             // restartAppNotifier.value = !restartAppNotifier.value;
                             RestartWidget.restartApp(context);
@@ -1658,6 +1652,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 false) {
                               MerchantBankNotAdded.showBankNotAddedDialog(
                                   context, 'userBankNotAdded');
+                            } else if (Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 ==
+                                    'Rejected' ||
+                                Repository().hiveQueries.userData.kycStatus2 ==
+                                    'Expired') {
+                              MerchantBankNotAdded.showBankNotAddedDialog(
+                                  context, 'userKYCExpired');
                             } else if ((Repository()
                                             .hiveQueries
                                             .userData
@@ -1803,6 +1806,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             false) {
                           MerchantBankNotAdded.showBankNotAddedDialog(
                               context, 'userBankNotAdded');
+                        } else if (Repository()
+                                    .hiveQueries
+                                    .userData
+                                    .kycStatus2 ==
+                                'Rejected' ||
+                            Repository().hiveQueries.userData.kycStatus2 ==
+                                'Expired') {
+                          MerchantBankNotAdded.showBankNotAddedDialog(
+                              context, 'userKYCExpired');
                         } else if ((Repository()
                                         .hiveQueries
                                         .userData
@@ -1909,7 +1921,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 MerchantBankNotAdded.showBankNotAddedDialog(
                                     context, 'userBankNotAdded');
                               } else {
-                                if ((Repository()
+                               if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if ((Repository()
                                             .hiveQueries
                                             .userData
                                             .kycStatus !=
@@ -2050,7 +2072,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           false) {
                         MerchantBankNotAdded.showBankNotAddedDialog(
                             context, 'userBankNotAdded');
-                      } else if ((Repository().hiveQueries.userData.kycStatus !=
+                      } else if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if ((Repository().hiveQueries.userData.kycStatus !=
                               1) ||
                           (Repository().hiveQueries.userData.premiumStatus ==
                               0)) {
