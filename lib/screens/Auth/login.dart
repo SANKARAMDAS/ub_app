@@ -49,18 +49,19 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          //toolbarHeight: 0,
-          leading: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
-              },
-            ),
-          ),
-        ),
+        // appBar: AppBar(
+        //   //toolbarHeight: 0,
+        //   leading: Padding(
+        //     padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        //     // child: IconButton(
+        //     //   icon: Icon(Icons.arrow_back_ios),
+        //     //   onPressed: () {
+        //     //     Navigator.of(context)
+        //     //         .pushReplacementNamed(AppRoutes.welcomescreenRoute);
+        //     //   },
+        //     // ),
+        //   ),
+        // ),
         // resizeToAvoidBottomInset: false,
         // resizeToAvoidBottomPadding: false,
         // appBar: AppBar(
@@ -254,12 +255,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                         Navigator.of(context).pop();
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
-                                          content: Text('This mobile is already registered with us, please Login with this number.'),
+                                          content: Text(
+                                              'This mobile is already registered with us, please Login with this number.'),
                                         ));
                                         if (e.toString().contains('registered'))
                                           Future.delayed(Duration(seconds: 2),
                                               () {
-                                            Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
+                                            Navigator.of(context)
+                                                .pushReplacementNamed(AppRoutes
+                                                    .welcomescreenRoute);
                                           });
                                         return false;
                                       }))
@@ -267,21 +271,25 @@ class _LoginScreenState extends State<LoginScreen> {
                                         .loginOtpRequest((_countryCode! +
                                                 _mobileController.text)
                                             .trim()
-                                            .replaceAll('+', '')).timeout(Duration(seconds: 30),
-                                      onTimeout: () async {
-                                Navigator.of(context).pop();
-                                return Future.value(null);
-                              }).catchError((e) {
-                                    Navigator.of(context).pop();
-                                    debugPrint(e.toString());
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      content: Text(e.toString()),
-                                    ));
-                                    if (e.toString().contains('register'))
-                                      Future.delayed(Duration(seconds: 2), () {
-                                        Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
-                                      });
+                                            .replaceAll('+', ''))
+                                        .timeout(Duration(seconds: 30),
+                                            onTimeout: () async {
+                                        Navigator.of(context).pop();
+                                        return Future.value(null);
+                                      }).catchError((e) {
+                                        Navigator.of(context).pop();
+                                        debugPrint(e.toString());
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          content: Text(e.toString()),
+                                        ));
+                                        if (e.toString().contains('register'))
+                                          Future.delayed(Duration(seconds: 2),
+                                              () {
+                                            Navigator.of(context)
+                                                .pushReplacementNamed(AppRoutes
+                                                    .welcomescreenRoute);
+                                          });
 
                                         return false;
                                       }));
