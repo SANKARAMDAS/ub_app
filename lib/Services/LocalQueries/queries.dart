@@ -9,6 +9,7 @@ import 'package:urbanledger/Models/cashbook_entry_model.dart';
 import 'package:urbanledger/Models/customer_model.dart';
 import 'package:urbanledger/Models/customer_ranking_model.dart';
 import 'package:urbanledger/Models/import_contact_model.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/settlement_history_model.dart';
 import 'package:urbanledger/Models/transaction_model.dart';
 import 'package:urbanledger/Services/APIs/customer_ranking_api.dart';
@@ -17,6 +18,7 @@ import 'package:urbanledger/Services/LocalQueries/mobile_analytics_queries.dart'
 import 'package:urbanledger/Services/local_db.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
 import 'package:urbanledger/chat_module/utils/custom_shared_preferences.dart';
+import 'package:urbanledger/main.dart';
 
 import '../../screens/Components/custom_widgets.dart';
 
@@ -789,7 +791,8 @@ class Queries with MobileAnalyticsQueries {
       return (await _db.query(TransactionModel.tableName,
               where:
                   '${TransactionModel.columnCustomerId} = ? AND ${TransactionModel.columnIsDeleted} = ?',
-              whereArgs: [customerId, 0],orderBy: '${TransactionModel.columnDate} DESC'))
+              whereArgs: [customerId, 0],
+              orderBy: '${TransactionModel.columnDate} DESC'))
           .map((element) {
         return TransactionModel().fromDb(element);
       }).toList();
@@ -896,7 +899,8 @@ class Queries with MobileAnalyticsQueries {
     }
   }
 
-  Future<List<CustomerModel>> getCustomerDetails(String mobileNo, String businessId) async {
+  Future<List<CustomerModel>> getCustomerDetails(
+      String mobileNo, String businessId) async {
     final _db = await db;
     try {
       return (await _db.query(CustomerModel.customerTableName,
@@ -1262,6 +1266,84 @@ class Queries with MobileAnalyticsQueries {
     } catch (e) {
       recordError(e, StackTrace.current);
       return null;
+    }
+  }
+
+  Future<int?> checkLoginUser(LoginModel loginModel) async {
+    final _db = await db;
+    try {
+      List<Map> m = await _db.rawQuery(
+        '''SELECT * FROM ${LoginModel.tableName} WHERE ${LoginModel.column_mobile_no} = "${loginModel.mobileNo}" AND ${LoginModel.column_status} = 1''',
+      );
+      debugPrint('SSSSS : ' + m.length.toString());
+      
+      // debugPrint('QQQ : ' + loginModel.toJson().toString());
+      if (m.length == 1) {
+        int status = loginModel.status == true? 1:0;
+        // repository.hiveQueries.insertUserPin(m.first['pin'] == null ? loginModel.pin: m.first['pin']);
+            // repository.hiveQueries.setPinStatus(true);
+            // repository.hiveQueries.setFingerPrintStatus(true);
+        debugPrint('BBBB' + loginModel.toJson().toString());
+        String pin = loginModel.pin ?? m.first['pin'];
+        return await _db.update(
+          LoginModel.tableName,
+          {
+            LoginModel.column_pin: pin,
+            LoginModel.column_status: status,
+          },
+          where: '${LoginModel.column_mobile_no} = ?',
+          whereArgs: [loginModel.mobileNo],
+        );
+      } else {
+        debugPrint('QQQ : ' + loginModel.toJson().toString());
+        return await _db.insert(LoginModel.tableName, loginModel.toDb(),
+            conflictAlgorithm: ConflictAlgorithm.replace);
+      }
+    } catch (e) {
+      recordError(e, StackTrace.current);
+      return null;
+    }
+  }
+  
+  Future<bool> fetchLoginUser(LoginModel loginModel) async {
+    final _db = await db;
+    try {
+      debugPrint('SELECT * FROM ${LoginModel.tableName} WHERE ${LoginModel.column_mobile_no} = "${loginModel.mobileNo}" AND ${LoginModel.column_status} = 1');
+      List<Map> m = await _db.rawQuery(
+        '''SELECT * FROM ${LoginModel.tableName} WHERE ${LoginModel.column_mobile_no} = "${loginModel.mobileNo}" AND ${LoginModel.column_status} = 1''',
+      );
+      if (m.length > 0) {
+        Map pin = m.first;
+        debugPrint('QQQ 2 : ${pin["pin"]} == ${loginModel.pin}');
+        if (pin['pin'].toString() == loginModel.pin.toString()) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } catch (e) {
+      recordError(e, StackTrace.current);
+      return false;
+    }
+  }
+
+  Future<bool> isLoginUser(LoginModel loginModel) async {
+    final _db = await db;
+    try {
+      debugPrint('SELECT * FROM ${LoginModel.tableName} WHERE ${LoginModel.column_mobile_no} = "${loginModel.mobileNo}" AND ${LoginModel.column_status} = 1');
+      List<Map> m = await _db.rawQuery(
+        '''SELECT * FROM ${LoginModel.tableName} WHERE ${LoginModel.column_mobile_no} = "${loginModel.mobileNo}" AND ${LoginModel.column_status} = 1''',
+      );
+      if (m.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      recordError(e, StackTrace.current);
+      return false;
     }
   }
 

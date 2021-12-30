@@ -14,6 +14,7 @@ import 'package:urbanledger/Cubits/Contacts/contacts_cubit.dart';
 import 'package:urbanledger/Cubits/ImportContacts/import_contacts_cubit.dart';
 import 'package:urbanledger/Cubits/Ledger/ledger_cubit.dart';
 import 'package:urbanledger/Models/customer_model.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Models/transaction_model.dart';
 import 'package:urbanledger/Models/user_model.dart';
@@ -2690,12 +2691,12 @@ Future getKyc() async {
                     ..avatar = widget._customerList[index].avatar
                     ..chatId = widget._customerList[index].chatId;
                   final localCustId = await repository.queries
-                      .getCustomerId(widget._customerList[index].mobileNo!).catchError((e) {
+                      .getCustomerId(widget._customerList[index].mobileNo!)
+                      .catchError((e) {
                     Navigator.of(context).pop();
                     'Something went wrong. Please try again later.'
                         .showSnackBar(context);
-                  })
-                      .timeout(Duration(seconds: 30), onTimeout: () async {
+                  }).timeout(Duration(seconds: 30), onTimeout: () async {
                     Navigator.of(context).pop();
                     return Future.value(null);
                   });
@@ -2714,12 +2715,12 @@ Future getKyc() async {
                       ..chatId = widget._customerList[index].chatId
                       ..isChanged = true;
                     await repository.queries
-                        .insertCustomer(customer).catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  })
-                        .timeout(Duration(seconds: 30), onTimeout: () async {
+                        .insertCustomer(customer)
+                        .catchError((e) {
+                      Navigator.of(context).pop();
+                      'Something went wrong. Please try again later.'
+                          .showSnackBar(context);
+                    }).timeout(Duration(seconds: 30), onTimeout: () async {
                       Navigator.of(context).pop();
                       return Future.value(null);
                     });
@@ -2731,10 +2732,10 @@ Future getKyc() async {
                         Navigator.of(context).pop();
                         return Future.value(null);
                       }).catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  }));
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      }));
                       // if (apiResponse.isNotEmpty) {
                       //   ///update chat id here
                       //   await repository.queries
@@ -2776,9 +2777,9 @@ Future getKyc() async {
                         }
                       }
                     } else {
-                          'Please check your internet connection or try again later.'
-                              .showSnackBar(context);
-                        }
+                      'Please check your internet connection or try again later.'
+                          .showSnackBar(context);
+                    }
                     BlocProvider.of<ContactsCubit>(context).getContacts(
                         Provider.of<BusinessProvider>(context, listen: false)
                             .selectedBusiness
@@ -2815,15 +2816,17 @@ Future getKyc() async {
                         widget._customerList[index].transactionAmount == 0) {
                       var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
-                      await anaylticsEvents.customerDetailsPayEvent().catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
+                      await anaylticsEvents
+                          .customerDetailsPayEvent()
+                          .catchError((e) {
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
                       // Navigator.push(
                       //   context,
                       //   MaterialPageRoute(
@@ -2863,15 +2866,17 @@ Future getKyc() async {
                         TransactionType.Pay) {
                       var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
-                      await anaylticsEvents.customerDetailsPayEvent().catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
+                      await anaylticsEvents
+                          .customerDetailsPayEvent()
+                          .catchError((e) {
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
                       // Navigator.push(
                       //   context,
                       //   MaterialPageRoute(
@@ -2910,15 +2915,17 @@ Future getKyc() async {
                     } else {
                       var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
-                      await anaylticsEvents.customerDetailsPayEvent().catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
+                      await anaylticsEvents
+                          .customerDetailsPayEvent()
+                          .catchError((e) {
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
                       // Navigator.push(
                       //   context,
                       //   MaterialPageRoute(
@@ -2937,11 +2944,12 @@ Future getKyc() async {
                       // );
                       Map<String, dynamic> isTransaction = await repository
                           .paymentThroughQRApi
-                          .getTransactionLimit(context).catchError((e) {
-                    Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
-                        .showSnackBar(context);
-                  });
+                          .getTransactionLimit(context)
+                          .catchError((e) {
+                        Navigator.of(context).pop();
+                        'Something went wrong. Please try again later.'
+                            .showSnackBar(context);
+                      });
                       if (!(isTransaction)['isError']) {
                         Navigator.of(context).pop(true);
                         // showBankAccountDialog();
@@ -3206,7 +3214,6 @@ Future getKyc() async {
                       arguments: TransactionListArgs(
                           false, widget._customerList[index]));
                   await fetchContacts();
-
                 },
               ),
             ),
@@ -3217,25 +3224,24 @@ Future getKyc() async {
   }
 
   Future<void> fetchContacts() async {
-    String selectedBusinessId = Provider.of<BusinessProvider>(context, listen: false)
-        .selectedBusiness
-        .businessId;
+    String selectedBusinessId =
+        Provider.of<BusinessProvider>(context, listen: false)
+            .selectedBusiness
+            .businessId;
     final _customerList =
         await repository.customerApi.getAllCustomers(selectedBusinessId);
 
     await Future.forEach<CustomerModel>(_customerList,
-            (element) async => await repository.queries.insertCustomer(element));
-    BlocProvider.of<ContactsCubit>(context,listen: false).getContacts(selectedBusinessId
-        );
-    setState(() {
-
-    });
+        (element) async => await repository.queries.insertCustomer(element));
+    BlocProvider.of<ContactsCubit>(context, listen: false)
+        .getContacts(selectedBusinessId);
+    setState(() {});
     _customerList.forEach((e) async {
       final _ledgerTransactionList =
-      await repository.ledgerApi.getLedger(e.customerId);
+          await repository.ledgerApi.getLedger(e.customerId);
       _ledgerTransactionList.forEach(
-            (e) async =>
-        await repository.queries.insertLedgerTransaction(e).catchError((e) {
+        (e) async =>
+            await repository.queries.insertLedgerTransaction(e).catchError((e) {
           debugPrint(e);
           recordError(e, StackTrace.current);
         }),

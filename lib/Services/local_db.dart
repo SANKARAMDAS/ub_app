@@ -8,6 +8,7 @@ import 'package:urbanledger/Models/cashbook_entry_model.dart';
 import 'package:urbanledger/Models/customer_model.dart';
 import 'package:urbanledger/Models/customer_ranking_model.dart';
 import 'package:urbanledger/Models/import_contact_model.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/settlement_history_model.dart';
 import 'package:urbanledger/Models/transaction_model.dart';
 // import 'package:urbanledger/Models/user_profile_model.dart';
@@ -220,7 +221,15 @@ class LocalDb {
           )
           ''');
 
-
+    batch.execute('''
+    CREATE TABLE ${LoginModel.tableName} ( 
+      ${LoginModel.column_id} integer primary key autoincrement,
+      ${LoginModel.column_user_id} text unique,
+      ${LoginModel.column_user_name} text not null,
+      ${LoginModel.column_mobile_no} integer not null,
+      ${LoginModel.column_pin} integer,
+      ${LoginModel.column_status} integer default 1
+    )''');
 
     await batch.commit(noResult: true);
   }
