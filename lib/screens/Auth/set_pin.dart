@@ -460,16 +460,17 @@ class _SetPinScreenState extends State<SetPinScreen> {
                             widget.isResetPinState, widget.isRegister));
                   },
                   child: CustomText(
-                    'Proceed',
+                    'PROCEED',
                     size: (18),
                     bold: FontWeight.w500,
-                    color: AppTheme.electricBlue,
+                    color: Colors.white,
                   ),
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(15),
-                    primary: Colors.grey[200],
+                    primary: Colors.grey[400],
+                      elevation: 0,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),side:BorderSide(color: AppTheme.electricBlue,width: 1)),
+                        borderRadius: BorderRadius.circular(10)),
                   )),
             ),
             ),
@@ -482,7 +483,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                       Navigator.of(context).pop();
                     },
                     child: CustomText(
-                      'Change PIN',
+                      'CHANGE PIN',
                       size: (18),
                       bold: FontWeight.w500,
                     ),
@@ -490,6 +491,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                       padding: EdgeInsets.all(15),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
+                      elevation: 0
                     )),
               ),
             )

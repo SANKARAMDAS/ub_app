@@ -21,7 +21,7 @@ class NotificationListCubit extends Cubit<NotificationListState>{
 
   Future<void> clearNotification(int index) async {
     NotificationListApi.notificationListApi.deleteNotifications(['${notificationList[index].id}']);
-    notificationList.remove(index);
+    notificationList.removeAt(index);
     emit(FetchedNotificationListState(notificationList));
 
   }
@@ -37,7 +37,8 @@ class NotificationListCubit extends Cubit<NotificationListState>{
   Future<void> markAllAsRead() async {
     List<String> ids = notificationList.map((e) => e.id.toString()).toList();
     emit(FetchingNotificationListState());
-    await NotificationListApi.notificationListApi.markAllAsRead(ids);
+    NotificationListApi.notificationListApi.markAllAsRead(ids);
+    notificationList.forEach((element) {element.read = true;});
     emit(FetchedNotificationListState(notificationList));
 
   }
@@ -47,6 +48,7 @@ class NotificationListCubit extends Cubit<NotificationListState>{
 
     NotificationListApi.notificationListApi.deleteNotifications(ids);
     notificationList.removeWhere((element) => element.isSelected);
+    print(notificationList.length);
     emit(FetchedNotificationListState(notificationList));
 
   }
