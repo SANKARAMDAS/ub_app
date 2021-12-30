@@ -51,7 +51,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
   final GlobalKey<State> key = GlobalKey<State>();
   late bool _serviceEnabled;
   final location = Location();
- // final FirebaseAnalytics analytics = FirebaseAnalytics();
+  // final FirebaseAnalytics analytics = FirebaseAnalytics();
 
   @override
   void initState() {
@@ -66,7 +66,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
     fourController.text = ' ';
     fiveController.text = ' ';
     sixController.text = ' ';
-
   }
 
   @override
@@ -142,8 +141,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     padding: EdgeInsets.only(
                         bottom: 15, top: 15, left: 30, right: 30),
                     primary: validate() == true
-                          ? AppTheme.electricBlue
-                          : AppTheme.coolGrey,
+                        ? AppTheme.electricBlue
+                        : AppTheme.coolGrey,
                   ),
                   child: CustomText(
                     'VERIFY',
@@ -152,101 +151,108 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     color: Colors.white,
                   ),
                   onPressed: validate() == true
-                        ? () async {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              //TODO: To handle location permission when denied.
+                      ? () async {
+                          if (_formKey.currentState!.validate()) {
+                            debugPrint("validate");
 
-                              // await checkService();
-                              // final _location = await location.getLocation();
-                              CustomLoadingDialog.showLoadingDialog(
-                                  context, key);
-                              final status = widget.isRegister
-                                  ? await (repository.registerApi
-                                          .registerOtpVerification(
-                                              _digit1! +
-                                                  _digit2! +
-                                                  _digit3! +
-                                                  _digit4!,
-                                              // _location.latitude,
-                                              // _location.longitude,
-                                              0,
-                                              0))
-                                      .timeout(Duration(seconds: 30),
-                                          onTimeout: () async {
-                                      Navigator.of(context).pop();
-                                      return Future.value(null);
-                                    }).catchError((e) {
-                                      oneController.text = ' ';
-                                      twoController.text = ' ';
-                                      threeController.text = ' ';
-                                      fourController.text = ' ';
-                                      fiveController.text = ' ';
-                                      sixController.text = ' ';
-                                      setState(() {});
-                                      e.toString().showSnackBar(context);
-                                      Navigator.of(context).pop();
-                                      return 'Incorrect';
-                                    })
-                                  : await (repository.loginApi
-                                          .loginOtpVerification(
-                                              _digit1! +
-                                                  _digit2! +
-                                                  _digit3! +
-                                                  _digit4!,
-                                              // _location.latitude,
-                                              // _location.longitude,
-                                              0,
-                                              0))
-                                      .catchError((e) {
-                                        oneController.text = ' ';
-                                      twoController.text = ' ';
-                                      threeController.text = ' ';
-                                      fourController.text = ' ';
-                                      fiveController.text = ' ';
-                                      sixController.text = ' ';
-                                      debugPrint('KKKKKKKKKKKKK');
-                                      setState(() {});
-                                      e.toString().showSnackBar(context);
-                                      Navigator.of(context).pop();
-                                      return 'Incorrect';
-                                    });
-                              if (status.isNotEmpty) {
-                                if (status == 'Incorrect') return;
-                                _formKey.currentState!.reset();
-                                if (!widget.isRegister) {
-                                  // await analytics.logLogin();
-                                  LoginRepository().login(
-                                      widget.phoneNo.replaceAll(' ', ''),
-                                      context);
-                                  repository.hiveQueries
-                                      .insertIsAuthenticated(true);
-                                  Navigator.of(context)
-                                    ..pop()
-                                    ..pop()
-                                    ..pushReplacementNamed(
-                                        repository.hiveQueries.userPin.isEmpty
-                                            ? AppRoutes.setPinRoute
-                                            : AppRoutes.pinLoginRoute,
-                                        arguments: repository
-                                                .hiveQueries.userPin.isEmpty
-                                            ? SetPinRouteArgs(
-                                                '', false, false, false)
-                                            : null);
-                                } else {
-                                  //  await analytics.logSignUp(signUpMethod: 'SignUp');
-                                  /*    var anaylticsEvents = await AnalyticsEvents(context);
+                            _formKey.currentState!.save();
+                            //TODO: To handle location permission when denied.
+
+                            // await checkService();
+                            // final _location = await location.getLocation();
+                            CustomLoadingDialog.showLoadingDialog(context, key);
+                            final status = widget.isRegister
+                                ? await (repository.registerApi
+                                        .registerOtpVerification(
+                                            _digit1! +
+                                                _digit2! +
+                                                _digit3! +
+                                                _digit4!,
+                                            // _location.latitude,
+                                            // _location.longitude,
+                                            0,
+                                            0))
+                                    .timeout(Duration(seconds: 30),
+                                        onTimeout: () async {
+                                    Navigator.of(context).pop();
+                                    return Future.value(null);
+                                  }).catchError((e) {
+                                    oneController.text = ' ';
+                                    twoController.text = ' ';
+                                    threeController.text = ' ';
+                                    fourController.text = ' ';
+                                    fiveController.text = ' ';
+                                    sixController.text = ' ';
+                                    setState(() {});
+                                    e.toString().showSnackBar(context);
+                                    Navigator.of(context).pop();
+                                    return 'Incorrect';
+                                  })
+                                : await (repository.loginApi
+                                        .loginOtpVerification(
+                                            _digit1! +
+                                                _digit2! +
+                                                _digit3! +
+                                                _digit4!,
+                                            // _location.latitude,
+                                            // _location.longitude,
+                                            0,
+                                            0))
+                                    .catchError((e) {
+                                    oneController.text = ' ';
+                                    twoController.text = ' ';
+                                    threeController.text = ' ';
+                                    fourController.text = ' ';
+                                    fiveController.text = ' ';
+                                    sixController.text = ' ';
+                                    debugPrint('KKKKKKKKKKKKK');
+                                    setState(() {});
+                                    e.toString().showSnackBar(context);
+                                    Navigator.of(context).pop();
+                                    return 'Incorrect';
+                                  });
+                            if (status.isNotEmpty) {
+                              debugPrint("isNotEmpt");
+
+                              if (status == 'Incorrect') return;
+                              debugPrint("Incorrect");
+
+                              _formKey.currentState!.reset();
+                              if (!widget.isRegister) {
+                                debugPrint("isREgister");
+
+                                // await analytics.logLogin();
+                                LoginRepository().login(
+                                    widget.phoneNo.replaceAll(' ', ''),
+                                    context);
+                                repository.hiveQueries
+                                    .insertIsAuthenticated(true);
+                                oneController.text = ' ';
+                                twoController.text = ' ';
+                                threeController.text = ' ';
+                                fourController.text = ' ';
+                                fiveController.text = ' ';
+                                sixController.text = ' ';
+                                debugPrint('KKKKKKKKKKKKK');
+                                setState(() {});
+
+                                Navigator.of(context)
+                                  ..pop()
+                                  ..pop()
+                                  ..pushReplacementNamed(
+                                      repository.hiveQueries.userPin.isEmpty
+                                          ? AppRoutes.setPinRoute
+                                          : AppRoutes.pinLoginRoute,
+                                      arguments:
+                                          repository.hiveQueries.userPin.isEmpty
+                                              ? SetPinRouteArgs(
+                                                  '', false, false, false)
+                                              : null);
+                              } else {
+                                //  await analytics.logSignUp(signUpMethod: 'SignUp');
+                                /*    var anaylticsEvents = await AnalyticsEvents(context);
                             anaylticsEvents.signUpEvent(withReferral);*/
 
-                                  Navigator.of(context)
-                                    ..pop()
-                                    ..pop()
-                                    ..pushReplacementNamed(
-                                        AppRoutes.signupRoute,
-                                        arguments:
-                                            widget.phoneNo.replaceAll(' ', ''));
-                                }
-                              } else {
                                 Navigator.of(context)
                                   ..pop()
                                   ..pop()
@@ -254,10 +260,17 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                       arguments:
                                           widget.phoneNo.replaceAll(' ', ''));
                               }
+                            } else {
+                              Navigator.of(context)
+                                ..pop()
+                                ..pop()
+                                ..pushReplacementNamed(AppRoutes.signupRoute,
+                                    arguments:
+                                        widget.phoneNo.replaceAll(' ', ''));
                             }
                           }
-                        : () {},
-
+                        }
+                      : () {},
                 ),
               ),
               (screenWidth(context) * 0.035).widthBox,
@@ -301,12 +314,12 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   ),
                   (deviceHeight * 0.04).heightBox,
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: otpTextField(
                             controller: oneController,
                             onSaved: (value) => _digit1 = value,
@@ -315,8 +328,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           ),
                         ).flexible,
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: otpTextField(
                             controller: twoController,
                             onSaved: (value) => _digit2 = value,
@@ -326,8 +338,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           ),
                         ).flexible,
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: otpTextField(
                             controller: threeController,
                             onSaved: (value) => _digit3 = value,
@@ -337,8 +348,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           ),
                         ).flexible,
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: otpTextField(
                             controller: fourController,
                             onSaved: (value) => _digit4 = value,
@@ -348,8 +358,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           ),
                         ).flexible,
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: otpTextField(
                               controller: fiveController,
                               onSaved: (value) => _digit5 = value,
@@ -358,8 +367,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                               previousFocusNode: fourthFocusNode),
                         ).flexible,
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: otpTextField(
                             controller: sixController,
                             focusNode: sixthFocusNode,
@@ -391,58 +399,76 @@ class _VerificationScreenState extends State<VerificationScreen> {
     );
   }
 
-
-
   Widget otpTextField(
       {required FocusNode focusNode,
       required void Function(String?) onSaved,
       FocusNode? nextFocusNode,
       FocusNode? previousFocusNode,
       required TextEditingController controller}) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(width: 3.0, color: AppTheme.coolGrey),
+    return Material(
+      elevation: 8.0,
+      child: Container(
+        height: 55,
+        width: 40,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          // border: new Border.all(width: 2.0, color: Colors.grey),
+          borderRadius: new BorderRadius.circular(5),
+          boxShadow: [
+            // color: Colors.white, //background color of box
+            BoxShadow(
+              color: Colors.grey,
+              blurRadius: 2.0, // soften the shadow
+              spreadRadius: 0.0, //extend the shadow
+              offset: Offset(
+                0.0, // Move to right 10  horizontally
+                0.7, // Move to bottom 10 Vertically
+              ),
+            )
+          ],
         ),
-      ),
-      child: TextFormField(
-        controller: controller,
-        enableInteractiveSelection: false,
-        textAlign: TextAlign.center,
-        focusNode: focusNode,
-        onSaved: onSaved,
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        validator: (value) {
-          if (value!.isEmpty || value.isValidOneDigitNumber == false) {
-            return ' ';
-          } else {
-            return null;
-          }
-        },
-        onChanged: nextFocusNode == null
-            ? null
-            : (value) {
-                if (value.length > 0 && value !="") {
-                  FocusScope.of(context).requestFocus(nextFocusNode);
-                } else {
-                  FocusScope.of(context).requestFocus(previousFocusNode);
-                }
-              },
-        keyboardType: TextInputType.phone,
-        maxLength: 1,
-        cursorColor: AppTheme.coolGrey,
-        style: TextStyle(
-            color: AppTheme.coolGrey,
-            fontSize: 28,
-            fontWeight: FontWeight.bold),
-        decoration: InputDecoration(
-          counterText: '',
-          enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: AppTheme.coolGrey, style: BorderStyle.solid)),
-          focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: AppTheme.coolGrey, style: BorderStyle.solid)),
+        child: TextFormField(
+          controller: controller,
+          enableInteractiveSelection: false,
+          textAlign: TextAlign.center,
+          focusNode: focusNode,
+          onSaved: onSaved,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          validator: (value) {
+            if (value!.isEmpty || value.isValidOneDigitNumber == false) {
+              return ' ';
+            } else {
+              return null;
+            }
+          },
+          onChanged: nextFocusNode == null
+              ? null
+              : (value) {
+                  if (value.length > 0 && value != "") {
+                    FocusScope.of(context).requestFocus(nextFocusNode);
+                  } else {
+                    FocusScope.of(context).requestFocus(previousFocusNode);
+                  }
+                },
+          keyboardType: TextInputType.phone,
+          maxLength: 1,
+          cursorColor: Colors.transparent,
+          cursorWidth: 0,
+          obscureText: true,
+          style: TextStyle(
+              color: AppTheme.coolGrey,
+              fontSize: 28,
+              fontWeight: FontWeight.bold),
+          decoration: InputDecoration(
+            counterText: '',
+            hintText: '_',
+            enabledBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Colors.white, style: BorderStyle.solid)),
+            focusedBorder: UnderlineInputBorder(
+                borderSide:
+                    BorderSide(color: Colors.white, style: BorderStyle.solid)),
+          ),
         ),
       ),
     );
@@ -466,7 +492,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
     }
   }
 
-
   //********************************************************************************* */
   // BUSINESS LOGIC
   //********************************************************************************* */
@@ -482,9 +507,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
     fiveController.clear();
     sixController.clear();
   }
-
-
-
 
   /* Future<void> _sendVerificationCode(String phone) async {
     try {
