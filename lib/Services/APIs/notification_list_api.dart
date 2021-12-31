@@ -70,7 +70,7 @@ class NotificationListApi {
     try {
       final response = await http.patch(
         Uri.parse('$baseUrl$url'),
-        headers: apiAuthHeaderWithOnlyToken(),
+        headers: apiAuthHeader(),
           body: jsonEncode({"id":ids})
       );
 
@@ -94,11 +94,13 @@ class NotificationListApi {
     const url = "notification";
     print('$baseUrl$url');
     Map<String,dynamic> responseData={};
+
     try {
+      String bodyMap =  jsonEncode({"id":ids});
       final response = await http.delete(
         Uri.parse('$baseUrl$url'),
-        headers: apiAuthHeaderWithOnlyToken(),
-        body: jsonEncode({"id":ids})
+        headers: apiAuthHeader(),
+        body: bodyMap
       );
 
       debugPrint('Check SUS' + jsonDecode(response.body).toString());

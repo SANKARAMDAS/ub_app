@@ -62,10 +62,14 @@ class _UserNotificationsState extends State<UserNotifications> {
                 // to rebuild the widget with state
               },
               builder: (context, state) {
-                return  ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemBuilder:(ctx,i)=>listItem(widget.dataList![i],i),itemCount: widget.dataList?.length);
-                // return widget here based on BlocA's state
+                if(state is FetchedNotificationListState){
+                  return  state.notificationList.length > 0?ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemBuilder:(ctx,i)=>listItem(widget.dataList![i],i),itemCount: widget.dataList?.length):Container(child:Center(child: Text('No Data')));
+
+                }
+                return Container(child:Center(child: Text('No Data')));
+              // return widget here based on BlocA's state
               }
           ))
           // AppBar(title: Text('Notifications(03)'),backgroundColor: AppTheme.electricBlue,)
@@ -127,8 +131,9 @@ class _UserNotificationsState extends State<UserNotifications> {
 
         },
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           // crossAxisAlignment: CrossAxisAlignment.stretch,
+
           children: [
             Container(
               margin: EdgeInsets.symmetric(vertical: 0),
@@ -144,80 +149,7 @@ class _UserNotificationsState extends State<UserNotifications> {
                 /*
 
                        */
-                child: ListTile(
-                  onTap: () {
-
-
-                  },
-                  leading: Container(
-                    width: 80,
-                    height: 80,
-                    alignment: Alignment.center,
-                    child: Center(
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Positioned(
-                            top: 10,
-                            left:10,
-                            child: Image.asset(
-                              data.read??false?AppAssets.notification_unselected:AppAssets.notification_selected,
-                              height: 60,
-                              width: 60,
-                            ),
-                          ),
-                      Positioned(
-                        top:30,
-                        left:30,
-                        child: Container(
-                          child: Image.asset(
-                            data.isSelected?AppAssets.check_selected:AppAssets.check_unselected,
-                            height: 60,
-                            width: 60,
-                          ),
-                        ),
-                      ),
-
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomText(
-                        '${data.title}',
-                        bold: FontWeight.w600,
-                        size: 20,
-                        color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
-                      ),
-                      Container(
-                        child: CustomText(
-                          // "${DateFormat('dd MMM yyyy | hh:mm aa').format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))}"
-                          timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))
-                          ,
-                          size: 12,
-                          color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
-                          bold: FontWeight.w400,
-                        ),
-                      )
-                    ],
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      6.0.heightBox,
-                      CustomText(
-                        '${data.body}',
-                        size: 16,
-                        color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
-                        bold: FontWeight.w400,
-                      ),
-                    ],
-                  ),
-
-                ),
+                child: CustomListItem(data: data)
               ),
             ),
             Container(
@@ -235,6 +167,9 @@ class _UserNotificationsState extends State<UserNotifications> {
     );
   }
 
+
+
+
   Widget appbar(BuildContext context){
     return AppBar(
       title: Text('Notification(03)'),
@@ -242,3 +177,119 @@ class _UserNotificationsState extends State<UserNotifications> {
 
   }
 }
+
+class CustomListItem extends StatefulWidget {
+  const CustomListItem({
+    Key? key,
+    required this.data,
+
+  }) : super(key: key);
+
+
+  final NotificationData data;
+
+
+  @override
+  State<CustomListItem> createState() => _CustomListItemState();
+}
+
+class _CustomListItemState extends State<CustomListItem> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: Container(
+            width: 80,
+            height: 80,
+            child: Center(
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    top: 10,
+                    left:10,
+                    child: Image.asset(
+                      widget.data.read??false?AppAssets.notification_unselected:AppAssets.notification_selected,
+                      height: 60,
+                      width: 60,
+                    ),
+                  ),
+                  Positioned(
+                    top:30,
+                    left:30,
+                    child: Container(
+                      child: Image.asset(
+                        widget.data.isSelected?AppAssets.check_selected:AppAssets.check_unselected,
+                        height: 60,
+                        width: 60,
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: _NotificationDescription(
+            data: widget.data,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+          child: CustomText(
+            // "${DateFormat('dd MMM yyyy | hh:mm aa').format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))}"
+            timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${widget.data.createdAt}'))
+            ,
+            size: 12,
+            color: widget.data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
+            bold: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _NotificationDescription extends StatelessWidget {
+  const _NotificationDescription({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
+
+  final NotificationData data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          CustomText(
+            '${data.title}',
+            bold: FontWeight.w600,
+            size: 20,
+            color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
+          ),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+          CustomText(
+            '${data.body}',
+            size: 16,
+            color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
+            bold: FontWeight.w400,
+          ),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
+      
+        ],
+      ),
+    );
+  }
+}
+
