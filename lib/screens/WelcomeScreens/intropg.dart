@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Models/routeArgs.dart';
+import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/app_routes.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
@@ -47,7 +49,9 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);});
       } else {
         Future.delayed(Duration(seconds: 2), () {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.pinLoginRoute);});
+        Navigator.of(context).pushReplacementNamed(AppRoutes.pinLoginRoute,arguments:PinRouteArgs(
+                                                Repository().hiveQueries.userData.mobileNo,
+                                                true));});
       }
     } else {
       timer = PausableTimer(Duration(seconds: 3), () async {
@@ -112,7 +116,9 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                                 AppRoutes.welcomescreenRoute);
                           } else {
                             Navigator.of(context)
-                                .pushReplacementNamed(AppRoutes.pinLoginRoute);
+                                .pushReplacementNamed(AppRoutes.pinLoginRoute,arguments:PinRouteArgs(
+                                                Repository().hiveQueries.userData.mobileNo,
+                                                true));
                           }
                         },
                         child: Container(

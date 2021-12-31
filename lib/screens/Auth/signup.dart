@@ -477,6 +477,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           setState(() {
                                             isLoading = false;
                                           });
+                                          debugPrint(e.toString());
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(SnackBar(
                                             content: CustomText('Please check internet connectivity and try again.'),

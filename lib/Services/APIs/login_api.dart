@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:device_info/device_info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/user_model.dart';
 import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/apiCalls.dart';
@@ -88,31 +89,37 @@ class LoginAPI {
           if (map['chatToken'] != null)
             await CustomSharedPreferences.setString(
                 'chat_token', map['chatToken']);
-          if (map['customerDetails']['profilePic'] !=
-              null) if (map['customerDetails']
-                  ['profilePic']
-              .toString()
-              .isNotEmpty) {
-            filePath = await _repository!.ledgerApi
-                .networkImageToFile(map['customerDetails']['profilePic']);
+          if (map['customerDetails']['profilePic'] != null) {
+            if (map['customerDetails']['profilePic'].toString().isNotEmpty) {
+              filePath = await _repository!.ledgerApi
+                  .networkImageToFile(map['customerDetails']['profilePic']);
+            }
           }
-
+          LoginModel loginModel = LoginModel(
+            userId: map['customerDetails']['_id'],
+            userName: map['customerDetails']['first_name'] +
+                ' ' +
+                map['customerDetails']['last_name'],
+            mobileNo: map['customerDetails']['mobile_no'],
+            status: true,
+          );
+          _repository!.hiveQueries.setPinStatus(true);
+            _repository!.hiveQueries.setFingerPrintStatus(true);
+          repository.queries.checkLoginUser(loginModel);
           _repository!.hiveQueries.insertUserData(SignUpModel.fromJson(
-            map['customerDetails'],
-            filePath,
-            bankStatus: map['bankStatus'] ?? false,
-            kycExpDate: map['kycExpDate'] ?? '',
-            kycStatus: map['kycStatus'] ?? 0,
-            premiumExpDate: map['premiumExpDate'] ?? '',
-            premiumStatus: map['premiumStatus'] ?? 0,
-            isEmiratesIdDone: map['tl'] ?? false,
-            isTradeLicenseDone: map['emirates'] ?? false,
-            paymentLink:
-                map['link'] ?? '${repository.hiveQueries.userData.paymentLink}',
-            referral_code: map['customerDetails']['referral_code'] ?? '',
-            referral_link: map['customerDetails']['referral_link'] ?? '',
-            email_status: map['customerDetails']['email_status']??false
-          ));
+              map['customerDetails'], filePath,
+              bankStatus: map['bankStatus'] ?? false,
+              kycExpDate: map['kycExpDate'] ?? '',
+              kycStatus: map['kycStatus'] ?? 0,
+              premiumExpDate: map['premiumExpDate'] ?? '',
+              premiumStatus: map['premiumStatus'] ?? 0,
+              isEmiratesIdDone: map['tl'] ?? false,
+              isTradeLicenseDone: map['emirates'] ?? false,
+              paymentLink: map['link'] ??
+                  '${repository.hiveQueries.userData.paymentLink}',
+              referral_code: map['customerDetails']['referral_code'] ?? '',
+              referral_link: map['customerDetails']['referral_link'] ?? '',
+              email_status: map['customerDetails']['email_status'] ?? false));
         }
         return map['customerDetails']['first_name'] ?? '';
       }

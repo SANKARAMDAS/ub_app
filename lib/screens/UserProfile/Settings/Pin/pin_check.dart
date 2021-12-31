@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Utility/app_services.dart';
 import 'package:urbanledger/Services/repository.dart';
@@ -323,7 +324,9 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
       pinNotifier.value = pinNotifier.value + str;
     }
     if (pinNotifier.value.length == 4) {
-      if (repository.hiveQueries.userPin == pinNotifier.value) {
+      LoginModel loginModel = LoginModel(mobileNo: Repository().hiveQueries.userData.mobileNo, pin: pinNotifier.value);
+      bool isLogin = await Repository().queries.fetchLoginUser(loginModel);
+      if (isLogin) {
         if (widget.fromPinSetupScreen != null) {
           if (widget.fromPinSetupScreen!) {
             Navigator.of(context).pop(true);

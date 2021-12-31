@@ -14,6 +14,7 @@ import 'package:urbanledger/Cubits/Contacts/contacts_cubit.dart';
 import 'package:urbanledger/Cubits/ImportContacts/import_contacts_cubit.dart';
 import 'package:urbanledger/Cubits/Ledger/ledger_cubit.dart';
 import 'package:urbanledger/Models/customer_model.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Models/transaction_model.dart';
 import 'package:urbanledger/Models/user_model.dart';
@@ -552,58 +553,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       });
     }
     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      // Navigator.of(context).pop();
       setState(() {
         loading = false;
       });
       'Something went wrong. Please try again later.'.showSnackBar(context);
     }).then((value) {
-      debugPrint('Check the value : ' + value['status'].toString());
-
-      if (value != null && value.toString().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            Repository().hiveQueries.insertUserData(Repository()
-                .hiveQueries
-                .userData
-                .copyWith(
-                kycStatus:
-                (value['emirates'] == true && value['tl'] == true) &&
-                    value['isVerified'] == false
-                    ? 2
-                    : (value['isVerified'] == true &&
-                    value['status'] == true)
-                    ? 1
-                    : 0,
-                premiumStatus:
-                value['planDuration'].toString() == 0.toString()
-                    ? 0
-                    : int.tryParse(value['planDuration']),
-                isEmiratesIdDone: value['emirates'] ?? false,
-                isTradeLicenseDone: value['tl'] ?? false,
-                paymentLink: value['link'] ?? ''));
-
-            // Need to set emirates iD and TradeLicense ID Values
-            // isEmiratesIdDone = value['emirates'] ?? false;
-            // isTradeLicenseDone = value['tl'] ?? false;
-            // status = value['status'] ?? false;
-            // isPremium = value['premium'] ?? false;
-            // debugPrint('check1' + status.toString());
-            // debugPrint('check' + isEmiratesIdDone.toString());
-          });
-          return true;
-        }
-      }
-    });
-    calculatePremiumDate();
-
-    if (mounted) {
       setState(() {
         loading = false;
       });
-    }
+    });
+    calculatePremiumDate();
+    setState(() {
+      loading = false;
+    });
   }
-
   getAllCards() async {
     Provider.of<AddCardsProvider>(context, listen: false).getCard();
   }
@@ -626,91 +589,91 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Future<bool> exitAppDialog(BuildContext context) async {
     debugPrint('qwert');
     return (await showDialog(
-      context: context,
-      builder: (context) => Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Dialog(
-            insetPadding: EdgeInsets.only(left: 20, right: 20, bottom: 35),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 25.0, bottom: 0),
-                  child: CustomText(
-                    'Do you want to exit app?',
-                    color: AppTheme.tomato,
-                    bold: FontWeight.w500,
-                    size: 18,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.symmetric(vertical: 10),
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 10),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(15),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              primary: AppTheme.electricBlue,
-                            ),
-                            child: CustomText(
-                              'YES',
-                              color: Colors.white,
-                              size: (18),
-                              bold: FontWeight.w500,
-                            ),
-                            onPressed: () {
-                              if (Platform.isAndroid) {
-                                SystemNavigator.pop();
-                              } else if (Platform.isIOS) {
-                                exit(0);
-                              }
-                            },
-                          ),
-                        ),
+          context: context,
+          builder: (context) => Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Dialog(
+                insetPadding: EdgeInsets.only(left: 20, right: 20, bottom: 35),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 25.0, bottom: 0),
+                      child: CustomText(
+                        'Do you want to exit app?',
+                        color: AppTheme.tomato,
+                        bold: FontWeight.w500,
+                        size: 18,
                       ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.symmetric(vertical: 10),
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 15),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(15),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              primary: AppTheme.electricBlue,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.all(15),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  primary: AppTheme.electricBlue,
+                                ),
+                                child: CustomText(
+                                  'YES',
+                                  color: Colors.white,
+                                  size: (18),
+                                  bold: FontWeight.w500,
+                                ),
+                                onPressed: () {
+                                  if (Platform.isAndroid) {
+                                    SystemNavigator.pop();
+                                  } else if (Platform.isIOS) {
+                                    exit(0);
+                                  }
+                                },
+                              ),
                             ),
-                            child: CustomText(
-                              'NO',
-                              color: Colors.white,
-                              size: (18),
-                              bold: FontWeight.w500,
-                            ),
-                            onPressed: () =>
-                                Navigator.of(context).pop(false),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.all(15),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  primary: AppTheme.electricBlue,
+                                ),
+                                child: CustomText(
+                                  'NO',
+                                  color: Colors.white,
+                                  size: (18),
+                                  bold: FontWeight.w500,
+                                ),
+                                onPressed: () =>
+                                    Navigator.of(context).pop(false),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    )) ??
+        )) ??
         false;
   }
 
@@ -746,16 +709,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             onTap: snapshot.data!.length == 0
                                 ? () {}
                                 : () async {
-                              var anaylticsEvents =
-                              AnalyticsEvents(context);
-                              await anaylticsEvents.initCurrentUser();
-                              await anaylticsEvents
-                                  .sendRecieveButtonEvent();
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(
-                                builder: (context) => PayRequestScreen(),
-                              ));
-                            },
+                                    var anaylticsEvents =
+                                        AnalyticsEvents(context);
+                                    await anaylticsEvents.initCurrentUser();
+                                    await anaylticsEvents
+                                        .sendRecieveButtonEvent();
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) => PayRequestScreen(),
+                                    ));
+                                  },
                             child: Image.asset(
                               snapshot.data!.length == 0
                                   ? AppAssets.switchGrey
@@ -778,7 +741,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 );
               }),
           floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked,
+              FloatingActionButtonLocation.centerDocked,
           backgroundColor: AppTheme.paleGrey,
           extendBody: true,
           bottomNavigationBar: CustomBottomNavBarNew(),
@@ -793,273 +756,271 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     alignment: Alignment.topCenter)),
             child: loading == true
                 ? Center(
-              child: CircularProgressIndicator(),
-            )
+                    child: CircularProgressIndicator(),
+                  )
                 : Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                (MediaQuery.of(context).padding.top).heightBox,
-                BlocBuilder<ContactsCubit, ContactsState>(
-                  buildWhen: (state1, state2) {
-                    return true;
-                  },
-                  builder: (context, state) {
-                    if (state is FetchedContacts) {
-                      if (state.customerList.isEmpty) {
-                        return Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              appBar,
-                              const PayReceiveButtons(
-                                isCustomerEmpty: true,
-                              ),
-                              reportButton(true),
-                              // CustomSearchBar(
-                              //   CtextFormField: TextFormField(
-                              //     // textAlignVertical: TextAlignVertical.center,
-                              //     controller: _searchController,
-                              //     onChanged: (value) {
-                              //       BlocProvider.of<ContactsCubit>(context)
-                              //           .searchContacts(value);
-                              //     },
-                              //     style: TextStyle(
-                              //       fontSize: 17,
-                              //       color: AppTheme.brownishGrey,
-                              //     ),
-                              //     cursorColor: AppTheme.brownishGrey,
-                              //     decoration: InputDecoration(
-                              //         // contentPadding: EdgeInsets.only(top: 15),
-                              //         border: InputBorder.none,
-                              //         hintText: 'Search Customers, Name, phone',
-                              //         hintStyle: TextStyle(
-                              //             color: Color(0xffb6b6b6),
-                              //             fontSize: 17,
-                              //             fontWeight: FontWeight.w500)),
-                              //   ),
-                              //   Suffix: Column(
-                              //     children: [
-                              //       GestureDetector(
-                              //         child: Padding(
-                              //           padding: EdgeInsets.only(right: 15.0),
-                              //           child: Image.asset(
-                              //             AppAssets.filterIcon,
-                              //             color: AppTheme.brownishGrey,
-                              //             height: 18,
-                              //             // scale: 1.5,
-                              //           ),
-                              //         ),
-                              //         onTap: () async {
-                              //           await filterBottomSheet;
-                              //           setState(() {
-                              //             hideFilterString = false;
-                              //           });
-                              //         },
-                              //       ),
-                              //       Positioned(
-                              //         right: 14,
-                              //         top: -3,
-                              //         child: ClipRRect(
-                              //           borderRadius: BorderRadius.circular(25),
-                              //           child: Container(
-                              //             color: AppTheme.tomato,
-                              //             height: 9,
-                              //             width: 9,
-                              //           ),
-                              //         ),
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
-                              searchField(1, 1),
-                              Container(
-                                padding: const EdgeInsets.only(
-                                    left: 16, right: 16, top: 15),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      'Customers List (0)',
-                                      style: TextStyle(
-                                          color: Color(0xff666666),
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    Container(
-                                      child: ElevatedButton(
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                            MaterialStateProperty.all<
-                                                Color>(
-                                                Color(0xff1058ff)),
-                                            shape: MaterialStateProperty
-                                                .all<OutlinedBorder>(
-                                                RoundedRectangleBorder(
-                                                  borderRadius:
-                                                  BorderRadius.circular(
-                                                      24),
-                                                )),
-                                            elevation:
-                                            MaterialStateProperty.all<
-                                                double>(0)),
-                                        child: SvgPicture.asset(
-                                          AppAssets.addCustomerIcon,
-                                          height: 24,
-                                          width: 24,
-                                        ),
-                                        onPressed: () async {
-                                          if (BlocProvider.of<
-                                              ImportContactsCubit>(
-                                              context)
-                                              .state
-                                              .runtimeType ==
-                                              SearchedImportedContacts)
-                                            BlocProvider.of<
-                                                ImportContactsCubit>(
-                                                context)
-                                                .searchImportedContacts(
-                                                '');
-                                          Navigator.of(context).pushNamed(
-                                              AppRoutes.addCustomerRoute);
-                                          // Navigator.of(context).pushNamed(
-                                          //     AppRoutes.introscreenRoute);
-                                        },
-                                      ),
-                                    ),
-
-                                    // Image.asset(
-                                    //   'assets/icons/link.png',
-                                    //   scale: 1.2,
-                                    // ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              SingleChildScrollView(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      (MediaQuery.of(context).padding.top).heightBox,
+                      BlocBuilder<ContactsCubit, ContactsState>(
+                        buildWhen: (state1, state2) {
+                          return true;
+                        },
+                        builder: (context, state) {
+                          if (state is FetchedContacts) {
+                            if (state.customerList.isEmpty) {
+                              return Padding(
+                                padding: const EdgeInsets.all(10.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
                                   children: [
-                                    SizedBox(
-                                      height: MediaQuery.of(context)
-                                          .size
-                                          .height *
-                                          0.1,
-                                    ).flexible,
-                                    Image.asset(
-                                      'assets/images/addYourFirstCustomer.png',
-                                      height: MediaQuery.of(context)
-                                          .size
-                                          .height *
-                                          0.3,
+                                    appBar,
+                                    const PayReceiveButtons(
+                                      isCustomerEmpty: true,
                                     ),
-                                    Center(
-                                      child: CustomText(
-                                        'Start adding your\n first customer',
-                                        color: AppTheme.brownishGrey,
-                                        size: 22,
-                                        centerAlign: true,
-                                        bold: FontWeight.w500,
+                                    reportButton(true),
+                                    // CustomSearchBar(
+                                    //   CtextFormField: TextFormField(
+                                    //     // textAlignVertical: TextAlignVertical.center,
+                                    //     controller: _searchController,
+                                    //     onChanged: (value) {
+                                    //       BlocProvider.of<ContactsCubit>(context)
+                                    //           .searchContacts(value);
+                                    //     },
+                                    //     style: TextStyle(
+                                    //       fontSize: 17,
+                                    //       color: AppTheme.brownishGrey,
+                                    //     ),
+                                    //     cursorColor: AppTheme.brownishGrey,
+                                    //     decoration: InputDecoration(
+                                    //         // contentPadding: EdgeInsets.only(top: 15),
+                                    //         border: InputBorder.none,
+                                    //         hintText: 'Search Customers, Name, phone',
+                                    //         hintStyle: TextStyle(
+                                    //             color: Color(0xffb6b6b6),
+                                    //             fontSize: 17,
+                                    //             fontWeight: FontWeight.w500)),
+                                    //   ),
+                                    //   Suffix: Column(
+                                    //     children: [
+                                    //       GestureDetector(
+                                    //         child: Padding(
+                                    //           padding: EdgeInsets.only(right: 15.0),
+                                    //           child: Image.asset(
+                                    //             AppAssets.filterIcon,
+                                    //             color: AppTheme.brownishGrey,
+                                    //             height: 18,
+                                    //             // scale: 1.5,
+                                    //           ),
+                                    //         ),
+                                    //         onTap: () async {
+                                    //           await filterBottomSheet;
+                                    //           setState(() {
+                                    //             hideFilterString = false;
+                                    //           });
+                                    //         },
+                                    //       ),
+                                    //       Positioned(
+                                    //         right: 14,
+                                    //         top: -3,
+                                    //         child: ClipRRect(
+                                    //           borderRadius: BorderRadius.circular(25),
+                                    //           child: Container(
+                                    //             color: AppTheme.tomato,
+                                    //             height: 9,
+                                    //             width: 9,
+                                    //           ),
+                                    //         ),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                    searchField(1, 1),
+                                    Container(
+                                      padding: const EdgeInsets.only(
+                                          left: 16, right: 16, top: 15),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                            'Customers List (0)',
+                                            style: TextStyle(
+                                                color: Color(0xff666666),
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          Container(
+                                            child: ElevatedButton(
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all<
+                                                              Color>(
+                                                          Color(0xff1058ff)),
+                                                  shape: MaterialStateProperty
+                                                      .all<OutlinedBorder>(
+                                                          RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            24),
+                                                  )),
+                                                  elevation:
+                                                      MaterialStateProperty.all<
+                                                          double>(0)),
+                                              child: SvgPicture.asset(
+                                                AppAssets.addCustomerIcon,
+                                                height: 24,
+                                                width: 24,
+                                              ),
+                                              onPressed: () async {
+                                                if (BlocProvider.of<
+                                                                ImportContactsCubit>(
+                                                            context)
+                                                        .state
+                                                        .runtimeType ==
+                                                    SearchedImportedContacts)
+                                                  BlocProvider.of<
+                                                              ImportContactsCubit>(
+                                                          context)
+                                                      .searchImportedContacts(
+                                                          '');
+                                                Navigator.of(context).pushNamed(
+                                                    AppRoutes.addCustomerRoute);
+                                              },
+                                            ),
+                                          ),
+
+                                          // Image.asset(
+                                          //   'assets/icons/link.png',
+                                          //   scale: 1.2,
+                                          // ),
+                                        ],
                                       ),
                                     ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.1,
+                                          ).flexible,
+                                          Image.asset(
+                                            'assets/images/addYourFirstCustomer.png',
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.3,
+                                          ),
+                                          Center(
+                                            child: CustomText(
+                                              'Start adding your\n first customer',
+                                              color: AppTheme.brownishGrey,
+                                              size: 22,
+                                              centerAlign: true,
+                                              bold: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ).flexible,
                                   ],
                                 ),
-                              ).flexible,
-                            ],
-                          ),
-                        );
-                      }
-                      _selectedSortOption = 1;
-                      _selectedFilterOption = 1;
-                      return Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: customerListWithOtherWidgets(
-                            state.customerList,
-                            _selectedFilterOption,
-                            _selectedSortOption),
-                      );
-                    }
-                    if (state is SearchedContacts) {
-                      // hideFilterString = false;
-                      return Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: customerListWithOtherWidgets(
-                            state.searchedCustomerList,
-                            state.selectedFilter,
-                            state.selectedSort),
-                      );
-                    }
-                    if (state is ContactsInitial) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height:
-                            MediaQuery.of(context).size.height * 0.15,
-                          ),
-                          ShimmerButton(),
-                          ShimmerButton(),
-                          ShimmerButton(),
-                          Container(
-                            padding: EdgeInsets.only(
-                                left: 15, right: 15, top: 15),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment:
-                              CrossAxisAlignment.center,
+                              );
+                            }
+                            _selectedSortOption = 1;
+                            _selectedFilterOption = 1;
+                            return Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: customerListWithOtherWidgets(
+                                  state.customerList,
+                                  _selectedFilterOption,
+                                  _selectedSortOption),
+                            );
+                          }
+                          if (state is SearchedContacts) {
+                            // hideFilterString = false;
+                            return Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: customerListWithOtherWidgets(
+                                  state.searchedCustomerList,
+                                  state.selectedFilter,
+                                  state.selectedSort),
+                            );
+                          }
+                          if (state is ContactsInitial) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ShimmerText(),
-                                ShimmerText(),
-                                // Container(
-                                //   child: ElevatedButton(
-                                //     style: ButtonStyle(
-                                //         backgroundColor:
-                                //             MaterialStateProperty.all<
-                                //                 Color>(Color(0xff1058ff)),
-                                //         shape: MaterialStateProperty.all<
-                                //                 OutlinedBorder>(
-                                //             RoundedRectangleBorder(
-                                //           borderRadius:
-                                //               BorderRadius.circular(24),
-                                //         )),
-                                //         elevation: MaterialStateProperty
-                                //             .all<double>(0)),
-                                //     child: SvgPicture.asset(
-                                //       AppAssets.addCustomerIcon,
-                                //       height: 24,
-                                //       width: 24,
-                                //     ),
-                                //     onPressed: () async {
-                                //     },
-                                //   ),
-                                // ),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.15,
+                                ),
+                                ShimmerButton(),
+                                ShimmerButton(),
+                                ShimmerButton(),
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      left: 15, right: 15, top: 15),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      ShimmerText(),
+                                      ShimmerText(),
+                                      // Container(
+                                      //   child: ElevatedButton(
+                                      //     style: ButtonStyle(
+                                      //         backgroundColor:
+                                      //             MaterialStateProperty.all<
+                                      //                 Color>(Color(0xff1058ff)),
+                                      //         shape: MaterialStateProperty.all<
+                                      //                 OutlinedBorder>(
+                                      //             RoundedRectangleBorder(
+                                      //           borderRadius:
+                                      //               BorderRadius.circular(24),
+                                      //         )),
+                                      //         elevation: MaterialStateProperty
+                                      //             .all<double>(0)),
+                                      //     child: SvgPicture.asset(
+                                      //       AppAssets.addCustomerIcon,
+                                      //       height: 24,
+                                      //       width: 24,
+                                      //     ),
+                                      //     onPressed: () async {
+                                      //     },
+                                      //   ),
+                                      // ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                ShimmerListTile(),
+                                ShimmerListTile(),
+                                ShimmerListTile(),
                               ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          ShimmerListTile(),
-                          ShimmerListTile(),
-                          ShimmerListTile(),
-                        ],
-                      );
-                    }
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  },
-                ).flexible,
-              ],
-            ),
+                            );
+                          }
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                      ).flexible,
+                    ],
+                  ),
           ),
         ),
       ),
@@ -1084,7 +1045,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   borderRadius: BorderRadius.circular(10)),
               child: Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -1095,7 +1056,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     ),
                     GestureDetector(
                       child:
-                      Icon(Icons.close_sharp, color: AppTheme.brownishGrey),
+                          Icon(Icons.close_sharp, color: AppTheme.brownishGrey),
                       onTap: () {
                         _selectedFilterOption = 1;
                         _selectedSortOption = 1;
@@ -1128,11 +1089,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor:
-                      MaterialStateProperty.all<Color>(Color(0xff1058ff)),
+                          MaterialStateProperty.all<Color>(Color(0xff1058ff)),
                       shape: MaterialStateProperty.all<OutlinedBorder>(
                           RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          )),
+                        borderRadius: BorderRadius.circular(24),
+                      )),
                       elevation: MaterialStateProperty.all<double>(0)),
                   child: SvgPicture.asset(
                     AppAssets.addCustomerIcon,
@@ -1147,10 +1108,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       BlocProvider.of<ImportContactsCubit>(context)
                           .searchImportedContacts('');
                     Navigator.of(context).pushNamed(AppRoutes.addCustomerRoute);
-                    final loginTime =
-                        repository.hiveQueries.unAuthData.loginTime;
-                    final diff = DateTime.now().difference(loginTime!).inDays;
-                    debugPrint(diff.toString());
                   },
                 ),
               ),
@@ -1178,99 +1135,99 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget searchField(int filterIndex, int sortIndex) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    child: Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      margin: EdgeInsets.only(
-        top: 5,
-        bottom: 5,
-      ),
-      elevation: 3,
-      child: Container(
-        // width: MediaQuery.of(context).size.width * 0.92,
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(10)),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 15.0),
-              child: Image.asset(
-                AppAssets.searchIcon,
-                color: AppTheme.brownishGrey,
-                height: 20,
-                scale: 1.4,
-              ),
-            ),
-            Container(
-              width: screenWidth(context) * 0.7,
-              child: TextFormField(
-                // textAlignVertical: TextAlignVertical.center,
-                controller: _searchController,
-                onChanged: (value) {
-                  BlocProvider.of<ContactsCubit>(context)
-                      .searchContacts(value);
-                },
-                style: TextStyle(
-                  fontSize: 17,
-                  color: AppTheme.brownishGrey,
-                ),
-                cursorColor: AppTheme.brownishGrey,
-                decoration: InputDecoration(
-                  // contentPadding: EdgeInsets.only(top: 15),
-                    border: InputBorder.none,
-                    hintText: 'Search Customer',
-                    hintStyle: TextStyle(
-                        color: Color(0xffb6b6b6),
-                        fontSize: 17,
-                        fontWeight: FontWeight.w500)),
-              ),
-            ),
-            Stack(
-              clipBehavior: Clip.none,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          margin: EdgeInsets.only(
+            top: 5,
+            bottom: 5,
+          ),
+          elevation: 3,
+          child: Container(
+            // width: MediaQuery.of(context).size.width * 0.92,
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 15.0),
-                    child: Image.asset(
-                      AppAssets.filterIcon,
-                      color: AppTheme.brownishGrey,
-                      height: 18,
-                      // scale: 1.5,
-                    ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0),
+                  child: Image.asset(
+                    AppAssets.searchIcon,
+                    color: AppTheme.brownishGrey,
+                    height: 20,
+                    scale: 1.4,
                   ),
-                  onTap: () async {
-                    await filterBottomSheet;
-                    if (_selectedFilterOption != 1 ||
-                        _selectedSortOption != 1)
-                      setState(() {
-                        hideFilterString = false;
-                      });
-                  },
                 ),
-                if (filterIndex != 1 || sortIndex != 1)
-                  Positioned(
-                    right: 14,
-                    top: -3,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(25),
-                      child: Container(
-                        color: AppTheme.tomato,
-                        height: 9,
-                        width: 9,
-                      ),
+                Container(
+                  width: screenWidth(context) * 0.7,
+                  child: TextFormField(
+                    // textAlignVertical: TextAlignVertical.center,
+                    controller: _searchController,
+                    onChanged: (value) {
+                      BlocProvider.of<ContactsCubit>(context)
+                          .searchContacts(value);
+                    },
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: AppTheme.brownishGrey,
                     ),
+                    cursorColor: AppTheme.brownishGrey,
+                    decoration: InputDecoration(
+                        // contentPadding: EdgeInsets.only(top: 15),
+                        border: InputBorder.none,
+                        hintText: 'Search Customer',
+                        hintStyle: TextStyle(
+                            color: Color(0xffb6b6b6),
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500)),
                   ),
+                ),
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    GestureDetector(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 15.0),
+                        child: Image.asset(
+                          AppAssets.filterIcon,
+                          color: AppTheme.brownishGrey,
+                          height: 18,
+                          // scale: 1.5,
+                        ),
+                      ),
+                      onTap: () async {
+                        await filterBottomSheet;
+                        if (_selectedFilterOption != 1 ||
+                            _selectedSortOption != 1)
+                          setState(() {
+                            hideFilterString = false;
+                          });
+                      },
+                    ),
+                    if (filterIndex != 1 || sortIndex != 1)
+                      Positioned(
+                        right: 14,
+                        top: -3,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(25),
+                          child: Container(
+                            color: AppTheme.tomato,
+                            height: 9,
+                            width: 9,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
-    ),
-  );
+      );
 
 //GestureDetector(
 //                       child: Padding(
@@ -1302,211 +1259,221 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 //                       ),
 //                     ),
   Widget get appBar => ValueListenableBuilder<Box?>(
-    valueListenable: repository.hiveQueries.userBox.listenable(),
-    builder: (context, box, _) => box == null
-        ? Container()
-        : Container(
-      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-      child: Row(
-        children: [
-          Container(
-            // padding: EdgeInsets.all(2),
-            // decoration: BoxDecoration(
-            //   borderRadius: BorderRadius.circular(99),
-            //   color: Colors.white,
-            // ),
-              child: ((box.get('UserData') as SignUpModel?)
-                  ?.profilePic
-                  .isEmpty ??
-                  true)
-                  ? CircleAvatar(
-                  radius: 22,
-                  backgroundColor: Colors.white.withOpacity(0.5),
-                  backgroundImage:
-                  AssetImage('assets/icons/my-account.png'))
-                  : CircleAvatar(
-                  radius: 22,
-                  backgroundColor: Colors.white.withOpacity(0.5),
-                  backgroundImage: FileImage(File(
-                      (box.get('UserData') as SignUpModel)
-                          .profilePic)))),
-          15.0.widthBox,
-          InkWell(
-            onTap: ((Repository().hiveQueries.userData.kycStatus !=
-                1) ||
-                (Repository()
-                    .hiveQueries
-                    .userData
-                    .premiumStatus ==
-                    0))
-                ? () async {
-              print("Premium Status " +
-                  repository.hiveQueries.userData.premiumStatus
-                      .toString());
-              debugPrint('qwerty2');
-              debugPrint('KYC STATUS: ' +
-                  Repository()
-                      .hiveQueries
-                      .userData
-                      .kycStatus
-                      .toString());
-              if (Repository().hiveQueries.userData.kycStatus ==
-                  2) {
-                await getKyc();
-                MerchantBankNotAdded.showBankNotAddedDialog(
-                    _scaffold.currentState!.context,
-                    'userKYCVerificationPending');
-              } else if (Repository()
-                  .hiveQueries
-                  .userData
-                  .kycStatus ==
-                  0) {
-                setState(() {
-                  loading = true;
-                });
-                //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                MerchantBankNotAdded.showBankNotAddedDialog(
-                    context, 'userKYCPending')
-                    .then((value) => setState(() {
-                  loading = false;
-                }));
-              } else if (Repository()
-                  .hiveQueries
-                  .userData
-                  .kycStatus ==
-                  0 &&
-                  Repository()
-                      .hiveQueries
-                      .userData
-                      .isEmiratesIdDone ==
-                      false) {
-                setState(() {
-                  loading = true;
-                });
-                //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                MerchantBankNotAdded.showBankNotAddedDialog(
-                    context, 'EmiratesIdPending')
-                    .then((value) => setState(() {
-                  loading = false;
-                }));
-              } else if (Repository()
-                  .hiveQueries
-                  .userData
-                  .kycStatus ==
-                  0 &&
-                  Repository()
-                      .hiveQueries
-                      .userData
-                      .isTradeLicenseDone ==
-                      false) {
-                setState(() {
-                  loading = true;
-                });
-                //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                MerchantBankNotAdded.showBankNotAddedDialog(
-                    context, 'TradeLicensePending')
-                    .then((value) => setState(() {
-                  loading = false;
-                }));
-              } else if (Repository()
-                  .hiveQueries
-                  .userData
-                  .kycStatus ==
-                  1 &&
-                  Repository()
-                      .hiveQueries
-                      .userData
-                      .premiumStatus ==
-                      0) {
-                setState(() {
-                  loading = true;
-                });
-                MerchantBankNotAdded.showBankNotAddedDialog(
-                    context, 'upgradePremium')
-                    .then((value) => setState(() {
-                  loading = false;
-                }));
-              } else {
-                switchBusinessSheet;
-              }
-            }
-                : () {
-              switchBusinessSheet;
-            },
-            child: Container(
-              // width: screenWidth(context) * 0.5,
-              // color: Colors.amber,
-              constraints: BoxConstraints(
-                  maxWidth: screenWidth(context) * 0.5),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Consumer<BusinessProvider>(
-                        builder: (context, value, child) {
-                          return Flexible(
-                            child: CustomText(
-                              '${value.selectedBusiness.businessName}',
-                              color: Colors.white,
-                              size: 19,
-                              bold: FontWeight.w500,
-                              overflow: TextOverflow.ellipsis,
+        valueListenable: repository.hiveQueries.userBox.listenable(),
+        builder: (context, box, _) => box == null
+            ? Container()
+            : Container(
+                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                child: Row(
+                  children: [
+                    Container(
+                        // padding: EdgeInsets.all(2),
+                        // decoration: BoxDecoration(
+                        //   borderRadius: BorderRadius.circular(99),
+                        //   color: Colors.white,
+                        // ),
+                        child: ((box.get('UserData') as SignUpModel?)
+                                    ?.profilePic
+                                    .isEmpty ??
+                                true)
+                            ? CircleAvatar(
+                                radius: 22,
+                                backgroundColor: Colors.white.withOpacity(0.5),
+                                backgroundImage:
+                                    AssetImage('assets/icons/my-account.png'))
+                            : CircleAvatar(
+                                radius: 22,
+                                backgroundColor: Colors.white.withOpacity(0.5),
+                                backgroundImage: FileImage(File(
+                                    (box.get('UserData') as SignUpModel)
+                                        .profilePic)))),
+                    15.0.widthBox,
+                    InkWell(
+                      onTap: ((Repository().hiveQueries.userData.kycStatus !=
+                                  1) ||
+                              (Repository()
+                                      .hiveQueries
+                                      .userData
+                                      .premiumStatus ==
+                                  0))
+                          ? () async {
+                              print("Premium Status " +
+                                  repository.hiveQueries.userData.premiumStatus
+                                      .toString());
+                              debugPrint('qwerty2');
+                              debugPrint('KYC STATUS: ' +
+                                  Repository()
+                                      .hiveQueries
+                                      .userData
+                                      .kycStatus
+                                      .toString());
+                              if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository().hiveQueries.userData.kycStatus ==
+                                  2) {
+                                await getKyc();
+                                MerchantBankNotAdded.showBankNotAddedDialog(
+                                    _scaffold.currentState!.context,
+                                    'userKYCVerificationPending');
+                              } else if (Repository()
+                                      .hiveQueries
+                                      .userData
+                                      .kycStatus ==
+                                  0) {
+                                setState(() {
+                                  loading = true;
+                                });
+                                //KYC WHEN USER STARTS A NEW KYC JOURNEY
+                                MerchantBankNotAdded.showBankNotAddedDialog(
+                                        context, 'userKYCPending')
+                                    .then((value) => setState(() {
+                                          loading = false;
+                                        }));
+                              } else if (Repository()
+                                          .hiveQueries
+                                          .userData
+                                          .kycStatus ==
+                                      0 &&
+                                  Repository()
+                                          .hiveQueries
+                                          .userData
+                                          .isEmiratesIdDone ==
+                                      false) {
+                                setState(() {
+                                  loading = true;
+                                });
+                                //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                                MerchantBankNotAdded.showBankNotAddedDialog(
+                                        context, 'EmiratesIdPending')
+                                    .then((value) => setState(() {
+                                          loading = false;
+                                        }));
+                              } else if (Repository()
+                                          .hiveQueries
+                                          .userData
+                                          .kycStatus ==
+                                      0 &&
+                                  Repository()
+                                          .hiveQueries
+                                          .userData
+                                          .isTradeLicenseDone ==
+                                      false) {
+                                setState(() {
+                                  loading = true;
+                                });
+                                //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                                MerchantBankNotAdded.showBankNotAddedDialog(
+                                        context, 'TradeLicensePending')
+                                    .then((value) => setState(() {
+                                          loading = false;
+                                        }));
+                              } else if (Repository()
+                                          .hiveQueries
+                                          .userData
+                                          .kycStatus ==
+                                      1 &&
+                                  Repository()
+                                          .hiveQueries
+                                          .userData
+                                          .premiumStatus ==
+                                      0) {
+                                setState(() {
+                                  loading = true;
+                                });
+                                MerchantBankNotAdded.showBankNotAddedDialog(
+                                        context, 'upgradePremium')
+                                    .then((value) => setState(() {
+                                          loading = false;
+                                        }));
+                              } else {
+                                switchBusinessSheet;
+                              }
+                            }
+                          : () {
+                              switchBusinessSheet;
+                            },
+                      child: Container(
+                        // width: screenWidth(context) * 0.5,
+                        // color: Colors.amber,
+                        constraints: BoxConstraints(
+                            maxWidth: screenWidth(context) * 0.5),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Consumer<BusinessProvider>(
+                                  builder: (context, value, child) {
+                                    return Flexible(
+                                      child: CustomText(
+                                        '${value.selectedBusiness.businessName}',
+                                        color: Colors.white,
+                                        size: 19,
+                                        bold: FontWeight.w500,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    );
+                                  },
+                                ),
+                                AnimatedSize(
+                                  vsync: this,
+                                  duration: Duration(seconds: 2),
+                                  curve: Curves.easeInBack,
+                                  // height: animatedHeight,
+                                  child: animatedHeight == 0.0
+                                      ? Container()
+                                      : CustomText(
+                                          'Switch Ledger',
+                                          size: 14,
+                                          color: Colors.white,
+                                          bold: FontWeight.w400,
+                                          overflow: TextOverflow.fade,
+                                        ),
+                                )
+                              ],
                             ),
-                          );
-                        },
-                      ),
-                      AnimatedSize(
-                        vsync: this,
-                        duration: Duration(seconds: 2),
-                        curve: Curves.easeInBack,
-                        // height: animatedHeight,
-                        child: animatedHeight == 0.0
-                            ? Container()
-                            : CustomText(
-                          'Switch Ledger',
-                          size: 14,
-                          color: Colors.white,
-                          bold: FontWeight.w400,
-                          overflow: TextOverflow.fade,
+                            const Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Colors.white,
+                              size: 28,
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                  ),
-                  const Icon(
-                    Icons.keyboard_arrow_down,
-                    color: Colors.white,
-                    size: 28,
-                  )
-                ],
-              ),
-            ),
-          ),
-          //  Spacer(),
-          // Container(
-          //   child: Row(
-          //     mainAxisSize: MainAxisSize.min,
-          //     children: [
-          //       InkWell(
-          //         onTap: () {
-          //           Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //                 builder: (context) => UrbanSalary()),
-          //           );
-          //         },
-          //         child: Image.asset(
-          //           'assets/icons/refer-friend.png',
-          //           height: 40,
-          //         ),
-          //       )
-          //     ],
-          //   ),
-          // ),
-        ],
-        /* trailing: Row(
+                      ),
+                    ),
+                    //  Spacer(),
+                    // Container(
+                    //   child: Row(
+                    //     mainAxisSize: MainAxisSize.min,
+                    //     children: [
+                    //       InkWell(
+                    //         onTap: () {
+                    //           Navigator.push(
+                    //             context,
+                    //             MaterialPageRoute(
+                    //                 builder: (context) => UrbanSalary()),
+                    //           );
+                    //         },
+                    //         child: Image.asset(
+                    //           'assets/icons/refer-friend.png',
+                    //           height: 40,
+                    //         ),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
+                  ],
+                  /* trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       InkWell(
@@ -1528,53 +1495,53 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       )
                     ],
                   ), */
-      ),
-    ),
-  );
+                ),
+              ),
+      );
 
   Widget reportButton(bool isCustomerEmpty) => Container(
-    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-    width: double.infinity, height: 45,
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        width: double.infinity, height: 45,
 
-    // decoration: BoxDecoration(
-    //   borderRadius: BorderRadius.circular(20),
-    //   color: Colors.white,
-    // ),
-    child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          primary: Colors.white,
-        ),
-        onPressed: isCustomerEmpty
-            ? () {}
-            : () {
-          Navigator.of(context).pushNamed(
-            AppRoutes.customerReportRoute,
-          );
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              isCustomerEmpty
-                  ? 'assets/icons/greydoc.png'
-                  : 'assets/icons/Document-01.png',
-              height: 26,
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(20),
+        //   color: Colors.white,
+        // ),
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              primary: Colors.white,
             ),
-            SizedBox(width: 5),
-            CustomText(
-              'View Report',
-              bold: FontWeight.w500,
-              color: isCustomerEmpty
-                  ? AppTheme.greyish
-                  : AppTheme.brownishGrey,
-              size: 16,
-            ),
-          ],
-        )),
-  );
+            onPressed: isCustomerEmpty
+                ? () {}
+                : () {
+                    Navigator.of(context).pushNamed(
+                      AppRoutes.customerReportRoute,
+                    );
+                  },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  isCustomerEmpty
+                      ? 'assets/icons/greydoc.png'
+                      : 'assets/icons/Document-01.png',
+                  height: 26,
+                ),
+                SizedBox(width: 5),
+                CustomText(
+                  'View Report',
+                  bold: FontWeight.w500,
+                  color: isCustomerEmpty
+                      ? AppTheme.greyish
+                      : AppTheme.brownishGrey,
+                  size: 16,
+                ),
+              ],
+            )),
+      );
 
   Widget payReceiveButtons(bool isCustomerEmpty) => FutureBuilder<List<double>>(
       future: repository.queries.getTotalPayReceiveForCustomer(
@@ -1594,176 +1561,176 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     // crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Expanded(
-                        child: Container(
-                          // width: size.width * 0.425,
-                          // height: 95.r,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 5,
-                              vertical: MediaQuery.of(context).size.height * .015),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                  Expanded(
+                    child: Container(
+                      // width: size.width * 0.425,
+                      // height: 95.r,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: MediaQuery.of(context).size.height * .015),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Image.asset(
+                          //   isCustomerEmpty
+                          //       ? AppAssets.payIconDeactivated
+                          //       : AppAssets.payIconActive,
+                          //   height: 35,
+                          // ),
+                          // SizedBox(
+                          //   width: 5,
+                          // ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              // Image.asset(
-                              //   isCustomerEmpty
-                              //       ? AppAssets.payIconDeactivated
-                              //       : AppAssets.payIconActive,
-                              //   height: 35,
-                              // ),
-                              // SizedBox(
-                              //   width: 5,
-                              // ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  RichText(
-                                      overflow: TextOverflow.ellipsis,
-                                      text: TextSpan(text: '', children: [
-                                        WidgetSpan(
-                                          child: Image.asset(
-                                            AppAssets.giveIcon,
-                                            height: 18,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: ' You will Give',
-                                          style: TextStyle(
-                                            color: isCustomerEmpty
-                                                ? AppTheme.greyish
-                                                : AppTheme.brownishGrey,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ])),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  RichText(
-                                    overflow: TextOverflow.ellipsis,
-                                    text: TextSpan(
-                                        text: '$currencyAED ',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: isCustomerEmpty
-                                                ? AppTheme.greyish
-                                                : AppTheme.tomato,
-                                            fontWeight: FontWeight.w600),
-                                        children: [
-                                          TextSpan(
-                                              text: isCustomerEmpty
-                                                  ? '0'
-                                                  : snapshot.data != null
-                                                  ? (snapshot.data!.last)
-                                                  .getFormattedCurrency
-                                                  .replaceAll('-', '')
-                                                  : '0',
-                                              // text: '46151830',
-                                              style: TextStyle(
-                                                  fontSize: 21,
-                                                  fontWeight: FontWeight.bold)),
-                                        ]),
-                                  )
-                                ],
-                              ).flexible,
-                            ],
-                          ),
-                        ),
-                      ),
-                      // (screenWidth(context) * 0.01).widthBox,
-                      VerticalDivider(
-                        color: AppTheme.brownishGrey,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                      Expanded(
-                        child: Container(
-                          // width: size.width * 0.425,
-                          // height: 95.r,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 5,
-                              vertical: MediaQuery.of(context).size.height * .015),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // Image.asset(
-                              //   isCustomerEmpty
-                              //       ? AppAssets.receiveIconDeactivated
-                              //       : AppAssets.receiveIconActive,
-                              //   height: 55,
-                              // ),
-                              // SizedBox(
-                              //   width: 5,
-                              // ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  // CustomText(
-                                  //   'You will Get',
-                                  //   color: isCustomerEmpty
-                                  //       ? AppTheme.greyish
-                                  //       : AppTheme.brownishGrey,
-                                  //   bold: FontWeight.w500,
-                                  //   size: 16,
-                                  // ),
-                                  RichText(
-                                      overflow: TextOverflow.ellipsis,
-                                      text: TextSpan(text: '', children: [
-                                        WidgetSpan(
-                                          child: Image.asset(
-                                            AppAssets.getIcon,
-                                            height: 18,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: ' You will Get',
-                                          style: TextStyle(
-                                            color: isCustomerEmpty
-                                                ? AppTheme.greyish
-                                                : AppTheme.brownishGrey,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                          ),
-                                        )
-                                      ])),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  FittedBox(
-                                    child: RichText(
-                                      overflow: TextOverflow.ellipsis,
-                                      text: TextSpan(
-                                          text: '$currencyAED ',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: isCustomerEmpty
-                                                  ? AppTheme.greyish
-                                                  : AppTheme.greenColor,
-                                              fontWeight: FontWeight.w600),
-                                          children: [
-                                            TextSpan(
-                                                text: isCustomerEmpty
-                                                    ? '0'
-                                                    : snapshot.data != null
-                                                    ? (snapshot.data!.first)
-                                                    .getFormattedCurrency
-                                                    .replaceAll('-', '')
-                                                    : '0',
-                                                // text: '46151830',
-                                                style: TextStyle(
-                                                    fontSize: 21,
-                                                    fontWeight: FontWeight.bold)),
-                                          ]),
+                              RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(text: '', children: [
+                                    WidgetSpan(
+                                      child: Image.asset(
+                                        AppAssets.giveIcon,
+                                        height: 18,
+                                      ),
                                     ),
-                                  )
-                                ],
-                              ).flexible,
+                                    TextSpan(
+                                      text: ' You will Give',
+                                      style: TextStyle(
+                                        color: isCustomerEmpty
+                                            ? AppTheme.greyish
+                                            : AppTheme.brownishGrey,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ])),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              RichText(
+                                overflow: TextOverflow.ellipsis,
+                                text: TextSpan(
+                                    text: '$currencyAED ',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: isCustomerEmpty
+                                            ? AppTheme.greyish
+                                            : AppTheme.tomato,
+                                        fontWeight: FontWeight.w600),
+                                    children: [
+                                      TextSpan(
+                                          text: isCustomerEmpty
+                                              ? '0'
+                                              : snapshot.data != null
+                                                  ? (snapshot.data!.last)
+                                                      .getFormattedCurrency
+                                                      .replaceAll('-', '')
+                                                  : '0',
+                                          // text: '46151830',
+                                          style: TextStyle(
+                                              fontSize: 21,
+                                              fontWeight: FontWeight.bold)),
+                                    ]),
+                              )
                             ],
-                          ),
-                        ),
+                          ).flexible,
+                        ],
                       ),
-                    ])),
+                    ),
+                  ),
+                  // (screenWidth(context) * 0.01).widthBox,
+                  VerticalDivider(
+                    color: AppTheme.brownishGrey,
+                    indent: 10,
+                    endIndent: 10,
+                  ),
+                  Expanded(
+                    child: Container(
+                      // width: size.width * 0.425,
+                      // height: 95.r,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: MediaQuery.of(context).size.height * .015),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Image.asset(
+                          //   isCustomerEmpty
+                          //       ? AppAssets.receiveIconDeactivated
+                          //       : AppAssets.receiveIconActive,
+                          //   height: 55,
+                          // ),
+                          // SizedBox(
+                          //   width: 5,
+                          // ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // CustomText(
+                              //   'You will Get',
+                              //   color: isCustomerEmpty
+                              //       ? AppTheme.greyish
+                              //       : AppTheme.brownishGrey,
+                              //   bold: FontWeight.w500,
+                              //   size: 16,
+                              // ),
+                              RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(text: '', children: [
+                                    WidgetSpan(
+                                      child: Image.asset(
+                                        AppAssets.getIcon,
+                                        height: 18,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: ' You will Get',
+                                      style: TextStyle(
+                                        color: isCustomerEmpty
+                                            ? AppTheme.greyish
+                                            : AppTheme.brownishGrey,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                      ),
+                                    )
+                                  ])),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              FittedBox(
+                                child: RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                      text: '$currencyAED ',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: isCustomerEmpty
+                                              ? AppTheme.greyish
+                                              : AppTheme.greenColor,
+                                          fontWeight: FontWeight.w600),
+                                      children: [
+                                        TextSpan(
+                                            text: isCustomerEmpty
+                                                ? '0'
+                                                : snapshot.data != null
+                                                    ? (snapshot.data!.first)
+                                                        .getFormattedCurrency
+                                                        .replaceAll('-', '')
+                                                    : '0',
+                                            // text: '46151830',
+                                            style: TextStyle(
+                                                fontSize: 21,
+                                                fontWeight: FontWeight.bold)),
+                                      ]),
+                                ),
+                              )
+                            ],
+                          ).flexible,
+                        ],
+                      ),
+                    ),
+                  ),
+                ])),
           ),
         );
       });
@@ -1812,7 +1779,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 // width: screenWidth(context) * 0.35,
                                 child: CustomText(
                                   Provider.of<BusinessProvider>(context,
-                                      listen: false)
+                                          listen: false)
                                       .selectedBusiness
                                       .businessName,
                                   bold: FontWeight.w600,
@@ -1824,7 +1791,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               FutureBuilder<int>(
                                   future: repository.queries.getCustomerCount(
                                       Provider.of<BusinessProvider>(context,
-                                          listen: false)
+                                              listen: false)
                                           .selectedBusiness
                                           .businessId),
                                   builder: (context, snapshot) {
@@ -1847,10 +1814,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           child: FutureBuilder<List<double>>(
                               future: repository.queries
                                   .getTotalPayReceiveForCustomer(
-                                  Provider.of<BusinessProvider>(context,
-                                      listen: false)
-                                      .selectedBusiness
-                                      .businessId),
+                                      Provider.of<BusinessProvider>(context,
+                                              listen: false)
+                                          .selectedBusiness
+                                          .businessId),
                               builder: (context, snapshot) {
                                 return Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -1884,8 +1851,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           CustomText(
                                             snapshot.data != null
                                                 ? (snapshot.data!.last)
-                                                .getFormattedCurrency
-                                                .replaceAll('-', '')
+                                                    .getFormattedCurrency
+                                                    .replaceAll('-', '')
                                                 : '0',
                                             bold: FontWeight.w700,
                                             color: AppTheme.tomato,
@@ -1925,8 +1892,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                           CustomText(
                                             snapshot.data != null
                                                 ? (snapshot.data!.first)
-                                                .getFormattedCurrency
-                                                .replaceAll('-', '')
+                                                    .getFormattedCurrency
+                                                    .replaceAll('-', '')
                                                 : '0',
                                             color: AppTheme.greenColor,
                                             bold: FontWeight.w700,
@@ -1946,12 +1913,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ListView.builder(
                   shrinkWrap: true,
                   itemCount:
-                  Provider.of<BusinessProvider>(context, listen: false)
-                      .businesses
-                      .length,
+                      Provider.of<BusinessProvider>(context, listen: false)
+                          .businesses
+                          .length,
                   itemBuilder: (BuildContext context, int index) {
                     if (Provider.of<BusinessProvider>(context, listen: false)
-                        .businesses[index] ==
+                            .businesses[index] ==
                         Provider.of<BusinessProvider>(context, listen: false)
                             .selectedBusiness) return Container();
                     return GestureDetector(
@@ -1964,18 +1931,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             .updateSelectedBusiness(index: index);
                         print('business Id' +
                             Provider.of<BusinessProvider>(context,
-                                listen: false)
+                                    listen: false)
                                 .selectedBusiness
                                 .businessId);
                         BlocProvider.of<ContactsCubit>(context).getContacts(
                             Provider.of<BusinessProvider>(context,
-                                listen: false)
+                                    listen: false)
                                 .selectedBusiness
                                 .businessId);
                         (Provider.of<BusinessProvider>(context, listen: false)
-                            .selectedBusiness
-                            .businessName +
-                            ' is now selected as your active ledger')
+                                    .selectedBusiness
+                                    .businessName +
+                                ' is now selected as your active ledger')
                             .showSnackBar(context);
                       },
                       child: Container(
@@ -1998,7 +1965,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       width: screenWidth(context) * 0.5,
                                       child: CustomText(
                                         Provider.of<BusinessProvider>(context,
-                                            listen: false)
+                                                listen: false)
                                             .businesses[index]
                                             .businessName,
                                         bold: FontWeight.w600,
@@ -2010,11 +1977,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                     FutureBuilder<int>(
                                         future: repository.queries
                                             .getCustomerCount(
-                                            Provider.of<BusinessProvider>(
-                                                context,
-                                                listen: false)
-                                                .businesses[index]
-                                                .businessId),
+                                                Provider.of<BusinessProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .businesses[index]
+                                                    .businessId),
                                         builder: (context, snapshot) {
                                           return CustomText(
                                             '${snapshot.data} ${snapshot.data == 1 ? 'Customer' : 'Customers'}',
@@ -2031,15 +1998,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 child: FutureBuilder<List<double>>(
                                     future: repository.queries
                                         .getTotalPayReceiveForCustomer(
-                                        Provider.of<BusinessProvider>(
-                                            context,
-                                            listen: false)
-                                            .businesses[index]
-                                            .businessId),
+                                            Provider.of<BusinessProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .businesses[index]
+                                                .businessId),
                                     builder: (context, snapshot) {
                                       return Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                            MainAxisAlignment.center,
                                         children: [
                                           SizedBox(
                                             // width: screenWidth(context) * 0.24,
@@ -2070,8 +2037,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                 CustomText(
                                                   snapshot.data != null
                                                       ? (snapshot.data!.last)
-                                                      .getFormattedCurrency
-                                                      .replaceAll('-', '')
+                                                          .getFormattedCurrency
+                                                          .replaceAll('-', '')
                                                       : '0',
                                                   bold: FontWeight.w700,
                                                   color: AppTheme.tomato,
@@ -2111,8 +2078,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                 CustomText(
                                                   snapshot.data != null
                                                       ? (snapshot.data!.first)
-                                                      .getFormattedCurrency
-                                                      .replaceAll('-', '')
+                                                          .getFormattedCurrency
+                                                          .replaceAll('-', '')
                                                       : '0',
                                                   color: AppTheme.greenColor,
                                                   bold: FontWeight.w700,
@@ -2561,9 +2528,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 class CustomerListWidget extends StatefulWidget {
   final List<CustomerModel> _customerList;
   CustomerListWidget(
-      this._customerList, {
-        Key? key,
-      }) : super(key: key);
+    this._customerList, {
+    Key? key,
+  }) : super(key: key);
   @override
   _CustomerListWidgetState createState() => _CustomerListWidgetState();
 }
@@ -2617,7 +2584,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                           fontFamily: 'SFProDisplay',
                           fontSize: 18,
                           letterSpacing:
-                          0 /*percentages not used in flutter. defaulting to zero*/,
+                              0 /*percentages not used in flutter. defaulting to zero*/,
                           fontWeight: FontWeight.normal,
                           height: 1),
                     ),
@@ -2632,7 +2599,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                           fontFamily: 'SFProDisplay',
                           fontSize: 18,
                           letterSpacing:
-                          0 /*percentages not used in flutter. defaulting to zero*/,
+                              0 /*percentages not used in flutter. defaulting to zero*/,
                           fontWeight: FontWeight.w700,
                           height: 1),
                     ),
@@ -2672,45 +2639,8 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
       setState(() {
         isLoading = false;
       });
-      debugPrint('Check the value : ' + value['status'].toString());
-
-      if (value != null && value.toString().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            Repository().hiveQueries.insertUserData(Repository()
-                .hiveQueries
-                .userData
-                .copyWith(
-                kycStatus:
-                (value['isVerified'] == true && value['status'] == true)
-                    ? 1
-                    : (value['emirates'] &&
-                    value['tl'] == true &&
-                    value['status'] == false)
-                    ? 2
-                    : 0,
-                premiumStatus:
-                value['planDuration'].toString() == 0.toString()
-                    ? 0
-                    : int.tryParse(value['planDuration']),
-                isEmiratesIdDone: value['emirates'] ?? false,
-                isTradeLicenseDone: value['tl'] ?? false,
-                paymentLink: value['link'] ?? ''));
-
-            //TODO Need to set emirates iD and TradeLicense ID Values
-            // isEmiratesIdDone = value['emirates'] ?? false;
-            // isTradeLicenseDone = value['tl'] ?? false;
-            // status = value['status'] ?? false;
-            // isPremium = value['premium'] ?? false;
-
-            // debugPrint('check1' + status.toString());
-            // debugPrint('check' + isEmiratesIdDone.toString());
-          });
-          return;
-        }
-      }
     });
-
+    calculatePremiumDate();
     setState(() {
       isLoading = false;
     });
@@ -2721,9 +2651,9 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
     return ListView.builder(
       physics: BouncingScrollPhysics(),
       padding:
-      EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.06),
+          EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.06),
       itemCount: widget._customerList.length,
-      itemBuilder: (BuildContext ctx, int index) {
+      itemBuilder: (BuildContext context, int index) {
         return Container(
           margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
@@ -2740,8 +2670,8 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                 if (await checkConnectivity) {
                   var cid = await repository.customerApi
                       .getCustomerID(
-                      mobileNumber:
-                      widget._customerList[index].mobileNo.toString())
+                          mobileNumber:
+                              widget._customerList[index].mobileNo.toString())
                       .catchError((e) {
                     Navigator.of(context).pop();
                     'Something went wrong. Please try again later.'
@@ -2764,12 +2694,12 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                     ..avatar = widget._customerList[index].avatar
                     ..chatId = widget._customerList[index].chatId;
                   final localCustId = await repository.queries
-                      .getCustomerId(widget._customerList[index].mobileNo!).catchError((e) {
+                      .getCustomerId(widget._customerList[index].mobileNo!)
+                      .catchError((e) {
                     Navigator.of(context).pop();
                     'Something went wrong. Please try again later.'
                         .showSnackBar(context);
-                  })
-                      .timeout(Duration(seconds: 30), onTimeout: () async {
+                  }).timeout(Duration(seconds: 30), onTimeout: () async {
                     Navigator.of(context).pop();
                     return Future.value(null);
                   });
@@ -2788,27 +2718,27 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       ..chatId = widget._customerList[index].chatId
                       ..isChanged = true;
                     await repository.queries
-                        .insertCustomer(customer).catchError((e) {
+                        .insertCustomer(customer)
+                        .catchError((e) {
                       Navigator.of(context).pop();
                       'Something went wrong. Please try again later.'
                           .showSnackBar(context);
-                    })
-                        .timeout(Duration(seconds: 30), onTimeout: () async {
+                    }).timeout(Duration(seconds: 30), onTimeout: () async {
                       Navigator.of(context).pop();
                       return Future.value(null);
                     });
                     if (await checkConnectivity) {
                       final apiResponse = await (repository.customerApi
                           .saveCustomer(
-                          customer, context, AddCustomers.ADD_NEW_CUSTOMER)
+                              customer, context, AddCustomers.ADD_NEW_CUSTOMER)
                           .timeout(Duration(seconds: 30), onTimeout: () async {
                         Navigator.of(context).pop();
                         return Future.value(null);
                       }).catchError((e) {
-                        Navigator.of(context).pop();
-                        'Something went wrong. Please try again later.'
-                            .showSnackBar(context);
-                      }));
+                    Navigator.of(context).pop();
+                    'Something went wrong. Please try again later.'
+                        .showSnackBar(context);
+                  }));
                       // if (apiResponse.isNotEmpty) {
                       //   ///update chat id here
                       //   await repository.queries
@@ -2817,42 +2747,42 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       if (apiResponse) {
                         ///update chat id here
                         final Messages msg =
-                        Messages(messages: '', messageType: 100);
+                            Messages(messages: '', messageType: 100);
                         var jsondata = jsonEncode(msg);
                         final response = await _chatRepository
                             .sendMessage(
-                            _customerModel.mobileNo.toString(),
-                            _customerModel.name,
-                            jsondata,
-                            localCustId.isEmpty ? uniqueId : localCustId,
-                            Provider.of<BusinessProvider>(context,
-                                listen: false)
-                                .selectedBusiness
-                                .businessId)
+                                _customerModel.mobileNo.toString(),
+                                _customerModel.name,
+                                jsondata,
+                                localCustId.isEmpty ? uniqueId : localCustId,
+                                Provider.of<BusinessProvider>(context,
+                                        listen: false)
+                                    .selectedBusiness
+                                    .businessId)
                             .timeout(Duration(seconds: 30),
-                            onTimeout: () async {
-                              Navigator.of(context).pop();
-                              return Future.value(null);
-                            });
+                                onTimeout: () async {
+                          Navigator.of(context).pop();
+                          return Future.value(null);
+                        });
                         final messageResponse = Map<String, dynamic>.from(
                             jsonDecode(response.body));
                         Message _message =
-                        Message.fromJson(messageResponse['message']);
+                            Message.fromJson(messageResponse['message']);
                         if (_message.chatId.toString().isNotEmpty) {
                           await repository.queries
                               .updateCustomerIsChanged(0,
-                              _customerModel.customerId!, _message.chatId)
+                                  _customerModel.customerId!, _message.chatId)
                               .timeout(Duration(seconds: 30),
-                              onTimeout: () async {
-                                Navigator.of(context).pop();
-                                return Future.value(null);
-                              });
+                                  onTimeout: () async {
+                            Navigator.of(context).pop();
+                            return Future.value(null);
+                          });
                         }
                       }
                     } else {
-                      'Please check your internet connection or try again later.'
-                          .showSnackBar(context);
-                    }
+                          'Please check your internet connection or try again later.'
+                              .showSnackBar(context);
+                        }
                     BlocProvider.of<ContactsCubit>(context).getContacts(
                         Provider.of<BusinessProvider>(context, listen: false)
                             .selectedBusiness
@@ -2870,18 +2800,18 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
 
                     merchantBankNotAddedModalSheet(
                         text:
-                        'We have requested your merchant to add bank account.');
+                            'We have requested your merchant to add bank account.');
                   } else if (cid.customerInfo?.kycStatus == false) {
                     Navigator.of(context).pop(true);
                     merchantBankNotAddedModalSheet(
                         text:
-                        'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
+                            'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
                   } else if (merchantSubscriptionPlan == false) {
                     Navigator.of(context).pop(true);
                     debugPrint('Checket');
                     merchantBankNotAddedModalSheet(
                         text:
-                        'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
+                            'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
                   } else {
                     // Navigator.of(context).pop(true);
                     // showBankAccountDialog();
@@ -2893,7 +2823,9 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         'Something went wrong. Please try again later.'
                             .showSnackBar(context);
                       });
-                      await anaylticsEvents.customerDetailsPayEvent().catchError((e) {
+                      await anaylticsEvents
+                          .customerDetailsPayEvent()
+                          .catchError((e) {
                         Navigator.of(context).pop();
                         'Something went wrong. Please try again later.'
                             .showSnackBar(context);
@@ -2941,7 +2873,9 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         'Something went wrong. Please try again later.'
                             .showSnackBar(context);
                       });
-                      await anaylticsEvents.customerDetailsPayEvent().catchError((e) {
+                      await anaylticsEvents
+                          .customerDetailsPayEvent()
+                          .catchError((e) {
                         Navigator.of(context).pop();
                         'Something went wrong. Please try again later.'
                             .showSnackBar(context);
@@ -2988,7 +2922,9 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         'Something went wrong. Please try again later.'
                             .showSnackBar(context);
                       });
-                      await anaylticsEvents.customerDetailsPayEvent().catchError((e) {
+                      await anaylticsEvents
+                          .customerDetailsPayEvent()
+                          .catchError((e) {
                         Navigator.of(context).pop();
                         'Something went wrong. Please try again later.'
                             .showSnackBar(context);
@@ -3011,7 +2947,8 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       // );
                       Map<String, dynamic> isTransaction = await repository
                           .paymentThroughQRApi
-                          .getTransactionLimit(context).catchError((e) {
+                          .getTransactionLimit(context)
+                          .catchError((e) {
                         Navigator.of(context).pop();
                         'Something went wrong. Please try again later.'
                             .showSnackBar(context);
@@ -3049,7 +2986,17 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                   if (Repository().hiveQueries.userData.bankStatus == false) {
                     MerchantBankNotAdded.showBankNotAddedDialog(
                         context, 'userBankNotAdded');
-                  } else if (Repository().hiveQueries.userData.kycStatus == 2) {
+                  } else if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository().hiveQueries.userData.kycStatus == 2) {
                     //If KYC is Verification is Pending
                     CustomLoadingDialog.showLoadingDialog(context, key);
                     await getKyc().then((value) {
@@ -3105,7 +3052,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       ..name = getName(widget._customerList[index].name,
                           widget._customerList[index].mobileNo)
                       ..mobileNo = widget._customerList[index].mobileNo
-                    // ..ulId = cid.customerInfo?.id.toString()
+                      // ..ulId = cid.customerInfo?.id.toString()
                       ..avatar = widget._customerList[index].avatar
                       ..chatId = widget._customerList[index].chatId;
                     final localCustId = await repository.queries
@@ -3138,7 +3085,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                               model: _customerModel,
                               customerId: localCustId,
                               amount: (widget
-                                  ._customerList[index].transactionAmount)!
+                                      ._customerList[index].transactionAmount)!
                                   .getFormattedCurrency
                                   .replaceAll('-', '')),
                         ),
@@ -3214,31 +3161,31 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                     RichText(
                       text: TextSpan(
                           text: widget._customerList[index].transactionType ==
-                              TransactionType.Pay ||
-                              widget._customerList[index]
-                                  .transactionAmount ==
-                                  0
+                                      TransactionType.Pay ||
+                                  widget._customerList[index]
+                                          .transactionAmount ==
+                                      0
                               ? '+$currencyAED '
                               : '-$currencyAED ',
                           style: TextStyle(
                               color:
-                              widget._customerList[index].transactionType ==
-                                  null ||
-                                  widget._customerList[index]
-                                      .transactionAmount ==
-                                      0
-                                  ? AppTheme.greyish
-                                  : widget._customerList[index]
-                                  .transactionType ==
-                                  TransactionType.Pay
-                                  ? AppTheme.greenColor
-                                  : AppTheme.tomato,
+                                  widget._customerList[index].transactionType ==
+                                              null ||
+                                          widget._customerList[index]
+                                                  .transactionAmount ==
+                                              0
+                                      ? AppTheme.greyish
+                                      : widget._customerList[index]
+                                                  .transactionType ==
+                                              TransactionType.Pay
+                                          ? AppTheme.greenColor
+                                          : AppTheme.tomato,
                               fontWeight: FontWeight.w500,
                               fontSize: 18),
                           children: [
                             TextSpan(
                                 text: (widget._customerList[index]
-                                    .transactionAmount)!
+                                        .transactionAmount)!
                                     .getFormattedCurrency
                                     .replaceAll('-', ''),
                                 style: TextStyle(fontWeight: FontWeight.w500)),
@@ -3246,20 +3193,17 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                     ),
                     CustomText(
                       widget._customerList[index].transactionType == null ||
-                          widget._customerList[index].transactionAmount == 0
+                              widget._customerList[index].transactionAmount == 0
                           ? 'Nothing Pending'
                           : widget._customerList[index].transactionType ==
-                          TransactionType.Pay
-                          ? 'You’ll Get'
-                          : 'You’ll Give',
+                                  TransactionType.Pay
+                              ? 'You’ll Get'
+                              : 'You’ll Give',
                       color: AppTheme.greyish,
                     )
                   ],
                 ),
                 onTap: () async {
-                  CustomLoadingDialog.showLoadingDialog(
-                      context, key);
-                  await fetchLedger(widget._customerList[index].customerId??'');
                   debugPrint(
                       'chatt v ${widget._customerList[index].toJson().toString()}');
 
@@ -3268,12 +3212,11 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       .getLedgerData(widget._customerList[index].customerId!);
                   ContactController.initChat(
                       context, widget._customerList[index].chatId);
-                  Navigator.of(context).pop();
                   Navigator.of(context).pushNamed(
                       AppRoutes.transactionListRoute,
                       arguments: TransactionListArgs(
                           false, widget._customerList[index]));
-
+                  await fetchContacts();
 
                 },
               ),
@@ -3284,19 +3227,30 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
     ).flexible;
   }
 
-  Future<void> fetchLedger(String customerId) async {
+  Future<void> fetchContacts() async {
+    String selectedBusinessId =
+        Provider.of<BusinessProvider>(context, listen: false)
+            .selectedBusiness
+            .businessId;
+    final _customerList =
+        await repository.customerApi.getAllCustomers(selectedBusinessId);
 
-    if(customerId.isNotEmpty){
+    await Future.forEach<CustomerModel>(_customerList,
+        (element) async => await repository.queries.insertCustomer(element));
+    BlocProvider.of<ContactsCubit>(context, listen: false)
+        .getContacts(selectedBusinessId);
+    setState(() {});
+    _customerList.forEach((e) async {
       final _ledgerTransactionList =
-      await repository.ledgerApi.getLedger(customerId);
+          await repository.ledgerApi.getLedger(e.customerId);
       _ledgerTransactionList.forEach(
-            (e) async =>
-        await repository.queries.insertLedgerTransaction(e).catchError((e) {
+        (e) async =>
+            await repository.queries.insertLedgerTransaction(e).catchError((e) {
           debugPrint(e);
           recordError(e, StackTrace.current);
         }),
       );
-    }
+    });
   }
 }
 

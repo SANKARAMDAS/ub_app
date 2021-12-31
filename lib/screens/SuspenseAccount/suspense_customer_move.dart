@@ -115,63 +115,24 @@ class _SuspenseAccountCustomerScreenState
   bool loading = false;
   bool isloading = false;
 
-  Future getKyc() async {
-    if (mounted) {
-      setState(() {
-        loading = true;
-      });
-    }
+Future getKyc() async {
+    setState(() {
+      loading = true;
+    });
     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      // Navigator.of(context).pop();
       setState(() {
         loading = false;
       });
       'Something went wrong. Please try again later.'.showSnackBar(context);
     }).then((value) {
-      debugPrint('Check the value : ' + value['status'].toString());
-
-      if (value != null && value.toString().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            Repository().hiveQueries.insertUserData(Repository()
-                .hiveQueries
-                .userData
-                .copyWith(
-                    kycStatus:
-                        (value['emirates'] == true && value['tl'] == true) &&
-                                value['isVerified'] == false
-                            ? 2
-                            : (value['isVerified'] == true &&
-                                    value['status'] == true)
-                                ? 1
-                                : 0,
-                    premiumStatus:
-                        value['planDuration'].toString() == 0.toString()
-                            ? 0
-                            : int.tryParse(value['planDuration']),
-                    isEmiratesIdDone: value['emirates'] ?? false,
-                    isTradeLicenseDone: value['tl'] ?? false,
-                    paymentLink: value['link'] ?? ''));
-
-            // Need to set emirates iD and TradeLicense ID Values
-            // isEmiratesIdDone = value['emirates'] ?? false;
-            // isTradeLicenseDone = value['tl'] ?? false;
-            // status = value['status'] ?? false;
-            // isPremium = value['premium'] ?? false;
-            // debugPrint('check1' + status.toString());
-            // debugPrint('check' + isEmiratesIdDone.toString());
-          });
-          return true;
-        }
-      }
-    });
-    calculatePremiumDate();
-
-    if (mounted) {
       setState(() {
         loading = false;
       });
-    }
+    });
+    calculatePremiumDate();
+    setState(() {
+      loading = false;
+    });
   }
 
   getAllCards() async {
@@ -671,7 +632,17 @@ class _SuspenseAccountCustomerScreenState
                                       .userData
                                       .kycStatus
                                       .toString());
-                              if (Repository().hiveQueries.userData.kycStatus ==
+                             if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository().hiveQueries.userData.kycStatus ==
                                   2) {
                                 await getKyc();
                                 MerchantBankNotAdded.showBankNotAddedDialog(

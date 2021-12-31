@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
 import 'package:urbanledger/Utility/pin_code_strenth.dart';
+import 'package:urbanledger/main.dart';
 import '../Components/extensions.dart';
 // import 'package:local_auth/local_auth.dart';
 // import 'package:urbanledger/Models/routeArgs.dart';
@@ -377,9 +379,24 @@ class _SetPinScreenState extends State<SetPinScreen> {
             _repository.hiveQueries.setPinStatus(true);
             _repository.hiveQueries.setFingerPrintStatus(true);
             if (widget.showConfirmPinState && widget.isResetPinState) {
+
+              debugPrint('CCCCCCCCCC : '+_repository.hiveQueries.userData.toString());
+              LoginModel loginModel = LoginModel(
+                mobileNo: _repository.hiveQueries.userData.mobileNo,
+                pin: confirmPinNotifier.value,
+                status: true,
+              );
+              repository.queries.checkLoginUser(loginModel);
               'Pin Reset Successful'.showSnackBar(context);
               await Future.delayed(Duration(seconds: 1));
             }
+            debugPrint('CCCCCCCCCC : '+_repository.hiveQueries.userData.toString());
+              LoginModel loginModel = LoginModel(
+                mobileNo: _repository.hiveQueries.userData.mobileNo,
+                pin: confirmPinNotifier.value,
+                status: true,
+              );
+              repository.queries.checkLoginUser(loginModel);
             Navigator.of(context)
               ..pop()
               ..pop();

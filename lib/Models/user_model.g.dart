@@ -34,15 +34,17 @@ class SignUpModelAdapter extends TypeAdapter<SignUpModel> {
       referral_code: fields[14] as String,
       referral_link: fields[15] as String,
       kycID: fields[16] as String,
-      loginTime: fields[17] as DateTime?,
-      email_status: fields[18] as bool
+      email_status: fields[17] as bool,
+      kycStatus2: fields[18] as String?,
+      emiratesIdVerified: fields[19] as String?,
+      tradeLicenseVerified: fields[20] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, SignUpModel obj) {
     writer
-      ..writeByte(19)
+      ..writeByte(21)
       ..writeByte(0)
       ..write(obj.firstName)
       ..writeByte(1)
@@ -78,9 +80,13 @@ class SignUpModelAdapter extends TypeAdapter<SignUpModel> {
       ..writeByte(16)
       ..write(obj.kycID)
       ..writeByte(17)
-      ..write(obj.loginTime)
+      ..write(obj.email_status)
       ..writeByte(18)
-      ..write(obj.email_status);
+      ..write(obj.kycStatus2)
+      ..writeByte(19)
+      ..write(obj.emiratesIdVerified)
+      ..writeByte(20)
+      ..write(obj.tradeLicenseVerified);
   }
 
   @override
