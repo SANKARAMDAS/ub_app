@@ -1,173 +1,295 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:urbanledger/Cubits/Notifications/notificationlist_cubit.dart';
+import 'package:urbanledger/Models/notification_list_model.dart';
 import 'package:urbanledger/Utility/app_services.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 import 'package:urbanledger/screens/Components/extensions.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class UserNotifications extends StatefulWidget {
-  const UserNotifications({Key? key}) : super(key: key);
+  final List<NotificationData>? dataList;
+  const UserNotifications({Key? key, this.dataList}) : super(key: key);
+
 
   @override
   _UserNotificationsState createState() => _UserNotificationsState();
 }
 
 class _UserNotificationsState extends State<UserNotifications> {
-  bool isItemSelected = false;
+  // bool isItemSelected = false;
+  int itemSelectedCount = 0;
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Container(
         color: Colors.white,
         child: Column(children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 12,vertical: 16),
-          color: AppTheme.electricBlue,
-          child:  Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              InkWell(
-                  child: Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),onTap: (){
-                    Navigator.of(context).pop();
-              },),
-              SizedBox(width: 8,),
-              Text('Notification(03)',style: TextStyle(color: Colors.white,fontSize: 20)),
-            ],
-          ),
-            Text('Mark all as Read',style: TextStyle(color: Colors.white,fontSize: 16),),
+          Container(
+              padding: EdgeInsets.symmetric(horizontal: 12,vertical: 16),
+              color: AppTheme.electricBlue,
+              child:  Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        child: Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),onTap: (){
+                        Navigator.of(context).pop();
+                      },),
+                      SizedBox(width: 8,),
+                      Text('Notification (${widget.dataList?.length})',style: TextStyle(color: Colors.white,fontSize: 20)),
+                    ],
+                  ),
+                  itemSelectedCount>0?Text('${itemSelectedCount} items selected',style: TextStyle(color: Colors.white,fontSize: 16),):InkWell(child: Text('Mark all as Read',style: TextStyle(color: Colors.white,fontSize: 16),),onTap: (){
+                    BlocProvider.of<NotificationListCubit>(context,listen:false).markAllAsRead();
 
-        ],)),
-        Expanded(child: ListView.builder(itemBuilder:(ctx,i)=>listItem(i),itemCount: 5, ))
-       // AppBar(title: Text('Notifications(03)'),backgroundColor: AppTheme.electricBlue,)
-      ],),),
+                  },),
+
+                ],)),
+          Expanded(child:BlocConsumer<NotificationListCubit, NotificationListState>(
+              listener: (context, state) {
+                // do stuff here based on BlocA's state
+              },
+              buildWhen: (previous, current) {
+                return current is FetchedNotificationListState;
+                // return true/false to determine whether or not
+                // to rebuild the widget with state
+              },
+              builder: (context, state) {
+                if(state is FetchedNotificationListState){
+                  return  state.notificationList.length > 0?ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemBuilder:(ctx,i)=>listItem(widget.dataList![i],i),itemCount: widget.dataList?.length):Container(child:Center(child: Text('No Data')));
+
+                }
+                return Container(child:Center(child: Text('No Data')));
+              // return widget here based on BlocA's state
+              }
+          ))
+          // AppBar(title: Text('Notifications(03)'),backgroundColor: AppTheme.electricBlue,)
+        ],),),
       bottomNavigationBar: Container(
-         color: Colors.white,
-        padding: EdgeInsets.all(20),
-          child:isItemSelected?InkWell(
-            child: Container(
-                child: Text('Clear',textAlign: TextAlign.center,)),onTap: (){
-            Navigator.of(context).pop();
+          color: Colors.white,
+          padding: EdgeInsets.all(20),
+          child:itemSelectedCount>0?InkWell(
+            child: Image.asset(
+             AppAssets.delete_notification_icon,
+              height: 45,
+              width: 45,
+            ),onTap: () async {
+           await BlocProvider.of<NotificationListCubit>(context,listen:false).deleteNotifications();
+           setState(() {
+             itemSelectedCount = 0;
+           });
           },):InkWell(
-        child: Icon(Icons.delete,color: Colors.red,size: 30,),onTap: (){
-        Navigator.of(context).pop();
-      },)),
+            child: Container(
+                child: CustomText(
+                  'Clear all',
+                  bold: FontWeight.w600,
+                  size: 20,
+                  color: AppTheme.brownishGrey,
+                  centerAlign: true,
+                )),onTap: () async {
+            await BlocProvider.of<NotificationListCubit>(context,listen:false).clearAllNotification();
+            setState(() {
+              itemSelectedCount = 0;
+            });
+          },)),
     );
   }
-  Widget listItem(int index){
-    return GestureDetector(
-      onLongPress: (){
-        setState(() {
-          isItemSelected = true;
-        });
+  Widget listItem(NotificationData data,int index){
+    return Dismissible(
 
+      key: Key(data.id.toString()),
+      // Provide a function that tells the app
+      // what to do after an item has been swiped away.
+      onDismissed: (direction) async {
+        // Remove the item from the data source.
+        await BlocProvider.of<NotificationListCubit>(context,listen:false).clearNotification(index);
 
+           setState(() {
+             --itemSelectedCount;
+           });
+
+        // Then show a snackbar.
+      /*  ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Item cleared.')));*/
       },
-      child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            padding: EdgeInsets.symmetric(
-                horizontal: 0, vertical: 18), //horizonal-4
-            decoration: BoxDecoration(
-                color: isItemSelected?Colors.grey:Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: index == 0 ? Radius.circular(10) : Radius.zero,
-                    topRight:
-                    index == 0 ? Radius.circular(10) : Radius.zero)),
-            child: GestureDetector(
-              // onTap: () {
-              //   showTranactionBottomSheet(context, data[index]);
-              // },
-              /*
-
-                     */
-              child: ListTile(
-                onTap: () {
+      child: GestureDetector(
+        onLongPress: (){
+          setState(() {
+            data.isSelected = !data.isSelected;
+            data.isSelected?++itemSelectedCount:--itemSelectedCount;
+          });
 
 
-                },
-                leading: Image.asset(
-                  AppAssets.transactionsLink01,
-                  height: 40,
-                ),
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
 
-                title: CustomText(
-                  'Urban Ledger',
-                  bold: FontWeight.w600,
-                  size: 16,
-                  color: AppTheme.brownishGrey,
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    6.0.heightBox,
-                    CustomText(
-                     'Our firm is involed in rendering Housekeeping Manpower Services',
-                      size: 16,
-                      color: AppTheme.brownishGrey,
-                      bold: FontWeight.w400,
-                    ),
-                  ],
-                ),
-                trailing: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  // mainAxisAlignment: MainAxisAlignment.min,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomText(
-                      "${DateFormat('dd MMM yyyy | hh:mm aa').format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('2007-03-06 13:44:25'))}"
-                         ,
-                      size: 12,
-                      color: AppTheme.brownishGrey,
-                      bold: FontWeight.w400,
-                    )
-                    /*Checkbox(
-                            checkColor: Colors.white,
-                            fillColor:
-                                MaterialStateProperty.resolveWith(getColor),
-                            value: isChecked.contains(index),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(2)),
-                            onChanged: (bool? value) {
-                              setState(() {
-                                if (value!) {
-                                  isChecked.add(index);
-                                  data2.add(data[index]);
-                                } else {
-                                  isChecked.remove(index);
-                                  data2.remove(data[index]);
-                                }
-                              });
-                            },
-                          )*/
-                  ],
-                ),
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 0),
+              padding: EdgeInsets.symmetric(
+                  horizontal: 0, vertical: 18), //horizonal-4
+              decoration: BoxDecoration(
+                color:  data.isSelected ?Colors.grey[200]:Colors.white,
+              ),
+              child: GestureDetector(
+                // onTap: () {
+                //   showTranactionBottomSheet(context, data[index]);
+                // },
+                /*
+
+                       */
+                child: CustomListItem(data: data)
               ),
             ),
-          ),
-          Container(
-            color: Colors.white,
-            child: Divider(
-              height: 1,
-              color: AppTheme.senderColor,
-             /* endIndent: 24,
-              indent: 24,*/
-            ),
-          )
-        ],
+            Container(
+              color: Colors.white,
+              child: Divider(
+                height: 1,
+                color: AppTheme.senderColor,
+                /* endIndent: 24,
+                indent: 24,*/
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 
+
+
+
   Widget appbar(BuildContext context){
     return AppBar(
-       title: Text('Notification(03)'),
+      title: Text('Notification(03)'),
     );
 
   }
 }
+
+class CustomListItem extends StatefulWidget {
+  const CustomListItem({
+    Key? key,
+    required this.data,
+
+  }) : super(key: key);
+
+
+  final NotificationData data;
+
+
+  @override
+  State<CustomListItem> createState() => _CustomListItemState();
+}
+
+class _CustomListItemState extends State<CustomListItem> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: Container(
+            width: 80,
+            height: 80,
+            child: Center(
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    top: 10,
+                    left:10,
+                    child: Image.asset(
+                      widget.data.read??false?AppAssets.notification_unselected:AppAssets.notification_selected,
+                      height: 60,
+                      width: 60,
+                    ),
+                  ),
+                  Positioned(
+                    top:30,
+                    left:30,
+                    child: Container(
+                      child: Image.asset(
+                        widget.data.isSelected?AppAssets.check_selected:AppAssets.check_unselected,
+                        height: 60,
+                        width: 60,
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: _NotificationDescription(
+            data: widget.data,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+          child: CustomText(
+            // "${DateFormat('dd MMM yyyy | hh:mm aa').format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))}"
+            timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${widget.data.createdAt}'))
+            ,
+            size: 12,
+            color: widget.data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
+            bold: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _NotificationDescription extends StatelessWidget {
+  const _NotificationDescription({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
+
+  final NotificationData data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          CustomText(
+            '${data.title}',
+            bold: FontWeight.w600,
+            size: 20,
+            color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
+          ),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
+          CustomText(
+            '${data.body}',
+            size: 16,
+            color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
+            bold: FontWeight.w400,
+          ),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
+      
+        ],
+      ),
+    );
+  }
+}
+

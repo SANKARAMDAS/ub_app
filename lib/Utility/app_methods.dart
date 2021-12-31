@@ -156,9 +156,11 @@ Map<String, String> apiAuthHeader() {
 }
 
 Map<String, String> apiAuthHeaderWithOnlyToken() {
+  var token = Repository().hiveQueries.token;
+  print(token);
   return {
     // "Content-Type": "application/json",
-    "Authorization": Repository().hiveQueries.token
+    "Authorization": token
   };
 }
 

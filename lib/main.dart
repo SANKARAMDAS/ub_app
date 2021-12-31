@@ -25,6 +25,8 @@ import 'package:urbanledger/Cubits/Contacts/contacts_cubit.dart';
 import 'package:urbanledger/Cubits/CustomerRanking/customer_ranking_pay_cubit.dart';
 import 'package:urbanledger/Cubits/ImportContacts/import_contacts_cubit.dart';
 import 'package:urbanledger/Cubits/Ledger/ledger_cubit.dart';
+import 'package:urbanledger/Cubits/Notifications/notificationlist_cubit.dart';
+import 'package:urbanledger/Cubits/UserProfile/user_profile_cubit.dart';
 import 'package:urbanledger/Models/business_model.dart';
 import 'package:urbanledger/Models/unauth_model.dart';
 import 'package:urbanledger/Models/user_model.dart';
@@ -40,7 +42,6 @@ import 'package:urbanledger/screens/Kyc%20Screen/kyc_provider.dart';
 import 'package:urbanledger/screens/TransactionScreens/add_cards_provider.dart';
 import 'package:urbanledger/screens/UserProfile/MyLedger/business_provider.dart';
 import 'package:urbanledger/screens/UserProfile/ReferAFriend/rewards_provider.dart';
-import 'package:urbanledger/screens/UserProfile/notifications_module/notificationlist_provider.dart';
 import 'package:urbanledger/screens/WelcomeScreens/splash.dart';
 
 import 'Cubits/CustomerRanking/customer_ranking_request_cubit.dart';
@@ -52,6 +53,7 @@ import 'package:urbanledger/Utility/app_constants.dart';
 
 final _kTestingCrashlytics = false;
 final repository = Repository();
+FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
 UserRepository _userRepository = UserRepository();
 
@@ -72,19 +74,19 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
     playSound: true);
 
 const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('launcher_icon');
+AndroidInitializationSettings('launcher_icon');
 
 final IOSInitializationSettings initializationSettingsIOS =
-    IOSInitializationSettings(
-        onDidReceiveLocalNotification: (id, title, body, payload) async {
-  return null; //TODO: To add logic
-});
+IOSInitializationSettings(
+    onDidReceiveLocalNotification: (id, title, body, payload) async {
+      return null; //TODO: To add logic
+    });
 
 final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
 final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-/* 
+/*
 bool initialized = false;
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -121,18 +123,18 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 } */
 
-void main() {
-  runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-    FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-    FirebaseAnalytics analytics = FirebaseAnalytics();
-    FirebaseAnalyticsObserver observer =
-        FirebaseAnalyticsObserver(analytics: analytics);
-    if (kReleaseMode) {
-      debugPrint = (message, {wrapWidth}) {};
-    }
-    // HttpOverrides.global = new MyHttpOverrides();
+Future<void> main() async {
+  FirebaseAnalytics analytics = FirebaseAnalytics();
+
+  FirebaseAnalyticsObserver observer =
+  FirebaseAnalyticsObserver(analytics: analytics);
+  if (kReleaseMode) {
+    debugPrint = (message, {wrapWidth}) {};
+  }
+  // HttpOverrides.global = new MyHttpOverrides();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  if (Platform.isIOS) {
     await _firebaseMessaging.requestPermission(
       alert: true,
       announcement: false,
@@ -142,41 +144,43 @@ void main() {
       provisional: true,
       sound: true,
     );
+  }
 
-    await Hive.initFlutter();
-    Hive.registerAdapter(SignUpModelAdapter());
-    Hive.registerAdapter(BusinessModelAdapter());
-    Hive.registerAdapter(UnAuthModelAdapter());
-    await repository.hiveQueries.openAuthBox;
-    await repository.hiveQueries.openUserBox;
-    await repository.hiveQueries.openUnAuthBox;
-    _initializeCrashlytics();
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
+  await Hive.initFlutter();
+  Hive.registerAdapter(SignUpModelAdapter());
+  Hive.registerAdapter(BusinessModelAdapter());
+  Hive.registerAdapter(UnAuthModelAdapter());
+  await repository.hiveQueries.openAuthBox;
+  await repository.hiveQueries.openUserBox;
+  await repository.hiveQueries.openUnAuthBox;
+  _initializeCrashlytics();
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (payload) async {
-      if (payload != null) {
-        final data = jsonDecode(payload);
-        if (data['pdfPath'] != null) {
-          OpenFile.open(data['pdfPath']);
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onSelectNotification: (payload) async {
+        if (payload != null) {
+          final data = jsonDecode(payload);
+          if (data['pdfPath'] != null) {
+            OpenFile.open(data['pdfPath']);
+          }
         }
-      }
-    });
+      });
 //DYNAMIC LINKS
-    await DynamicLinkService().handleInitialDynamicLinks();
-    // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    await _firebaseMessaging.setForegroundNotificationPresentationOptions(
-        alert: true, badge: true, sound: true);
-    Bloc.observer = BlocObserver();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.transparent));
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
-    updateKey();
+  await DynamicLinkService().handleInitialDynamicLinks();
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+      alert: true, badge: true, sound: true);
+  Bloc.observer = BlocObserver();
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent));
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+  updateKey();
+  runZonedGuarded<Future<void>>(() async {
     runApp(RestartWidget(
       child: (_uniqueKey) => MultiBlocProvider(
         providers: [
@@ -204,6 +208,12 @@ void main() {
           BlocProvider<TransHistoryCubit>(
             create: (context) => TransHistoryCubit(),
           ),
+          BlocProvider<NotificationListCubit>(
+            create: (context) => NotificationListCubit(),
+          ),
+          BlocProvider<UserProfileCubit>(
+            create: (context) => UserProfileCubit(),
+          )
         ],
         child: MultiProvider(
           providers: [
@@ -233,15 +243,12 @@ void main() {
             ChangeNotifierProvider<RewardsProvider>(
               create: (context) => RewardsProvider(),
             ),
-            ChangeNotifierProvider<NotificationListProvider>(
-              create: (context) => NotificationListProvider(),
-            ),
           ],
           child: MyApp(),
         ),
       ),
     ));
-  }, (e, s) => FirebaseCrashlytics.instance.recordError(e, s));
+  }, FirebaseCrashlytics.instance.recordError);
 }
 
 class RestartWidget extends StatefulWidget {
@@ -285,7 +292,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseAnalyticsObserver observer =
-        Provider.of<FirebaseAnalyticsObserver>(context);
+    Provider.of<FirebaseAnalyticsObserver>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       builder: (context, widget) {
@@ -315,14 +322,14 @@ class MyApp extends StatelessWidget {
         CountryLocalizations.delegate,
       ],
       theme: ThemeData(
-              primarySwatch: blueDefault,
-              fontFamily: AppAssets.sFProDisplayFont,
-              primaryColor: AppTheme.electricBlue,
-              accentColor: AppTheme.electricBlue,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-              appBarTheme: ThemeData.light()
-                  .appBarTheme
-                  .copyWith(elevation: 0, color: AppTheme.electricBlue))
+          primarySwatch: blueDefault,
+          fontFamily: AppAssets.sFProDisplayFont,
+          primaryColor: AppTheme.electricBlue,
+          accentColor: AppTheme.electricBlue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          appBarTheme: ThemeData.light()
+              .appBarTheme
+              .copyWith(elevation: 0, color: AppTheme.electricBlue))
           .copyWith(
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: {

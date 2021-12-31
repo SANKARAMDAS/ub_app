@@ -96,18 +96,20 @@ class RegisterAPI {
     try {
       _repository = _repository ?? Repository();
     const url = "auth/customer/registeration/verify";
+    Map bodyMap = {
+      "otp": "$otp",
+      "token": "${_repository!.hiveQueries.token}",
+      "device_name":
+      "${Platform.isAndroid ? (await deviceInfo.androidInfo).model : (await deviceInfo.iosInfo).model}",
+      "os": "${Platform.isAndroid ? 'Android' : 'IOS'}",
+      "fcm_token": await _firebaseMessaging.getToken(),
+      "latitude": (lat ?? 0).toString(),
+      "longitude": (long ?? 0).toString()
+    };
+    print(jsonEncode(bodyMap));
     final response = await postRequest(
       endpoint: url,
-      body: {
-        "otp": "$otp",
-        "token": "${_repository!.hiveQueries.token}",
-        "device_name":
-            "${Platform.isAndroid ? (await deviceInfo.androidInfo).model : (await deviceInfo.iosInfo).model}",
-        "os": "${Platform.isAndroid ? 'Android' : 'IOS'}",
-        "fcm_token": await _firebaseMessaging.getToken(),
-        "latitude": (lat ?? 0).toString(),
-        "longitude": (long ?? 0).toString()
-      },
+      body: bodyMap,
     );
     if (response.statusCode == 200) {
       debugPrint(response.body);
@@ -134,6 +136,7 @@ class RegisterAPI {
       }
       return map['status'] ? "true" : '';
     }
+    print(jsonDecode(response.body)['message'].toString());
     return Future.error(jsonDecode(response.body)['message'].toString());
     } catch (e) {
       return Future.error('Something went wrong. Please try again later.');

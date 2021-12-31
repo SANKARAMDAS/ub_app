@@ -1866,7 +1866,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                         cid.customerInfo?.merchantSubscriptionPlan ??
                             false;
                     debugPrint(cData.mobileNo.toString());
-                    debugPrint(cData.firstName);
+                    debugPrint(cData.contactData?.name?.split(' ')[0]);
                     debugPrint(cData.chatId);
                     //    debugPrint(cid.customerInfo?.id.toString());
                     var avatar = cData.profilePic!.isNotEmpty &&
@@ -1879,7 +1879,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                         .asUint8List()
                         : null;
                     _customerModel
-                      ..name = getName(cData.firstName, cData.mobileNo)
+                      ..name = getName(cData.contactData?.name?.split(' ')[0], cData.mobileNo)
                       ..mobileNo = cData.mobileNo
                       ..ulId = cid.customerInfo?.id.toString()
                       ..avatar = avatar
@@ -1904,7 +1904,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                           : null;
                       final customer = CustomerModel()
                         ..name = getName(
-                            cData.firstName!.trim(), cData.mobileNo!)
+                            cData.contactData?.name?.split(' ')[0].trim(), cData.mobileNo!)
                         ..mobileNo = (cData.mobileNo!)
                         ..avatar = avatar
                         ..customerId = uniqueId
@@ -2194,7 +2194,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                           .asUint8List()
                           : null;
                       _customerModel
-                        ..name = getName(cData.firstName, cData.mobileNo)
+                        ..name = getName(cData.contactData?.name?.split(' ')[0], cData.mobileNo)
                         ..mobileNo = cData.mobileNo
                         ..ulId = cData.id
                         ..avatar = avatar
@@ -2224,9 +2224,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                         ? Container()
                         : CustomText(
                       getInitials(
-                          cData.firstName!.trim() +
-                              ' ' +
-                              cData.lastName!.trim(),
+                          cData.contactData?.name,
                           cData.mobileNo?.trim() ?? '')
                           .toUpperCase(),
                       color: AppTheme.circularAvatarTextColor,

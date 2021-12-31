@@ -100,7 +100,16 @@ class AppAssets {
   static const String transactionsLink03 =
       'assets/icons/transaction_link_03.png';
   static const String info_01 = 'assets/icons/info_01.png';
+  static const String weak_pin = 'assets/icons/weak_pin.png';
+  static const String check_selected = 'assets/icons/check_selected.png';
+  static const String check_unselected = 'assets/icons/check_unselected.png';
+  static const String delete_notification_icon = 'assets/icons/delete_notification_icon.png';
+
+  static const String notification_selected = 'assets/icons/notification_selected.png';
+  static const String notification_unselected = 'assets/icons/notification_unselected.png';
   static const String warning = 'assets/icons/Warning-01.png';
+
+  static const String notification_bell = 'assets/icons/notification_bell.png';
 
   static const String sd_message_icon = 'assets/icons/sd_message_icon.png';
 

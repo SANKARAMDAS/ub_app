@@ -25,7 +25,6 @@ import 'package:urbanledger/chat_module/data/models/message.dart';
 import 'package:urbanledger/chat_module/data/repositories/chat_repository.dart';
 import 'package:urbanledger/chat_module/screens/contact/contact_controller.dart';
 import 'package:urbanledger/chat_module/screens/home/home_controller.dart';
-import 'package:urbanledger/chat_module/utils/custom_shared_preferences.dart';
 import 'package:urbanledger/main.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
 import 'package:urbanledger/screens/Components/extensions.dart';
@@ -547,10 +546,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   //       });
   // }
 
-Future getKyc() async {
-    setState(() {
-      loading = true;
-    });
+  Future getKyc() async {
+    if (mounted) {
+      setState(() {
+        loading = true;
+      });
+    }
     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
       setState(() {
         loading = false;
@@ -2623,11 +2624,13 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
 
   bool isLoading = false;
 
-Future getKyc() async {
+  Future getKyc() async {
     setState(() {
       isLoading = true;
     });
+
     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
+      // Navigator.of(context).pop();
       setState(() {
         isLoading = false;
       });
@@ -2732,10 +2735,10 @@ Future getKyc() async {
                         Navigator.of(context).pop();
                         return Future.value(null);
                       }).catchError((e) {
-                        Navigator.of(context).pop();
-                        'Something went wrong. Please try again later.'
-                            .showSnackBar(context);
-                      }));
+                    Navigator.of(context).pop();
+                    'Something went wrong. Please try again later.'
+                        .showSnackBar(context);
+                  }));
                       // if (apiResponse.isNotEmpty) {
                       //   ///update chat id here
                       //   await repository.queries
@@ -2777,9 +2780,9 @@ Future getKyc() async {
                         }
                       }
                     } else {
-                      'Please check your internet connection or try again later.'
-                          .showSnackBar(context);
-                    }
+                          'Please check your internet connection or try again later.'
+                              .showSnackBar(context);
+                        }
                     BlocProvider.of<ContactsCubit>(context).getContacts(
                         Provider.of<BusinessProvider>(context, listen: false)
                             .selectedBusiness
@@ -3214,6 +3217,7 @@ Future getKyc() async {
                       arguments: TransactionListArgs(
                           false, widget._customerList[index]));
                   await fetchContacts();
+
                 },
               ),
             ),
