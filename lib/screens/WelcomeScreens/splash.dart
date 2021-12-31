@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:urbanledger/Cubits/Ledger/ledger_cubit.dart';
 import 'package:urbanledger/Models/customer_model.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Services/local_db.dart';
 import 'package:urbanledger/Services/repository.dart';
@@ -279,7 +280,13 @@ void onStart() async {
             .copyWith(loginTime: DateTime.now(), seen: false));
       }
       if (repository.hiveQueries.isAuthenticated!) {
-        if (repository.hiveQueries.userPin.length == 0) {
+        // debugPrint('qqqqqqqqqqqqqqqqqqqqqqqqqq: '+repository.hiveQueries.userData.toString());
+        LoginModel loginModel = LoginModel(
+                                    mobileNo: repository.hiveQueries.userData.mobileNo);
+                                bool isLogin = await Repository()
+                                    .queries
+                                    .isLoginUser(loginModel);
+        if (!isLogin) {
           Navigator.of(context).pushReplacementNamed(AppRoutes.setPinRoute,
               arguments: SetPinRouteArgs('', false, false, false));
         } else {
