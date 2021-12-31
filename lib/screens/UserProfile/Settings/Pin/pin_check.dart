@@ -93,59 +93,60 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
                     builder: (context, value, _) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Container(
-                          height: height * 0.13,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.white),
-                          child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 12,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(AppAssets.lockIcon),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      'Enter Urban Ledger PIN'.toUpperCase(),
-                                      style: TextStyle(
-                                          color: AppTheme.brownishGrey,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    PinField(
-                                      isFilled: value.length > 0,
-                                    ),
-                                    PinField(
-                                      isFilled: value.length > 1,
-                                    ),
-                                    PinField(
-                                      isFilled: value.length > 2,
-                                    ),
-                                    PinField(
-                                      isFilled: value.length > 3,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 12,
-                                ),
-                              ]),
-                        ),
+                        child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 12,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    AppAssets.lockIcon,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(
+                                    'Enter Urban Ledger PIN'.toUpperCase(),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  PinField(
+                                    isSetField: false,
+                                    isFilled: value.length > 0,
+                                  ),
+                                  PinField(
+                                    isSetField: false,
+                                    isFilled: value.length > 1,
+                                  ),
+                                  PinField(
+                                    isSetField: false,
+                                    isFilled: value.length > 2,
+                                  ),
+                                  PinField(
+                                    isSetField: false,
+                                    isFilled: value.length > 3,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 12,
+                              ),
+                            ]),
                       );
                     }),
                 (height * 0.12).heightBox,
@@ -155,7 +156,7 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
                           CustomText(
                             incorrectPinCount > 3
                                 ? 'Too many incorrect attempts.'
-                                : 'You have entered an invalid PIN. You have ${4 - incorrectPinCount} more attempts left.',
+                                : 'You have entered an invalid PIN.\n You have ${4 - incorrectPinCount} more attempts left.',
                             size: 16,
                             bold: FontWeight.w400,
                             color: AppTheme.brownishGrey,
@@ -301,15 +302,15 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
       );
 
   Widget pinBox(bool value) => Padding(
-        padding: EdgeInsets.all(22),
+        padding: EdgeInsets.all(10),
         child: new Container(
-            height: 20,
-            width: 20,
+            height: 75,
+            width: 50,
             alignment: Alignment.center,
             decoration: new BoxDecoration(
                 color: Colors.white,
                 border: new Border.all(width: 2.0, color: Colors.white),
-                borderRadius: new BorderRadius.circular(20)),
+                borderRadius: new BorderRadius.circular(7)),
             child: Container(
               height: 18,
               width: 18,
@@ -324,7 +325,9 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
       pinNotifier.value = pinNotifier.value + str;
     }
     if (pinNotifier.value.length == 4) {
-      LoginModel loginModel = LoginModel(mobileNo: Repository().hiveQueries.userData.mobileNo, pin: pinNotifier.value);
+      LoginModel loginModel = LoginModel(
+          mobileNo: Repository().hiveQueries.userData.mobileNo,
+          pin: pinNotifier.value);
       bool isLogin = await Repository().queries.fetchLoginUser(loginModel);
       if (isLogin) {
         if (widget.fromPinSetupScreen != null) {
@@ -369,35 +372,29 @@ class PinField extends StatelessWidget {
   const PinField({
     Key? key,
     required this.isFilled,
+    required this.isSetField,
   }) : super(key: key);
 
   final bool isFilled;
+  final bool isSetField;
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(left: 15.0, right: 15),
-        child: Column(
-          children: [
-            // CustomText(
-            //   isFilled ? '*' : '',
-            //   size: 30,
-            //   color: AppTheme.brownishGrey,
-            // ),
-            10.0.heightBox,
-            Container(
-              height: 10,
-              width: 10,
+        padding: EdgeInsets.all(10),
+        child: new Container(
+            height: 75,
+            width: 50,
+            alignment: Alignment.center,
+            decoration: new BoxDecoration(
+                color: Colors.white,
+                border: new Border.all(width: 2.0, color: Colors.white),
+                borderRadius: new BorderRadius.circular(7)),
+            child: Container(
+              height: 18,
+              width: 18,
               decoration: BoxDecoration(
-                  color: isFilled ? AppTheme.brownishGrey : Colors.white,
-                  borderRadius: BorderRadius.circular(15)),
-            ),
-            10.0.heightBox,
-            Container(
-              color: AppTheme.brownishGrey,
-              height: 3,
-              width: 30,
-            )
-          ],
-        ),
+                  borderRadius: BorderRadius.circular(20),
+                  color: isFilled ? AppTheme.brownishGrey : Colors.white),
+            )),
       );
 }

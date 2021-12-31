@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/app_assets.dart';
+import 'package:urbanledger/Utility/app_constants.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
 import 'package:urbanledger/Utility/app_routes.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
@@ -19,14 +20,62 @@ class ChangePinVerification extends StatefulWidget {
 }
 
 class _ChangePinVerificationState extends State<ChangePinVerification> {
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final Repository repository = Repository();
+  String? _digit1, _digit2, _digit3, _digit4, _digit5, _digit6;
+  FocusNode firstFocusNode = FocusNode();
+  FocusNode secondFocusNode = FocusNode();
+  FocusNode thirdFocusNode = FocusNode();
+  FocusNode fourthFocusNode = FocusNode();
+  FocusNode fifthFocusNode = FocusNode();
+  FocusNode sixthFocusNode = FocusNode();
+  final TextEditingController oneController = TextEditingController();
+  final TextEditingController twoController = TextEditingController();
+  final TextEditingController threeController = TextEditingController();
+  final TextEditingController fourController = TextEditingController();
+  final TextEditingController fiveController = TextEditingController();
+  final TextEditingController sixController = TextEditingController();
+
   TextEditingController _pinController = TextEditingController();
-  final repository = Repository();
+  // final repository = Repository();
+  final GlobalKey<State> key = GlobalKey<State>();
+  late bool _serviceEnabled;
+  // final location = Location();
+  // final FirebaseAnalytics analytics = FirebaseAnalytics();
+
+  @override
+  void initState() {
+    super.initState();
+    /*  Future.delayed(Duration(milliseconds: 250)).then((value) {
+      if (widget.phoneNo != null)
+        _sendVerificationCode(widget.phoneNo.replaceAll(' ', ''));
+    }); */
+    oneController.text = ' ';
+    twoController.text = ' ';
+    threeController.text = ' ';
+    fourController.text = ' ';
+    fiveController.text = ' ';
+    sixController.text = ' ';
+  }
 
   @override
   void dispose() {
-    _pinController.dispose();
+    oneController.dispose();
+    twoController.dispose();
+    threeController.dispose();
+    fourController.dispose();
+    fiveController.dispose();
+    sixController.dispose();
+    firstFocusNode.dispose();
+    secondFocusNode.dispose();
+    thirdFocusNode.dispose();
+    fourthFocusNode.dispose();
+    fifthFocusNode.dispose();
+    sixthFocusNode.dispose();
     super.dispose();
   }
+
+  //final status = await repository.changePinApi
 
   @override
   Widget build(BuildContext context) {
@@ -35,150 +84,309 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: AppTheme.greyBackground,
+        backgroundColor: Colors.white,
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.all(15),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              primary: Theme.of(context).primaryColor,
-            ),
-            child: CustomText(
-              'SUBMIT',
-              size: 18,
-              color: Colors.white,
-            ),
-            onPressed: _pinController.text.length == 6
-                ? () async {
-                    final status = await repository.changePinApi
-                        .verifyChangePin(
-                            widget.token, _pinController.text.substring(0, 4))
-                        .catchError((e) {
-                          _pinController.clear();
-                      e.toString().showSnackBar(context);
-                      return false;
-                    });
-                    if (status) {
-                      repository.hiveQueries.insertUserPin('');
-                      Navigator.of(context)
-                        ..pop()
-                        ..pop()
-                        ..pushNamed(
-                            widget.fromSettings
-                                ? AppRoutes.setNewPinRoute
-                                : AppRoutes.setPinRoute,
-                            arguments: SetPinRouteArgs('', false, true, false));
-                    } //else {
-                    //   Navigator.pop(context);
-                    //}
-                  }
-                : null,
-          ),
-        ),
-        body: SafeArea(
-          child: Column(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, top: 20),
-                    child: IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: Icon(Icons.arrow_back_ios)),
+              (screenWidth(context) * 0.01).widthBox,
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.only(
+                        bottom: 15, top: 15, left: 30, right: 30),
+                    primary: Theme.of(context).primaryColor,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20, top: 20),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: ULLogoWidget(
-                        height: 50,
-                      ),
-                    ),
+                  child: CustomText(
+                    'SUBMIT',
+                    size: 18,
+                    color: Colors.white,
                   ),
-                ],
-              ),
+                  onPressed: validate() == true
+                      ? () async {
+                          final status = await repository.changePinApi
+                              .verifyChangePin(
+                            widget.token,
+                            _digit1! + _digit2! + _digit3! + _digit4!,
+                            
+                          )
+                              .timeout(Duration(seconds: 30),
+                                  onTimeout: () async {
+                            Navigator.of(context).pop();
+                            return Future.value(null);
+                          }).catchError((e) {
+                            oneController.text = ' ';
+                            twoController.text = ' ';
+                            threeController.text = ' ';
+                            fourController.text = ' ';
+                            fiveController.text = ' ';
+                            sixController.text = ' ';
+                            setState(() {});
+                            e.toString().showSnackBar(context);
+                            Navigator.of(context).pop();
+                            return false;
 
-              10.0.heightBox,
-              Divider(
-                thickness: 1,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset(
-                          AppAssets.msgIcon,
-                          height: 33,
-                        ),
-                        15.0.widthBox,
-                        CustomText(
-                          'Code Sent to +' +
-                              repository.hiveQueries.userData.mobileNo,
-                          bold: FontWeight.w400,
-                          color: AppTheme.brownishGrey,
-                        ),
-                      ],
-                    ),
-                    25.0.heightBox,
-                    TextField(
-                      controller: _pinController,
-                      cursorColor: AppTheme.brownishGrey,
-                      maxLength: 6,
-                      buildCounter: counter(),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        ModifiedLengthLimitingTextInputFormatter(6),
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      onChanged: (value) {
-                        if (value.length == 5 || value.length == 6) {
-                          setState(() {});
+                            // _pinController.clear();
+                          });
+                          if (status) {
+                            repository.hiveQueries.insertUserPin('');
+                            Navigator.of(context)
+                              ..pop()
+                              ..pop()
+                              ..pushNamed(
+                                  widget.fromSettings
+                                      ? AppRoutes.setNewPinRoute
+                                      : AppRoutes.setPinRoute,
+                                  arguments:
+                                      SetPinRouteArgs('', false, true, false));
+                          } //else {
+                          //   Navigator.pop(context);
+                          //}
                         }
-                      },
-                      decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor)),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor)),
-                          hintText: 'Enter 6 digit code',
-                          counterText: '',
-                          hintStyle: TextStyle(
-                            color: Color(0xffb6b6b6),
-                            fontSize: (16),
-                          ),
-                          errorStyle: TextStyle(
-                              color: AppTheme.tomato,
-                              fontWeight: FontWeight.w500)),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton(
-                          onPressed: () {},
-                          child: CustomText(
-                            "RESEND CODE",
-                            size: 16,
-                            bold: FontWeight.w600,
-                            color: Theme.of(context).primaryColor,
-                          )),
-                    )
-                  ],
+                      : null,
                 ),
               ),
             ],
           ),
         ),
+        body: SingleChildScrollView(
+          child: Container(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: Image.asset(
+                      AppAssets.backgroundImage,
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+                  (deviceHeight * 0.09).heightBox,
+                  ULLogoWidget(
+                    height: 80,
+                  ),
+                  (deviceHeight * 0.09).heightBox,
+                  Center(
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          text: 'We have sent a 6-digit OTP\nto ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: AppTheme.coolGrey,
+                            fontSize: (15),
+                          ),
+                          children: [
+                            TextSpan(
+                              text: 'Code Sent to +' +
+                                  repository.hiveQueries.userData.mobileNo,
+                            ),
+                          ]),
+                    ),
+                  ),
+                  (deviceHeight * 0.04).heightBox,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
+                          child: otpTextField(
+                            controller: oneController,
+                            onSaved: (value) => _digit1 = value,
+                            focusNode: firstFocusNode,
+                            nextFocusNode: secondFocusNode,
+                          ),
+                        ).flexible,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
+                          child: otpTextField(
+                            controller: twoController,
+                            onSaved: (value) => _digit2 = value,
+                            focusNode: secondFocusNode,
+                            nextFocusNode: thirdFocusNode,
+                            previousFocusNode: firstFocusNode,
+                          ),
+                        ).flexible,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
+                          child: otpTextField(
+                            controller: threeController,
+                            onSaved: (value) => _digit3 = value,
+                            focusNode: thirdFocusNode,
+                            nextFocusNode: fourthFocusNode,
+                            previousFocusNode: secondFocusNode,
+                          ),
+                        ).flexible,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
+                          child: otpTextField(
+                            controller: fourController,
+                            onSaved: (value) => _digit4 = value,
+                            focusNode: fourthFocusNode,
+                            nextFocusNode: fifthFocusNode,
+                            previousFocusNode: thirdFocusNode,
+                          ),
+                        ).flexible,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
+                          child: otpTextField(
+                              controller: fiveController,
+                              onSaved: (value) => _digit5 = value,
+                              focusNode: fifthFocusNode,
+                              nextFocusNode: sixthFocusNode,
+                              previousFocusNode: fourthFocusNode),
+                        ).flexible,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
+                          child: otpTextField(
+                            controller: sixController,
+                            focusNode: sixthFocusNode,
+                            nextFocusNode: sixthFocusNode,
+                            previousFocusNode: fifthFocusNode,
+                            onSaved: (value) => _digit6 = value,
+                          ),
+                        ).flexible,
+                      ],
+                    ),
+                  ),
+                  (deviceHeight * 0.09).heightBox,
+                  // Center(
+                  //   child: TextButton(
+                  //       onPressed: () {},
+                  //       child: CustomText(
+                  //         "RESEND CODE",
+                  //         size: 16,
+                  //         bold: FontWeight.w600,
+                  //         color: Theme.of(context).primaryColor,
+                  //       )),
+                  // ),
+                  (deviceHeight * 0.04).heightBox,
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
+  }
+
+  Widget otpTextField(
+      {required FocusNode focusNode,
+      required void Function(String?) onSaved,
+      FocusNode? nextFocusNode,
+      FocusNode? previousFocusNode,
+      required TextEditingController controller}) {
+    return Container(
+      height: 75,
+      decoration: BoxDecoration(
+          // border: Border(
+          //   bottom: BorderSide(width: 3.0, color: AppTheme.coolGrey),
+          // ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ],
+          // border: Border.all(
+          //   color: AppTheme.coolGrey,
+          //   width: 0.5
+          // ),
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.white),
+      child: Align(
+        alignment: Alignment.center,
+        child: TextFormField(
+          controller: controller,
+          enableInteractiveSelection: false,
+          textAlign: TextAlign.center,
+          focusNode: focusNode,
+          onSaved: onSaved,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          validator: (value) {
+            if (value!.isEmpty || value.isValidOneDigitNumber == false) {
+              return ' ';
+            } else {
+              return null;
+            }
+          },
+          onChanged: nextFocusNode == null
+              ? null
+              : (value) {
+                  if (value.length > 0 && value != "") {
+                    FocusScope.of(context).requestFocus(nextFocusNode);
+                  } else {
+                    FocusScope.of(context).requestFocus(previousFocusNode);
+                  }
+                  if (validate()) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  }
+                },
+          keyboardType: TextInputType.phone,
+          // obscureText: true,
+          maxLength: 1,
+          cursorColor: AppTheme.coolGrey,
+          style: TextStyle(
+              color: AppTheme.coolGrey,
+              fontSize: 28,
+              fontWeight: FontWeight.bold),
+          decoration: InputDecoration(
+            counterText: '',
+            hintText: '_',
+            hintStyle: TextStyle(color: AppTheme.coolGrey),
+            enabledBorder: UnderlineInputBorder(borderSide: BorderSide.none),
+            focusedBorder: UnderlineInputBorder(borderSide: BorderSide.none),
+          ),
+        ),
+      ),
+    );
+  }
+
+  bool validate() {
+    if (oneController.text.trim().isEmpty) {
+      return false;
+    } else if (twoController.text.trim().isEmpty) {
+      return false;
+    } else if (threeController.text.trim().isEmpty) {
+      return false;
+    } else if (fourController.text.trim().isEmpty) {
+      return false;
+    } else if (fiveController.text.trim().isEmpty) {
+      return false;
+    } else if (sixController.text.trim().isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  //********************************************************************************* */
+  // BUSINESS LOGIC
+  //********************************************************************************* */
+
+  // String _verificationID;
+  // final _auth = FirebaseAuth.instance;
+
+  void clearTextControllers() {
+    oneController.clear();
+    twoController.clear();
+    threeController.clear();
+    fourController.clear();
+    fiveController.clear();
+    sixController.clear();
   }
 }

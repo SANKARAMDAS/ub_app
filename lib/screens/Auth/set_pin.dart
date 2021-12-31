@@ -99,7 +99,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                   bold: FontWeight.w500,
                   color: Colors.white,
                 ),
-                (deviceHeight * 0.04).heightBox,
+                (deviceHeight * 0.02).heightBox,
                 if (!widget.showConfirmPinState)
                   ValueListenableBuilder<String>(
                       valueListenable: setPinNotifier,
@@ -128,7 +128,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                                 ],
                               ),
                               SizedBox(
-                                height: 6,
+                                height: 10,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -159,8 +159,9 @@ class _SetPinScreenState extends State<SetPinScreen> {
                       }),
                 if (!widget.showConfirmPinState)
                   SizedBox(
-                    height: 10,
+                    height: 6,
                   ),
+                // (deviceHeight * 0.02).heightBox,
                 if (widget.showConfirmPinState)
                   ValueListenableBuilder<String>(
                       valueListenable: confirmPinNotifier,
@@ -169,16 +170,16 @@ class _SetPinScreenState extends State<SetPinScreen> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              SizedBox(
-                                height: 4,
-                              ),
+                              // SizedBox(
+                              //   height: 12,
+                              // ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(AppAssets.lock1Icon),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
+                                  // SizedBox(
+                                  //   width: 8,
+                                  // ),
                                   Text(
                                     'Confirm PIN',
                                     style: TextStyle(
@@ -189,7 +190,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                                 ],
                               ),
                               SizedBox(
-                                height: 6,
+                                height: 10,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -368,8 +369,8 @@ class _SetPinScreenState extends State<SetPinScreen> {
             _repository.hiveQueries.setPinStatus(true);
             _repository.hiveQueries.setFingerPrintStatus(true);
             if (widget.showConfirmPinState && widget.isResetPinState) {
-
-              debugPrint('CCCCCCCCCC : '+_repository.hiveQueries.userData.toString());
+              debugPrint('CCCCCCCCCC : ' +
+                  _repository.hiveQueries.userData.toString());
               LoginModel loginModel = LoginModel(
                 mobileNo: _repository.hiveQueries.userData.mobileNo,
                 pin: confirmPinNotifier.value,
@@ -379,13 +380,14 @@ class _SetPinScreenState extends State<SetPinScreen> {
               'Pin Reset Successful'.showSnackBar(context);
               await Future.delayed(Duration(seconds: 1));
             }
-            debugPrint('CCCCCCCCCC : '+_repository.hiveQueries.userData.toString());
-              LoginModel loginModel = LoginModel(
-                mobileNo: _repository.hiveQueries.userData.mobileNo,
-                pin: confirmPinNotifier.value,
-                status: true,
-              );
-              repository.queries.checkLoginUser(loginModel);
+            debugPrint(
+                'CCCCCCCCCC : ' + _repository.hiveQueries.userData.toString());
+            LoginModel loginModel = LoginModel(
+              mobileNo: _repository.hiveQueries.userData.mobileNo,
+              pin: confirmPinNotifier.value,
+              status: true,
+            );
+            repository.queries.checkLoginUser(loginModel);
             Navigator.of(context)
               ..pop()
               ..pop();
@@ -463,7 +465,7 @@ class PinField extends StatelessWidget {
         // padding: const EdgeInsets.only(left: 15.0, right: 15),
         padding: EdgeInsets.all(10),
         child: new Container(
-          height: 60,
+          height: 75,
           width: 50,
           alignment: Alignment.center,
           decoration: new BoxDecoration(

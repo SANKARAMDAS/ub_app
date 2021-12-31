@@ -26,8 +26,10 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
   }
 
   bool isEmiratesIdDone = Repository().hiveQueries.userData.isEmiratesIdDone;
-  bool isTradeLicenseDone = Repository().hiveQueries.userData.isTradeLicenseDone;
-  bool status = Repository().hiveQueries.userData.kycStatus2 == 'Approved' ? true: false;
+  bool isTradeLicenseDone =
+      Repository().hiveQueries.userData.isTradeLicenseDone;
+  bool status =
+      Repository().hiveQueries.userData.kycStatus2 == 'Approved' ? true : false;
   bool checkedValue = true;
   bool isPremium = false;
   bool isLoading = false;
@@ -36,7 +38,8 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
     setState(() {
       isLoading = true;
     });
-    debugPrint('qwerttyy : '+Repository().hiveQueries.userData.isEmiratesIdDone.toString());
+    debugPrint('qwerttyy : ' +
+        Repository().hiveQueries.userData.isEmiratesIdDone.toString());
     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
       setState(() {
         isLoading = false;
@@ -67,8 +70,20 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                   child: Column(
                     children: [
                       Container(
-                        height: deviceHeight * 0.13,
+                        height: deviceHeight * 0.17,
+                        width: double.maxFinite,
+                        alignment: Alignment.topCenter,
+                        decoration: BoxDecoration(
+                          // color: Color(0xffE5E5E5),
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: AssetImage('assets/images/back.png'),
+                              alignment: Alignment.topCenter),
+                        ),
                       ),
+                      // Container(
+                      //   height: deviceHeight * 0.13,
+                      // ),
                       Container(
                         // height: deviceHeight * 0.37,
                         margin:
