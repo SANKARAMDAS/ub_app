@@ -169,9 +169,7 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
     setState(() {
       isLoading = true;
     });
-
     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      // Navigator.of(context).pop();
       setState(() {
         isLoading = false;
       });
@@ -180,42 +178,6 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
       setState(() {
         isLoading = false;
       });
-      debugPrint('Check the value : ' + value['status'].toString());
-
-      if (value != null && value.toString().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            Repository().hiveQueries.insertUserData(Repository()
-                .hiveQueries
-                .userData
-                .copyWith(
-                    kycStatus:
-                        (value['isVerified'] == true && value['status'] == true)
-                            ? 1
-                            : (value['emirates'] &&
-                                    value['tl'] == true &&
-                                    value['status'] == false)
-                                ? 2
-                                : 0,
-                    premiumStatus:
-                        value['planDuration'].toString() == 0.toString()
-                            ? 0
-                            : int.tryParse(value['planDuration']),
-                    isEmiratesIdDone: value['emirates'] ?? false,
-                    isTradeLicenseDone: value['tl'] ?? false));
-
-            //TODO Need to set emirates iD and TradeLicense ID Values
-            // isEmiratesIdDone = value['emirates'] ?? false;
-            // isTradeLicenseDone = value['tl'] ?? false;
-            // status = value['status'] ?? false;
-            // isPremium = value['premium'] ?? false;
-
-            // debugPrint('check1' + status.toString());
-            // debugPrint('check' + isEmiratesIdDone.toString());
-          });
-          return;
-        }
-      }
     });
     calculatePremiumDate();
     setState(() {
@@ -259,7 +221,13 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
                       Repository().hiveQueries.userData.kycStatus == 2) ||
                   Repository().hiveQueries.userData.premiumStatus == 0
               ? () async {
-                  if (Repository().hiveQueries.userData.kycStatus == 2) {
+                  if (Repository().hiveQueries.userData.kycStatus2 ==
+                          'Rejected' ||
+                      Repository().hiveQueries.userData.kycStatus2 ==
+                          'Expired') {
+                    MerchantBankNotAdded.showBankNotAddedDialog(
+                        context, 'userKYCExpired');
+                  } else if (Repository().hiveQueries.userData.kycStatus == 2) {
                     //If KYC is Verification is Pending
                     debugPrint('adf');
                     CustomLoadingDialog.showLoadingDialog(context, key);
@@ -497,10 +465,11 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
                                                                   bid, 1);
                                                         }
                                                       } else {
-                                        // Navigator.of(context).pop();
-                          'Please check your internet connection or try again later.'
-                              .showSnackBar(context);
-                        }
+                                                        // Navigator.of(context).pop();
+                                                        'Please check your internet connection or try again later.'
+                                                            .showSnackBar(
+                                                                context);
+                                                      }
                                                     });
                                                     'Ledger Deleted Successfully'
                                                         .showSnackBar(context);

@@ -64,6 +64,16 @@ void equalPressed() {
   }
 }
 
+bool documentLifecycle(String document) {
+  if(document == 'Pending'){
+    return false;
+  } else if (document == 'Rejected'){
+    return false;
+  } else {
+    return true;
+  }
+}
+
 String removeDecimalif0(double? number) {
   return number == null
       ? ''

@@ -57,14 +57,13 @@ class KycAPI {
 
     // const url = "customer-kyc/trade-liscence";
     const url_new = "customer-kyc-new/add-trade-liscence";
-    Map<String, String> requestBody = <String,String>{
-      'kycId':"${Repository().hiveQueries.userData.kycID}"
+    Map<String, String> requestBody = <String, String>{
+      'kycId': "${Repository().hiveQueries.userData.kycID}"
     };
     var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url_new))
-    ..files
-        .add(await http.MultipartFile.fromPath('file', path.toString()))
-    ..fields.addAll(requestBody)
-    ..headers.addAll(apiAuthHeaderWithOnlyToken());
+      ..files.add(await http.MultipartFile.fromPath('file', path.toString()))
+      ..fields.addAll(requestBody)
+      ..headers.addAll(apiAuthHeaderWithOnlyToken());
 
     final _streamResponse = await request.send();
     final response = await http.Response.fromStream(_streamResponse);
@@ -72,7 +71,7 @@ class KycAPI {
     debugPrint(response.body.toString());
 
     if (response.statusCode == 200) {
-      debugPrint('wwwww'+response.body);
+      debugPrint('wwwww' + response.body);
 
       return jsonDecode(response.body);
     } else {
@@ -97,7 +96,32 @@ class KycAPI {
 
     if (response.statusCode == 200) {
       debugPrint('kyc Checker : ' + response.body.toString());
-
+      debugPrint('kyc Checker 22 : ' + jsonDecode(response.body)['kycStatus']);
+      Repository()
+          .hiveQueries
+          .insertUserData(Repository().hiveQueries.userData.copyWith(
+                kycStatus: (jsonDecode(response.body)['isVerified'] == true &&
+                        jsonDecode(response.body)['status'] == true)
+                    ? 1
+                    : (jsonDecode(response.body)['emirates'] &&
+                            jsonDecode(response.body)['tl'] == true &&
+                            jsonDecode(response.body)['status'] == false)
+                        ? 2
+                        : 0,
+                premiumStatus: jsonDecode(response.body)['planDuration']
+                            .toString() ==
+                        0.toString()
+                    ? 0
+                    : int.tryParse(jsonDecode(response.body)['planDuration']),
+                kycStatus2: jsonDecode(response.body)['kycStatus'],
+                kycID: jsonDecode(response.body)['kycId'],
+                emiratesIdVerified: jsonDecode(response.body)['emiratesIdVerified'],
+                tradeLicenseVerified: jsonDecode(response.body)['tradeLicenseVerified'],
+                isEmiratesIdDone: jsonDecode(response.body)['kycStatus'] == 'Rejected' || jsonDecode(response.body)['kycStatus'] == 'Expired' ? false : documentLifecycle(
+                    jsonDecode(response.body)['emiratesIdVerified']),
+                isTradeLicenseDone: jsonDecode(response.body)['kycStatus'] == 'Rejected' || jsonDecode(response.body)['kycStatus'] == 'Expired' ? false : documentLifecycle(
+                    jsonDecode(response.body)['tradeLicenseVerified']),
+              ));
       return jsonDecode(response.body);
     }
     return Future.error('Unexpected Error occured');

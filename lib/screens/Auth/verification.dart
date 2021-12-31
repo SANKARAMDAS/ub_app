@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/app_assets.dart';
@@ -153,8 +154,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   onPressed: validate() == true
                       ? () async {
                           if (_formKey.currentState!.validate()) {
-                            debugPrint("validate");
-
                             _formKey.currentState!.save();
                             //TODO: To handle location permission when denied.
 
@@ -212,42 +211,53 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                     return 'Incorrect';
                                   });
                             if (status.isNotEmpty) {
-                              debugPrint("isNotEmpt");
-
                               if (status == 'Incorrect') return;
-                              debugPrint("Incorrect");
-
                               _formKey.currentState!.reset();
                               if (!widget.isRegister) {
-                                debugPrint("isREgister");
-
                                 // await analytics.logLogin();
                                 LoginRepository().login(
                                     widget.phoneNo.replaceAll(' ', ''),
                                     context);
                                 repository.hiveQueries
                                     .insertIsAuthenticated(true);
-                                oneController.text = ' ';
-                                twoController.text = ' ';
-                                threeController.text = ' ';
-                                fourController.text = ' ';
-                                fiveController.text = ' ';
-                                sixController.text = ' ';
-                                debugPrint('KKKKKKKKKKKKK');
-                                setState(() {});
-
-                                Navigator.of(context)
-                                  ..pop()
-                                  ..pop()
-                                  ..pushReplacementNamed(
-                                      repository.hiveQueries.userPin.isEmpty
-                                          ? AppRoutes.setPinRoute
-                                          : AppRoutes.pinLoginRoute,
-                                      arguments:
-                                          repository.hiveQueries.userPin.isEmpty
-                                              ? SetPinRouteArgs(
-                                                  '', false, false, false)
-                                              : null);
+                                LoginModel loginModel = LoginModel(
+                                    mobileNo: widget.phoneNo
+                                        .replaceAll(' ', '')
+                                        .replaceAll('+', ''));
+                                bool isLogin = await Repository()
+                                    .queries
+                                    .isLoginUser(loginModel);
+                                debugPrint("qqqqqqqd : " + isLogin.toString());
+                                if (isLogin) {
+                                  Navigator.of(context)
+                                    ..pop()
+                                    ..pop()
+                                    ..pushReplacementNamed(
+                                        AppRoutes.pinLoginRoute,
+                                        arguments: PinRouteArgs(
+                                            widget.phoneNo.replaceAll(' ', ''),
+                                            true));
+                                } else {
+                                  if (repository.hiveQueries.userPin.isEmpty) {
+                                    Navigator.of(context)
+                                      ..pop()
+                                      ..pop()
+                                      ..pushReplacementNamed(
+                                          AppRoutes.setPinRoute,
+                                          arguments: SetPinRouteArgs(
+                                              '', false, false, false));
+                                  } else {
+                                    Navigator.of(context)
+                                      ..pop()
+                                      ..pop()
+                                      ..pushReplacementNamed(
+                                          AppRoutes.pinLoginRoute,
+                                          arguments: PinRouteArgs(
+                                              widget.phoneNo
+                                                  .replaceAll(' ', ''),
+                                              true));
+                                  }
+                                }
                               } else {
                                 //  await analytics.logSignUp(signUpMethod: 'SignUp');
                                 /*    var anaylticsEvents = await AnalyticsEvents(context);
@@ -319,7 +329,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: oneController,
                             onSaved: (value) => _digit1 = value,
@@ -328,7 +339,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           ),
                         ).flexible,
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: twoController,
                             onSaved: (value) => _digit2 = value,
@@ -338,7 +350,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           ),
                         ).flexible,
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: threeController,
                             onSaved: (value) => _digit3 = value,
@@ -348,7 +361,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           ),
                         ).flexible,
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: fourController,
                             onSaved: (value) => _digit4 = value,
@@ -358,7 +372,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           ),
                         ).flexible,
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                               controller: fiveController,
                               onSaved: (value) => _digit5 = value,
@@ -367,7 +382,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                               previousFocusNode: fourthFocusNode),
                         ).flexible,
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: sixController,
                             focusNode: sixthFocusNode,
@@ -405,28 +421,28 @@ class _VerificationScreenState extends State<VerificationScreen> {
       FocusNode? nextFocusNode,
       FocusNode? previousFocusNode,
       required TextEditingController controller}) {
-    return Material(
-      elevation: 8.0,
-      child: Container(
-        height: 55,
-        width: 40,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          // border: new Border.all(width: 2.0, color: Colors.grey),
-          borderRadius: new BorderRadius.circular(5),
+    return Container(
+      height: 75,
+      decoration: BoxDecoration(
+          // border: Border(
+          //   bottom: BorderSide(width: 3.0, color: AppTheme.coolGrey),
+          // ),
           boxShadow: [
-            // color: Colors.white, //background color of box
             BoxShadow(
-              color: Colors.grey,
-              blurRadius: 2.0, // soften the shadow
-              spreadRadius: 0.0, //extend the shadow
-              offset: Offset(
-                0.0, // Move to right 10  horizontally
-                0.7, // Move to bottom 10 Vertically
-              ),
-            )
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
           ],
-        ),
+          // border: Border.all(
+          //   color: AppTheme.coolGrey,
+          //   width: 0.5
+          // ),
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.white),
+      child: Align(
+        alignment: Alignment.center,
         child: TextFormField(
           controller: controller,
           enableInteractiveSelection: false,
@@ -449,12 +465,14 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   } else {
                     FocusScope.of(context).requestFocus(previousFocusNode);
                   }
+                  if(validate()){
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  }
                 },
           keyboardType: TextInputType.phone,
+          // obscureText: true,
           maxLength: 1,
-          cursorColor: Colors.transparent,
-          cursorWidth: 0,
-          obscureText: true,
+          cursorColor: AppTheme.coolGrey,
           style: TextStyle(
               color: AppTheme.coolGrey,
               fontSize: 28,
@@ -462,12 +480,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
           decoration: InputDecoration(
             counterText: '',
             hintText: '_',
-            enabledBorder: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Colors.white, style: BorderStyle.solid)),
-            focusedBorder: UnderlineInputBorder(
-                borderSide:
-                    BorderSide(color: Colors.white, style: BorderStyle.solid)),
+            hintStyle: TextStyle(color: AppTheme.coolGrey),
+            enabledBorder: UnderlineInputBorder(borderSide: BorderSide.none),
+            focusedBorder: UnderlineInputBorder(borderSide: BorderSide.none),
           ),
         ),
       ),

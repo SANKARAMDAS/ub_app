@@ -2101,7 +2101,17 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                     // bool? merchantSubscriptionPlan =
                     //     cid.customerInfo?.merchantSubscriptionPlan ??
                     //         false;
-                    if (Repository().hiveQueries.userData.kycStatus ==
+                   if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository().hiveQueries.userData.kycStatus ==
                         2) {
                       //If KYC is Verification is Pending
                       await getKyc().then((value) =>
@@ -2916,55 +2926,21 @@ class _ImportContactsListWidgetState extends State<ImportContactsListWidget> {
   //       });
   // }
 
-  Future getKyc() async {
+Future getKyc() async {
     setState(() {
       isLoading = true;
     });
-
-    await KycAPI.kycApiProvider.kycCheker().then((value) {
+    await KycAPI.kycApiProvider.kycCheker().catchError((e) {
       setState(() {
         isLoading = false;
       });
-      debugPrint('Check the value : ' + value['status'].toString());
-
-      if (value != null && value.toString().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            Repository().hiveQueries.insertUserData(Repository()
-                .hiveQueries
-                .userData
-                .copyWith(
-                kycStatus:
-                (value['isVerified'] == true && value['status'] == true)
-                    ? 1
-                    : (value['emirates'] &&
-                    value['tl'] == true &&
-                    value['status'] == false)
-                    ? 2
-                    : 0,
-                premiumStatus:
-                value['planDuration'].toString() == 0.toString()
-                    ? 0
-                    : int.tryParse(value['planDuration']),
-                isEmiratesIdDone: value['emirates'] ?? false,
-                isTradeLicenseDone: value['tl'] ?? false));
-
-            //TODO Need to set emirates iD and TradeLicense ID Values
-            // isEmiratesIdDone = value['emirates'] ?? false;
-            // isTradeLicenseDone = value['tl'] ?? false;
-            // status = value['status'] ?? false;
-            // isPremium = value['premium'] ?? false;
-
-            // debugPrint('check1' + status.toString());
-            // debugPrint('check' + isEmiratesIdDone.toString());
-          });
-          return true;
-        }
-      } else {
-        return false;
-      }
+      'Something went wrong. Please try again later.'.showSnackBar(context);
+    }).then((value) {
+      setState(() {
+        isLoading = false;
+      });
     });
-
+    calculatePremiumDate();
     setState(() {
       isLoading = false;
     });
@@ -3426,7 +3402,17 @@ class _ImportContactsListWidgetState extends State<ImportContactsListWidget> {
                   // bool? merchantSubscriptionPlan =
                   //     cid.customerInfo?.merchantSubscriptionPlan ??
                   //         false;
-                  if (Repository().hiveQueries.userData.kycStatus ==
+                 if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository().hiveQueries.userData.kycStatus ==
                       2) {
                     //If KYC is Verification is Pending
                     MerchantBankNotAdded.showBankNotAddedDialog(
