@@ -2418,8 +2418,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         height: 20,
       );
 
-  showNotificationListDialog(BuildContext context) {
-    return showGeneralDialog(
+  showNotificationListDialog(BuildContext context,List<NotificationData> dataList){
+    return  showGeneralDialog(
       barrierLabel: "Barrier",
       barrierDismissible: true,
       barrierColor: Colors.black.withOpacity(0.5),
@@ -2429,11 +2429,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         return Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: SizedBox.expand(
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: UserNotifications())),
+            height: MediaQuery.of(context).size.height*0.9 ,
+            child: SizedBox.expand(child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),child: UserNotifications(dataList: dataList,))),
             margin: EdgeInsets.only(bottom: 12, left: 16, right: 16),
             decoration: BoxDecoration(
               color: Colors.white,

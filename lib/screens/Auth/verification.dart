@@ -34,7 +34,7 @@ class VerificationScreen extends StatefulWidget {
   _VerificationScreenState createState() => _VerificationScreenState();
 }
 
-class _VerificationScreenState extends State<VerificationScreen> {
+class _VerificationScreenState extends State<VerificationScreen> with SingleTickerProviderStateMixin {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Repository repository = Repository();
   String? _digit1, _digit2, _digit3, _digit4, _digit5, _digit6;
@@ -366,7 +366,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         ).flexible,
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: threeController,
                             onSaved: (value) => _digit3 = value,
