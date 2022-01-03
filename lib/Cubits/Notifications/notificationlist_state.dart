@@ -1,15 +1,24 @@
-/*
-import 'package:equatable/equatable.dart';
+part of 'notificationlist_cubit.dart';
 
-abstract class NotificationState extends Equatable{
+abstract class NotificationListState extends Equatable{
 
-  const NotificationState();
+  const NotificationListState();
 
   @override
   List<Object> get props => [];
 }
-class NotificationStateInitial extends NotificationState{
+class NotificationListStateInitial extends NotificationListState{}
+
+class FetchingNotificationListState extends NotificationListState{}
+
+class FetchedNotificationListState extends NotificationListState
+{
+  final  List<NotificationData> notificationList;
+
+  FetchedNotificationListState(this.notificationList);
+
+  @override
+  List<Object> get props => [notificationList];
 
 }
 
-*/

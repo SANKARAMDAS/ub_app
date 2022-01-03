@@ -4,11 +4,14 @@ import 'dart:typed_data';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 // import 'package:share_plus/share_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tap_debouncer/tap_debouncer.dart';
+import 'package:urbanledger/Cubits/Notifications/notificationlist_cubit.dart';
+import 'package:urbanledger/Models/notification_list_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Services/APIs/kyc_api.dart';
 import 'package:urbanledger/Services/repository.dart';
@@ -29,7 +32,6 @@ import 'package:urbanledger/screens/Components/custom_widgets.dart';
 import 'package:urbanledger/screens/UserProfile/MyLedger/business_provider.dart';
 import 'package:urbanledger/screens/UserProfile/inappbrowser.dart';
 import 'package:urbanledger/screens/UserProfile/notifications_module/badge.dart';
-import 'package:urbanledger/screens/UserProfile/notifications_module/notificationlist_provider.dart';
 import 'package:urbanledger/screens/UserProfile/notifications_module/user_notifications.dart';
 import 'package:urbanledger/screens/UserProfile/user_profile_new.dart';
 import 'package:urbanledger/screens/mobile_analytics/analytics_events.dart';
@@ -133,6 +135,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     fileName = (fileName.split('/').last);
     uniquePaymentLink =
         Repository().hiveQueries.userData.paymentLink.toString();
+    getNotificationListData();
+  }
+  getNotificationListData() async {
+    await BlocProvider.of<NotificationListCubit>(context).getNotificationListData();
   }
 
   bool isEmiratesIdDone = false;
@@ -450,12 +456,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   //     context: context);
 
   Future getKyc() async {
-    setState(() {
-      loading = true;
-    });
-    await KycAPI.kycApiProvider.kycCheker().catchError((e) {
+    if (mounted) {
       setState(() {
-        loading = false;
+        loading = true;
+      });
+    }
+    await KycAPI.kycApiProvider.kycCheker().catchError((e) {
+      // Navigator.of(context).pop();
+      setState(() {
+        isLoading = false;
       });
       'Something went wrong. Please try again later.'.showSnackBar(context);
     }).then((value) {
@@ -574,74 +583,108 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         ]),
                   ),
                   Spacer(),
-                  Row(
-                    children: [
-                      Repository().hiveQueries.userData.premiumStatus != 0
-                          ? Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 18),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              // width: 126,
-                              height: 27,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: Color(0xffebebeb),
-                                  width: 1,
+                  Row(children: [
+                    Repository().hiveQueries.userData.premiumStatus != 0
+                        ? Container(
+                      margin: EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 18),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      // width: 126,
+                      height: 27,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Color(0xffebebeb),
+                          width: 1,
+                        ),
+                        color: AppTheme.electricBlue,
+                      ),
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              child: Container(
+                                child: Image.asset(
+                                  'assets/images/crown.png',
+                                  height: 15,
+                                  width: 15,
                                 ),
-                                color: AppTheme.electricBlue,
                               ),
-                              child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      child: Container(
-                                        child: Image.asset(
-                                          'assets/images/crown.png',
-                                          height: 15,
-                                          width: 15,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 3),
-                                    FittedBox(
-                                      child: Container(
-                                        child: Text(
-                                          'Premium',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: 'SFProDisplay',
-                                              fontWeight: FontWeight
-                                                  .w500, //FontWeight.w500
-                                              fontSize: 16),
-                                        ),
-                                      ),
-                                    ),
-                                  ]),
+                            ),
+                            SizedBox(width: 3),
+                            FittedBox(
+                              child: Container(
+                                child: Text(
+                                  'Premium',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'SFProDisplay',
+                                      fontWeight:
+                                      FontWeight.w500, //FontWeight.w500
+                                      fontSize: 16),
+                                ),
+                              ),
+                            ),
+
+                          ]),
+                    )
+                        : Container(),
+
+                    BlocConsumer<NotificationListCubit, NotificationListState>(
+                      listener: (context, state) {
+                        // do stuff here based on BlocA's state
+                      },
+                      buildWhen: (previous, current) {
+                        return current!=previous;
+                        // return true/false to determine whether or not
+                        // to rebuild the widget with state
+                      },
+                      builder: (context, state) {
+
+                        if (state is FetchedNotificationListState) {
+                          List<NotificationData> data =  state.notificationList;
+                          return Badge(
+                            child: InkWell(
+                              child: Image.asset(
+                                AppAssets.notification_bell,
+                                height: 50,
+                                width:50,
+                              ),
+                              onTap: () async {
+                               await showNotificationListDialog(context,data);
+                               setState(() {
+
+                               });
+                              },
                             )
-                          : Container(),
-                      Consumer<NotificationListProvider>(
-                          child: IconButton(
-                              icon: Icon(Icons.circle_notifications,
-                                  color: AppTheme.electricBlue, //Colors.black,
-                                  size: 32),
-                              onPressed: () {
-                                showNotificationListDialog(context);
-                              }),
-                          builder: (ctx, notifProv, ch) => Badge(
-                                child: ch,
-                                value: notifProv.notificationList.length
-                                        .toString() ??
-                                    '0',
-                                color: Colors.red,
-                                countColor: Colors.white,
-                              ))
-                    ],
-                  )
+
+                            ,
+                            value: data.length.toString() ?? '0',
+                            color: Colors.grey,
+                            countColor: Colors.white,
+                          );
+                        }
+
+                        return Container();
+
+
+                        // return widget here based on BlocA's state
+                      },
+
+
+                    ),
+
+                    /*BlocBuilder<NotificationListCubit,
+                  NotificationListState>(
+                  builder: (context, state) {
+
+                  })*/
+                  ],)
+
                 ],
               ),
             ),
@@ -1112,281 +1155,280 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         },
                       ),
 
-                      divider,
-                      CustomList(
-                        icon: theImage10,
-                        text: 'Unrecognized Transaction',
-                        onSubmit: () {
-                          //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
-                          Navigator.pushNamed(
-                              context, AppRoutes.suspenseAccountRoute);
-                        },
-                      ),
+                divider,
+                CustomList(
+                  icon: theImage10,
+                  text: 'Unrecognized Transaction',
+                  onSubmit: () {
+                    //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
+                    Navigator.pushNamed(
+                        context, AppRoutes.suspenseAccountRoute);
+                  },
+                ),
 
-                      // Padding
+                // Padding
 
-                      divider,
-                      CustomList(
-                        icon: theImage3,
-                        text: 'My Saved Cards',
-                        onSubmit: () {
-                          /* Navigator.of(context)
+                divider,
+                CustomList(
+                  icon: theImage3,
+                  text: 'My Saved Cards',
+                  onSubmit: () {
+                    /* Navigator.of(context)
                             .pushNamed(AppRoutes.savedCardsRoute);*/
-                          /*Navigator.of(context).push(
+                    /*Navigator.of(context).push(
                               MaterialPageRoute(builder: (_) => CardList()));*/
-                          Navigator.of(context)
-                              .pushNamed(AppRoutes.cardListRoute);
-                          CustomLoadingDialog.showLoadingDialog(context, key);
-                        },
-                      ),
-                      divider,
+                    Navigator.of(context).pushNamed(AppRoutes.cardListRoute);
+                    CustomLoadingDialog.showLoadingDialog(context, key);
+                  },
+                ),
+                divider,
 
-                      CustomList(
-                        icon: theImage4,
-                        text: 'My Bank Account',
-                        onSubmit: () {
-                          debugPrint('Bank status from Local DB: ' +
-                              Repository()
-                                  .hiveQueries
-                                  .userData
-                                  .bankStatus
-                                  .toString());
-                          Navigator.of(context)
-                              .pushNamed(AppRoutes.profileBankAccountRoute);
-                          CustomLoadingDialog.showLoadingDialog(context, key);
-                        },
-                      ),
-                      divider,
+                CustomList(
+                  icon: theImage4,
+                  text: 'My Bank Account',
+                  onSubmit: () {
+                    debugPrint('Bank status from Local DB: ' +
+                        Repository()
+                            .hiveQueries
+                            .userData
+                            .bankStatus
+                            .toString());
+                    Navigator.of(context)
+                        .pushNamed(AppRoutes.profileBankAccountRoute);
+                    CustomLoadingDialog.showLoadingDialog(context, key);
+                  },
+                ),
+                divider,
 
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.068,
-                            right: MediaQuery.of(context).size.width * 0.05),
-                        child: CustomExpansionTile(
-                            initiallyExpanded: false,
-                            key: key2,
-                            childrenPadding:
-                                EdgeInsets.only(left: 70, right: 20),
-                            trailingIconSize: 30,
-                            title: CustomText('Settings',
-                                color: AppTheme.brownishGrey,
-                                size: 16,
-                                bold: FontWeight.bold),
-                            leading: theImage5,
-                            children: [
-                              ListTile(
-                                contentPadding: EdgeInsets.zero,
-                                title: CustomText(
-                                  'App Lock and Security',
-                                  bold: FontWeight.w400,
-                                  color: AppTheme.brownishGrey,
-                                ),
-                                trailing: Icon(Icons.chevron_right_rounded),
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .pushNamed(AppRoutes.pinSetupRoute);
-                                  key2.currentState!.initState();
-                                  key2.currentState!.build(context);
-                                },
-                              ),
-                              Divider(
-                                color: Colors.grey,
-                                indent: 0,
-                              ),
-                              ListTile(
-                                contentPadding: EdgeInsets.zero,
-                                title: CustomText(
-                                  'App Update',
-                                  bold: FontWeight.w400,
-                                  color: AppTheme.brownishGrey,
-                                ),
-                                trailing: Icon(Icons.chevron_right_rounded),
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .pushNamed(AppRoutes.appUpdateRoute);
-                                  key2.currentState!.initState();
-                                  key2.currentState!.build(context);
-                                },
-                              ),
-                            ]),
-                      ),
-
-                      divider,
-
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).size.width * 0.068,
-                              right: MediaQuery.of(context).size.width * 0.05),
-                          child: CustomExpansionTile(
-                              initiallyExpanded: false,
-                              key: key3,
-                              childrenPadding:
-                                  EdgeInsets.only(left: 70, right: 20),
-                              trailingIconSize: 30,
-                              title: CustomText('Help Center',
-                                  color: AppTheme.brownishGrey,
-                                  size: 16,
-                                  bold: FontWeight.bold),
-                              leading: theImage8,
-                              children: [
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: CustomText(
-                                    'Help Topics',
-                                    bold: FontWeight.w400,
-                                    color: AppTheme.brownishGrey,
-                                  ),
-                                  trailing: Icon(Icons.chevron_right_rounded),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => UlAppBrowser(
-                                          url: 'https://urbanledger.app/help',
-                                          title: 'Help',
-                                        ),
-                                      ),
-                                    );
-                                    key3.currentState!.initState();
-                                    key3.currentState!.build(context);
-                                  },
-                                ),
-                                Divider(
-                                  color: Colors.grey,
-                                  indent: 0,
-                                ),
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: CustomText(
-                                    'Contact Us',
-                                    bold: FontWeight.w400,
-                                    color: AppTheme.brownishGrey,
-                                  ),
-                                  trailing: Icon(Icons.chevron_right_rounded),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => UlAppBrowser(
-                                          url:
-                                              'https://urbanledger.app/contact/',
-                                          title: 'Contact Us',
-                                        ),
-                                      ),
-                                    );
-                                    key3.currentState!.initState();
-                                    key3.currentState!.build(context);
-                                  },
-                                ),
-                              ])),
-
-                      divider,
-                      CustomList(
-                        icon: theImage12,
-                        text: 'Settlement History',
-                        onSubmit: () {
-                          //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
-                          Navigator.pushNamed(
-                              context, AppRoutes.settlementHistoryRoute);
-                        },
-                      ),
-
-                      divider,
-
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * 0.068,
-                            right: MediaQuery.of(context).size.width * 0.05),
-                        child: CustomExpansionTile(
-                          initiallyExpanded: false,
-                          key: key4,
-                          childrenPadding: EdgeInsets.only(left: 70, right: 20),
-                          trailingIconSize: 30,
-                          title: CustomText('About Us',
-                              color: AppTheme.brownishGrey,
-                              size: 16,
-                              bold: FontWeight.bold),
-                          leading: theImage6,
-                          children: [
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: CustomText(
-                                'About Urban Ledger',
-                                bold: FontWeight.w400,
-                                color: AppTheme.brownishGrey,
-                              ),
-                              trailing: Icon(Icons.chevron_right_rounded),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UlAppBrowser(
-                                      url: 'https://urbanledger.app/help/about',
-                                      title: 'About Urban Ledger',
-                                    ),
-                                  ),
-                                );
-                                key4.currentState!.initState();
-                                key4.currentState!.build(context);
-                              },
-                            ),
-                            Divider(
-                              color: Colors.grey,
-                              indent: 0,
-                            ),
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: CustomText(
-                                'Privacy Policy',
-                                bold: FontWeight.w400,
-                                color: AppTheme.brownishGrey,
-                              ),
-                              trailing: Icon(Icons.chevron_right_rounded),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UlAppBrowser(
-                                      url:
-                                          'https://urbanledger.app/cookie-policy',
-                                      title: 'Privacy Policy',
-                                    ),
-                                  ),
-                                );
-                                key4.currentState!.initState();
-                                key4.currentState!.build(context);
-                              },
-                            ),
-                            Divider(
-                              color: Colors.grey,
-                              indent: 0,
-                            ),
-                            ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              title: CustomText(
-                                'Terms and Conditions',
-                                bold: FontWeight.w400,
-                                color: AppTheme.brownishGrey,
-                              ),
-                              trailing: Icon(Icons.chevron_right_rounded),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UlAppBrowser(
-                                      url:
-                                          'https://urbanledger.app/terms-and-conditions',
-                                      title: 'Terms and Conditions',
-                                    ),
-                                  ),
-                                );
-                                key1.currentState!.initState();
-                                key1.currentState!.build(context);
-                              },
-                            ),
-                          ],
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.068,
+                      right: MediaQuery.of(context).size.width * 0.05),
+                  child: CustomExpansionTile(
+                      initiallyExpanded: false,
+                      key: key2,
+                      childrenPadding:
+                      EdgeInsets.only(left: 70, right: 20),
+                      trailingIconSize: 30,
+                      title: CustomText('Settings',
+                          color: AppTheme.brownishGrey,
+                          size: 16,
+                          bold: FontWeight.bold),
+                      leading: theImage5,
+                      children: [
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: CustomText(
+                            'App Lock and Security',
+                            bold: FontWeight.w400,
+                            color: AppTheme.brownishGrey,
+                          ),
+                          trailing: Icon(Icons.chevron_right_rounded),
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamed(AppRoutes.pinSetupRoute);
+                            key2.currentState!.initState();
+                            key2.currentState!.build(context);
+                          },
                         ),
+                        Divider(
+                          color: Colors.grey,
+                          indent: 0,
+                        ),
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: CustomText(
+                            'App Update',
+                            bold: FontWeight.w400,
+                            color: AppTheme.brownishGrey,
+                          ),
+                          trailing: Icon(Icons.chevron_right_rounded),
+                          onTap: () {
+                            Navigator.of(context)
+                                .pushNamed(AppRoutes.appUpdateRoute);
+                            key2.currentState!.initState();
+                            key2.currentState!.build(context);
+                          },
+                        ),
+                      ]),
+                ),
+
+                divider,
+
+                Padding(
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.068,
+                        right: MediaQuery.of(context).size.width * 0.05),
+                    child: CustomExpansionTile(
+                        initiallyExpanded: false,
+                        key: key3,
+                        childrenPadding:
+                        EdgeInsets.only(left: 70, right: 20),
+                        trailingIconSize: 30,
+                        title: CustomText('Help Center',
+                            color: AppTheme.brownishGrey,
+                            size: 16,
+                            bold: FontWeight.bold),
+                        leading: theImage8,
+                        children: [
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: CustomText(
+                              'Help Topics',
+                              bold: FontWeight.w400,
+                              color: AppTheme.brownishGrey,
+                            ),
+                            trailing: Icon(Icons.chevron_right_rounded),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UlAppBrowser(
+                                    url: 'https://urbanledger.app/help',
+                                    title: 'Help',
+                                  ),
+                                ),
+                              );
+                              key3.currentState!.initState();
+                              key3.currentState!.build(context);
+                            },
+                          ),
+                          Divider(
+                            color: Colors.grey,
+                            indent: 0,
+                          ),
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: CustomText(
+                              'Contact Us',
+                              bold: FontWeight.w400,
+                              color: AppTheme.brownishGrey,
+                            ),
+                            trailing: Icon(Icons.chevron_right_rounded),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UlAppBrowser(
+                                    url:
+                                    'https://urbanledger.app/contact/',
+                                    title: 'Contact Us',
+                                  ),
+                                ),
+                              );
+                              key3.currentState!.initState();
+                              key3.currentState!.build(context);
+                            },
+                          ),
+                        ])),
+
+                divider,
+                CustomList(
+                  icon: theImage12,
+                  text: 'Settlement History',
+                  onSubmit: () {
+                    //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
+                    Navigator.pushNamed(
+                        context, AppRoutes.settlementHistoryRoute);
+                  },
+                ),
+
+                divider,
+
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.068,
+                      right: MediaQuery.of(context).size.width * 0.05),
+                  child: CustomExpansionTile(
+                    initiallyExpanded: false,
+                    key: key4,
+                    childrenPadding: EdgeInsets.only(left: 70, right: 20),
+                    trailingIconSize: 30,
+                    title: CustomText('About Us',
+                        color: AppTheme.brownishGrey,
+                        size: 16,
+                        bold: FontWeight.bold),
+                    leading: theImage6,
+                    children: [
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: CustomText(
+                          'About Urban Ledger',
+                          bold: FontWeight.w400,
+                          color: AppTheme.brownishGrey,
+                        ),
+                        trailing: Icon(Icons.chevron_right_rounded),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UlAppBrowser(
+                                url: 'https://urbanledger.app/help/about',
+                                title: 'About Urban Ledger',
+                              ),
+                            ),
+                          );
+                          key4.currentState!.initState();
+                          key4.currentState!.build(context);
+                        },
                       ),
+                      Divider(
+                        color: Colors.grey,
+                        indent: 0,
+                      ),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: CustomText(
+                          'Privacy Policy',
+                          bold: FontWeight.w400,
+                          color: AppTheme.brownishGrey,
+                        ),
+                        trailing: Icon(Icons.chevron_right_rounded),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UlAppBrowser(
+                                url:
+                                'https://urbanledger.app/cookie-policy',
+                                title: 'Privacy Policy',
+                              ),
+                            ),
+                          );
+                          key4.currentState!.initState();
+                          key4.currentState!.build(context);
+                        },
+                      ),
+                      Divider(
+                        color: Colors.grey,
+                        indent: 0,
+                      ),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: CustomText(
+                          'Terms and Conditions',
+                          bold: FontWeight.w400,
+                          color: AppTheme.brownishGrey,
+                        ),
+                        trailing: Icon(Icons.chevron_right_rounded),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UlAppBrowser(
+                                url:
+                                'https://urbanledger.app/terms-and-conditions',
+                                title: 'Terms and Conditions',
+                              ),
+                            ),
+                          );
+                          key1.currentState!.initState();
+                          key1.currentState!.build(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
 
                       //   padding: EdgeInsets.only(
                       //       top: 7, left: 30, bottom: 7, right: 20),
@@ -1420,52 +1462,52 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       //   ),
                       // ),
 
-                      divider,
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 7,
-                            left: MediaQuery.of(context).size.width * 0.068,
-                            bottom: 7,
-                            right: MediaQuery.of(context).size.width * 0.05),
-                        child: ListTile(
-                          onTap: () async {
-                            await repository.hiveQueries.clearHiveData();
-                            await repository.queries.clearULTables();
-                            await DBProvider.db.clearDatabase();
-                            await CustomSharedPreferences.setBool(
-                                'chatSync', false);
-                            await CustomSharedPreferences.remove(
-                                'primaryBusiness');
-                            repository.hiveQueries.insertUnAuthData(repository
-                                .hiveQueries.unAuthData
-                                .copyWith(seen: true));
-                            // await repository.loginApi.logout();
-                            // restartAppNotifier.value = !restartAppNotifier.value;
-                            RestartWidget.restartApp(context);
-                          },
-                          dense: true,
-                          leading: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // CircleAvatar(
-                              //   radius: 22,
-                              Container(
-                                child: theImage7,
-                              ),
-                              // ),
-                            ],
-                          ),
-                          title: Text(
-                            'Signout',
-                            style: TextStyle(
-                                color: AppTheme.brownishGrey,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
+                divider,
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: 7,
+                      left: MediaQuery.of(context).size.width * 0.068,
+                      bottom: 7,
+                      right: MediaQuery.of(context).size.width * 0.05),
+                  child: ListTile(
+                    onTap: () async {
+                      await repository.hiveQueries.clearHiveData();
+                      await repository.queries.clearULTables();
+                      await DBProvider.db.clearDatabase();
+                      await CustomSharedPreferences.setBool(
+                          'chatSync', false);
+                      await CustomSharedPreferences.remove(
+                          'primaryBusiness');
+                      repository.hiveQueries.insertUnAuthData(repository
+                          .hiveQueries.unAuthData
+                          .copyWith(seen: true));
+                      // await repository.loginApi.logout();
+                      // restartAppNotifier.value = !restartAppNotifier.value;
+                      RestartWidget.restartApp(context);
+                    },
+                    dense: true,
+                    leading: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // CircleAvatar(
+                        //   radius: 22,
+                        Container(
+                          child: theImage7,
                         ),
-                      ),
+                        // ),
+                      ],
+                    ),
+                    title: Text(
+                      'Signout',
+                      style: TextStyle(
+                          color: AppTheme.brownishGrey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
 
-                      /* Container(
+                /* Container(
                       height: 380,
                       decoration: BoxDecoration(
                           image: DecorationImage(
@@ -1491,105 +1533,105 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 },
                               ),
                             ), */
-                      // SizedBox(height: 20),
-                      bottom
-                      //       ]),
-                      // ),
+                // SizedBox(height: 20),
+                bottom
+                //       ]),
+                // ),
 
-                      // Stack(
-                      //   alignment: AlignmentDirectional.topCenter,
-                      //   children: [
-                      //     Padding(
-                      //       padding: EdgeInsets.only(top: 10),
-                      //       child: CustomList(
-                      //         icon: AppAssets.referIcon,
-                      //         text: 'Refer a Friend',
-                      //         onSubmit: () {},
-                      //       ),
-                      //     ),
-                      //     Image.asset(
-                      //       AppAssets.referBackgroundIcon,
-                      //       fit: BoxFit.fitWidth,
-                      //     ),
-                      //     Spacer(),
-                      //
-                      //   ],
-                      // ),
-                    ],
-                  ),
+                // Stack(
+                //   alignment: AlignmentDirectional.topCenter,
+                //   children: [
+                //     Padding(
+                //       padding: EdgeInsets.only(top: 10),
+                //       child: CustomList(
+                //         icon: AppAssets.referIcon,
+                //         text: 'Refer a Friend',
+                //         onSubmit: () {},
+                //       ),
+                //     ),
+                //     Image.asset(
+                //       AppAssets.referBackgroundIcon,
+                //       fit: BoxFit.fitWidth,
+                //     ),
+                //     Spacer(),
+                //
+                //   ],
+                // ),
+              ],
+            ),
           ),
         ));
   }
 
   Widget get appBar => Padding(
-        padding: const EdgeInsets.only(top: 5.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: screenWidth(context) * 0.5,
-              padding: EdgeInsets.only(top: 0),
-              margin: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.1,
-                  vertical: 0),
-              child: Consumer<BusinessProvider>(builder: (context, value, _) {
-                return Text(
-                  value.selectedBusiness.businessName,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: AppTheme.electricBlue,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
-                );
-              }),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserProfileNew()),
-                ).then((value) {
-                  if (value != null) {
-                    if (value) setState(() {});
-                  }
-                });
-              },
-              child: Container(
-                margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.1, right: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.white.withOpacity(0.5),
-                      radius: MediaQuery.of(context).size.height * 0.05,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: (fileName == 'null') ||
-                                (repository.hiveQueries.userData.profilePic
-                                        .toString()
-                                        .isEmpty &&
-                                    repository.hiveQueries.userData.profilePic
-                                        .isEmpty)
-                            ? Image.asset(
-                                'assets/icons/my-account.png',
-                                // height:
-                                //     MediaQuery.of(context).size.height * 0.05,
-                              )
-                            : Container(
-                                width: 200,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100.0),
-                                  child: Image.file(
-                                    File(repository
-                                        .hiveQueries.userData.profilePic),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
+    padding: const EdgeInsets.only(top: 5.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: screenWidth(context) * 0.5,
+          padding: EdgeInsets.only(top: 0),
+          margin: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.1,
+              vertical: 0),
+          child: Consumer<BusinessProvider>(builder: (context, value, _) {
+            return Text(
+              value.selectedBusiness.businessName,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: AppTheme.electricBlue,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            );
+          }),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => UserProfileNew()),
+            ).then((value) {
+              if (value != null) {
+                if (value) setState(() {});
+              }
+            });
+          },
+          child: Container(
+            margin: EdgeInsets.only(
+                left: MediaQuery.of(context).size.width * 0.1, right: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.white.withOpacity(0.5),
+                  radius: MediaQuery.of(context).size.height * 0.05,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: (fileName == 'null') ||
+                        (repository.hiveQueries.userData.profilePic
+                            .toString()
+                            .isEmpty &&
+                            repository.hiveQueries.userData.profilePic
+                                .isEmpty)
+                        ? Image.asset(
+                      'assets/icons/my-account.png',
+                      // height:
+                      //     MediaQuery.of(context).size.height * 0.05,
+                    )
+                        : Container(
+                      width: 200,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100.0),
+                        child: Image.file(
+                          File(repository
+                              .hiveQueries.userData.profilePic),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
+                  ),
+                ),
 
                     SizedBox(
                       width: 10,
@@ -2376,8 +2418,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         height: 20,
       );
 
-  showNotificationListDialog(BuildContext context) {
-    return showGeneralDialog(
+  showNotificationListDialog(BuildContext context,List<NotificationData> dataList){
+    return  showGeneralDialog(
       barrierLabel: "Barrier",
       barrierDismissible: true,
       barrierColor: Colors.black.withOpacity(0.5),
@@ -2387,11 +2429,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         return Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: SizedBox.expand(
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: UserNotifications())),
+            height: MediaQuery.of(context).size.height*0.9 ,
+            child: SizedBox.expand(child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),child: UserNotifications(dataList: dataList,))),
             margin: EdgeInsets.only(bottom: 12, left: 16, right: 16),
             decoration: BoxDecoration(
               color: Colors.white,
