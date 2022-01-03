@@ -21,13 +21,18 @@ class _TradeLicenseScreenState extends State<TradeLicenseScreen>
   int? selectedCameraIndex;
   String? imgPath;
   bool mode = false;
+  bool _initializing= false;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // App state changed before we got the chance to initialize.
     // if (!cameraController.value.isInitialized) {
     //   return;
     // }
+
     debugPrint(state.toString());
+    if(_initializing){
+      return;
+    }
     if (state == AppLifecycleState.inactive) {
       setState(() {
         selectedCameraIndex = null;
@@ -192,7 +197,9 @@ class _TradeLicenseScreenState extends State<TradeLicenseScreen>
 
   void onCapture(context) async {
     if (!cameraController.value.isInitialized) {
-      cameraController.initialize();
+      await cameraController.initialize();
+      _initializing = false;
+
       return null;
     }
 
@@ -225,6 +232,7 @@ class _TradeLicenseScreenState extends State<TradeLicenseScreen>
   @override
   void initState() {
     super.initState();
+    _initializing = true;
     WidgetsBinding.instance?.addObserver(this);
 
     availableCameras().then((value) {
