@@ -111,6 +111,7 @@ dependencies:
   url_launcher: ^6.0.10
   device_display_brightness: ^0.0.6
   pausable_timer: ^1.0.0+3
+  timeago: ^3.1.0
   # qrscan: ^0.3.2
   phone_selector: ^3.0.0
 
