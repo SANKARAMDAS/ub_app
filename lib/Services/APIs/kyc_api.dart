@@ -108,19 +108,27 @@ class KycAPI {
                             jsonDecode(response.body)['status'] == false)
                         ? 2
                         : 0,
-                premiumStatus: jsonDecode(response.body)['planDuration']
-                            .toString() ==
-                        0.toString()
-                    ? 0
-                    : int.tryParse(jsonDecode(response.body)['planDuration']),
+                premiumStatus: isPremium == true
+                    ? int.parse(jsonDecode(response.body)['planDuration'])
+                    : 0,
                 kycStatus2: jsonDecode(response.body)['kycStatus'],
                 kycID: jsonDecode(response.body)['kycId'],
-                emiratesIdVerified: jsonDecode(response.body)['emiratesIdVerified'],
-                tradeLicenseVerified: jsonDecode(response.body)['tradeLicenseVerified'],
-                isEmiratesIdDone: jsonDecode(response.body)['kycStatus'] == 'Rejected' || jsonDecode(response.body)['kycStatus'] == 'Expired' ? false : documentLifecycle(
-                    jsonDecode(response.body)['emiratesIdVerified']),
-                isTradeLicenseDone: jsonDecode(response.body)['kycStatus'] == 'Rejected' || jsonDecode(response.body)['kycStatus'] == 'Expired' ? false : documentLifecycle(
-                    jsonDecode(response.body)['tradeLicenseVerified']),
+                emiratesIdVerified:
+                    jsonDecode(response.body)['emiratesIdVerified'],
+                tradeLicenseVerified:
+                    jsonDecode(response.body)['tradeLicenseVerified'],
+                isEmiratesIdDone:
+                    jsonDecode(response.body)['kycStatus'] == 'Rejected' ||
+                            jsonDecode(response.body)['kycStatus'] == 'Expired'
+                        ? false
+                        : documentLifecycle(
+                            jsonDecode(response.body)['emiratesIdVerified']),
+                isTradeLicenseDone:
+                    jsonDecode(response.body)['kycStatus'] == 'Rejected' ||
+                            jsonDecode(response.body)['kycStatus'] == 'Expired'
+                        ? false
+                        : documentLifecycle(
+                            jsonDecode(response.body)['tradeLicenseVerified']),
               ));
       return jsonDecode(response.body);
     }
