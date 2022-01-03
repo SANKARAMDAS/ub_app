@@ -1,9 +1,12 @@
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/app_assets.dart';
@@ -31,7 +34,7 @@ class VerificationScreen extends StatefulWidget {
   _VerificationScreenState createState() => _VerificationScreenState();
 }
 
-class _VerificationScreenState extends State<VerificationScreen> {
+class _VerificationScreenState extends State<VerificationScreen> with SingleTickerProviderStateMixin {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Repository repository = Repository();
   String? _digit1, _digit2, _digit3, _digit4, _digit5, _digit6;
@@ -51,7 +54,12 @@ class _VerificationScreenState extends State<VerificationScreen> {
   final GlobalKey<State> key = GlobalKey<State>();
   late bool _serviceEnabled;
   final location = Location();
- // final FirebaseAnalytics analytics = FirebaseAnalytics();
+  bool isResendOtpClickable = true;
+  int _resendOtpCount = 30;
+ // late Timer _timer;
+
+  late AnimationController _controller;
+  // final FirebaseAnalytics analytics = FirebaseAnalytics();
 
   @override
   void initState() {
@@ -66,6 +74,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
     fourController.text = ' ';
     fiveController.text = ' ';
     sixController.text = ' ';
+
+    _controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 30));
 
   }
 
@@ -83,6 +94,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
     fourthFocusNode.dispose();
     fifthFocusNode.dispose();
     sixthFocusNode.dispose();
+   // _timer.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -112,28 +125,29 @@ class _VerificationScreenState extends State<VerificationScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               (screenWidth(context) * 0.035).widthBox,
-              Expanded(
+             /* Expanded(
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     padding: EdgeInsets.all(15),
-                    side: BorderSide(color: Color(0xff1058ff), width: 2),
+                    side: BorderSide(color: isResendOtpClickable?Color(0xff1058ff):Colors.grey, width: 2),
                     // color: Colors.white,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
                   onPressed: () async {
                     clearTextControllers();
+                    isResendOtpClickable = false;
                     // _sendVerificationCode(widget.phoneNo.replaceAll(' ', ''));
                   },
                   child: CustomText(
                     'RESEND OTP',
                     size: (18),
-                    color: AppTheme.electricBlue,
+                    color: isResendOtpClickable?AppTheme.electricBlue:Colors.grey,
                     bold: FontWeight.w500,
                   ),
                 ),
               ),
-              (screenWidth(context) * 0.07).widthBox,
+              (screenWidth(context) * 0.07).widthBox,*/
               Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -142,121 +156,146 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     padding: EdgeInsets.only(
                         bottom: 15, top: 15, left: 30, right: 30),
                     primary: validate() == true
-                          ? AppTheme.electricBlue
-                          : AppTheme.coolGrey,
+                        ? AppTheme.electricBlue
+                        : AppTheme.coolGrey,
                   ),
                   child: CustomText(
-                    'VERIFY',
+                    'VERIFY OTP',
                     size: (18),
                     bold: FontWeight.w500,
                     color: Colors.white,
                   ),
                   onPressed: validate() == true
-                        ? () async {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              //TODO: To handle location permission when denied.
+                      ? () async {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      //TODO: To handle location permission when denied.
 
-                              // await checkService();
-                              // final _location = await location.getLocation();
-                              CustomLoadingDialog.showLoadingDialog(
-                                  context, key);
-                              final status = widget.isRegister
-                                  ? await (repository.registerApi
-                                          .registerOtpVerification(
-                                              _digit1! +
-                                                  _digit2! +
-                                                  _digit3! +
-                                                  _digit4!,
-                                              // _location.latitude,
-                                              // _location.longitude,
-                                              0,
-                                              0))
-                                      .timeout(Duration(seconds: 30),
-                                          onTimeout: () async {
-                                      Navigator.of(context).pop();
-                                      return Future.value(null);
-                                    }).catchError((e) {
-                                      oneController.text = ' ';
-                                      twoController.text = ' ';
-                                      threeController.text = ' ';
-                                      fourController.text = ' ';
-                                      fiveController.text = ' ';
-                                      sixController.text = ' ';
-                                      setState(() {});
-                                      e.toString().showSnackBar(context);
-                                      Navigator.of(context).pop();
-                                      return 'Incorrect';
-                                    })
-                                  : await (repository.loginApi
-                                          .loginOtpVerification(
-                                              _digit1! +
-                                                  _digit2! +
-                                                  _digit3! +
-                                                  _digit4!,
-                                              // _location.latitude,
-                                              // _location.longitude,
-                                              0,
-                                              0))
-                                      .catchError((e) {
-                                        oneController.text = ' ';
-                                      twoController.text = ' ';
-                                      threeController.text = ' ';
-                                      fourController.text = ' ';
-                                      fiveController.text = ' ';
-                                      sixController.text = ' ';
-                                      debugPrint('KKKKKKKKKKKKK');
-                                      setState(() {});
-                                      e.toString().showSnackBar(context);
-                                      Navigator.of(context).pop();
-                                      return 'Incorrect';
-                                    });
-                              if (status.isNotEmpty) {
-                                if (status == 'Incorrect') return;
-                                _formKey.currentState!.reset();
-                                if (!widget.isRegister) {
-                                  // await analytics.logLogin();
-                                  LoginRepository().login(
-                                      widget.phoneNo.replaceAll(' ', ''),
-                                      context);
-                                  repository.hiveQueries
-                                      .insertIsAuthenticated(true);
+                            // await checkService();
+                            // final _location = await location.getLocation();
+                            CustomLoadingDialog.showLoadingDialog(context, key);
+                            final status = widget.isRegister
+                                ? await (repository.registerApi
+                                        .registerOtpVerification(
+                                            _digit1! +
+                                                _digit2! +
+                                                _digit3! +
+                                                _digit4!,
+                                            // _location.latitude,
+                                            // _location.longitude,
+                                            0,
+                                            0))
+                                    .timeout(Duration(seconds: 30),
+                                        onTimeout: () async {
+                                    Navigator.of(context).pop();
+                                    return Future.value(null);
+                                  }).catchError((e) {
+                                    oneController.text = ' ';
+                                    twoController.text = ' ';
+                                    threeController.text = ' ';
+                                    fourController.text = ' ';
+                                    fiveController.text = ' ';
+                                    sixController.text = ' ';
+                                    setState(() {});
+                                    e.toString().showSnackBar(context);
+                                    Navigator.of(context).pop();
+                                    return 'Incorrect';
+                                  })
+                                : await (repository.loginApi
+                                        .loginOtpVerification(
+                                            _digit1! +
+                                                _digit2! +
+                                                _digit3! +
+                                                _digit4!,
+                                            // _location.latitude,
+                                            // _location.longitude,
+                                            0,
+                                            0))
+                                    .catchError((e) {
+                                    oneController.text = ' ';
+                                    twoController.text = ' ';
+                                    threeController.text = ' ';
+                                    fourController.text = ' ';
+                                    fiveController.text = ' ';
+                                    sixController.text = ' ';
+                                    debugPrint('KKKKKKKKKKKKK');
+                                    setState(() {});
+                                    e.toString().showSnackBar(context);
+                                    Navigator.of(context).pop();
+                                    return 'Incorrect';
+                                  });
+                            if (status.isNotEmpty) {
+                              if (status == 'Incorrect') return;
+                              _formKey.currentState!.reset();
+                              if (!widget.isRegister) {
+                                // await analytics.logLogin();
+                                LoginRepository().login(
+                                    widget.phoneNo.replaceAll(' ', ''),
+                                    context);
+                                repository.hiveQueries
+                                    .insertIsAuthenticated(true);
+                                LoginModel loginModel = LoginModel(
+                                    mobileNo: widget.phoneNo
+                                        .replaceAll(' ', '')
+                                        .replaceAll('+', ''));
+                                bool isLogin = await Repository()
+                                    .queries
+                                    .isLoginUser(loginModel);
+                                debugPrint("qqqqqqqd : " + isLogin.toString());
+                                if (isLogin) {
                                   Navigator.of(context)
                                     ..pop()
                                     ..pop()
                                     ..pushReplacementNamed(
-                                        repository.hiveQueries.userPin.isEmpty
-                                            ? AppRoutes.setPinRoute
-                                            : AppRoutes.pinLoginRoute,
-                                        arguments: repository
-                                                .hiveQueries.userPin.isEmpty
-                                            ? SetPinRouteArgs(
-                                                '', false, false, false)
-                                            : null);
+                                        AppRoutes.pinLoginRoute,
+                                        arguments: PinRouteArgs(
+                                            widget.phoneNo.replaceAll(' ', ''),
+                                            true));
                                 } else {
-                                  //  await analytics.logSignUp(signUpMethod: 'SignUp');
-                                  /*    var anaylticsEvents = await AnalyticsEvents(context);
-                            anaylticsEvents.signUpEvent(withReferral);*/
-
-                                  Navigator.of(context)
-                                    ..pop()
-                                    ..pop()
-                                    ..pushReplacementNamed(
-                                        AppRoutes.signupRoute,
-                                        arguments:
-                                            widget.phoneNo.replaceAll(' ', ''));
+                                  if (repository.hiveQueries.userPin.isEmpty) {
+                                    Navigator.of(context)
+                                      ..pop()
+                                      ..pop()
+                                      ..pushReplacementNamed(
+                                          AppRoutes.setPinRoute,
+                                          arguments: SetPinRouteArgs(
+                                              '', false, false, false));
+                                  } else {
+                                    Navigator.of(context)
+                                      ..pop()
+                                      ..pop()
+                                      ..pushReplacementNamed(
+                                          AppRoutes.pinLoginRoute,
+                                          arguments: PinRouteArgs(
+                                              widget.phoneNo
+                                                  .replaceAll(' ', ''),
+                                              true));
+                                  }
                                 }
                               } else {
-                                Navigator.of(context)
-                                  ..pop()
-                                  ..pop()
-                                  ..pushReplacementNamed(AppRoutes.signupRoute,
-                                      arguments:
-                                          widget.phoneNo.replaceAll(' ', ''));
-                              }
-                            }
-                          }
-                        : () {},
+                                //  await analytics.logSignUp(signUpMethod: 'SignUp');
+                                /*    var anaylticsEvents = await AnalyticsEvents(context);
+                            anaylticsEvents.signUpEvent(withReferral);*/
+
+                          Navigator.of(context)
+                            ..pop()
+                            ..pop()
+                            ..pushReplacementNamed(
+                                AppRoutes.signupRoute,
+                                arguments:
+                                widget.phoneNo.replaceAll(' ', ''));
+                        }
+                      } else {
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop()
+                          ..pushReplacementNamed(AppRoutes.signupRoute,
+                              arguments:
+                              widget.phoneNo.replaceAll(' ', ''));
+                      }
+                    }
+                  }
+                      : () {},
 
                 ),
               ),
@@ -306,7 +345,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: oneController,
                             onSaved: (value) => _digit1 = value,
@@ -316,7 +355,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         ).flexible,
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: twoController,
                             onSaved: (value) => _digit2 = value,
@@ -327,7 +366,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         ).flexible,
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: threeController,
                             onSaved: (value) => _digit3 = value,
@@ -338,7 +377,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         ).flexible,
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: fourController,
                             onSaved: (value) => _digit4 = value,
@@ -349,7 +388,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         ).flexible,
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                               controller: fiveController,
                               onSaved: (value) => _digit5 = value,
@@ -359,7 +398,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         ).flexible,
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 15.0),
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: sixController,
                             focusNode: sixthFocusNode,
@@ -368,6 +407,47 @@ class _VerificationScreenState extends State<VerificationScreen> {
                             onSaved: (value) => _digit6 = value,
                           ),
                         ).flexible,
+                      ],
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 40.0, vertical: 15.0),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          child: CustomText(
+                            isResendOtpClickable?'RESEND CODE':'RESEND CODE IN ',
+                            size: (18),
+                            color: isResendOtpClickable?AppTheme.electricBlue:Colors.grey,
+                            bold: FontWeight.w800,
+                          ),
+                          onTap:isResendOtpClickable? (){
+                            clearTextControllers();
+                            setState(() {
+                              isResendOtpClickable = false;
+                              _resendOtpCount = 30;
+                            });
+                            //startTimer();
+
+                            _controller.forward();
+                          }:(){},
+                        ),
+                        if(!isResendOtpClickable)
+                          Countdown(
+                            animation: StepTween(
+                              begin: 30,
+                              end: 0,
+                            ).animate(_controller)..addStatusListener((status) {
+                              if(status == AnimationStatus.completed){
+                                _controller.reset();
+                                setState(() {
+                                isResendOtpClickable = true;
+                              });
+                              }
+                            }),
+                          )
                       ],
                     ),
                   ),
@@ -391,8 +471,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
     );
   }
 
-
-
   Widget otpTextField(
       {required FocusNode focusNode,
       required void Function(String?) onSaved,
@@ -400,49 +478,68 @@ class _VerificationScreenState extends State<VerificationScreen> {
       FocusNode? previousFocusNode,
       required TextEditingController controller}) {
     return Container(
+      height: 75,
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(width: 3.0, color: AppTheme.coolGrey),
-        ),
-      ),
-      child: TextFormField(
-        controller: controller,
-        enableInteractiveSelection: false,
-        textAlign: TextAlign.center,
-        focusNode: focusNode,
-        onSaved: onSaved,
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        validator: (value) {
-          if (value!.isEmpty || value.isValidOneDigitNumber == false) {
-            return ' ';
-          } else {
-            return null;
-          }
-        },
-        onChanged: nextFocusNode == null
-            ? null
-            : (value) {
-                if (value.length > 0 && value !="") {
-                  FocusScope.of(context).requestFocus(nextFocusNode);
-                } else {
-                  FocusScope.of(context).requestFocus(previousFocusNode);
-                }
-              },
-        keyboardType: TextInputType.phone,
-        maxLength: 1,
-        cursorColor: AppTheme.coolGrey,
-        style: TextStyle(
-            color: AppTheme.coolGrey,
-            fontSize: 28,
-            fontWeight: FontWeight.bold),
-        decoration: InputDecoration(
-          counterText: '',
-          enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: AppTheme.coolGrey, style: BorderStyle.solid)),
-          focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: AppTheme.coolGrey, style: BorderStyle.solid)),
+          // border: Border(
+          //   bottom: BorderSide(width: 3.0, color: AppTheme.coolGrey),
+          // ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ],
+          // border: Border.all(
+          //   color: AppTheme.coolGrey,
+          //   width: 0.5
+          // ),
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.white),
+      child: Align(
+        alignment: Alignment.center,
+        child: TextFormField(
+          controller: controller,
+          enableInteractiveSelection: false,
+          textAlign: TextAlign.center,
+          focusNode: focusNode,
+          onSaved: onSaved,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          validator: (value) {
+            if (value!.isEmpty || value.isValidOneDigitNumber == false) {
+              return ' ';
+            } else {
+              return null;
+            }
+          },
+          onChanged: nextFocusNode == null
+              ? null
+              : (value) {
+                  if (value.length > 0 && value != "") {
+                    FocusScope.of(context).requestFocus(nextFocusNode);
+                  } else {
+                    FocusScope.of(context).requestFocus(previousFocusNode);
+                  }
+                  if(validate()){
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  }
+                },
+          keyboardType: TextInputType.phone,
+          // obscureText: true,
+          maxLength: 1,
+          cursorColor: AppTheme.coolGrey,
+          style: TextStyle(
+              color: AppTheme.coolGrey,
+              fontSize: 28,
+              fontWeight: FontWeight.bold),
+          decoration: InputDecoration(
+            counterText: '',
+            hintText: '_',
+            hintStyle: TextStyle(color: AppTheme.coolGrey),
+            enabledBorder: UnderlineInputBorder(borderSide: BorderSide.none),
+            focusedBorder: UnderlineInputBorder(borderSide: BorderSide.none),
+          ),
         ),
       ),
     );
@@ -591,4 +688,33 @@ class _VerificationScreenState extends State<VerificationScreen> {
         .checkUserAvailability(widget.phoneNo.replaceAll(' ', ''));
     return response;
   } */
+}
+
+class Countdown extends AnimatedWidget {
+  Countdown({Key? key, this.animation}) : super(key: key, listenable: animation!);
+  Animation<int>? animation;
+
+
+  @override
+  build(BuildContext context) {
+    Duration clockTimer = Duration(seconds: animation!.value);
+
+    String timerText =
+        '0${clockTimer.inMinutes.remainder(60).toString()}:${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')} secs';
+
+    /*return Text(
+      "$timerText",
+      style: TextStyle(
+        fontSize: 110,
+        color: Theme.of(context).primaryColor,
+      ),
+    );*/
+
+   return CustomText(
+      '${timerText}',
+      size: (18),
+      color: AppTheme.electricBlue,
+      bold: FontWeight.w800,
+    );
+  }
 }

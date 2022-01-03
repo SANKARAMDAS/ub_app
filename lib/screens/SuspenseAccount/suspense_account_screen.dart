@@ -1938,7 +1938,7 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
     // bool _value = false;
     int val = -1;
     String? Bid;
-    bool isClickable = true;
+    bool isClickable = false;
     bool bottomsheetLoading = false;
 
     loading == true
@@ -1979,6 +1979,7 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                                         listen: false)
                                     .businesses[index]
                                     .businessId;
+                                isClickable = true;
                               });
                               debugPrint(
                                   'Check this Business ID: ' + Bid.toString());

@@ -507,7 +507,12 @@ class Router {
             builder: (_) => NFCCard(), settings: routeSettings);
       case (AppRoutes.pinLoginRoute):
         return MaterialPageRoute(
-            builder: (_) => PinLoginScreen(), settings: routeSettings);
+            builder: (_) => PinLoginScreen(
+              isLogin: (routeSettings.arguments as PinRouteArgs)
+                          .isLogin,
+                          mobileNo: (routeSettings.arguments as PinRouteArgs)
+                          .mobileNo,
+            ), settings: routeSettings);
       case (AppRoutes.setPinRoute):
         return MaterialPageRoute(
             builder: (_) => SetPinScreen(

@@ -570,7 +570,6 @@ class _LedgerViewState extends State<LedgerView> {
     });
 
     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      // Navigator.of(context).pop();
       setState(() {
         isLoading = false;
       });
@@ -579,42 +578,6 @@ class _LedgerViewState extends State<LedgerView> {
       setState(() {
         isLoading = false;
       });
-      debugPrint('Check the value : ' + value['status'].toString());
-
-      if (value != null && value.toString().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            Repository().hiveQueries.insertUserData(Repository()
-                .hiveQueries
-                .userData
-                .copyWith(
-                    kycStatus:
-                        (value['isVerified'] == true && value['status'] == true)
-                            ? 1
-                            : (value['emirates'] &&
-                                    value['tl'] == true &&
-                                    value['status'] == false)
-                                ? 2
-                                : 0,
-                    premiumStatus:
-                        value['planDuration'].toString() == 0.toString()
-                            ? 0
-                            : int.tryParse(value['planDuration']),
-                    isEmiratesIdDone: value['emirates'] ?? false,
-                    isTradeLicenseDone: value['tl'] ?? false));
-
-            //TODO Need to set emirates iD and TradeLicense ID Values
-            // isEmiratesIdDone = value['emirates'] ?? false;
-            // isTradeLicenseDone = value['tl'] ?? false;
-            // status = value['status'] ?? false;
-            // isPremium = value['premium'] ?? false;
-
-            // debugPrint('check1' + status.toString());
-            // debugPrint('check' + isEmiratesIdDone.toString());
-          });
-          return;
-        }
-      }
     });
     calculatePremiumDate();
     setState(() {
@@ -623,7 +586,7 @@ class _LedgerViewState extends State<LedgerView> {
   }
 
   Widget bottomButtons() => SafeArea(
-    child: Container(
+        child: Container(
           // color: Colors.white,
           decoration: BoxDecoration(
               boxShadow: [
@@ -737,7 +700,7 @@ class _LedgerViewState extends State<LedgerView> {
             ),
           ),
         ),
-  );
+      );
 
   void displayModalBottomSheet(
       BuildContext context, CustomerModel customerModel, sendMessage) {
@@ -787,7 +750,11 @@ class _LedgerViewState extends State<LedgerView> {
                               .getCustomerID(
                                   mobileNumber:
                                       widget.customerModel.mobileNo.toString())
-                              .timeout(Duration(seconds: 30),
+                              .catchError((e) {
+                            Navigator.of(context).pop();
+                            'Please check internet connectivity and try again.'
+                                .showSnackBar(context);
+                          }).timeout(Duration(seconds: 30),
                                   onTimeout: () async {
                             Navigator.of(context).pop();
                             return Future.value(null);
@@ -868,7 +835,12 @@ class _LedgerViewState extends State<LedgerView> {
                           } else {
                             Map<String, dynamic> isTransaction =
                                 await repository.paymentThroughQRApi
-                                    .getTransactionLimit(context);
+                                    .getTransactionLimit(context)
+                                    .catchError((e) {
+                              Navigator.of(context).pop();
+                              'Please check internet connectivity and try again.'
+                                  .showSnackBar(context);
+                            });
                             if (!(isTransaction)['isError']) {
                               Navigator.of(context).pop(true);
                               // showBankAccountDialog();
@@ -945,7 +917,17 @@ class _LedgerViewState extends State<LedgerView> {
                                       .userData
                                       .premiumStatus ==
                                   0)) {
-                            if (Repository().hiveQueries.userData.kycStatus ==
+                            if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository().hiveQueries.userData.kycStatus ==
                                 2) {
                               //Navigator.of(context).pop(true);
 

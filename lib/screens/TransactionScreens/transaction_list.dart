@@ -655,58 +655,19 @@ class _TransactionListScreenState extends State<TransactionListScreen>
         });
   }
 
-  Future getKyc() async {
+Future getKyc() async {
     setState(() {
       isLoading = true;
     });
-
     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      // Navigator.of(context).pop();
       setState(() {
         isLoading = false;
       });
       'Something went wrong. Please try again later.'.showSnackBar(context);
     }).then((value) {
-      if (mounted)
-        setState(() {
-          isLoading = false;
-        });
-      debugPrint('Check the value : ' + value['status'].toString());
-
-      if (value != null && value.toString().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            Repository().hiveQueries.insertUserData(Repository()
-                .hiveQueries
-                .userData
-                .copyWith(
-                    kycStatus:
-                        (value['isVerified'] == true && value['status'] == true)
-                            ? 1
-                            : (value['emirates'] &&
-                                    value['tl'] == true &&
-                                    value['status'] == false)
-                                ? 2
-                                : 0,
-                    premiumStatus:
-                        value['planDuration'].toString() == 0.toString()
-                            ? 0
-                            : int.tryParse(value['planDuration']),
-                    isEmiratesIdDone: value['emirates'] ?? false,
-                    isTradeLicenseDone: value['tl'] ?? false));
-
-            //TODO Need to set emirates iD and TradeLicense ID Values
-            // isEmiratesIdDone = value['emirates'] ?? false;
-            // isTradeLicenseDone = value['tl'] ?? false;
-            // status = value['status'] ?? false;
-            // isPremium = value['premium'] ?? false;
-
-            // debugPrint('check1' + status.toString());
-            // debugPrint('check' + isEmiratesIdDone.toString());
-          });
-          return;
-        }
-      }
+      setState(() {
+        isLoading = false;
+      });
     });
     calculatePremiumDate();
     setState(() {
@@ -1286,7 +1247,17 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                                     .userData
                                                     .premiumStatus ==
                                                 0)) {
-                                          if (Repository()
+                                          if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository()
                                                   .hiveQueries
                                                   .userData
                                                   .kycStatus ==
@@ -1476,7 +1447,17 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                           .userData
                                           .premiumStatus ==
                                       0)) {
-                                if (Repository()
+                               if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository()
                                         .hiveQueries
                                         .userData
                                         .kycStatus ==
@@ -3719,9 +3700,9 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                         }
                                       } else {
                                         Navigator.of(context).pop();
-                          'Please check your internet connection or try again later.'
-                              .showSnackBar(context);
-                        }
+                                        'Please check your internet connection or try again later.'
+                                            .showSnackBar(context);
+                                      }
                                       BlocProvider.of<ContactsCubit>(context)
                                           .getContacts(
                                               Provider.of<BusinessProvider>(
@@ -5642,10 +5623,10 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                             }
                                             // await saveContacts();
                                           } else {
-                                        Navigator.of(context).pop();
-                          'Please check your internet connection or try again later.'
-                              .showSnackBar(context);
-                        }
+                                            Navigator.of(context).pop();
+                                            'Please check your internet connection or try again later.'
+                                                .showSnackBar(context);
+                                          }
                                           BlocProvider.of<ContactsCubit>(
                                                   context)
                                               .getContacts(
@@ -6075,8 +6056,10 @@ class _TransactionListScreenState extends State<TransactionListScreen>
   }
 
   Future<String?> getSize(String message) async {
+    
     final apiResponse = await repository.ledgerApi.networkImageToFile2(message);
     int fileSize = File(apiResponse).lengthSync();
+    debugPrint('SSS : ' + fileSize.toString());
     const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
     var i = (log(fileSize) / log(1024)).floor();
     String fileSizewith =
@@ -6120,28 +6103,39 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                     GestureDetector(
                         onTap: () async {
                           debugPrint(filePath);
-                          if(isPlatformiOS()){
+                          if (isPlatformiOS()) {
                             var documentDirectory =
-                              await (getExternalStorageDirectory());  
+                                await (getApplicationDocumentsDirectory());
+                            String path = documentDirectory!.absolute.path;
+                            if (await File(path + message.details!).exists()) {
+                              debugPrint('yesss');
+                              // await PdfDocument.openFile(path+message.details!);
+                              File(path + message.details!)
+                                  .open(mode: FileMode.read);
+                              final _result =
+                                  await OpenFile.open(path + message.details!);
+                              print(_result.message);
+                            } else {
+                              debugPrint('noooo');
+                            }
                           } else {
                             var documentDirectory =
-                              await (getApplicationDocumentsDirectory());
+                                await (getApplicationDocumentsDirectory());
+                            String path = documentDirectory!.absolute.path;
+                            if (await File(path + message.details!).exists()) {
+                              debugPrint('yesss');
+                              // await PdfDocument.openFile(path+message.details!);
+                              File(path + message.details!)
+                                  .open(mode: FileMode.read);
+                              final _result =
+                                  await OpenFile.open(path + message.details!);
+                              print(_result.message);
+                            } else {
+                              debugPrint('noooo');
+                            }
                           }
-                          var documentDirectory =
-                              await (getExternalStorageDirectory());
-                          String path = documentDirectory!.absolute.path +
-                              "/filereader/files/";
-                          if (await File(path + message.details!).exists()) {
-                            debugPrint('yesss');
-                            // await PdfDocument.openFile(path+message.details!);
-                            File(path + message.details!)
-                                .open(mode: FileMode.read);
-                            final _result =
-                                await OpenFile.open(path + message.details!);
-                            print(_result.message);
-                          } else {
-                            debugPrint('noooo');
-                          }
+                          // var documentDirectory =
+                          //     await (getExternalStorageDirectory());
                         },
                         child: Container(
                           constraints: BoxConstraints(

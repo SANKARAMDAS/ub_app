@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Utility/app_services.dart';
 import 'package:urbanledger/Services/repository.dart';
@@ -154,7 +155,7 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
                           CustomText(
                             incorrectPinCount > 3
                                 ? 'Too many incorrect attempts.'
-                                : 'Wrong PIN. ${4 - incorrectPinCount} attempts left',
+                                : 'You have entered an invalid PIN. You have ${4 - incorrectPinCount} more attempts left.',
                             size: 16,
                             bold: FontWeight.w400,
                             color: AppTheme.brownishGrey,
@@ -323,7 +324,9 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
       pinNotifier.value = pinNotifier.value + str;
     }
     if (pinNotifier.value.length == 4) {
-      if (repository.hiveQueries.userPin == pinNotifier.value) {
+      LoginModel loginModel = LoginModel(mobileNo: Repository().hiveQueries.userData.mobileNo, pin: pinNotifier.value);
+      bool isLogin = await Repository().queries.fetchLoginUser(loginModel);
+      if (isLogin) {
         if (widget.fromPinSetupScreen != null) {
           if (widget.fromPinSetupScreen!) {
             Navigator.of(context).pop(true);

@@ -350,68 +350,24 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
         });
   }
 
-  Future getKyc() async {
-    if (mounted) {
-      setState(() {
-        isLoading = true;
-      });
-    }
-
+Future getKyc() async {
+    setState(() {
+      isLoading = true;
+    });
     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      // Navigator.of(context).pop();
       setState(() {
         isLoading = false;
       });
       'Something went wrong. Please try again later.'.showSnackBar(context);
     }).then((value) {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-      // debugPrint('Check the value : ' + value['status'].toString());
-
-      if (value != null && value.toString().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            Repository().hiveQueries.insertUserData(Repository()
-                .hiveQueries
-                .userData
-                .copyWith(
-                    kycStatus:
-                        (value['isVerified'] == true && value['status'] == true)
-                            ? 1
-                            : (value['emirates'] &&
-                                    value['tl'] == true &&
-                                    value['status'] == false)
-                                ? 2
-                                : 0,
-                    premiumStatus:
-                        value['planDuration'].toString() == 0.toString()
-                            ? 0
-                            : int.tryParse(value['planDuration']),
-                    isEmiratesIdDone: value['emirates'] ?? false,
-                    isTradeLicenseDone: value['tl'] ?? false));
-
-            //TODO Need to set emirates iD and TradeLicense ID Values
-            // isEmiratesIdDone = value['emirates'] ?? false;
-            // isTradeLicenseDone = value['tl'] ?? false;
-            // status = value['status'] ?? false;
-            // isPremium = value['premium'] ?? false;
-
-            // // debugPrint('check1' + status.toString());
-            // // debugPrint('check' + isEmiratesIdDone.toString());
-          });
-          return;
-        }
-      }
-    });
-    calculatePremiumDate();
-    if (mounted) {
       setState(() {
         isLoading = false;
       });
-    }
+    });
+    calculatePremiumDate();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   getCar() async {
@@ -884,7 +840,20 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
                                               Navigator.of(context).pop();
                                               return Future.value(null);
                                             });
-
+                                            List<CustomerModel> customerModel =
+                                            await repository.queries
+                                                .getCustomerDetails(widget.mobileNo ?? widget.model!.mobileNo!,
+                                                    Provider.of<BusinessProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .selectedBusiness
+                                                        .businessId);
+                                        debugPrint('ss ::' +
+                                            customerModel.first
+                                                .toJson()
+                                                .toString());
+                                        CustomerModel _customerModel =
+                                            customerModel.first;
                                             final _transactionModel =
                                                 TransactionModel()
                                                   ..transactionId = Uuid().v1()
@@ -893,7 +862,7 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
                                                   ..transactionType =
                                                       TransactionType.Pay
                                                   ..customerId =
-                                                      widget.customerId
+                                                      _customerModel.customerId
                                                   ..date = DateTime.now()
                                                   ..attachments = []
                                                   ..balanceAmount = amt - amount

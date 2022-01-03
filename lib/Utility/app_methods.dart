@@ -64,6 +64,16 @@ void equalPressed() {
   }
 }
 
+bool documentLifecycle(String document) {
+  if(document == 'Pending'){
+    return false;
+  } else if (document == 'Rejected'){
+    return false;
+  } else {
+    return true;
+  }
+}
+
 String removeDecimalif0(double? number) {
   return number == null
       ? ''
@@ -146,9 +156,11 @@ Map<String, String> apiAuthHeader() {
 }
 
 Map<String, String> apiAuthHeaderWithOnlyToken() {
+  var token = Repository().hiveQueries.token;
+  print(token);
   return {
     // "Content-Type": "application/json",
-    "Authorization": Repository().hiveQueries.token
+    "Authorization": token
   };
 }
 

@@ -40,7 +40,7 @@ class WelcomeScreen extends StatelessWidget {
             ),
             onPressed: () async {
               Navigator.of(context)
-                  .pushNamed(AppRoutes.loginRoute, arguments: true);
+                  .pushReplacementNamed(AppRoutes.loginRoute, arguments: true);
             },
             child: CustomText(
               'Sign up',

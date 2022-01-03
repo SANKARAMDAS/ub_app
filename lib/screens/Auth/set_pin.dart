@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
+import 'package:urbanledger/Utility/pin_code_strenth.dart';
+import 'package:urbanledger/main.dart';
 import '../Components/extensions.dart';
 // import 'package:local_auth/local_auth.dart';
 // import 'package:urbanledger/Models/routeArgs.dart';
@@ -106,9 +109,9 @@ class _SetPinScreenState extends State<SetPinScreen> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              SizedBox(
-                                height: 12,
-                              ),
+                              // SizedBox(
+                              //   height: 7,
+                              // ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -174,9 +177,9 @@ class _SetPinScreenState extends State<SetPinScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(AppAssets.lock1Icon),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
+                                  // SizedBox(
+                                  //   width: 8,
+                                  // ),
                                   Text(
                                     'Confirm PIN',
                                     style: TextStyle(
@@ -352,9 +355,19 @@ class _SetPinScreenState extends State<SetPinScreen> {
       if (setPinNotifier.value.length < 4) {
         setPinNotifier.value = setPinNotifier.value + str;
         if (setPinNotifier.value.length == 4) {
-          Navigator.of(context).pushNamed(AppRoutes.setPinRoute,
-              arguments: SetPinRouteArgs(setPinNotifier.value, true,
-                  widget.isResetPinState, widget.isRegister));
+          if(PincodeStrenth().checkPincodeStrenth(setPinNotifier.value)){
+            setState(() {
+              showError = true;
+            });
+            showWeakPinDialog(context);
+
+          }
+          else{
+            Navigator.of(context).pushNamed(AppRoutes.setPinRoute,
+                arguments: SetPinRouteArgs(setPinNotifier.value, true,
+                    widget.isResetPinState, widget.isRegister));
+          }
+
         }
       }
     } else {
@@ -366,9 +379,24 @@ class _SetPinScreenState extends State<SetPinScreen> {
             _repository.hiveQueries.setPinStatus(true);
             _repository.hiveQueries.setFingerPrintStatus(true);
             if (widget.showConfirmPinState && widget.isResetPinState) {
+
+              debugPrint('CCCCCCCCCC : '+_repository.hiveQueries.userData.toString());
+              LoginModel loginModel = LoginModel(
+                mobileNo: _repository.hiveQueries.userData.mobileNo,
+                pin: confirmPinNotifier.value,
+                status: true,
+              );
+              repository.queries.checkLoginUser(loginModel);
               'Pin Reset Successful'.showSnackBar(context);
               await Future.delayed(Duration(seconds: 1));
             }
+            debugPrint('CCCCCCCCCC : '+_repository.hiveQueries.userData.toString());
+              LoginModel loginModel = LoginModel(
+                mobileNo: _repository.hiveQueries.userData.mobileNo,
+                pin: confirmPinNotifier.value,
+                status: true,
+              );
+              repository.queries.checkLoginUser(loginModel);
             Navigator.of(context)
               ..pop()
               ..pop();
@@ -378,14 +406,130 @@ class _SetPinScreenState extends State<SetPinScreen> {
                 : AppRoutes.mainRoute);
             // Navigator.of(context).pushNamed(AppRoutes.introscreenRoute, arguments: IntroRouteArgs(widget.isRegister));
           } else {
-            confirmPinNotifier.value = '';
-            setState(() {
+            
+            Future.delayed(Duration(milliseconds: 300),
+                                              () {
+                                                confirmPinNotifier.value = '';
+                                                setState(() {
               showError = true;
             });
+                                            // Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
+                                          });
+            
           }
         }
       }
     }
+  }
+
+  showWeakPinDialog(BuildContext ctx){
+    return  showGeneralDialog(
+      barrierLabel: "Barrier",
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: Duration(milliseconds: 300),
+      context: context,
+      pageBuilder: (_, __, ___) {
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            height: MediaQuery.of(context).size.height*0.3 ,
+            child: SizedBox.expand(child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),child: Scaffold(body: Container(child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+              Container(
+                  padding: EdgeInsets.only(top:16),
+                  alignment: Alignment.center,
+                  child:  Text('Weak PIN',style: TextStyle(color: Colors.red,fontSize: 20,fontWeight: FontWeight.w500))),
+                SizedBox(height: 8,),
+                Image.asset(
+                  AppAssets.weak_pin,
+                  height: 50,
+                  width: 50,
+                ),
+                SizedBox(height: 8,),
+
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal:40),
+                child: CustomText('This PIN Can Be Easily Guessed. Please try again with a different PIN'
+                ,
+                  size: 18,
+                  centerAlign: true,
+                  color: AppTheme.brownishGrey,
+                  bold: FontWeight.w400,
+                ),
+              ),
+              SizedBox(height: 8,),
+
+            ],)),
+              bottomNavigationBar: Row(children: [
+                Expanded(
+                child: Padding(
+                padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                  onPressed: () {
+
+
+                    Navigator.of(context).pushNamed(AppRoutes.setPinRoute,
+                        arguments: SetPinRouteArgs(setPinNotifier.value, true,
+                            widget.isResetPinState, widget.isRegister));
+                  },
+                  child: CustomText(
+                    'PROCEED',
+                    size: (18),
+                    bold: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(15),
+                    primary: Colors.grey[400],
+                      elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  )),
+            ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: () {
+                      setPinNotifier.value = '';
+                      Navigator.of(context).pop();
+                    },
+                    child: CustomText(
+                      'CHANGE PIN',
+                      size: (18),
+                      bold: FontWeight.w500,
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(15),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      elevation: 0
+                    )),
+              ),
+            )
+            ],)
+
+              ,))),
+            margin: EdgeInsets.only(bottom: 12, left: 16, right: 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: new BorderRadius.all(new Radius.circular(12.0)),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (_, anim, __, child) {
+        return SlideTransition(
+          position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim),
+          child: child,
+        );
+      },
+    );
   }
 
   void deleteText() {
@@ -437,15 +581,16 @@ class PinField extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         // padding: const EdgeInsets.only(left: 15.0, right: 15),
-        padding: EdgeInsets.all(22),
+        padding: EdgeInsets.all(10),
         child: new Container(
-          height: 20,
-          width: 20,
+          height: 75,
+          width: 50,
           alignment: Alignment.center,
           decoration: new BoxDecoration(
               color: Colors.white,
               border: new Border.all(width: 2.0, color: Colors.white),
-              borderRadius: new BorderRadius.circular(20)),
+              borderRadius: new BorderRadius.circular(7)
+              ),
           child: Container(
             height: 18,
             width: 18,

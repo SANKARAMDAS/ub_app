@@ -113,13 +113,11 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
   bool isPremium = false;
   bool isNotAccount = false;
 
-  Future getKyc() async {
+Future getKyc() async {
     setState(() {
       isLoading = true;
     });
-
     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      // Navigator.of(context).pop();
       setState(() {
         isLoading = false;
       });
@@ -128,49 +126,13 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
       setState(() {
         isLoading = false;
       });
-      debugPrint('Check the value : ' + value['status'].toString());
-
-      if (value != null && value.toString().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            Repository().hiveQueries.insertUserData(Repository()
-                .hiveQueries
-                .userData
-                .copyWith(
-                    kycStatus:
-                        (value['isVerified'] == true && value['status'] == true)
-                            ? 1
-                            : (value['emirates'] &&
-                                    value['tl'] == true &&
-                                    value['status'] == false)
-                                ? 2
-                                : 0,
-                    premiumStatus:
-                        value['planDuration'].toString() == 0.toString()
-                            ? 0
-                            : int.tryParse(value['planDuration']),
-                    isEmiratesIdDone: value['emirates'] ?? false,
-                    isTradeLicenseDone: value['tl'] ?? false));
-
-            //TODO Need to set emirates iD and TradeLicense ID Values
-            // isEmiratesIdDone = value['emirates'] ?? false;
-            // isTradeLicenseDone = value['tl'] ?? false;
-            // status = value['status'] ?? false;
-            // isPremium = value['premium'] ?? false;
-
-            // debugPrint('check1' + status.toString());
-            // debugPrint('check' + isEmiratesIdDone.toString());
-          });
-          return;
-        }
-      }
     });
     calculatePremiumDate();
     setState(() {
       isLoading = false;
     });
   }
-
+  
   getRecentBankAcc() async {
     if (mounted) {
       setState(() {
@@ -1610,7 +1572,11 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                                   context, key);
                               var Cid = await repository.customerApi
                                   .getCustomerID(mobileNumber: phone.toString())
-                                  .timeout(Duration(seconds: 30),
+                                  .catchError((e) {
+                                Navigator.of(context).pop();
+                                'Please check internet connectivity and try again.'
+                                    .showSnackBar(context);
+                              }).timeout(Duration(seconds: 30),
                                       onTimeout: () async {
                                 Navigator.of(context).pop();
                                 return Future.value(null);
@@ -1711,7 +1677,12 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                                 // );
                                 Map<String, dynamic> isTransaction =
                                     await repository.paymentThroughQRApi
-                                        .getTransactionLimit(context);
+                                        .getTransactionLimit(context)
+                                        .catchError((e) {
+                                  Navigator.of(context).pop();
+                                  'Please check internet connectivity and try again.'
+                                      .showSnackBar(context);
+                                });
                                 if (!(isTransaction)['isError']) {
                                   Navigator.of(context).pop(true);
                                   // showBankAccountDialog();
@@ -1802,7 +1773,17 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                                           .userData
                                           .premiumStatus ==
                                       0)) {
-                                if (Repository()
+                                 if(Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Rejected' || Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .kycStatus2 == 'Expired') {
+                                          MerchantBankNotAdded
+                                          .showBankNotAddedDialog(context,
+                                              'userKYCExpired');
+                                } else if (Repository()
                                         .hiveQueries
                                         .userData
                                         .kycStatus ==
@@ -1887,7 +1868,6 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                                   // Navigator.of(context).pop(true);
                                   _customerModel.chatId = widget.chatId;
 
-
                                   var anaylticsEvents =
                                       AnalyticsEvents(context);
                                   await anaylticsEvents.initCurrentUser();
@@ -1897,7 +1877,7 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                                   Navigator.of(context).popAndPushNamed(
                                       AppRoutes.requestTransactionRoute,
                                       arguments: ReceiveTransactionArgs(
-                                          _customerModel,widget.customerId!));
+                                          _customerModel, widget.customerId!));
                                   // Navigator.push(
                                   //   context,
                                   //   MaterialPageRoute(

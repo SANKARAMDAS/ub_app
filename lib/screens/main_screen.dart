@@ -12,6 +12,7 @@ import 'package:urbanledger/Models/analytics_model.dart';
 import 'package:urbanledger/Models/business_model.dart';
 import 'package:urbanledger/Models/cashbook_entry_model.dart';
 import 'package:urbanledger/Models/customer_model.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Models/transaction_model.dart';
 import 'package:urbanledger/Utility/app_services.dart';
@@ -97,6 +98,8 @@ class _MainScreenState extends State<MainScreen> {
       onMessageTap(message);
     });
   }
+
+  
 
   paymentNotification(String transactionId) async {
     Map<String?, dynamic>? response =
@@ -322,7 +325,7 @@ class _MainScreenState extends State<MainScreen> {
         Navigator.of(context).pushNamed(AppRoutes.mainRoute);
         break;
       case 'add_kyc':
-      await CustomSharedPreferences.setBool('isKYC', true);
+        await CustomSharedPreferences.setBool('isKYC', true);
         Navigator.of(context).pushNamed(AppRoutes.manageKyc1Route);
         break;
       case 'complete_kyc_reminder':
@@ -330,7 +333,7 @@ class _MainScreenState extends State<MainScreen> {
         Navigator.of(context).pushNamed(AppRoutes.manageKyc1Route);
         break;
       case 'premium':
-      await CustomSharedPreferences.setBool('isKYC', true);
+        await CustomSharedPreferences.setBool('isKYC', true);
         Navigator.of(context).pushNamed(AppRoutes.manageKyc1Route);
         break;
       case 'ledger_addentry':

@@ -70,6 +70,13 @@ class SetPinRouteArgs {
       this.isRegister);
 }
 
+class PinRouteArgs {
+  final String mobileNo;
+  final bool isLogin;
+
+  PinRouteArgs(this.mobileNo, this.isLogin);
+}
+
 class IntroRouteArgs {
   final bool isRegister;
 
