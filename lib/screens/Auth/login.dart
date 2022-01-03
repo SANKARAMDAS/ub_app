@@ -10,6 +10,7 @@ import 'package:urbanledger/Utility/app_theme.dart';
 import 'package:urbanledger/main.dart';
 import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
+import 'package:phone_selector/phone_selector.dart';
 
 class LoginScreen extends StatefulWidget {
   final bool isRegister;
@@ -23,6 +24,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String? _country = 'AE';
   String? _countryCode = '+971';
+  String _phoneNumber = '';
   final GlobalKey<State> key = GlobalKey<State>();
 
   final TextEditingController _mobileController = TextEditingController();
@@ -32,6 +34,23 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     // _mobileController.text = '';
+  }
+
+  _getPhoneNumber() async {
+    String phoneNumber;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      phoneNumber = (await PhoneSelector.getPhoneNumber())!;
+      print(phoneNumber);
+    } catch(e){
+      print(e);
+      phoneNumber = 'Failed to get Phone Number.';
+    }
+    if (mounted) {
+      setState(() {
+        _phoneNumber = phoneNumber;
+      });
+    }
   }
 
   @override

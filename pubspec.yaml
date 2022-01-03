@@ -112,6 +112,7 @@ dependencies:
   device_display_brightness: ^0.0.6
   pausable_timer: ^1.0.0+3
   # qrscan: ^0.3.2
+  phone_selector: ^3.0.0
 
 dev_dependencies:
   flutter_test:
