@@ -2180,7 +2180,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                     // }
 
                     else {
-                      // CustomLoadingDialog.showLoadingDialog(context, key);
+                       CustomLoadingDialog.showLoadingDialog(context, key);
                       // var cid = await repository.customerApi.getCustomerID(
                       //     mobileNumber:
                       //         widget.contacts[index].mobileNo.toString());
@@ -2203,10 +2203,11 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                           .getCustomerId(cData.mobileNo!);
                       debugPrint('ww: ' + _customerModel.toString());
                       Navigator.of(context).pop(true);
-                      Navigator.of(context).pushNamed(
+                    await  Navigator.of(context).pushNamed(
                           AppRoutes.requestTransactionRoute,
                           arguments: ReceiveTransactionArgs(
                               _customerModel, localCustId));
+                      print('teest');
                     }
                   }
                 },
@@ -3505,6 +3506,7 @@ Future getKyc() async {
                         AppRoutes.requestTransactionRoute,
                         arguments: ReceiveTransactionArgs(
                             _customerModel, localCustId));
+                    print('teest');
                   }
                 }
               },
