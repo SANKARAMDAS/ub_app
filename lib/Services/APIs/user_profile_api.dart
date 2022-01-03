@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/user_model.dart';
+import 'package:urbanledger/Models/user_profile_model.dart';
 import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/apiCalls.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
@@ -83,19 +84,21 @@ class UserProfileAPI {
     }
   }
 
-  Future getUserProfileApi() async {
+  Future<UserProfileModel?> getUserProfileApi() async {
     const url = "userProfile/get";
-
+    UserProfileModel? userProfileModel ;
     final responseAPI =
         await postRequest(endpoint: url, headers: apiAuthHeaderWithOnlyToken());
 
     if (responseAPI.statusCode == 200) {
       debugPrint('Check' + responseAPI.body.toString());
-      return jsonDecode(responseAPI.body.toString());
-    } else {
-      print(responseAPI.statusCode.toString());
-      return Future.error('Unexpected Error occured');
+      userProfileModel=  userProfileModelFromJson(responseAPI.body.toString());
     }
+    else{
+      userProfileModel=null;
+    }
+    debugPrint(responseAPI.statusCode.toString());
+    return userProfileModel;
   }
 
 // Future<dynamic> postUserdata(Map userData) async {

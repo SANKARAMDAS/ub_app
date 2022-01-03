@@ -64,21 +64,21 @@ class UserProfile {
   DateTime? lastSettlementDate;
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
-    emailStatus: json["email_status"],
-    id: json["_id"],
-    mobileNo: json["mobile_no"],
-    registeredOn: DateTime.parse(json["registered_on"]),
-    chatId: json["chat_id"],
-    mid: json["mid"],
-    secretKey: json["secret_key"],
-    updatedAt: DateTime.parse(json["updatedAt"]),
-    referralCode: json["referral_code"],
-    referralLink: json["referral_link"],
-    emailId: json["email_id"],
-    firstName: json["first_name"],
-    lastName: json["last_name"],
-    profilePic: json["profilePic"],
-    lastSettlementDate: DateTime.parse(json["last_settlement_date"]),
+    emailStatus: json.containsKey("email_status")?json["email_status"]:null,
+    id: json.containsKey("_id")?json["_id"]:null,
+    mobileNo: json.containsKey("mobile_no")?json["mobile_no"]:null,
+    registeredOn: json.containsKey("registered_on")?DateTime.tryParse(json["registered_on"]):null,
+    chatId: json.containsKey("chat_id")?json["chat_id"]:null,
+    mid: json.containsKey("mid")?json["mid"]:null,
+    secretKey: json.containsKey("secret_key")?json["secret_key"]:null,
+    updatedAt: json.containsKey("updatedAt")?DateTime.tryParse(json["updatedAt"]):null,
+    referralCode: json.containsKey("referral_code")?json["referral_code"]:null,
+    referralLink: json.containsKey("referral_link")?json["referral_link"]:null,
+    emailId: json.containsKey("email_id")?json["email_id"]:null,
+    firstName: json.containsKey("first_name")?json["first_name"]:null,
+    lastName: json.containsKey("last_name")?json["last_name"]:null,
+    profilePic: json.containsKey("profilePic")?json["profilePic"]:null,
+    lastSettlementDate:json.containsKey("last_settlement_date")?DateTime.tryParse(json["last_settlement_date"]):null,
   );
 
   Map<String, dynamic> toJson() => {
