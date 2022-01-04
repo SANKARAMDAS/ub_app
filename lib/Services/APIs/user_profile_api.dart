@@ -60,7 +60,7 @@ class UserProfileAPI {
     return map;
   }
 
-  Future<bool>? sendDynamicReferralCode(code) async {
+  Future<bool?> sendDynamicReferralCode(code) async {
     bool? check = false;
     const url = "referral/code";
     final response = await postRequest(

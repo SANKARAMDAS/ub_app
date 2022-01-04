@@ -478,10 +478,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             isLoading = false;
                                           });
                                           debugPrint(e.toString());
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                            content: CustomText('Please check internet connectivity and try again.'),
-                                          ));
+                                          // ScaffoldMessenger.of(context)
+                                          //     .showSnackBar(SnackBar(
+                                          //   content: CustomText(
+                                          //       'Please check internet connectivity and try again.'),
+                                          // ));
+                                          'Please check internet connectivity and try again.'.showSnackBar(context);
                                           return false;
                                         }));
 
@@ -497,11 +499,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                                           if (_referralController
                                               .text.isNotEmpty) {
-                                            final response = await (Repository()
-                                                .userProfileAPI
-                                                .sendDynamicReferralCode(
-                                                    _referralController.text
-                                                        .toString()));
+                                            // final response = await (Repository()
+                                            //     .userProfileAPI
+                                            //     .sendDynamicReferralCode(
+                                            //         _referralController.text
+                                            //             .toString())
+                                            //     .timeout(Duration(seconds: 30),
+                                            //         onTimeout: () async {
+                                            //   Navigator.of(context).pop();
+                                            //   return false;
+                                            // }).catchError((e) {
+                                            //   setState(() {
+                                            //     isLoading = false;
+                                            //   });
+                                            //   debugPrint(e.toString());
+                                            //   ScaffoldMessenger.of(context)
+                                            //       .showSnackBar(SnackBar(
+                                            //     content: CustomText(
+                                            //         'Please check internet connectivity and try again.'),
+                                            //   ));
+                                            //   return false;
+                                            // }));
                                             await anaylticsEvents
                                                 .signUpEvent(true);
                                             debugPrint(
@@ -658,41 +676,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => UlAppBrowser(
-                                          url: 'https://urbanledger.app/terms-and-conditions',
-                                          title: 'Terms & Conditions',
-                                        ),
-                                      ),
-                                    );
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UlAppBrowser(
+                                  url:
+                                      'https://urbanledger.app/terms-and-conditions',
+                                  title: 'Terms & Conditions',
+                                ),
+                              ),
+                            );
                           },
                           child: Center(
                             child: RichText(
                                 textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  children: [
-                              TextSpan(
-                                text:
-                                    'By clicking the register button,\n you agree to our ',
-                                style: TextStyle(
-                                  color: AppTheme.greyish,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              TextSpan(
-                                text: 'Terms and Conditions',
-                                style: TextStyle(
-                                  color: AppTheme.electricBlue,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              )
-                            ])),
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                    text:
+                                        'By clicking the register button,\n you agree to our ',
+                                    style: TextStyle(
+                                      color: AppTheme.greyish,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: 'Terms and Conditions',
+                                    style: TextStyle(
+                                      color: AppTheme.electricBlue,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  )
+                                ])),
                           ),
                         )
                         // Center(

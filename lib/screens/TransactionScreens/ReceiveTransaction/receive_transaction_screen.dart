@@ -156,8 +156,20 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
                             .getCustomerID(mobileNumber: widget.model.mobileNo)
                             .timeout(Duration(seconds: 30),
                                 onTimeout: () async {
+                                  setState(() {
+                                  isPressed = false;
+                                });
                           Navigator.of(context).pop();
+                          'Please check internet connectivity and try again.'
+                                    .showSnackBar(context);
                           return Future.value(null);
+                        }).catchError((e){
+                          setState(() {
+                                  isPressed = false;
+                                });
+                          Navigator.of(context).pop();
+                          'Please check internet connectivity and try again.'
+                                    .showSnackBar(context);
                         });
 
                         if (cid.customerInfo?.id == null) {
@@ -191,8 +203,20 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
                                   .sendQRData(data)
                                   .timeout(Duration(seconds: 30),
                                       onTimeout: () async {
+                                        setState(() {
+                                  isPressed = false;
+                                });
                                 Navigator.of(context).pop();
+                                'Please check internet connectivity and try again.'
+                                    .showSnackBar(context);
                                 return Future.value(null);
+                              }).catchError((e){
+                                setState(() {
+                                  isPressed = false;
+                                });
+                                Navigator.of(context).pop();
+                                'Please check internet connectivity and try again.'
+                                    .showSnackBar(context);
                               });
                               final qrData = response.last;
                               if (response.first != null) {
@@ -253,6 +277,9 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
                                 });
                               });
                             } else {
+                              setState(() {
+                                  isPressed = false;
+                                });
                               Navigator.of(context).pop();
                               'Please check your internet connection or try again later.'
                                   .showSnackBar(context);
@@ -262,6 +289,9 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
                           }
                         }
                       } else {
+                        setState(() {
+                                  isPressed = false;
+                                });
                         Navigator.of(context).pop();
                         'Please check your internet connection or try again later.'
                             .showSnackBar(context);
@@ -1544,7 +1574,14 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
     // CustomLoadingDialog.showLoadingDialog(context, key);
     int va = 0;
     var cid = await repository.customerApi
-        .getCustomerID(mobileNumber: widget.model.mobileNo);
+        .getCustomerID(mobileNumber: widget.model.mobileNo).catchError((e){
+          setState(() {
+                                  isPressed = false;
+                                });
+                                Navigator.of(context).pop();
+          'Please check internet connectivity and try again.'
+                                    .showSnackBar(context);
+        });
     if (await checkConnectivity) {
       for (var image in _pickedFiles) {
         setState(() {
@@ -1561,6 +1598,9 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
       }
     } else {
       Navigator.of(context).pop();
+      setState(() {
+                                  isPressed = false;
+                                });
       'Please check your internet connection or try again later.'
           .showSnackBar(context);
     }
@@ -1582,7 +1622,14 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
           "request_through": "CHAT"
         };
         final String requestId =
-            await repository.paymentThroughQRApi.getRequestId(data);
+            await repository.paymentThroughQRApi.getRequestId(data).catchError((e){
+              setState(() {
+                                  isPressed = false;
+                                });
+              Navigator.of(context).pop(true);
+              'Please check internet connectivity and try again.'
+                                    .showSnackBar(context);
+            });
 
         debugPrint('qwerty' + widget.customerId.toString());
 
