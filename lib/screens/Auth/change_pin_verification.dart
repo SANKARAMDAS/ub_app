@@ -39,7 +39,10 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
   TextEditingController _pinController = TextEditingController();
   // final repository = Repository();
   final GlobalKey<State> key = GlobalKey<State>();
+  bool isResendOtpClickable = true;
+  int _resendOtpCount = 30;
   late bool _serviceEnabled;
+  late AnimationController _controller;
   // final location = Location();
   // final FirebaseAnalytics analytics = FirebaseAnalytics();
 
@@ -111,7 +114,6 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
                               .verifyChangePin(
                             widget.token,
                             _digit1! + _digit2! + _digit3! + _digit4!,
-                            
                           )
                               .timeout(Duration(seconds: 30),
                                   onTimeout: () async {
@@ -261,17 +263,55 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
                       ],
                     ),
                   ),
-                  (deviceHeight * 0.09).heightBox,
-                  // Center(
-                  //   child: TextButton(
-                  //       onPressed: () {},
-                  //       child: CustomText(
-                  //         "RESEND CODE",
-                  //         size: 16,
-                  //         bold: FontWeight.w600,
-                  //         color: Theme.of(context).primaryColor,
-                  //       )),
-                  // ),
+                  (deviceHeight * 0.03).heightBox,
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 40.0, vertical: 15.0),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          child: CustomText(
+                            isResendOtpClickable
+                                ? 'RESEND CODE'
+                                : 'RESEND CODE IN ',
+                            size: (18),
+                            color: isResendOtpClickable
+                                ? AppTheme.electricBlue
+                                : Colors.grey,
+                            bold: FontWeight.w800,
+                          ),
+                          onTap: isResendOtpClickable
+                              ? () {
+                                  clearTextControllers();
+                                  setState(() {
+                                    isResendOtpClickable = false;
+                                    _resendOtpCount = 30;
+                                  });
+                                  //startTimer();
+
+                                  _controller.forward();
+                                }
+                              : () {},
+                        ),
+                        if (!isResendOtpClickable)
+                          Countdown(
+                            animation: StepTween(
+                              begin: 30,
+                              end: 0,
+                            ).animate(_controller)
+                              ..addStatusListener((status) {
+                                if (status == AnimationStatus.completed) {
+                                  _controller.reset();
+                                  setState(() {
+                                    isResendOtpClickable = true;
+                                  });
+                                }
+                              }),
+                          )
+                      ],
+                    ),
+                  ),
                   (deviceHeight * 0.04).heightBox,
                 ],
               ),
@@ -388,5 +428,34 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
     fourController.clear();
     fiveController.clear();
     sixController.clear();
+  }
+}
+
+class Countdown extends AnimatedWidget {
+  Countdown({Key? key, this.animation})
+      : super(key: key, listenable: animation!);
+  Animation<int>? animation;
+
+  @override
+  build(BuildContext context) {
+    Duration clockTimer = Duration(seconds: animation!.value);
+
+    String timerText =
+        '0${clockTimer.inMinutes.remainder(60).toString()}:${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')} secs';
+
+    /*return Text(
+      "$timerText",
+      style: TextStyle(
+        fontSize: 110,
+        color: Theme.of(context).primaryColor,
+      ),
+    );*/
+
+    return CustomText(
+      '${timerText}',
+      size: (18),
+      color: AppTheme.electricBlue,
+      bold: FontWeight.w800,
+    );
   }
 }

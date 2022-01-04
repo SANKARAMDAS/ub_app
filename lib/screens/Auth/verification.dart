@@ -452,6 +452,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                       ],
                     ),
                   ),
+                  
                   (deviceHeight * 0.09).heightBox,
                   Center(
                     child: CustomText(
