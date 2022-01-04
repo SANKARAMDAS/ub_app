@@ -1,5 +1,12 @@
+// import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:location/location.dart';
+import 'package:provider/provider.dart';
+import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/app_assets.dart';
@@ -7,19 +14,33 @@ import 'package:urbanledger/Utility/app_constants.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
 import 'package:urbanledger/Utility/app_routes.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
-import 'package:urbanledger/screens/Components/custom_widgets.dart';
+import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
+import 'package:urbanledger/screens/Components/custom_text_widget.dart';
+import 'package:urbanledger/screens/Components/ul_logo_widget.dart';
+import 'package:urbanledger/screens/mobile_analytics/analytics_events.dart';
+import '../../chat_module/data/repositories/login_repository.dart';
+
+import '../Components/extensions.dart';
 
 class ChangePinVerification extends StatefulWidget {
+  // final String phoneNo;
+  // final bool isRegister;
+
+  // const ChangePinVerification(
+  //     {Key? key, required this.phoneNo, required this.isRegister})
+  //     : super(key: key);
   final String token;
   final bool fromSettings;
   ChangePinVerification(
       {Key? key, required this.token, required this.fromSettings})
       : super(key: key);
+
   @override
   _ChangePinVerificationState createState() => _ChangePinVerificationState();
 }
 
-class _ChangePinVerificationState extends State<ChangePinVerification> {
+class _ChangePinVerificationState extends State<ChangePinVerification>
+    with SingleTickerProviderStateMixin {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Repository repository = Repository();
   String? _digit1, _digit2, _digit3, _digit4, _digit5, _digit6;
@@ -36,14 +57,14 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
   final TextEditingController fiveController = TextEditingController();
   final TextEditingController sixController = TextEditingController();
 
-  TextEditingController _pinController = TextEditingController();
-  // final repository = Repository();
   final GlobalKey<State> key = GlobalKey<State>();
+  late bool _serviceEnabled;
+  final location = Location();
   bool isResendOtpClickable = true;
   int _resendOtpCount = 30;
-  late bool _serviceEnabled;
+  // late Timer _timer;
+
   late AnimationController _controller;
-  // final location = Location();
   // final FirebaseAnalytics analytics = FirebaseAnalytics();
 
   @override
@@ -59,6 +80,9 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
     fourController.text = ' ';
     fiveController.text = ' ';
     sixController.text = ' ';
+
+    _controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 30));
   }
 
   @override
@@ -75,10 +99,20 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
     fourthFocusNode.dispose();
     fifthFocusNode.dispose();
     sixthFocusNode.dispose();
+    // _timer.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
-  //final status = await repository.changePinApi
+  checkService() async {
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +123,36 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
       child: Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+          padding: const EdgeInsets.only(
+            bottom: 10,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              (screenWidth(context) * 0.01).widthBox,
+              (screenWidth(context) * 0.035).widthBox,
+              /* Expanded(
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.all(15),
+                    side: BorderSide(color: isResendOtpClickable?Color(0xff1058ff):Colors.grey, width: 2),
+                    // color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  onPressed: () async {
+                    clearTextControllers();
+                    isResendOtpClickable = false;
+                    // _sendVerificationCode(widget.phoneNo.replaceAll(' ', ''));
+                  },
+                  child: CustomText(
+                    'RESEND OTP',
+                    size: (18),
+                    color: isResendOtpClickable?AppTheme.electricBlue:Colors.grey,
+                    bold: FontWeight.w500,
+                  ),
+                ),
+              ),
+              (screenWidth(context) * 0.07).widthBox,*/
               Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -101,39 +160,50 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
                         borderRadius: BorderRadius.circular(10)),
                     padding: EdgeInsets.only(
                         bottom: 15, top: 15, left: 30, right: 30),
-                    primary: Theme.of(context).primaryColor,
+                    primary: validate() == true
+                        ? AppTheme.electricBlue
+                        : AppTheme.coolGrey,
                   ),
                   child: CustomText(
-                    'SUBMIT',
-                    size: 18,
+                    'VERIFY OTP',
+                    size: (18),
+                    bold: FontWeight.w500,
                     color: Colors.white,
                   ),
                   onPressed: validate() == true
                       ? () async {
-                          final status = await repository.changePinApi
-                              .verifyChangePin(
-                            widget.token,
-                            _digit1! + _digit2! + _digit3! + _digit4!,
-                          )
-                              .timeout(Duration(seconds: 30),
-                                  onTimeout: () async {
-                            Navigator.of(context).pop();
-                            return Future.value(null);
-                          }).catchError((e) {
-                            oneController.text = ' ';
-                            twoController.text = ' ';
-                            threeController.text = ' ';
-                            fourController.text = ' ';
-                            fiveController.text = ' ';
-                            sixController.text = ' ';
-                            setState(() {});
-                            e.toString().showSnackBar(context);
-                            Navigator.of(context).pop();
-                            return false;
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            //TODO: To handle location permission when denied.
 
-                            // _pinController.clear();
-                          });
-                          if (status) {
+                            // await checkService();
+                            // final _location = await location.getLocation();
+                            CustomLoadingDialog.showLoadingDialog(context, key);
+                            final status = await repository.changePinApi
+                                .verifyChangePin(
+                              widget.token,
+                              _digit1! + _digit2! + _digit3! + _digit4!,
+                              // _location.latitude,
+                              // _location.longitude,
+                            )
+                                .timeout(Duration(seconds: 30),
+                                    onTimeout: () async {
+                              Navigator.of(context).pop();
+                              return Future.value(null);
+                            }).catchError((e) {
+                              oneController.text = ' ';
+                              twoController.text = ' ';
+                              threeController.text = ' ';
+                              fourController.text = ' ';
+                              fiveController.text = ' ';
+                              sixController.text = ' ';
+                              setState(() {});
+                              e.toString().showSnackBar(context);
+                              Navigator.of(context).pop();
+                              return 'Incorrect';
+                            });
+
+                            if (status) {
                             repository.hiveQueries.insertUserPin('');
                             Navigator.of(context)
                               ..pop()
@@ -144,13 +214,22 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
                                       : AppRoutes.setPinRoute,
                                   arguments:
                                       SetPinRouteArgs('', false, true, false));
-                          } //else {
-                          //   Navigator.pop(context);
-                          //}
+                          } 
+                            
+                            //  else {
+                            //   Navigator.of(context)
+                            //     ..pop()
+                            //     ..pop()
+                            //     ..pushReplacementNamed(AppRoutes.signupRoute,
+                            //         arguments:
+                            //             widget.phoneNo.replaceAll(' ', ''));
+                            // }
+                          }
                         }
-                      : null,
+                      : () {},
                 ),
               ),
+              (screenWidth(context) * 0.035).widthBox,
             ],
           ),
         ),
@@ -184,8 +263,7 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
                           ),
                           children: [
                             TextSpan(
-                              text: 'Code Sent to +' +
-                                  repository.hiveQueries.userData.mobileNo,
+                              text: repository.hiveQueries.userData.mobileNo,
                             ),
                           ]),
                     ),
@@ -263,7 +341,6 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
                       ],
                     ),
                   ),
-                  (deviceHeight * 0.03).heightBox,
                   Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.symmetric(
@@ -310,6 +387,16 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
                               }),
                           )
                       ],
+                    ),
+                  ),
+                  (deviceHeight * 0.09).heightBox,
+                  Center(
+                    child: CustomText(
+                      'Sit tight and relax while we try to read the\nOTP from your device',
+                      centerAlign: true,
+                      size: (14),
+                      color: AppTheme.coolGrey,
+                      bold: FontWeight.w500,
                     ),
                   ),
                   (deviceHeight * 0.04).heightBox,
@@ -429,6 +516,112 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
     fiveController.clear();
     sixController.clear();
   }
+
+  /* Future<void> _sendVerificationCode(String phone) async {
+    try {
+      await _auth.verifyPhoneNumber(
+          phoneNumber: phone,
+          timeout: Duration(seconds: 60),
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            setState(() {
+              oneController.text = credential.smsCode.substring(0, 1);
+              twoController.text = credential.smsCode.substring(1, 2);
+              threeController.text = credential.smsCode.substring(2, 3);
+              fourController.text = credential.smsCode.substring(3, 4);
+              fiveController.text = credential.smsCode.substring(4, 5);
+              sixController.text = credential.smsCode.substring(5, 6);
+            });
+            // debugPrint(_otp);
+            final user =
+                await _auth.signInWithCredential(credential).catchError((e) {
+              debugPrint(e.toString());
+              return null;
+            });
+            if (user != null) {
+              final userStatus = await checkUserAvailability().catchError((e) {
+                scaffoldKey.currentState.showSnackBar(SnackBar(
+                  content: CustomText(e),
+                ));
+                return null;
+              });
+              if (!userStatus) {
+                Navigator.of(context)
+                  ..pop()
+                  ..pop()
+                  ..pushReplacementNamed(AppRoutes.signupRoute,
+                      arguments: phone);
+              } else {
+                LoginRepository().login(phone);
+                repository.hiveQueries.insertIsAuthenticated(true);
+                Navigator.of(context)
+                  ..pop()
+                  ..pop()
+                  ..pushReplacementNamed(repository.hiveQueries.userPin == null
+                      ? AppRoutes.setPinRoute
+                      : AppRoutes.pinLoginRoute);
+              }
+            } else {
+              scaffoldKey?.currentState?.showSnackBar(SnackBar(
+                content: Text("Authentication Failed"),
+              ));
+            }
+          },
+          verificationFailed: (FirebaseAuthException exception) {
+            debugPrint(exception.code);
+            debugPrint(exception.message);
+            scaffoldKey?.currentState?.showSnackBar(SnackBar(
+              content: Text(exception.message),
+            ));
+          },
+          forceResendingToken: 1,
+          codeSent: (String verificationId, [int forceResendingToken]) async {
+            // Update the UI - wait for the user to enter the SMS code
+            _verificationID = verificationId;
+
+            // // Create a PhoneAuthCredential with the code
+            // PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+            //     verificationId: verificationId, smsCode: _otp);
+            // // Sign the user in (or link) with the credential
+            // await auth.signInWithCredential(phoneAuthCredential);
+          },
+          codeAutoRetrievalTimeout: (String verificationId) {});
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<bool> _signInWithPhoneNumber(String smsCode) async {
+    try {
+      final AuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: _verificationID,
+        smsCode: smsCode,
+      );
+      final User user = (await _auth.signInWithCredential(credential)).user;
+      if (user.uid != null)
+        return true;
+      else
+        return false;
+    } catch (e, s) {
+      debugPrint(e);
+      debugPrint(s);
+      scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text(
+              e.toString().contains('[firebase_auth/invalid-verification-code]')
+                  ? 'The OTP you\'ve entered is incorrect'
+                  : e.toString().split('] ').last),
+        ),
+      );
+      return false;
+    }
+  } */
+
+  /* Future<bool> checkUserAvailability() async {
+    final response = await Repository()
+        .registerApi
+        .checkUserAvailability(widget.phoneNo.replaceAll(' ', ''));
+    return response;
+  } */
 }
 
 class Countdown extends AnimatedWidget {

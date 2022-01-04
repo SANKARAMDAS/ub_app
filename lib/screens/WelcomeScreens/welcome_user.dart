@@ -8,6 +8,7 @@ import 'package:urbanledger/Utility/app_constants.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
 import 'package:urbanledger/Utility/app_routes.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
+import 'package:urbanledger/chat_module/utils/custom_shared_preferences.dart';
 import 'package:urbanledger/main.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 import 'package:urbanledger/screens/Components/ul_logo_widget.dart';
@@ -140,7 +141,12 @@ class _WelcomeUserState extends State<WelcomeUser> {
             CustomList(
               icon: theImage,
               text: 'Personal',
-              onSubmit: () {
+              onSubmit: () async {
+                
+                await CustomSharedPreferences.setString(      //set flag
+                    'accounttype', 'PERSONAL');
+                String data1 =
+                    await (CustomSharedPreferences.get('accounttype'));   //
                 //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
                 Navigator.pushReplacementNamed(context, AppRoutes.mainRoute);
               },
@@ -152,7 +158,11 @@ class _WelcomeUserState extends State<WelcomeUser> {
               child: CustomList(
                 icon: theImage2,
                 text: 'Business',
-                onSubmit: () {
+                onSubmit: () async{
+                  await CustomSharedPreferences.setString(                      //set flag
+                    'accounttype', 'BUSINESS');
+                String data1 =
+                    await (CustomSharedPreferences.get('accounttype'));         //
                   //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
                   Navigator.pushReplacementNamed(context, AppRoutes.mainRoute);
                 },
