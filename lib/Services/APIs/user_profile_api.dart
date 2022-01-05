@@ -53,7 +53,8 @@ class UserProfileAPI {
     final response = await postRequest(
         endpoint: url,
         // headers: apiAuthHeaderWithOnlyToken(),
-        body: bodyData);
+        headers: apiAuthHeader(),
+        body: jsonEncode(bodyData));
     if (response.statusCode == 200) {
       debugPrint(response.body);
       map = jsonDecode(response.body);
