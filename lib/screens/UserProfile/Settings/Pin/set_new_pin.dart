@@ -206,7 +206,7 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                               ]),
                         );
                       }),
-                (height * 0.11).heightBox,
+                // (height * 0.11).heightBox,
                 showError && widget.showConfirmPinState
                     ? Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
@@ -480,14 +480,14 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                                   setPinNotifier.value, true, widget.isResetPinState, false));
                         },
                         child: CustomText(
-                          'PROCEED',
+                          'YES',
                           size: (18),
                           bold: FontWeight.w500,
                           color: Colors.white,
                         ),
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.all(15),
-                          primary: Colors.grey[400],
+                          primary: AppTheme.electricBlue,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
@@ -503,7 +503,7 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                           Navigator.of(context).pop();
                         },
                         child: CustomText(
-                          'CHANGE PIN',
+                          'NO',
                           size: (18),
                           bold: FontWeight.w500,
                         ),
