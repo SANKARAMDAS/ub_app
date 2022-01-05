@@ -3178,7 +3178,12 @@ Future getKyc() async {
                       onTimeout: () async {
                         Navigator.of(context).pop();
                         return Future.value(null);
-                      });
+                      }).catchError((e){
+                        
+                          Navigator.of(context).pop();
+                          'Please check internet connectivity and try again.'
+                                    .showSnackBar(context);
+                        });
                   bool? merchantSubscriptionPlan =
                       cid.customerInfo?.merchantSubscriptionPlan ??
                           false;
@@ -3232,10 +3237,11 @@ Future getKyc() async {
                           onTimeout: () async {
                             Navigator.of(context).pop();
                             return Future.value(null);
-                          }).catchError((e) {
-                        recordError(e, StackTrace.current);
-                        return false;
-                      }));
+                          }).catchError((e){
+                          Navigator.of(context).pop();
+                          'Please check internet connectivity and try again.'
+                                    .showSnackBar(context);
+                        }));
                       // if (apiResponse.isNotEmpty) {
                       //   ///update chat id here
                       //   await repository.queries
@@ -3361,7 +3367,12 @@ Future getKyc() async {
                   } else {
                     Map<String, dynamic> isTransaction =
                     await repository.paymentThroughQRApi
-                        .getTransactionLimit(context);
+                        .getTransactionLimit(context).catchError((e){
+                          
+                          Navigator.of(context).pop();
+                          'Please check internet connectivity and try again.'
+                                    .showSnackBar(context);
+                        });
                     if (!(isTransaction)['isError']) {
                       Navigator.of(context).pop(true);
                       // showBankAccountDialog();
@@ -3487,7 +3498,12 @@ Future getKyc() async {
                         .getCustomerID(
                         mobileNumber: widget
                             .contacts[index].mobileNo
-                            .toString());
+                            .toString()).catchError((e){
+                         
+                          Navigator.of(context).pop();
+                          'Please check internet connectivity and try again.'
+                                    .showSnackBar(context);
+                        });
                     _customerModel
                       ..name = getName(widget.contacts[index].name,
                           widget.contacts[index].mobileNo)

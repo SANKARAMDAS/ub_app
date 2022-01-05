@@ -82,64 +82,58 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                       builder: (context, value, _) {
                         return Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: Container(
-                            height: height * 0.13,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.white),
-                            child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  SizedBox(
-                                    height: 12,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(AppAssets.lockIcon),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Text(
-                                        'Enter New Urban Ledger PIN'
-                                            .toUpperCase(),
-                                        style: TextStyle(
-                                            color: AppTheme.brownishGrey,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      PinField(
-                                          showError: showError,
-                                          isFilled: value.length > 0,
-                                          isSetField: true),
-                                      PinField(
-                                          showError: showError,
-                                          isFilled: value.length > 1,
-                                          isSetField: true),
-                                      PinField(
-                                          showError: showError,
-                                          isFilled: value.length > 2,
-                                          isSetField: true),
-                                      PinField(
-                                          showError: showError,
-                                          isFilled: value.length > 3,
-                                          isSetField: true),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 12,
-                                  ),
-                                ]),
-                          ),
+                          child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 12,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(AppAssets.lockIcon, color: Colors.white,),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      'Enter New Urban Ledger PIN'
+                                          .toUpperCase(),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    PinField(
+                                        showError: showError,
+                                        isFilled: value.length > 0,
+                                        isSetField: true),
+                                    PinField(
+                                        showError: showError,
+                                        isFilled: value.length > 1,
+                                        isSetField: true),
+                                    PinField(
+                                        showError: showError,
+                                        isFilled: value.length > 2,
+                                        isSetField: true),
+                                    PinField(
+                                        showError: showError,
+                                        isFilled: value.length > 3,
+                                        isSetField: true),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 12,
+                                ),
+                              ]),
                         );
                       }),
                 if (!widget.showConfirmPinState)
@@ -152,11 +146,7 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                       builder: (context, value, _) {
                         return Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: Container(
-                            height: height * 0.13,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.white),
+                         
                             child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -167,14 +157,14 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Image.asset(AppAssets.lockIcon),
+                                      Image.asset(AppAssets.lockIcon,color: Colors.white,),
                                       SizedBox(
                                         width: 8,
                                       ),
                                       Text(
                                         'CONFIRM NEW URBAN LEDGER PIN',
                                         style: TextStyle(
-                                            color: AppTheme.brownishGrey,
+                                            color: Colors.white,
                                             fontSize: 20,
                                             fontWeight: FontWeight.w600),
                                       ),
@@ -208,10 +198,10 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                                     height: 12,
                                   ),
                                 ]),
-                          ),
+                          
                         );
                       }),
-                (height * 0.11).heightBox,
+                // (height * 0.11).heightBox,
                 showError && widget.showConfirmPinState
                     ? Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
@@ -399,6 +389,10 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
             await anaylticsEvents.initCurrentUser();
             await anaylticsEvents.changePinEvent();
             Navigator.of(context)..pop()..pop();
+            if (Navigator.of(context).canPop()) Navigator.of(context).pop();
+            Navigator.of(context).pushNamed(widget.isResetPinState
+                ? AppRoutes.welcomeuserRoute
+                : AppRoutes.mainRoute);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 margin: const EdgeInsets.all(60),
                 backgroundColor: Colors.white,
@@ -483,14 +477,14 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                                   setPinNotifier.value, true, widget.isResetPinState, false));
                         },
                         child: CustomText(
-                          'PROCEED',
+                          'YES',
                           size: (18),
                           bold: FontWeight.w500,
                           color: Colors.white,
                         ),
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.all(15),
-                          primary: Colors.grey[400],
+                          primary: AppTheme.electricBlue,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
@@ -506,7 +500,7 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                           Navigator.of(context).pop();
                         },
                         child: CustomText(
-                          'CHANGE PIN',
+                          'NO',
                           size: (18),
                           bold: FontWeight.w500,
                         ),
@@ -567,31 +561,22 @@ class PinField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(left: 15.0, right: 15),
-        child: Column(
-          children: [
-            // CustomText(
-            //   isFilled ? '*' : '',
-            //   size: 30,
-            //   color: AppTheme.brownishGrey,
-            // ),
-            10.0.heightBox,
-            Container(
-              height: 10,
-              width: 10,
+        padding: EdgeInsets.all(10),
+        child: new Container(
+          height: 75,
+          width: 50,
+          alignment: Alignment.center,
+          decoration: new BoxDecoration(
+              color: Colors.white,
+              border: new Border.all(width: 2.0, color: Colors.white),
+              borderRadius: new BorderRadius.circular(7)
+              ),
+            child: Container(
+              height: 18,
+              width: 18,
               decoration: BoxDecoration(
-                  color: isFilled ? AppTheme.brownishGrey : Colors.white,
-                  borderRadius: BorderRadius.circular(15)),
-            ),
-            10.0.heightBox,
-            Container(
-              color: showError && !isSetField
-                  ? AppTheme.tomato
-                  : AppTheme.brownishGrey,
-              height: 3,
-              width: 30,
-            )
-          ],
-        ),
+                  borderRadius: BorderRadius.circular(20),
+                  color: isFilled ? AppTheme.brownishGrey : Colors.white),
+            )),
       );
 }
