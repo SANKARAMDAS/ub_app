@@ -27,10 +27,12 @@ import 'package:urbanledger/screens/Components/shimmer_widgets.dart';
 class SuspenseAccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SuspenseCubit>(
+  /*  return BlocProvider<SuspenseCubit>(
       create: (context) => SuspenseCubit()..getSuspenseTransactions(true),
       child: _SuspenseAccountScreen(),
     );
+    */
+    return _SuspenseAccountScreen();
   }
 }
 
@@ -65,25 +67,30 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
   @override
   void initState() {
     super.initState();
-    unAuthorizedTranaction();
-    // color = Colors.transparent;
-    delDataFromSuspenseAccount();
     _paymentController = PaymentController(
       context: context,
     );
+    unAuthorizedTranaction();
+    // color = Colors.transparent;
+
+
+    fetchSuspenseData();
+
+
     //MoveSingleCustomerDataFromSuspenseAccount();
   }
 
-  moveApiLedger() async {
-    BlocProvider.of<ContactsCubit>(context).getContacts(
+  fetchSuspenseData(){
+   BlocProvider.of<SuspenseCubit>(context,listen:false).getSuspenseTransactions(true);
+  }
+
+ Future<void> moveApiLedger() async {
+ /*  await BlocProvider.of<ContactsCubit>(context).getContacts(
         Provider.of<BusinessProvider>(context, listen: false)
             .selectedBusiness
-            .businessId);
-    await SuspenseAccountApi.suspenseAccountApi.moveLedger()!.then((value) {
-      debugPrint('Move Ledger : ' + value.toString());
-      Provider.of<BusinessProvider>(context, listen: false)
-          .updateSelectedBusiness();
-    });
+            .businessId);*/
+    await SuspenseAccountApi.suspenseAccountApi.moveLedger();
+
   }
 
   delDataFromSuspenseAccount() async {
@@ -96,8 +103,8 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
     debugPrint("offline entry count: " + delTrans.length.toString());
     await SuspenseAccountApi.suspenseAccountApi
         .removeFromSuspenseEntry(TransctionIDS: delTrans);
-    Provider.of<BusinessProvider>(context, listen: false)
-        .updateSelectedBusiness();
+/*    Provider.of<BusinessProvider>(context, listen: false)
+        .updateSelectedBusiness();*/
   }
 
   MoveSingleCustomerDataFromSuspenseAccount() async {
@@ -383,7 +390,7 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                       onSubmit: isChecked.isNotEmpty
                           ? () {
                               debugPrint('Check' + isChecked[0].toString());
-                              ledgerBussinessModelSelectionBottomSheet();
+                              ledgerBussinessModelSelectionBottomSheet(context);
                               // ledgerBussinessModelBottomSheet(context, data2);
                               debugPrint(
                                   'qwerty : ' + isChecked.length.toString());
@@ -1950,7 +1957,7 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
             ),
             context: context,
             builder: (context) {
-              return StatefulBuilder(builder: (context, setState) {
+              return StatefulBuilder(builder: (ctx, setState) {
                 return Container(
                   // height: 360,
                   padding:
@@ -2142,6 +2149,8 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                                                     Bid! //todoadd column
                                                 ..createddate = DateTime.now(),
                                               () async {
+
+
                                         await Repository()
                                             .queries
                                             .updateIsMovedOffline(data2[i]);
@@ -2168,7 +2177,19 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                                           data2[i].suspense == true ? 1 : 0);
                                     }
                                   }
-                                  await SuspenseAccountApi.suspenseAccountApi
+                                 await delDataFromSuspenseAccount();
+                                 await moveApiLedger();
+                                  'Selected transaction moved\nsuccessfully!'
+                                      .showSnackBar(context);
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+
+                                  Navigator.pushReplacementNamed(context,
+                                      AppRoutes.suspenseAccountRoute);
+                                  /*await SuspenseAccountApi.suspenseAccountApi
                                       .removeFromSuspenseEntry(
                                           TransctionIDS: transactionIDS)
                                       .then((value) {
@@ -2185,7 +2206,7 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                                       Navigator.pushReplacementNamed(context,
                                           AppRoutes.suspenseAccountRoute);
                                     }
-                                  });
+                                  });*/
                                   Provider.of<BusinessProvider>(context,
                                           listen: false)
                                       .updateSelectedBusiness();
@@ -2554,12 +2575,12 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
   //     ),
   //   );
   // }
-  ledgerBussinessModelSelectionBottomSheet() {
+  ledgerBussinessModelSelectionBottomSheet(BuildContext context) {
     return showModalBottomSheet(
         context: context,
         isDismissible: true,
         enableDrag: true,
-        builder: (context) {
+        builder: (ctxx) {
           return Container(
             color: Color(0xFF737373), //could change this to Color(0xFF737373),
 
