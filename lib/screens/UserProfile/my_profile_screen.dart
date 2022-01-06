@@ -647,6 +647,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
                         if (state is FetchedNotificationListState) {
                           List<NotificationData> data =  state.notificationList;
+                          int unreadNotifications = data.where((element) => element.read==false).toList().length;
                           return Badge(
                             child: InkWell(
                               child: Image.asset(
@@ -663,7 +664,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             )
 
                             ,
-                            value: data.length.toString() ?? '0',
+                            value: unreadNotifications.toString() ?? '0',
                             color: Colors.grey,
                             countColor: Colors.white,
                           );
