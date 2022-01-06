@@ -153,8 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 });
                                 _country = value.code;
                                 _countryCode = value.dialCode;
-                                if (_country == 'IN' ||
-                                    _country == 'AE') {
+                                if (_country == 'IN' || _country == 'AE') {
                                   _getPhoneNumber();
                                 }
                                 debugPrint(_country);
@@ -363,10 +362,22 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   bool validate() {
-    if (_mobileController.text.trim().isEmpty) {
+    if (_mobileController.text.trim().length < 10 ||
+        _mobileController.text.trim().length > 10) {
       return false;
     } else {
       return true;
     }
   }
+
+  // bool validate() {
+  //   String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+  //   RegExp regExp = new RegExp(patttern);
+  //   if (_mobileController.text.trim().length == 0) {
+  //     return false;
+  //   } else if (!regExp.hasMatch(_mobileController.text.trim())) {
+  //     return true;
+  //   }
+  //   return true;
+  // }
 }
