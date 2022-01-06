@@ -6,6 +6,7 @@ import 'package:urbanledger/Utility/app_assets.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
 import 'package:urbanledger/Utility/app_routes.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
+import 'package:urbanledger/screens/Auth/verification.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
 
 class ChangePinVerification extends StatefulWidget {
@@ -18,14 +19,30 @@ class ChangePinVerification extends StatefulWidget {
   _ChangePinVerificationState createState() => _ChangePinVerificationState();
 }
 
-class _ChangePinVerificationState extends State<ChangePinVerification> {
+class _ChangePinVerificationState extends State<ChangePinVerification> with SingleTickerProviderStateMixin {
   TextEditingController _pinController = TextEditingController();
   final repository = Repository();
+  bool isResendOtpClickable = false;
+  late AnimationController _controller;
 
   @override
   void dispose() {
     _pinController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    /*  Future.delayed(Duration(milliseconds: 250)).then((value) {
+      if (widget.phoneNo != null)
+        _sendVerificationCode(widget.phoneNo.replaceAll(' ', ''));
+    }); */
+
+    _controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 30));
+    _controller.forward();
+
   }
 
   @override
@@ -163,14 +180,46 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: TextButton(
-                          onPressed: () {},
-                          child: CustomText(
-                            "RESEND CODE",
-                            size: 16,
-                            bold: FontWeight.w600,
-                            color: Theme.of(context).primaryColor,
-                          )),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 15.0),
+                        child: Row(
+                          children: [
+                            InkWell(
+                              child: CustomText(
+                                isResendOtpClickable?'RESEND CODE':'RESEND CODE IN ',
+                                size: (18),
+                                color: isResendOtpClickable?AppTheme.electricBlue:Colors.grey,
+                                bold: FontWeight.w800,
+                              ),
+                              onTap:isResendOtpClickable? (){
+                                clearTextControllers();
+                                setState(() {
+                                  isResendOtpClickable = false;
+                                });
+                                //startTimer();
+
+                                _controller.forward();
+                              }:(){},
+                            ),
+                            if(!isResendOtpClickable)
+                              Countdown(
+                                animation: StepTween(
+                                  begin: 30,
+                                  end: 0,
+                                ).animate(_controller)..addStatusListener((status) {
+                                  if(status == AnimationStatus.completed){
+                                    _controller.reset();
+                                    setState(() {
+                                      isResendOtpClickable = true;
+                                    });
+                                  }
+                                }),
+                              )
+                          ],
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -180,5 +229,9 @@ class _ChangePinVerificationState extends State<ChangePinVerification> {
         ),
       ),
     );
+  }
+  void clearTextControllers() {
+    _pinController.clear();
+
   }
 }
