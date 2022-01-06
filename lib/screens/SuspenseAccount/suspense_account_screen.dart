@@ -89,7 +89,13 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
         Provider.of<BusinessProvider>(context, listen: false)
             .selectedBusiness
             .businessId);*/
-    await SuspenseAccountApi.suspenseAccountApi.moveLedger();
+   try{
+     await SuspenseAccountApi.suspenseAccountApi.moveLedger();
+   }catch(e){
+     print(e);
+
+   }
+
 
   }
 
