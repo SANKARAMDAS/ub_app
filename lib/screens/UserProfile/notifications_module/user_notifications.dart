@@ -62,7 +62,7 @@ class _UserNotificationsState extends State<UserNotifications> {
                       Text('Notification (${widget.dataList?.length})',style: TextStyle(color: Colors.white,fontSize: 20)),
                     ],
                   ),
-                  itemSelectedCount>0?Text('${itemSelectedCount} items selected',style: TextStyle(color: Colors.white,fontSize: 16),):InkWell(child: Text('Mark all as Read',style: TextStyle(color: Colors.white,fontSize: 16),),onTap: (){
+                  itemSelectedCount>0?Text(itemSelectedCount>1?'${itemSelectedCount} items selected':'${itemSelectedCount} item selected',style: TextStyle(color: Colors.white,fontSize: 16),):InkWell(child: Text('Mark all as Read',style: TextStyle(color: Colors.white,fontSize: 16),),onTap: (){
                     BlocProvider.of<NotificationListCubit>(context,listen:false).markAllAsRead();
 
                   },),
