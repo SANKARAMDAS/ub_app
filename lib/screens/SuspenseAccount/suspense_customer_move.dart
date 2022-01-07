@@ -38,6 +38,7 @@ import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 import 'package:urbanledger/screens/Components/extensions.dart';
 import 'package:urbanledger/screens/Components/new_custom_button.dart';
 import 'package:urbanledger/screens/Components/shimmer_widgets.dart';
+import 'package:urbanledger/screens/SuspenseAccount/suspense_account_screen.dart';
 import 'package:urbanledger/screens/TransactionScreens/ReceiveTransaction/receive_transaction_screen.dart';
 import 'package:urbanledger/screens/TransactionScreens/add_cards_provider.dart';
 import 'package:urbanledger/screens/TransactionScreens/pay_recieve.dart';
@@ -977,8 +978,12 @@ class _SuspenseAccountCustomerScreenState
                                         'Selected transaction moved\nsuccessfully!'
                                             .showSnackBar(context);
 
-                                        Navigator.pushReplacementNamed(
-                                        context, AppRoutes.suspenseAccountRoute);
+                                       /* Navigator.pushReplacementNamed(
+                                        context, AppRoutes.suspenseAccountRoute);*/
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(builder: (context) => SuspenseAccountScreen()),
+                                              ModalRoute.withName(AppRoutes.myProfileScreenRoute));
                                         }
                                         });
                                        /* Provider.of<BusinessProvider>(context,
