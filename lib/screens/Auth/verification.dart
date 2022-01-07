@@ -118,7 +118,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
       child: Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.only(
+          padding: isPlatformiOS()? EdgeInsets.only(
+            bottom: 25,
+          ): EdgeInsets.only(
             bottom: 10,
           ),
           child: Row(

@@ -634,49 +634,49 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     )
                         : Container(),
 
-                    BlocConsumer<NotificationListCubit, NotificationListState>(
-                      listener: (context, state) {
-                        // do stuff here based on BlocA's state
-                      },
-                      buildWhen: (previous, current) {
-                        return current!=previous;
-                        // return true/false to determine whether or not
-                        // to rebuild the widget with state
-                      },
-                      builder: (context, state) {
+                    // BlocConsumer<NotificationListCubit, NotificationListState>(
+                    //   listener: (context, state) {
+                    //     // do stuff here based on BlocA's state
+                    //   },
+                    //   buildWhen: (previous, current) {
+                    //     return current!=previous;
+                    //     // return true/false to determine whether or not
+                    //     // to rebuild the widget with state
+                    //   },
+                    //   builder: (context, state) {
 
-                        if (state is FetchedNotificationListState) {
-                          List<NotificationData> data =  state.notificationList;
-                          return Badge(
-                            child: InkWell(
-                              child: Image.asset(
-                                AppAssets.notification_bell,
-                                height: 50,
-                                width:50,
-                              ),
-                              onTap: () async {
-                               await showNotificationListDialog(context,data);
-                               setState(() {
+                    //     if (state is FetchedNotificationListState) {
+                    //       List<NotificationData> data =  state.notificationList;
+                    //       return Badge(
+                    //         child: InkWell(
+                    //           child: Image.asset(
+                    //             AppAssets.notification_bell,
+                    //             height: 50,
+                    //             width:50,
+                    //           ),
+                    //           onTap: () async {
+                    //            await showNotificationListDialog(context,data);
+                    //            setState(() {
 
-                               });
-                              },
-                            )
+                    //            });
+                    //           },
+                    //         )
 
-                            ,
-                            value: data.length.toString() ?? '0',
-                            color: Colors.grey,
-                            countColor: Colors.white,
-                          );
-                        }
+                    //         ,
+                    //         value: data.length.toString() ?? '0',
+                    //         color: Colors.grey,
+                    //         countColor: Colors.white,
+                    //       );
+                    //     }
 
-                        return Container();
-
-
-                        // return widget here based on BlocA's state
-                      },
+                    //     return Container();
 
 
-                    ),
+                    //     // return widget here based on BlocA's state
+                    //   },
+
+
+                    // ),
 
                     /*BlocBuilder<NotificationListCubit,
                   NotificationListState>(

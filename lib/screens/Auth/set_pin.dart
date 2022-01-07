@@ -100,7 +100,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                   bold: FontWeight.w500,
                   color: Colors.white,
                 ),
-                (deviceHeight * 0.04).heightBox,
+                (deviceHeight * 0.02).heightBox,
                 if (!widget.showConfirmPinState)
                   ValueListenableBuilder<String>(
                       valueListenable: setPinNotifier,
@@ -160,7 +160,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                       }),
                 if (!widget.showConfirmPinState)
                   SizedBox(
-                    height: 12,
+                    height: 6,
                   ),
                 if (widget.showConfirmPinState)
                   ValueListenableBuilder<String>(
@@ -170,9 +170,9 @@ class _SetPinScreenState extends State<SetPinScreen> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              SizedBox(
-                                height: 12,
-                              ),
+                              // SizedBox(
+                              //   height: 12,
+                              // ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -453,7 +453,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
 
               Container(
                 margin: const EdgeInsets.symmetric(horizontal:40),
-                child: CustomText('This PIN Can Be Easily Guessed. Please try again with a different PIN'
+                child: CustomText('The PIN you have entered can be easily guessed. Do you want to proceed with this PIN?'
                 ,
                   size: 18,
                   centerAlign: true,
@@ -484,7 +484,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                   ),
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(15),
-                    primary: Colors.grey[400],
+                    primary: AppTheme.electricBlue,
                       elevation: 0,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),

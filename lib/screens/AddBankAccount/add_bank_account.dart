@@ -10,6 +10,7 @@ import 'package:urbanledger/Utility/app_theme.dart';
 import 'package:urbanledger/screens/AddBankAccount/add_bank_provider.dart';
 import 'package:urbanledger/screens/AddBankAccount/band_added_successfully.dart';
 import 'package:urbanledger/screens/AddBankAccount/user_bank_account_provider.dart';
+import 'package:urbanledger/screens/Components/custom_widgets.dart';
 import 'package:urbanledger/screens/Components/extensions.dart';
 import 'package:urbanledger/screens/Components/new_custom_button.dart';
 
@@ -58,382 +59,392 @@ class _AddBankAccountState extends State<AddBankAccount> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomSheet: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-                child: Container(
-                    width: double.infinity,
-                    color: Color(0xFFF2F1F6),
-                    padding: const EdgeInsets.all(20.0),
-                    // margin: EdgeInsets.symmetric(
-                    //   horizontal: 15,
-                    // ),
-                    child: NewCustomButton(
-                      text: 'Add Bank Account'.toUpperCase(),
-                      textColor: Colors.white,
-                      onSubmit: () async {
-                        //_formKey.currentState?.save();
-                        if (_formKey.currentState?.fields['name'] != null &&
-                            _formKey.currentState?.fields['bank'] != null &&
-                            _formKey.currentState?.fields['iban'] != null &&
-                            _formKey.currentState?.saveAndValidate() == true) {
-                          // print(_formKey.currentState!.value);
-                          Map bank = {
-                            "account_holders_name":
-                                "${accountHolderFullname.text}",
-                            "selected_bank_id": "${selectBank.text}",
-                            "ibann_number": "AE${iBanNumber.text}",
-                            "isdefault": "1"
-                          };
-                          await Provider.of<UserBankAccountProvider>(context,
-                                  listen: false)
-                              .addUserBankAccount(bank, context)
-                              .then((value) {
-                            setState(() {
-                              Repository().hiveQueries.insertUserData(
-                                  Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .copyWith(bankStatus: true));
-                            });
-                          });
-
-                          Navigator.pop(context);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BankAddedSuccessfully(
-                                        model: bank,
-                                      )));
-                        } else {
-                          print("validation failed");
-                        }
-                      },
-                      backgroundColor: AppTheme.electricBlue,
-                      textSize: 14,
-                    )
-                    // : NewCustomButton(
-                    //     text: 'Add Bank Account'.toUpperCase(),
-                    //     textColor: Colors.white,
-                    //     onSubmit: () async {
-                    //       // _formKey.currentState!.save();
-                    //       if (_formKey.currentState?.saveAndValidate() ?? false) {
-                    //         //print(_formKey.currentState!.value);
-                    //         Map bank = {
-                    //           "account_holders_name":
-                    //               "${accountHolderFullname.text}",
-                    //           "selected_bank_id": "${selectBank.text}",
-                    //           "ibann_number": "${iBanNumber.text}",
-                    //           "isdefault": "1"
-                    //         };
-                    //         await Provider.of<UserBankAccountProvider>(context,
-                    //                 listen: false)
-                    //             .addUserBankAccount(bank);
-                    //         Navigator.push(
-                    //             context,
-                    //             MaterialPageRoute(
-                    //                 builder: (context) => BankAddedSuccessfully(
-                    //                       model: bank,
-                    //                     )));
-                    //       } else {
-                    //         print("validation failed");
-                    //       }
-                    //     },
-                    //     backgroundColor: AppTheme.greyish,
-                    //     textSize: 14,
-                    //   ),
-                    )),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: Color(0xFFE5E5E5),
-          child: Stack(
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+        bottomSheet: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // AppAssets.backgroundImage.background,
-              // (deviceHeight * 0.025).heightBox,
-              Container(
-                //padding: EdgeInsets.symmetric(horizontal: 5.0),
-                child: Container(
-                  height: deviceHeight,
-                  alignment: Alignment.topCenter,
-                  decoration: BoxDecoration(
-                    color: Color(0xfff2f1f6),
-                    image: DecorationImage(
-                        fit: BoxFit.fitWidth,
-                        image: AssetImage('assets/images/back.png'),
-                        alignment: Alignment.topCenter),
-                  ),
-                  child: Column(
-                    children: [
-                      InkWell(
-                        // onTap: ,
-                        child: Container(
-                          margin: EdgeInsets.only(top: 40, bottom: 0),
-                          child: Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Icon(
-                                  Icons.chevron_left,
-                                  color: Colors.white,
-                                  size: 32,
+              Expanded(
+                  child: Container(
+                      width: double.infinity,
+                      color: Color(0xFFF2F1F6),
+                      padding: const EdgeInsets.all(20.0),
+                      // margin: EdgeInsets.symmetric(
+                      //   horizontal: 15,
+                      // ),
+                      child: NewCustomButton(
+                        text: 'Add Bank Account'.toUpperCase(),
+                        textColor: Colors.white,
+                        onSubmit: () async {
+                          //_formKey.currentState?.save();
+                          if (_formKey.currentState?.fields['name'] != null &&
+                              _formKey.currentState?.fields['bank'] != null &&
+                              _formKey.currentState?.fields['iban'] != null &&
+                              _formKey.currentState?.saveAndValidate() == true) {
+                            CustomLoadingDialog.showLoadingDialog(context);
+                            // print(_formKey.currentState!.value);
+                            Map bank = {
+                              "account_holders_name":
+                                  "${accountHolderFullname.text}",
+                              "selected_bank_id": "${selectBank.text}",
+                              "ibann_number": "AE${iBanNumber.text}",
+                              "isdefault": "1"
+                            };
+                            await Provider.of<UserBankAccountProvider>(context,
+                                    listen: false)
+                                .addUserBankAccount(bank, context)
+                                .then((value) {
+                              setState(() {
+                                Repository().hiveQueries.insertUserData(
+                                    Repository()
+                                        .hiveQueries
+                                        .userData
+                                        .copyWith(bankStatus: true));
+                              });
+                              Navigator.of(context).pop();
+                            }).catchError((e) {
+                              'Something went wrong, Please try again later.'.showSnackBar(context);
+                              Navigator.of(context).pop();
+                            });
+    
+                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => BankAddedSuccessfully(
+                                          model: bank,
+                                        )));
+                          } else {
+                            print("validation failed");
+                          }
+                        },
+                        backgroundColor: AppTheme.electricBlue,
+                        textSize: 14,
+                      )
+                      // : NewCustomButton(
+                      //     text: 'Add Bank Account'.toUpperCase(),
+                      //     textColor: Colors.white,
+                      //     onSubmit: () async {
+                      //       // _formKey.currentState!.save();
+                      //       if (_formKey.currentState?.saveAndValidate() ?? false) {
+                      //         //print(_formKey.currentState!.value);
+                      //         Map bank = {
+                      //           "account_holders_name":
+                      //               "${accountHolderFullname.text}",
+                      //           "selected_bank_id": "${selectBank.text}",
+                      //           "ibann_number": "${iBanNumber.text}",
+                      //           "isdefault": "1"
+                      //         };
+                      //         await Provider.of<UserBankAccountProvider>(context,
+                      //                 listen: false)
+                      //             .addUserBankAccount(bank);
+                      //         Navigator.push(
+                      //             context,
+                      //             MaterialPageRoute(
+                      //                 builder: (context) => BankAddedSuccessfully(
+                      //                       model: bank,
+                      //                     )));
+                      //       } else {
+                      //         print("validation failed");
+                      //       }
+                      //     },
+                      //     backgroundColor: AppTheme.greyish,
+                      //     textSize: 14,
+                      //   ),
+                      )),
+            ],
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            color: Color(0xFFE5E5E5),
+            child: Stack(
+              children: [
+                // AppAssets.backgroundImage.background,
+                // (deviceHeight * 0.025).heightBox,
+                Container(
+                  //padding: EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Container(
+                    height: deviceHeight,
+                    alignment: Alignment.topCenter,
+                    decoration: BoxDecoration(
+                      color: Color(0xfff2f1f6),
+                      image: DecorationImage(
+                          fit: BoxFit.fitWidth,
+                          image: AssetImage('assets/images/back.png'),
+                          alignment: Alignment.topCenter),
+                    ),
+                    child: Column(
+                      children: [
+                        InkWell(
+                          // onTap: ,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 40, bottom: 0),
+                            child: Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Icon(
+                                    Icons.chevron_left,
+                                    color: Colors.white,
+                                    size: 32,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                'Add Bank Account',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      (deviceHeight * 0.12).heightBox,
-                      Column(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            child: FormBuilder(
-                              key: _formKey,
-                              child: Column(
-                                children: [
-                                  Stack(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/accountholder.png',
-                                      ),
-                                      Container(
-                                        padding:
-                                            EdgeInsets.only(top: 12, left: 10),
-                                        child: FormBuilderTextField(
-                                          autovalidateMode: AutovalidateMode
-                                              .onUserInteraction,
-                                          style: TextStyle(
-                                              fontFamily: 'SFProDisplay',
-                                              fontSize: 20,
-                                              color: Color(0xff666666),
-                                              fontWeight: FontWeight.w400),
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                            enabledBorder: InputBorder.none,
-                                            errorBorder: InputBorder.none,
-                                            disabledBorder: InputBorder.none,
-                                            // labelText: 'Account Holder Full Name',
-                                            // labelStyle: TextStyle(
-                                            //     fontWeight: FontWeight.normal,
-                                            //     fontSize: 18),
-                                            // errorText:
-                                            //     'Please enter the full name of the account holder',
-                                            errorStyle:
-                                                TextStyle(color: Colors.red),
-                                            prefixIcon: Image.asset(
-                                              'assets/icons/usericon.png',
-                                              scale: 1.1,
-                                            ),
-                                            hintText:
-                                                'Account Holder Full Name',
-                                            hintStyle: TextStyle(
-                                                fontFamily: 'SFProDisplay',
-                                                fontSize: 20,
-                                                color: Color(0xffD3D3D3),
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          controller: accountHolderFullname,
-                                          validator:
-                                              FormBuilderValidators.compose([
-                                            FormBuilderValidators.required(
-                                                context),
-                                            FormBuilderValidators.min(
-                                                context, 3),
-                                            (val) {
-                                              if (val!.length > 3) {
-                                                return null;
-                                              }
-                                              return 'Please enter your name';
-                                            }
-                                          ]),
-                                          name: 'name',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 50,
-                                  ),
-                                  Stack(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/selectbank.png',
-                                      ),
-                                      Container(
-                                        padding:
-                                            EdgeInsets.only(top: 13, left: 10),
-                                        child: FormBuilderTextField(
-                                          style: TextStyle(
-                                              fontFamily: 'SFProDisplay',
-                                              fontSize: 20,
-                                              color: Color(0xff666666),
-                                              fontWeight: FontWeight.w400),
-                                          name: 'bank',
-                                          onTap: () async {
-                                            await _showMyDialog();
-                                            setState(() {});
-                                          },
-                                          decoration: InputDecoration(
-                                            suffixIcon: Icon(
-                                              Icons.keyboard_arrow_down,
-                                              size: 37,
-                                              color: Color(0xff1058FF),
-                                            ),
-                                            hintText: 'Please select your Bank',
-                                            border: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                            enabledBorder: InputBorder.none,
-                                            errorBorder: InputBorder.none,
-                                            disabledBorder: InputBorder.none,
-                                            prefixIcon: Image.asset(
-                                              'assets/images/bankk.png',
-                                              scale: 2,
-                                            ),
-                                            // errorText:
-                                            //     'Please select your bank name before entering your IBAN number',
-                                            errorStyle:
-                                                TextStyle(color: Colors.red),
-                                            hintStyle: TextStyle(
-                                                fontSize: 20,
-                                                color: Color(0xffD3D3D3),
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          readOnly: true,
-                                          autovalidateMode: AutovalidateMode
-                                              .onUserInteraction,
-                                          validator:
-                                              FormBuilderValidators.compose([
-                                            FormBuilderValidators.required(
-                                                context),
-                                          ]),
-                                          controller: selectBank,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 50,
-                                  ),
-                                  Stack(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/ibannumber.png',
-                                        fit: BoxFit.fitWidth,
-                                        scale: 0.1,
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.only(top: 12),
-                                        child: FormBuilderTextField(
-                                          autovalidateMode: AutovalidateMode
-                                              .onUserInteraction,
-                                          style: TextStyle(
-                                              fontFamily: 'SFProDisplay',
-                                              fontSize: 20,
-                                              color: Color(0xff666666),
-                                              fontWeight: FontWeight.w400),
-                                          name: 'iban',
-                                          decoration: InputDecoration(
-                                            prefixIcon: Container(
-                                              margin: EdgeInsets.fromLTRB(
-                                                  20, 10, 10, 10),
-                                              child: Image.asset(
-                                                AppAssets.ibanIcon,
-                                                height: 30,
-                                              ),
-                                            ),
-                                            prefixText: 'AE ',
-
-                                            prefixStyle: TextStyle(
-                                                fontSize: 20,
-                                                fontFamily: 'SFProDisplay',
-                                                color: AppTheme.brownishGrey),
-                                            border: InputBorder.none,
-                                            focusedBorder: InputBorder.none,
-                                            enabledBorder: InputBorder.none,
-                                            errorBorder: InputBorder.none,
-                                            disabledBorder: InputBorder.none,
-                                            // errorText:
-                                            //     'Only the use of numbers from 0 to 9 and upper case\nEnglish characters from A to Z is permitted',
-                                            errorStyle:
-                                                TextStyle(color: Colors.red),
-                                            hintText: '',
-                                            hintStyle: TextStyle(
-                                                fontFamily: 'SFProDisplay',
-                                                fontSize: 20,
-                                                color: Color(0xffD3D3D3),
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          keyboardType: TextInputType.phone,
-                                          validator:
-                                              FormBuilderValidators.compose([
-                                            (val) {
-                                              if (val!.length < 21) {
-                                                return 'The total length of IBAN number should be 23 characters';
-                                              }
-                                              return null;
-                                            },
-                                            (val) {
-                                              if (selectBank.text.isEmpty) {
-                                                return 'Please enter a valid IBAN number';
-                                              }
-                                              if (!isValid('AE' + val!)) {
-                                                return 'Please double check and enter a correct IBAN';
-                                              }
-
-                                              // if (selectBank.text.isEmpty) {
-                                              //   return 'Please select a Bank to proceed';
-                                              // }
-                                              // ignore: dead_code
-                                              return null;
-                                            },
-                                            FormBuilderValidators.required(
-                                                context),
-                                            (val) {
-                                              if (isValid('AE' + val!)) {
-                                                print('$val is a valid iban');
-                                              } else {
-                                                print(
-                                                    '$val is not a valid iban');
-                                                return 'Only the use of numbers from 0 to 9 and upper case English characters \nfrom A to Z is permitted';
-                                              }
-                                            },
-
-                                            // FormBuilderValidators.maxLength(
-                                            //     context, 23),
-                                          ]),
-                                          controller: iBanNumber,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'Add Bank Account',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 18),
+                                )
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                        (deviceHeight * 0.12).heightBox,
+                        Column(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              child: FormBuilder(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/accountholder.png',
+                                        ),
+                                        Container(
+                                          padding:
+                                              EdgeInsets.only(top: 12, left: 10),
+                                          child: FormBuilderTextField(
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            style: TextStyle(
+                                                fontFamily: 'SFProDisplay',
+                                                fontSize: 20,
+                                                color: Color(0xff666666),
+                                                fontWeight: FontWeight.w400),
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              focusedBorder: InputBorder.none,
+                                              enabledBorder: InputBorder.none,
+                                              errorBorder: InputBorder.none,
+                                              disabledBorder: InputBorder.none,
+                                              // labelText: 'Account Holder Full Name',
+                                              // labelStyle: TextStyle(
+                                              //     fontWeight: FontWeight.normal,
+                                              //     fontSize: 18),
+                                              // errorText:
+                                              //     'Please enter the full name of the account holder',
+                                              errorStyle:
+                                                  TextStyle(color: Colors.red),
+                                              prefixIcon: Image.asset(
+                                                'assets/icons/usericon.png',
+                                                scale: 1.1,
+                                              ),
+                                              hintText:
+                                                  'Account Holder Full Name',
+                                              hintStyle: TextStyle(
+                                                  fontFamily: 'SFProDisplay',
+                                                  fontSize: 20,
+                                                  color: Color(0xffD3D3D3),
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            controller: accountHolderFullname,
+                                            validator:
+                                                FormBuilderValidators.compose([
+                                              FormBuilderValidators.required(
+                                                  context),
+                                              FormBuilderValidators.min(
+                                                  context, 3),
+                                              (val) {
+                                                if (val!.length > 3) {
+                                                  return null;
+                                                }
+                                                return 'Please enter your name';
+                                              }
+                                            ]),
+                                            name: 'name',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 50,
+                                    ),
+                                    Stack(
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/selectbank.png',
+                                        ),
+                                        Container(
+                                          padding:
+                                              EdgeInsets.only(top: 13, left: 10),
+                                          child: FormBuilderTextField(
+                                            style: TextStyle(
+                                                fontFamily: 'SFProDisplay',
+                                                fontSize: 20,
+                                                color: Color(0xff666666),
+                                                fontWeight: FontWeight.w400),
+                                            name: 'bank',
+                                            onTap: () async {
+                                              await _showMyDialog();
+                                              setState(() {});
+                                            },
+                                            decoration: InputDecoration(
+                                              suffixIcon: Icon(
+                                                Icons.keyboard_arrow_down,
+                                                size: 37,
+                                                color: Color(0xff1058FF),
+                                              ),
+                                              hintText: 'Please select your Bank',
+                                              border: InputBorder.none,
+                                              focusedBorder: InputBorder.none,
+                                              enabledBorder: InputBorder.none,
+                                              errorBorder: InputBorder.none,
+                                              disabledBorder: InputBorder.none,
+                                              prefixIcon: Image.asset(
+                                                'assets/images/bankk.png',
+                                                scale: 2,
+                                              ),
+                                              // errorText:
+                                              //     'Please select your bank name before entering your IBAN number',
+                                              errorStyle:
+                                                  TextStyle(color: Colors.red),
+                                              hintStyle: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Color(0xffD3D3D3),
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            readOnly: true,
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            validator:
+                                                FormBuilderValidators.compose([
+                                              FormBuilderValidators.required(
+                                                  context),
+                                            ]),
+                                            controller: selectBank,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 50,
+                                    ),
+                                    Stack(
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/ibannumber.png',
+                                          fit: BoxFit.fitWidth,
+                                          scale: 0.1,
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.only(top: 12),
+                                          child: FormBuilderTextField(
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            style: TextStyle(
+                                                fontFamily: 'SFProDisplay',
+                                                fontSize: 20,
+                                                color: Color(0xff666666),
+                                                fontWeight: FontWeight.w400),
+                                            name: 'iban',
+                                            decoration: InputDecoration(
+                                              prefixIcon: Container(
+                                                margin: EdgeInsets.fromLTRB(
+                                                    20, 10, 10, 10),
+                                                child: Image.asset(
+                                                  AppAssets.ibanIcon,
+                                                  height: 30,
+                                                ),
+                                              ),
+                                              prefixText: 'AE ',
+    
+                                              prefixStyle: TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: 'SFProDisplay',
+                                                  color: AppTheme.brownishGrey),
+                                              border: InputBorder.none,
+                                              focusedBorder: InputBorder.none,
+                                              enabledBorder: InputBorder.none,
+                                              errorBorder: InputBorder.none,
+                                              disabledBorder: InputBorder.none,
+                                              // errorText:
+                                              //     'Only the use of numbers from 0 to 9 and upper case\nEnglish characters from A to Z is permitted',
+                                              errorStyle:
+                                                  TextStyle(color: Colors.red),
+                                              hintText: '',
+                                              hintStyle: TextStyle(
+                                                  fontFamily: 'SFProDisplay',
+                                                  fontSize: 20,
+                                                  color: Color(0xffD3D3D3),
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            keyboardType: TextInputType.phone,
+                                            validator:
+                                                FormBuilderValidators.compose([
+                                              (val) {
+                                                if (val!.length < 21) {
+                                                  return 'The total length of IBAN number should be 23 characters';
+                                                }
+                                                return null;
+                                              },
+                                              (val) {
+                                                if (selectBank.text.isEmpty) {
+                                                  return 'Please enter a valid IBAN number';
+                                                }
+                                                if (!isValid('AE' + val!)) {
+                                                  return 'Please double check and enter a correct IBAN';
+                                                }
+    
+                                                // if (selectBank.text.isEmpty) {
+                                                //   return 'Please select a Bank to proceed';
+                                                // }
+                                                // ignore: dead_code
+                                                return null;
+                                              },
+                                              FormBuilderValidators.required(
+                                                  context),
+                                              (val) {
+                                                if (isValid('AE' + val!)) {
+                                                  print('$val is a valid iban');
+                                                } else {
+                                                  print(
+                                                      '$val is not a valid iban');
+                                                  return 'Only the use of numbers from 0 to 9 and upper case English characters \nfrom A to Z is permitted';
+                                                }
+                                              },
+    
+                                              // FormBuilderValidators.maxLength(
+                                              //     context, 23),
+                                            ]),
+                                            controller: iBanNumber,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
