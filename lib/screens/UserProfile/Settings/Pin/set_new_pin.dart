@@ -349,7 +349,7 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
       if (setPinNotifier.value.length < 4) {
         setPinNotifier.value = setPinNotifier.value + str;
         if (setPinNotifier.value.length == 4) {
-          if(PincodeStrenth().checkPincodeStrenth(setPinNotifier.value)){
+          if(await PincodeStrenth().checkPincodeStrenth(setPinNotifier.value)){
             setState(() {
               showError = true;
             });
