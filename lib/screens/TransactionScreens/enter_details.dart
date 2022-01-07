@@ -12,6 +12,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf_render/pdf_render.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:urbanledger/Cubits/Contacts/contacts_cubit.dart';
 import 'package:urbanledger/Cubits/Ledger/ledger_cubit.dart';
 import 'package:urbanledger/Models/customer_model.dart';
@@ -21,6 +22,7 @@ import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/app_services.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
 import 'package:urbanledger/screens/UserProfile/MyLedger/business_provider.dart';
+import 'package:whatsapp_share/whatsapp_share.dart';
 // import 'package:whatsapp_share/whatsapp_share.dart';
 
 class EnterDetails extends StatefulWidget {
@@ -196,13 +198,13 @@ class _EnterDetailsState extends State<EnterDetails> {
                     }
                     File file = File(directory!.path + '/image1.png');
                     file.writeAsBytesSync(await _capturePng());
-                    // Share.shareFiles([file.path]);
-                    // final val = await WhatsappShare.isInstalled(
-                    //     package: Package.whatsapp);
-                    // if (val) {
-                    //   await whatsappShare(
-                    //       widget.customerModel!.mobileNo!, file.path);
-                    // }
+                    Share.shareFiles([file.path]);
+                    final val = await WhatsappShare.isInstalled(
+                        package: Package.whatsapp);
+                    if (val) {
+                      await whatsappShare(
+                          widget.customerModel!.mobileNo!, file.path);
+                    }
                   },
                 ),
               ),
