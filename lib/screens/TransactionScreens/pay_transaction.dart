@@ -93,7 +93,7 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
     _paymentController = PaymentController(
       context: context,
     );
-    getKyc();
+    // getKyc();
     calculatePremiumDate();
     debugPrint('dd : kycStatus:  ' +
         Repository().hiveQueries.userData.kycStatus.toString());
@@ -350,25 +350,25 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
         });
   }
 
-Future getKyc() async {
-    setState(() {
-      isLoading = true;
-    });
-    await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      setState(() {
-        isLoading = false;
-      });
-      'Something went wrong. Please try again later.'.showSnackBar(context);
-    }).then((value) {
-      setState(() {
-        isLoading = false;
-      });
-    });
-    calculatePremiumDate();
-    setState(() {
-      isLoading = false;
-    });
-  }
+// Future getKyc() async {
+//     setState(() {
+//       isLoading = true;
+//     });
+//     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
+//       setState(() {
+//         isLoading = false;
+//       });
+//       'Something went wrong. Please try again later.'.showSnackBar(context);
+//     }).then((value) {
+//       setState(() {
+//         isLoading = false;
+//       });
+//     });
+//     calculatePremiumDate();
+//     setState(() {
+//       isLoading = false;
+//     });
+//   }
 
   getCar() async {
     await CustomSharedPreferences.remove('DynamicQRData');

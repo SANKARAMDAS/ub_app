@@ -15,6 +15,7 @@ import 'package:urbanledger/Utility/app_routes.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
+import 'package:urbanledger/screens/SuspenseAccount/suspense_account_screen.dart';
 import 'package:urbanledger/screens/UserProfile/MyLedger/business_provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -600,8 +601,13 @@ class _SuspenseDtState extends State<SuspenseDt> {
                                 'Selected transaction moved\nsuccessfully!'
                                     .showSnackBar(context);
                                 Navigator.pop(context);
-                                Navigator.pushReplacementNamed(
-                                    context, AppRoutes.suspenseAccountRoute);
+                              /*  Navigator.pushReplacementNamed(
+                                    context, AppRoutes.suspenseAccountRoute);*/
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => SuspenseAccountScreen()),
+                                    ModalRoute.withName(AppRoutes.myProfileScreenRoute));
+
                               }
                             });
                             Provider.of<BusinessProvider>(context,

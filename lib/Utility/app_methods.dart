@@ -7,7 +7,10 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:urbanledger/Services/APIs/kyc_api.dart';
 import 'package:urbanledger/Services/repository.dart';
+import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
+import 'package:urbanledger/screens/Components/custom_popup.dart';
 
 // import 'package:url_launcher/url_launcher.dart';
 
@@ -65,9 +68,118 @@ void equalPressed() {
 }
 
 bool documentLifecycle(String document) {
-  if(document == 'Pending'){
+  if (document == 'Pending') {
     return false;
-  } else if (document == 'Rejected'){
+  } else if (document == 'Rejected') {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+Future<bool> allChecker(BuildContext context) async {
+  calculatePremiumDate();
+  if (Repository().hiveQueries.userData.bankStatus == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userBankNotAdded');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus2 == 'Rejected' ||
+      Repository().hiveQueries.userData.kycStatus2 == 'Expired') {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCExpired');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isEmiratesIdDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'EmiratesIdPending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isTradeLicenseDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'TradeLicensePending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCPending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 2) {
+    CustomLoadingDialog.showLoadingDialog(context);
+    await KycAPI.kycApiProvider.kycCheker().then((value) {
+      Navigator.of(context).pop();
+      MerchantBankNotAdded.showBankNotAddedDialog(
+          context, 'userKYCVerificationPending');
+    });
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 1 &&
+      Repository().hiveQueries.userData.premiumStatus == 0) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'upgradePremium');
+    return false;
+  } else {
+    return true;
+  }
+}
+
+Future<bool> kycAndPremium(BuildContext context) async {
+  calculatePremiumDate();
+  if (Repository().hiveQueries.userData.kycStatus2 == 'Rejected' ||
+      Repository().hiveQueries.userData.kycStatus2 == 'Expired') {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCExpired');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isEmiratesIdDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'EmiratesIdPending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isTradeLicenseDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'TradeLicensePending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCPending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 2) {
+    CustomLoadingDialog.showLoadingDialog(context);
+    await KycAPI.kycApiProvider.kycCheker().then((value) {
+      Navigator.of(context).pop();
+      MerchantBankNotAdded.showBankNotAddedDialog(
+          context, 'userKYCVerificationPending');
+    });
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 1 &&
+      Repository().hiveQueries.userData.premiumStatus == 0) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'upgradePremium');
+    return false;
+  } else {
+    return true;
+  }
+}
+
+Future<bool> kycChecker(BuildContext context) async {
+  if (Repository().hiveQueries.userData.kycStatus2 == 'Rejected' ||
+      Repository().hiveQueries.userData.kycStatus2 == 'Expired') {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCExpired');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isEmiratesIdDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'EmiratesIdPending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isTradeLicenseDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'TradeLicensePending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCPending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 2) {
+    CustomLoadingDialog.showLoadingDialog(context);
+    await KycAPI.kycApiProvider.kycCheker().then((value) {
+      Navigator.of(context).pop();
+      MerchantBankNotAdded.showBankNotAddedDialog(
+          context, 'userKYCVerificationPending');
+    });
+    return false;
+  } else {
+    return true;
+  }
+}
+
+bool bankChecker(BuildContext context) {
+  if (Repository().hiveQueries.userData.bankStatus == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userBankNotAdded');
     return false;
   } else {
     return true;
@@ -86,11 +198,11 @@ String fixTo2(double? number) {
   return number == null ? '' : number.toStringAsFixed(2);
 }
 
-bool isPlatformiOS(){
-  if(Platform.isIOS)
-  return true;
+bool isPlatformiOS() {
+  if (Platform.isIOS)
+    return true;
   else
-  return false;
+    return false;
 }
 
 double removeNegativeIfNegative(double? amount) {
@@ -148,7 +260,7 @@ double getWHRatio(context) {
 }
 
 Map<String, String> apiAuthHeader() {
-  print('token'+Repository().hiveQueries.token);
+  print('token' + Repository().hiveQueries.token);
   return {
     "Content-Type": "application/json",
     "Authorization": Repository().hiveQueries.token
@@ -194,9 +306,11 @@ Future<void> recordError(e, s) async =>
     await FirebaseCrashlytics.instance.recordError(e, s);
 
 const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-        '1', 'Pdf Notifications', channelDescription:'Notifications shown on download of a pdf',
-        importance: Importance.max, priority: Priority.high, showWhen: false);
+    AndroidNotificationDetails('1', 'Pdf Notifications',
+        channelDescription: 'Notifications shown on download of a pdf',
+        importance: Importance.max,
+        priority: Priority.high,
+        showWhen: false);
 
 const IOSNotificationDetails iosCS = IOSNotificationDetails(
   presentAlert: true,

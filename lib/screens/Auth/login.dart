@@ -7,6 +7,7 @@ import 'package:urbanledger/Utility/app_constants.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
 import 'package:urbanledger/Utility/app_routes.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
+import 'package:urbanledger/chat_module/utils/custom_shared_preferences.dart';
 import 'package:urbanledger/main.dart';
 import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
@@ -288,6 +289,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         return false;
                                       }));
                                 if (status) {
+                                  await CustomSharedPreferences.setString('ph_no_without_co',_mobileController.text);
                                   Navigator.of(context).pop();
                                   Navigator.of(context).pushNamed(
                                       AppRoutes.verificationRoute,
