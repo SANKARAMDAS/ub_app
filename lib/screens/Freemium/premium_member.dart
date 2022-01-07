@@ -32,32 +32,32 @@ class _UrbanLedgerPremiumState extends State<UrbanLedgerPremium> {
   bool isLoading = true;
   String? planPurchase;
 
-Future getKyc() async {
-    setState(() {
-      isLoading = true;
-    });
-    await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      setState(() {
-        isLoading = false;
-      });
-      'Something went wrong. Please try again later.'.showSnackBar(context);
-    }).then((value) {
-      setState(() {
-        isLoading = false;
-      });
-    });
-    calculatePremiumDate();
-    setState(() {
-      isLoading = false;
-    });
-  }
+// Future getKyc() async {
+//     setState(() {
+//       isLoading = true;
+//     });
+//     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
+//       setState(() {
+//         isLoading = false;
+//       });
+//       'Something went wrong. Please try again later.'.showSnackBar(context);
+//     }).then((value) {
+//       setState(() {
+//         isLoading = false;
+//       });
+//     });
+//     calculatePremiumDate();
+//     setState(() {
+//       isLoading = false;
+//     });
+//   }
 
   @override
   void initState() {
     super.initState();
 
     getPremiumPlans();
-    getKyc();
+    // getKyc();
     calculatePremiumDate();
   }
 

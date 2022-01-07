@@ -263,25 +263,25 @@ class _CustomBottomNavBarNewState extends State<CustomBottomNavBarNew> {
   //       });
   // }
 
-Future getKyc() async {
-    setState(() {
-      isLoading = true;
-    });
-    await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      setState(() {
-        isLoading = false;
-      });
-      'Something went wrong. Please try again later.'.showSnackBar(context);
-    }).then((value) {
-      setState(() {
-        isLoading = false;
-      });
-    });
-    calculatePremiumDate();
-    setState(() {
-      isLoading = false;
-    });
-  }
+// Future getKyc() async {
+//     setState(() {
+//       isLoading = true;
+//     });
+//     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
+//       setState(() {
+//         isLoading = false;
+//       });
+//       'Something went wrong. Please try again later.'.showSnackBar(context);
+//     }).then((value) {
+//       setState(() {
+//         isLoading = false;
+//       });
+//     });
+//     calculatePremiumDate();
+//     setState(() {
+//       isLoading = false;
+//     });
+//   }
 
   @override
   void initState() {
@@ -412,90 +412,7 @@ Future getKyc() async {
                     )
                   : InkWell(
                       onTap: () async {
-                        debugPrint('KYC STATUS : ' +
-                            Repository()
-                                .hiveQueries
-                                .userData
-                                .kycStatus
-                                .toString());
-                        debugPrint('Premium STATUS : ' +
-                            Repository()
-                                .hiveQueries
-                                .userData
-                                .premiumStatus
-                                .toString());
-                        debugPrint('Premium date : ' +
-                            Repository()
-                                .hiveQueries
-                                .userData
-                                .premiumExpDate
-                                .toString());
-                        if (Repository().hiveQueries.userData.kycStatus != 1 &&
-                            (Repository().hiveQueries.userData.premiumStatus ==
-                                0)) {
-                          debugPrint('Here2 ' +
-                              Repository()
-                                  .hiveQueries
-                                  .userData
-                                  .kycStatus
-                                  .toString());
-
-                         if(Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Rejected' || Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Expired') {
-                                          MerchantBankNotAdded
-                                          .showBankNotAddedDialog(context,
-                                              'userKYCExpired');
-                                } else if (Repository().hiveQueries.userData.kycStatus ==
-                              2) {
-                            debugPrint('VKYC VERIFICATION');
-                            //If KYC is Verification is Pending
-                            await getKyc().then((value) =>
-                                MerchantBankNotAdded.showBankNotAddedDialog(
-                                    context, 'userKYCVerificationPending'));
-                          } else if (Repository()
-                                  .hiveQueries
-                                  .userData
-                                  .kycStatus ==
-                              0) {
-                            debugPrint('VKYC NEW JOURNEY');
-                            //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                            MerchantBankNotAdded.showBankNotAddedDialog(
-                                context, 'userKYCPending');
-                          } else if (Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .kycStatus ==
-                                  0 &&
-                              Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .isEmiratesIdDone ==
-                                  false) {
-                            debugPrint('VKYC EMIRATES');
-                            //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                            MerchantBankNotAdded.showBankNotAddedDialog(
-                                context, 'EmiratesIdPending');
-                          } else if (Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .kycStatus ==
-                                  0 ||
-                              Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .isTradeLicenseDone ==
-                                  false) {
-                            debugPrint('VKYC Trade');
-                            //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                            MerchantBankNotAdded.showBankNotAddedDialog(
-                                context, 'TradeLicensePending');
-                          }
-                        } else {
+                        if (await kycChecker(context)) {
                           await calculatePremiumDate();
 
                           if (Repository().hiveQueries.userData.premiumStatus ==

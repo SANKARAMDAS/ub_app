@@ -7,7 +7,9 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:urbanledger/Services/APIs/kyc_api.dart';
 import 'package:urbanledger/Services/repository.dart';
+import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
 import 'package:urbanledger/screens/Components/custom_popup.dart';
 
 // import 'package:url_launcher/url_launcher.dart';
@@ -75,35 +77,112 @@ bool documentLifecycle(String document) {
   }
 }
 
-String allChecker(BuildContext context) {
-  
+Future<bool> allChecker(BuildContext context) async {
+  calculatePremiumDate();
   if (Repository().hiveQueries.userData.bankStatus == false) {
     MerchantBankNotAdded.showBankNotAddedDialog(context, 'userBankNotAdded');
-    return 'false';
-  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
-      Repository().hiveQueries.userData.isEmiratesIdDone == false) {
-    MerchantBankNotAdded.showBankNotAddedDialog(context, 'EmiratesIdPending');
-    return 'false';
-  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
-      Repository().hiveQueries.userData.isTradeLicenseDone == false) {
-    MerchantBankNotAdded.showBankNotAddedDialog(context, 'TradeLicensePending');
-    return 'false';
-  } else if (Repository().hiveQueries.userData.kycStatus == 0) {
-    debugPrint(Repository().hiveQueries.userData.kycStatus.toString());
-    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCPending');
-    return 'false';
+    return false;
   } else if (Repository().hiveQueries.userData.kycStatus2 == 'Rejected' ||
       Repository().hiveQueries.userData.kycStatus2 == 'Expired') {
     MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCExpired');
-    return 'false';
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isEmiratesIdDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'EmiratesIdPending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isTradeLicenseDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'TradeLicensePending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCPending');
+    return false;
   } else if (Repository().hiveQueries.userData.kycStatus == 2) {
-    return 'isKYCVerified';
+    CustomLoadingDialog.showLoadingDialog(context);
+    await KycAPI.kycApiProvider.kycCheker().then((value) {
+      Navigator.of(context).pop();
+      MerchantBankNotAdded.showBankNotAddedDialog(
+          context, 'userKYCVerificationPending');
+    });
+    return false;
   } else if (Repository().hiveQueries.userData.kycStatus == 1 &&
       Repository().hiveQueries.userData.premiumStatus == 0) {
     MerchantBankNotAdded.showBankNotAddedDialog(context, 'upgradePremium');
-    return 'false';
+    return false;
   } else {
-    return 'true';
+    return true;
+  }
+}
+
+Future<bool> kycAndPremium(BuildContext context) async {
+  calculatePremiumDate();
+  if (Repository().hiveQueries.userData.kycStatus2 == 'Rejected' ||
+      Repository().hiveQueries.userData.kycStatus2 == 'Expired') {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCExpired');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isEmiratesIdDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'EmiratesIdPending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isTradeLicenseDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'TradeLicensePending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCPending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 2) {
+    CustomLoadingDialog.showLoadingDialog(context);
+    await KycAPI.kycApiProvider.kycCheker().then((value) {
+      Navigator.of(context).pop();
+      MerchantBankNotAdded.showBankNotAddedDialog(
+          context, 'userKYCVerificationPending');
+    });
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 1 &&
+      Repository().hiveQueries.userData.premiumStatus == 0) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'upgradePremium');
+    return false;
+  } else {
+    return true;
+  }
+}
+
+Future<bool> kycChecker(BuildContext context) async {
+  if (Repository().hiveQueries.userData.kycStatus2 == 'Rejected' ||
+      Repository().hiveQueries.userData.kycStatus2 == 'Expired') {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCExpired');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isEmiratesIdDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'EmiratesIdPending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isTradeLicenseDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'TradeLicensePending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 0) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCPending');
+    return false;
+  } else if (Repository().hiveQueries.userData.kycStatus == 2) {
+    CustomLoadingDialog.showLoadingDialog(context);
+    await KycAPI.kycApiProvider.kycCheker().then((value) {
+      Navigator.of(context).pop();
+      MerchantBankNotAdded.showBankNotAddedDialog(
+          context, 'userKYCVerificationPending');
+    });
+    return false;
+  } else {
+    return true;
+  }
+}
+
+bool bankChecker(BuildContext context) {
+  if (Repository().hiveQueries.userData.bankStatus == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userBankNotAdded');
+    return false;
+  } else {
+    return true;
   }
 }
 

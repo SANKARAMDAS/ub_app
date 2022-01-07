@@ -655,25 +655,25 @@ class _TransactionListScreenState extends State<TransactionListScreen>
         });
   }
 
-Future getKyc() async {
-    setState(() {
-      isLoading = true;
-    });
-    await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      setState(() {
-        isLoading = false;
-      });
-      'Something went wrong. Please try again later.'.showSnackBar(context);
-    }).then((value) {
-      setState(() {
-        isLoading = false;
-      });
-    });
-    calculatePremiumDate();
-    setState(() {
-      isLoading = false;
-    });
-  }
+// Future getKyc() async {
+//     setState(() {
+//       isLoading = true;
+//     });
+//     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
+//       setState(() {
+//         isLoading = false;
+//       });
+//       'Something went wrong. Please try again later.'.showSnackBar(context);
+//     }).then((value) {
+//       setState(() {
+//         isLoading = false;
+//       });
+//     });
+//     calculatePremiumDate();
+//     setState(() {
+//       isLoading = false;
+//     });
+//   }
 
   merchantBankNotAddedModalSheet({text}) {
     return showModalBottomSheet(
@@ -753,7 +753,7 @@ Future getKyc() async {
     super.initState();
     _customerData = widget.customerModel;
     data();
-    getKyc();
+    // getKyc();
     // getRecentBankAcc();
 
     audioPlayer = AudioPlayer();
@@ -1224,117 +1224,7 @@ Future getKyc() async {
                                             .format(_selectedDate!),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () async {
-                                        if (Repository()
-                                                .hiveQueries
-                                                .userData
-                                                .bankStatus ==
-                                            false) {
-                                          MerchantBankNotAdded
-                                              .showBankNotAddedDialog(
-                                                  context, 'userBankNotAdded');
-                                        } else if ((Repository()
-                                                        .hiveQueries
-                                                        .userData
-                                                        .kycStatus ==
-                                                    0 ||
-                                                Repository()
-                                                        .hiveQueries
-                                                        .userData
-                                                        .kycStatus ==
-                                                    2) ||
-                                            (Repository()
-                                                    .hiveQueries
-                                                    .userData
-                                                    .premiumStatus ==
-                                                0)) {
-                                          if(Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Rejected' || Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Expired') {
-                                          MerchantBankNotAdded
-                                          .showBankNotAddedDialog(context,
-                                              'userKYCExpired');
-                                } else if (Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .kycStatus ==
-                                              2) {
-                                            //If KYC is Verification is Pending
-                                            if (isLoad == false) {
-                                              setState(() {
-                                                isLoad = true;
-                                              });
-                                              await getKyc()
-                                                  .then((value) =>
-                                                      MerchantBankNotAdded
-                                                          .showBankNotAddedDialog(
-                                                              context,
-                                                              'userKYCVerificationPending'))
-                                                  .then((value) {
-                                                setState(() {
-                                                  isLoad = false;
-                                                });
-                                              });
-                                            }
-                                          } else if (Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .kycStatus ==
-                                              0) {
-                                            //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                                            MerchantBankNotAdded
-                                                .showBankNotAddedDialog(
-                                                    context, 'userKYCPending');
-                                          } else if (Repository()
-                                                      .hiveQueries
-                                                      .userData
-                                                      .kycStatus ==
-                                                  0 &&
-                                              Repository()
-                                                      .hiveQueries
-                                                      .userData
-                                                      .isEmiratesIdDone ==
-                                                  false) {
-                                            //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                            MerchantBankNotAdded
-                                                .showBankNotAddedDialog(context,
-                                                    'EmiratesIdPending');
-                                          } else if (Repository()
-                                                      .hiveQueries
-                                                      .userData
-                                                      .kycStatus ==
-                                                  0 &&
-                                              Repository()
-                                                      .hiveQueries
-                                                      .userData
-                                                      .isTradeLicenseDone ==
-                                                  false) {
-                                            //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                            MerchantBankNotAdded
-                                                .showBankNotAddedDialog(context,
-                                                    'TradeLicensePending');
-                                          } else if (Repository()
-                                                      .hiveQueries
-                                                      .userData
-                                                      .kycStatus ==
-                                                  1 &&
-                                              Repository()
-                                                      .hiveQueries
-                                                      .userData
-                                                      .premiumStatus ==
-                                                  0) {
-                                            MerchantBankNotAdded
-                                                .showBankNotAddedDialog(
-                                                    context, 'upgradePremium');
-                                          } else {
-                                            await showDateBottomSheet(
-                                                snapshot.data);
-                                            setState(() {});
-                                          }
-                                        } else {
+                                        if (await allChecker(context)) {
                                           await showDateBottomSheet(
                                               snapshot.data);
                                           setState(() {});
@@ -1425,109 +1315,7 @@ Future getKyc() async {
                                   : AppTheme.electricBlue,
                             ),
                             onTap: () async {
-                              if (Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .bankStatus ==
-                                  false) {
-                                MerchantBankNotAdded.showBankNotAddedDialog(
-                                    context, 'userBankNotAdded');
-                              } else if ((Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .kycStatus ==
-                                          0 ||
-                                      Repository()
-                                              .hiveQueries
-                                              .userData
-                                              .kycStatus ==
-                                          2) ||
-                                  (Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .premiumStatus ==
-                                      0)) {
-                               if(Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Rejected' || Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Expired') {
-                                          MerchantBankNotAdded
-                                          .showBankNotAddedDialog(context,
-                                              'userKYCExpired');
-                                } else if (Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus ==
-                                    2) {
-                                  //If KYC is Verification is Pending
-                                  if (isLoad == false) {
-                                    setState(() {
-                                      isLoad = true;
-                                    });
-                                    await getKyc()
-                                        .then((value) => MerchantBankNotAdded
-                                            .showBankNotAddedDialog(context,
-                                                'userKYCVerificationPending'))
-                                        .then((value) {
-                                      setState(() {
-                                        isLoad = false;
-                                      });
-                                    });
-                                  }
-                                } else if (Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus ==
-                                    0) {
-                                  //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                                  MerchantBankNotAdded.showBankNotAddedDialog(
-                                      context, 'userKYCPending');
-                                } else if (Repository()
-                                            .hiveQueries
-                                            .userData
-                                            .kycStatus ==
-                                        0 &&
-                                    Repository()
-                                            .hiveQueries
-                                            .userData
-                                            .isEmiratesIdDone ==
-                                        false) {
-                                  //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                  MerchantBankNotAdded.showBankNotAddedDialog(
-                                      context, 'EmiratesIdPending');
-                                } else if (Repository()
-                                            .hiveQueries
-                                            .userData
-                                            .kycStatus ==
-                                        0 &&
-                                    Repository()
-                                            .hiveQueries
-                                            .userData
-                                            .isTradeLicenseDone ==
-                                        false) {
-                                  //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                  MerchantBankNotAdded.showBankNotAddedDialog(
-                                      context, 'TradeLicensePending');
-                                } else if (Repository()
-                                            .hiveQueries
-                                            .userData
-                                            .kycStatus ==
-                                        1 &&
-                                    Repository()
-                                            .hiveQueries
-                                            .userData
-                                            .premiumStatus ==
-                                        0) {
-                                  MerchantBankNotAdded.showBankNotAddedDialog(
-                                      context, 'upgradePremium');
-                                } else {
-                                  await showDateBottomSheet(snapshot.data);
-                                  setState(() {});
-                                }
-                              } else {
+                              if (await allChecker(context)) {
                                 await showDateBottomSheet(snapshot.data);
                                 setState(() {});
                               }

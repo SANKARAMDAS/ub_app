@@ -6,6 +6,7 @@ import 'package:urbanledger/Utility/app_constants.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
 import 'package:urbanledger/Utility/app_routes.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
+import 'package:urbanledger/main.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 import 'package:urbanledger/screens/Components/extensions.dart';
 import 'package:urbanledger/screens/Components/shimmer_widgets.dart';
@@ -26,8 +27,10 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
   }
 
   bool isEmiratesIdDone = Repository().hiveQueries.userData.isEmiratesIdDone;
-  bool isTradeLicenseDone = Repository().hiveQueries.userData.isTradeLicenseDone;
-  bool status = Repository().hiveQueries.userData.kycStatus2 == 'Approved' ? true: false;
+  bool isTradeLicenseDone =
+      Repository().hiveQueries.userData.isTradeLicenseDone;
+  bool status =
+      Repository().hiveQueries.userData.kycStatus2 == 'Approved' ? true : false;
   bool checkedValue = true;
   bool isPremium = false;
   bool isLoading = false;
@@ -36,7 +39,8 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
     setState(() {
       isLoading = true;
     });
-    debugPrint('qwerttyy : '+Repository().hiveQueries.userData.isEmiratesIdDone.toString());
+    debugPrint('qwerttyy : ' +
+        Repository().hiveQueries.userData.isEmiratesIdDone.toString());
     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
       setState(() {
         isLoading = false;
@@ -201,9 +205,9 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                         ),
                       ),
                       InkWell(
-                        onTap: checkedValue == false
-                            ? () {}
-                            : isEmiratesIdDone == false
+                        onTap:
+                            repository.hiveQueries.userData.isEmiratesIdDone ==
+                                    false
                                 ? () {
                                     Navigator.pushReplacementNamed(
                                         context, AppRoutes.scanEmiratesID);
@@ -267,22 +271,38 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                                         ),
                                 ],
                               ),
-                              isEmiratesIdDone == false
+                              repository.hiveQueries.userData
+                                          .isEmiratesIdDone ==
+                                      false
                                   ? Icon(
                                       Icons.chevron_right,
                                       size: 32,
                                       color: Color(0xff666666),
                                     )
-                                  : CircleAvatar(
-                                      backgroundColor: Colors.green,
-                                      radius: 20,
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.check,
-                                          color: Colors.white,
+                                  : repository.hiveQueries.userData
+                                                  .isEmiratesIdDone ==
+                                              true &&
+                                          (repository.hiveQueries.userData
+                                                      .emiratesIdVerified ==
+                                                  'Rejected' ||
+                                              repository.hiveQueries.userData
+                                                      .kycStatus2 ==
+                                                  'Expired')
+                                      ? Icon(
+                                          Icons.chevron_right,
+                                          size: 32,
+                                          color: Color(0xff666666),
+                                        )
+                                      : CircleAvatar(
+                                          backgroundColor: Colors.green,
+                                          radius: 20,
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
                             ],
                           ),
                         ),
@@ -303,10 +323,12 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                         ),
                       ),
                       InkWell(
-                        onTap: checkedValue == false && isEmiratesIdDone == true
-                            ? () {}
-                            : isTradeLicenseDone == false &&
-                                    isEmiratesIdDone == true
+                        onTap:
+                            repository.hiveQueries.userData.isEmiratesIdDone ==
+                                        true &&
+                                    repository.hiveQueries.userData
+                                            .isTradeLicenseDone ==
+                                        false
                                 ? () {
                                     Navigator.pushReplacementNamed(
                                         context, AppRoutes.scanTradeLicense);
@@ -318,9 +340,21 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                           padding: EdgeInsets.symmetric(
                               horizontal: 15, vertical: 25),
                           decoration: BoxDecoration(
-                            color: isEmiratesIdDone == false
+                            color: repository.hiveQueries.userData
+                                        .isEmiratesIdDone ==
+                                    false
                                 ? AppTheme.greyish
-                                : Colors.white,
+                                : repository.hiveQueries.userData
+                                                .isTradeLicenseDone ==
+                                            true &&
+                                        (repository.hiveQueries.userData
+                                                    .tradeLicenseVerified ==
+                                                'Rejected' ||
+                                            repository.hiveQueries.userData
+                                                    .kycStatus2 ==
+                                                'Expired')
+                                    ? AppTheme.greyish
+                                    : Colors.white,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Row(
@@ -346,22 +380,38 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                                   ),
                                 ],
                               ),
-                              isTradeLicenseDone == false
+                              repository.hiveQueries.userData
+                                          .isTradeLicenseDone ==
+                                      false
                                   ? Icon(
                                       Icons.chevron_right,
                                       size: 32,
                                       color: Color(0xff666666),
                                     )
-                                  : CircleAvatar(
-                                      backgroundColor: Colors.green,
-                                      radius: 20,
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.check,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
+                                  : repository.hiveQueries.userData
+                                                  .isTradeLicenseDone ==
+                                              true &&
+                                          (repository.hiveQueries.userData
+                                                      .tradeLicenseVerified ==
+                                                  'Rejected' ||
+                                              repository.hiveQueries.userData
+                                                      .kycStatus2 ==
+                                                  'Expired')
+                                      ? Icon(
+                                          Icons.chevron_right,
+                                          size: 32,
+                                          color: Color(0xff666666),
+                                        )
+                                      : CircleAvatar(
+                                          backgroundColor: Colors.green,
+                                          radius: 20,
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.check,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        )
                             ],
                           ),
                         ),
@@ -397,29 +447,67 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                         child: ElevatedButton(
                           onPressed: checkedValue == false
                               ? () {}
-                              : (isEmiratesIdDone == true &&
-                                      isTradeLicenseDone == true)
-                                  ? () async {
-                                      await Provider.of<KycProvider>(context,
-                                              listen: false)
-                                          .updateKyc();
-                                      // Navigator.popAndPushNamed(context,
-                                      //     AppRoutes.myProfileScreenRoute);
-                                      Navigator.of(context)
-                                          .popUntil((route) => route.isFirst);
-                                      Navigator.of(context)
-                                          .pushReplacementNamed(
-                                              AppRoutes.mainRoute);
-                                    }
-                                  : () {
-                                      if (isEmiratesIdDone == false) {
-                                        Navigator.pushReplacementNamed(
-                                            context, AppRoutes.scanEmiratesID);
-                                      } else {
-                                        Navigator.pushReplacementNamed(context,
-                                            AppRoutes.scanTradeLicense);
-                                      }
-                                    },
+                              : (repository.hiveQueries.userData
+                                              .tradeLicenseVerified ==
+                                          'Rejected' ||
+                                      repository.hiveQueries.userData
+                                              .kycStatus2 ==
+                                          'Expired')
+                                  ? () {
+                                    if (repository.hiveQueries.userData
+                                                  .isEmiratesIdDone ==
+                                              true && (repository.hiveQueries.userData
+                                                  .kycStatus2 ==
+                                              'Rejected' || repository.hiveQueries.userData
+                                                  .kycStatus2 ==
+                                              'Expired')) {
+                                            Navigator.pushReplacementNamed(
+                                                context,
+                                                AppRoutes.scanEmiratesID);
+                                          } else if (repository.hiveQueries.userData
+                                                  .isTradeLicenseDone ==
+                                              true && (repository.hiveQueries.userData
+                                                  .kycStatus2 ==
+                                              'Rejected' || repository.hiveQueries.userData
+                                                  .kycStatus2 ==
+                                              'Expired')) {
+                                            Navigator.pushReplacementNamed(
+                                                context,
+                                                AppRoutes.scanTradeLicense);
+                                          }
+                                  }
+                                  : (repository.hiveQueries.userData
+                                                  .isEmiratesIdDone ==
+                                              true &&
+                                          repository.hiveQueries.userData
+                                                  .isTradeLicenseDone ==
+                                              true)
+                                      ? () async {
+                                          await Provider.of<KycProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .updateKyc();
+                                          // Navigator.popAndPushNamed(context,
+                                          //     AppRoutes.myProfileScreenRoute);
+                                          Navigator.of(context).popUntil(
+                                              (route) => route.isFirst);
+                                          Navigator.of(context)
+                                              .pushReplacementNamed(
+                                                  AppRoutes.mainRoute);
+                                        }
+                                      : () {
+                                          if (repository.hiveQueries.userData
+                                                  .isEmiratesIdDone ==
+                                              false) {
+                                            Navigator.pushReplacementNamed(
+                                                context,
+                                                AppRoutes.scanEmiratesID);
+                                          } else {
+                                            Navigator.pushReplacementNamed(
+                                                context,
+                                                AppRoutes.scanTradeLicense);
+                                          }
+                                        },
                           style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.all(18),
                               shape: RoundedRectangleBorder(
@@ -428,10 +516,21 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                                   ? AppTheme.greyish
                                   : AppTheme.electricBlue),
                           child: CustomText(
-                              (isEmiratesIdDone == true &&
-                                      isTradeLicenseDone == true)
-                                  ? 'DONE'
-                                  : 'SCAN NOW'.toUpperCase(),
+                              (repository.hiveQueries.userData
+                                              .tradeLicenseVerified ==
+                                          'Rejected' ||
+                                      repository.hiveQueries.userData
+                                              .kycStatus2 ==
+                                          'Expired')
+                                  ? 'SCAN NOW'
+                                  : (repository.hiveQueries.userData
+                                                  .isEmiratesIdDone ==
+                                              true &&
+                                          repository.hiveQueries.userData
+                                                  .isTradeLicenseDone ==
+                                              true)
+                                      ? 'DONE'
+                                      : 'SCAN NOW'.toUpperCase(),
                               color: Colors.white,
                               size: 18,
                               bold: FontWeight.w500),
