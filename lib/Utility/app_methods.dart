@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:urbanledger/Services/repository.dart';
+import 'package:urbanledger/screens/Components/custom_popup.dart';
 
 // import 'package:url_launcher/url_launcher.dart';
 
@@ -65,12 +66,44 @@ void equalPressed() {
 }
 
 bool documentLifecycle(String document) {
-  if(document == 'Pending'){
+  if (document == 'Pending') {
     return false;
-  } else if (document == 'Rejected'){
+  } else if (document == 'Rejected') {
     return false;
   } else {
     return true;
+  }
+}
+
+String allChecker(BuildContext context) {
+  
+  if (Repository().hiveQueries.userData.bankStatus == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userBankNotAdded');
+    return 'false';
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isEmiratesIdDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'EmiratesIdPending');
+    return 'false';
+  } else if (Repository().hiveQueries.userData.kycStatus == 0 &&
+      Repository().hiveQueries.userData.isTradeLicenseDone == false) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'TradeLicensePending');
+    return 'false';
+  } else if (Repository().hiveQueries.userData.kycStatus == 0) {
+    debugPrint(Repository().hiveQueries.userData.kycStatus.toString());
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCPending');
+    return 'false';
+  } else if (Repository().hiveQueries.userData.kycStatus2 == 'Rejected' ||
+      Repository().hiveQueries.userData.kycStatus2 == 'Expired') {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCExpired');
+    return 'false';
+  } else if (Repository().hiveQueries.userData.kycStatus == 2) {
+    return 'isKYCVerified';
+  } else if (Repository().hiveQueries.userData.kycStatus == 1 &&
+      Repository().hiveQueries.userData.premiumStatus == 0) {
+    MerchantBankNotAdded.showBankNotAddedDialog(context, 'upgradePremium');
+    return 'false';
+  } else {
+    return 'true';
   }
 }
 
@@ -86,11 +119,11 @@ String fixTo2(double? number) {
   return number == null ? '' : number.toStringAsFixed(2);
 }
 
-bool isPlatformiOS(){
-  if(Platform.isIOS)
-  return true;
+bool isPlatformiOS() {
+  if (Platform.isIOS)
+    return true;
   else
-  return false;
+    return false;
 }
 
 double removeNegativeIfNegative(double? amount) {
@@ -148,7 +181,7 @@ double getWHRatio(context) {
 }
 
 Map<String, String> apiAuthHeader() {
-  print('token'+Repository().hiveQueries.token);
+  print('token' + Repository().hiveQueries.token);
   return {
     "Content-Type": "application/json",
     "Authorization": Repository().hiveQueries.token
@@ -194,9 +227,11 @@ Future<void> recordError(e, s) async =>
     await FirebaseCrashlytics.instance.recordError(e, s);
 
 const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-        '1', 'Pdf Notifications', channelDescription:'Notifications shown on download of a pdf',
-        importance: Importance.max, priority: Priority.high, showWhen: false);
+    AndroidNotificationDetails('1', 'Pdf Notifications',
+        channelDescription: 'Notifications shown on download of a pdf',
+        importance: Importance.max,
+        priority: Priority.high,
+        showWhen: false);
 
 const IOSNotificationDetails iosCS = IOSNotificationDetails(
   presentAlert: true,
