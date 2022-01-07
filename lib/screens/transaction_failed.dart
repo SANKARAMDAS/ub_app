@@ -14,7 +14,10 @@ import 'package:share_plus/share_plus.dart';
 import 'package:urbanledger/Models/customer_model.dart';
 import 'package:urbanledger/Utility/app_constants.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
+import 'package:urbanledger/Utility/dol_durma_clipper.dart';
 import 'package:whatsapp_share/whatsapp_share.dart';
+
+import 'Components/custom_text_widget.dart';
 
 class TransactionFailedScreen extends StatefulWidget {
   Map<String, dynamic>? model;
@@ -64,12 +67,12 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
 
   whatsappShare(String? phone, String filePath) async {
     print(phone);
-    // await WhatsappShare.shareFile(
-    //   package: Package.whatsapp,
-    //   text: '',
-    //   phone: phone ?? '',
-    //   filePath: [filePath],
-    // );
+    await WhatsappShare.shareFile(
+      package: Package.whatsapp,
+      text: '',
+      phone: phone ?? '',
+      filePath: [filePath],
+    );
   }
 
   @override
@@ -133,10 +136,15 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                     final val = await WhatsappShare.isInstalled(
                         package: Package.whatsapp);
                     if (val) {
-                      await whatsappShare(
-                        widget.customermodel?.mobileNo,
-                        file.path,
-                      );
+                      try{
+                        await whatsappShare(
+                          widget.customermodel?.mobileNo??'911234567890',
+                          file.path,
+                        );
+                      }
+                      catch(e){
+                        print(e.toString());
+                      }
                       // await WhatsappShare.shareFile(
                       //     filePath: [file.path],
                       //     package: Package.whatsapp,
@@ -171,92 +179,89 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
   }
 
   Widget bodyWidget() {
-    return Stack(
-      // alignment: Alignment.topCenter,
-      children: [
-        Container(
-          height: deviceHeight * 0.21,
-          width: double.maxFinite,
-          alignment: Alignment.topCenter,
-          decoration: BoxDecoration(
-            color: Color(0xfff2f1f6),
-            image: DecorationImage(
-              fit: BoxFit.fill,
-              image: AssetImage('assets/images/back2.png'),
-              alignment: Alignment.topCenter,
+    return Container(
+      height: 500,
+      width: 500,
+      child: Stack(
+        // alignment: Alignment.topCenter,
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: deviceHeight * 0.21,
+            width: double.maxFinite,
+            alignment: Alignment.topCenter,
+            decoration: BoxDecoration(
+              color: Color(0xfff2f1f6),
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage('assets/images/back2.png'),
+                alignment: Alignment.topCenter,
+              ),
             ),
           ),
-        ),
-        Align(
-          alignment: Alignment.topCenter,
-          child: Stack(
-            children: [
-              Positioned(
-                  bottom: 0,
-                  top:
-                      (deviceHeight * 0.5) - (deviceHeight > 800.0 ? 580 : 500),
-                  left: 0,
-                  right: 0,
-                  // width: 400,
-                  // height: 400,
-                  child: Screenshot(
-                    controller: _ssController,
+
+          Positioned(
+            top: 100,
+            left:0,
+            right:0,
+            child: Container(
+              child: Screenshot(
+                controller: _ssController,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: ClipPath(
+                    clipper: DolDurmaClipper( holeRadius: 40, bottom: 250),
                     child: Container(
-                      margin: EdgeInsets.only(
-                          left: 20,
-                          right: 20,
-                          top: deviceHeight * 0.25,
-                          bottom: deviceHeight * 0.15),
                       decoration: BoxDecoration(
-                          image: DecorationImage(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                        color: Colors.white,
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.all(36),
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Container(
+                          // color: Colors.blue,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+
+                            Image(
                               fit: BoxFit.fill,
-                              image: AssetImage("assets/images/payfail.png"))),
-                      child: Column(
-                        children: [
-                          Expanded(
-                              child: Container(
-                                  // color: Colors.green,
-                                  )),
-                          Expanded(
-                              child: Container(
-                                  // color: Colors.yellow,
-                                  )),
-                          Expanded(
-                              child: Container(
-                            // color: Colors.blue,
-                            child: Column(children: [
-                              //   Spacer(),
-                              paymentDetails(),
-                            ]),
-                          ))
-                        ],
+                              image: AssetImage("assets/images/payfail_new.png"),
+                              height: 200,width: 200,),
+                                SizedBox(height: 20,),
+                                CustomText(
+                                  'Payment Failed!',
+                                  size: 24,
+                                  color: Colors.red,
+                                  bold: FontWeight.w600
+                                ),
+                                SizedBox(height: 20,),
+                                CustomText(
+                                  'Please check your card details, security code, and connection',
+                                  size: 20,
+                                  color: AppTheme.brownishGrey,
+                                  bold: FontWeight.w600,
+                                  centerAlign: true,
+                                ),
+                                SizedBox(height: 20,),
+
+                            //   Spacer(),
+                            paymentDetails(),
+                          ]),
+                        ),
                       ),
                     ),
-                  )
-
-                  // Padding(
-                  //   padding: EdgeInsets.only(
-                  //     top: deviceHeight * 0.1,
-                  //   ),
-                  //   child: Container(
-                  //     // color: Colors.amber,
-                  //     // height: deviceHeight * 0.65,
-                  //     margin: EdgeInsets.symmetric(
-                  //         horizontal:
-                  //             MediaQuery.of(context).size.width * 0.02),
-                  //     child: Image.asset(
-                  //       'assets/images/paysuccess.png',
-                  //       // fit: BoxFit.fill,
-                  //       // width: MediaQuery.of(context).size.width,
-                  //       height: deviceHeight * 0.7,
-                  //     ),
-                  //   ),
-                  // ),
-                  )
-            ],
+                  ),
+                ) ,
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -287,7 +292,7 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
     // debugPrint(
     //     'xxx : ' + widget.model!['transactionData']['amount'].toString());
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 32),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
           widget.model!.containsKey('error')
@@ -340,7 +345,7 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                         child: Container(
                           alignment: Alignment.bottomLeft,
                           child: Text(
-                              "${widget.model!['transactionData']['amount'].toString()}",
+                              "${widget.model!['transactionData']['amount'].toString()} ${widget.model!['transactionData']['currency'].toString()}",
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 16,
