@@ -252,10 +252,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                         return Future.value(null);
                                       }).catchError((e) {
                                         Navigator.of(context).pop();
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text('This mobile is already registered with us, please Login with this number.'),
-                                        ));
+                                        // ScaffoldMessenger.of(context)
+                                        //     .showSnackBar(SnackBar(
+                                        //   content: Text('This mobile is already registered with us, please Login with this number.'),
+                                        // ));
+                                        'This mobile is already registered with us, please Login with this number.'.showSnackBar(context);
                                         if (e.toString().contains('registered'))
                                           Future.delayed(Duration(seconds: 2),
                                               () {
@@ -274,10 +275,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               }).catchError((e) {
                                     Navigator.of(context).pop();
                                     debugPrint(e.toString());
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      content: Text(e.toString()),
-                                    ));
+                                    // ScaffoldMessenger.of(context)
+                                    //     .showSnackBar(SnackBar(
+                                    //   content: Text(e.toString()),
+                                    // ));
+                                    '${e.toString()}'.showSnackBar(context);
                                     if (e.toString().contains('register'))
                                       Future.delayed(Duration(seconds: 2), () {
                                         Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);

@@ -477,7 +477,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                             widget.isResetPinState, widget.isRegister));
                   },
                   child: CustomText(
-                    'PROCEED',
+                    'YES',
                     size: (18),
                     bold: FontWeight.w500,
                     color: Colors.white,
@@ -500,7 +500,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                       Navigator.of(context).pop();
                     },
                     child: CustomText(
-                      'CHANGE PIN',
+                      'NO',
                       size: (18),
                       bold: FontWeight.w500,
                     ),
