@@ -59,7 +59,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
   final TextEditingController _searchController = TextEditingController();
   DateTime startDate = DateTime(DateTime.now().year, DateTime.now().month, 1);
   DateTime lastDate =
-  DateTime.now().date.add(Duration(hours: 23, minutes: 59, seconds: 59));
+      DateTime.now().date.add(Duration(hours: 23, minutes: 59, seconds: 59));
   bool loading = false;
   bool isLoading = false;
   List<CustomerRankingData> pay_data = [];
@@ -207,7 +207,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                       (deviceHeight * 0.010).heightBox,
                       Container(
                         margin:
-                        EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+                            EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
                         height: 55,
                         decoration: BoxDecoration(
                           color: Colors.transparent,
@@ -226,7 +226,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                             labelStyle: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 18),
                             unselectedLabelStyle:
-                            TextStyle(fontWeight: FontWeight.w600),
+                                TextStyle(fontWeight: FontWeight.w600),
                             controller: _tabController,
                             tabs: [
                               Tab(
@@ -245,644 +245,644 @@ class _PayRequestScreenState extends State<PayRequestScreen>
 
                       // tab bar view here
                       isLoaded == true
-                      // ? shimmerPayLoading()
+                          // ? shimmerPayLoading()
                           ? Container(
-                          padding: EdgeInsets.only(
-                              top:
-                              MediaQuery.of(context).size.height * 0.2),
-                          child: CircularProgressIndicator())
+                              padding: EdgeInsets.only(
+                                  top:
+                                      MediaQuery.of(context).size.height * 0.2),
+                              child: CircularProgressIndicator())
                           : Expanded(
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: [
-                            // first tab bar view widget
-                            Container(
-                              height: MediaQuery.of(context).size.height,
-                              child: CustomScrollView(
-                                slivers: [
-                                  SliverToBoxAdapter(
-                                    child: loading == true
-                                        ? Center(
-                                      child: shimmerPayLoading(),
-                                    )
-                                        : Container(
-                                      child: BlocBuilder<
-                                          CustomerRankingPayCubit,
-                                          CustomerRankingPayState>(
-                                        builder: (ctx, state) {
-                                          if (state
-                                          is FetchingCustomerRankingPayTransactions) {
-                                            return shimmerPayLoading();
-                                          }
-                                          // return const Center(
-                                          //   child:
-                                          //       ShimerAvatarWithNameContainer(),
-                                          // );
+                              child: TabBarView(
+                                controller: _tabController,
+                                children: [
+                                  // first tab bar view widget
+                                  Container(
+                                    height: MediaQuery.of(context).size.height,
+                                    child: CustomScrollView(
+                                      slivers: [
+                                        SliverToBoxAdapter(
+                                          child: loading == true
+                                              ? Center(
+                                                  child: shimmerPayLoading(),
+                                                )
+                                              : Container(
+                                                  child: BlocBuilder<
+                                                      CustomerRankingPayCubit,
+                                                      CustomerRankingPayState>(
+                                                    builder: (ctx, state) {
+                                                      if (state
+                                                          is FetchingCustomerRankingPayTransactions) {
+                                                        return shimmerPayLoading();
+                                                      }
+                                                      // return const Center(
+                                                      //   child:
+                                                      //       ShimerAvatarWithNameContainer(),
+                                                      // );
 
-                                          if (state
-                                          is FetchedCustomerRankingPayTransactions) {
-                                            pay_data = state
-                                                .customerRankingPayDataList;
-                                            customerRankingPayPageCount =
-                                                state.payPageCount;
-                                            /*data.sort((a, b) {
+                                                      if (state
+                                                          is FetchedCustomerRankingPayTransactions) {
+                                                        pay_data = state
+                                                            .customerRankingPayDataList;
+                                                        customerRankingPayPageCount =
+                                                            state.payPageCount;
+                                                        /*data.sort((a, b) {
                                                        var adate =
                                                            a.updatedAt; //before -> var adate = a.expiry;
                                                        var bdate = b.updatedAt; //var bdate = b.expiry;
                                                        return -adate!.compareTo(bdate!);
                                                      });*/
 
-                                            if (pay_data.isEmpty) {
-                                              return Container(
-                                                height: 0,
-                                              );
-                                            }
-                                            // _selectedFilter = 0;
-                                            //  _selectedSort = 0;
+                                                        if (pay_data.isEmpty) {
+                                                          return Container(
+                                                            height: 0,
+                                                          );
+                                                        }
+                                                        // _selectedFilter = 0;
+                                                        //  _selectedSort = 0;
 
-                                            return Padding(
-                                              padding:
-                                              const EdgeInsets
-                                                  .all(10.0),
-                                              child: customerListRecentPaymentPaid(
-                                                  customerRankingPayPageCount,
-                                                  pay_data,
-                                                  context
-                                                /*  _selectedFilter,
+                                                        return Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(10.0),
+                                                          child: customerListRecentPaymentPaid(
+                                                              customerRankingPayPageCount,
+                                                              pay_data,
+                                                              context
+                                                              /*  _selectedFilter,
                                                            _selectedSort*/
-                                              ),
-                                            );
-                                          }
-                                          return Container();
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  SliverToBoxAdapter(
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 15.0,
-                                      ),
-                                      // height: 80,
-                                      decoration: BoxDecoration(
-                                        // color: Colors.white,
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                          5.0,
+                                                              ),
+                                                        );
+                                                      }
+                                                      return Container();
+                                                    },
+                                                  ),
+                                                ),
                                         ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                qrScreen = false;
-                                                byLocation = false;
-                                                contactList = true;
-                                                debugPrint(
-                                                    qrScreen.toString());
-                                              });
-                                            },
-                                            child: Container(
-                                              // height: 200,
-                                              child: Column(
-                                                children: [
-                                                  contactList == true
-                                                      ? Image.asset(
-                                                    'assets/icons/Contact-List-Fill.png',
-                                                    height: 80,
-                                                    // color: Colors.white,
-                                                  )
-                                                      : Image.asset(
-                                                    'assets/icons/Contact-List-01.png',
-                                                    height: 80,
-                                                    // color: Theme.of(context).primaryColor,
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Text(
-                                                    'Contact List',
-                                                    textAlign:
-                                                    TextAlign.center,
-                                                  ),
-                                                ],
+                                        SliverToBoxAdapter(
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 15.0,
+                                            ),
+                                            // height: 80,
+                                            decoration: BoxDecoration(
+                                              // color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                5.0,
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(
-                                              width:
-                                              MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                                  0.1),
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                byLocation = false;
-                                                contactList = false;
-                                                qrScreen = true;
-                                                debugPrint(
-                                                    qrScreen.toString());
-                                              });
-                                            },
-                                            child: Container(
-                                              child: Column(children: [
-                                                qrScreen == true
-                                                    ? Image.asset(
-                                                  'assets/icons/QR-Code-Button-Fill-01.png',
-                                                  height: 80,
-                                                  // color: Colors.white,
-                                                )
-                                                    : Image.asset(
-                                                  'assets/icons/QR-Code-Button-01.png',
-                                                  height: 80,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      qrScreen = false;
+                                                      byLocation = false;
+                                                      contactList = true;
+                                                      debugPrint(
+                                                          qrScreen.toString());
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    // height: 200,
+                                                    child: Column(
+                                                      children: [
+                                                        contactList == true
+                                                            ? Image.asset(
+                                                                'assets/icons/Contact-List-Fill.png',
+                                                                height: 80,
+                                                                // color: Colors.white,
+                                                              )
+                                                            : Image.asset(
+                                                                'assets/icons/Contact-List-01.png',
+                                                                height: 80,
+                                                                // color: Theme.of(context).primaryColor,
+                                                              ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Text(
+                                                          'Contact List',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ),
                                                 SizedBox(
-                                                  height: 5,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.1),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      byLocation = false;
+                                                      contactList = false;
+                                                      qrScreen = true;
+                                                      debugPrint(
+                                                          qrScreen.toString());
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    child: Column(children: [
+                                                      qrScreen == true
+                                                          ? Image.asset(
+                                                              'assets/icons/QR-Code-Button-Fill-01.png',
+                                                              height: 80,
+                                                              // color: Colors.white,
+                                                            )
+                                                          : Image.asset(
+                                                              'assets/icons/QR-Code-Button-01.png',
+                                                              height: 80,
+                                                            ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        'QR Code',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ]),
+                                                  ),
                                                 ),
-                                                Text(
-                                                  'QR Code',
-                                                  textAlign:
-                                                  TextAlign.center,
-                                                ),
-                                              ]),
+                                                // GestureDetector(
+                                                //   onTap: () {
+                                                //     setState(() {
+                                                //       contactList = false;
+                                                //       qrScreen = false;
+                                                //       byLocation = true;
+                                                //       debugPrint(qrScreen.toString());
+                                                //     });
+                                                //   },
+                                                //   child: Container(
+                                                //     child: Column(
+                                                //       children: [
+                                                //         byLocation == true
+                                                //             ? Image.asset(
+                                                //                 'assets/icons/Search-by-location-Fill-01.png',
+                                                //                 height: 80,
+                                                //                 // color: Colors.white,
+                                                //               )
+                                                //             : Image.asset(
+                                                //                 'assets/icons/Search-by-location-01.png',
+                                                //                 height: 80,
+                                                //               ),
+                                                //         SizedBox(
+                                                //           height: 5,
+                                                //         ),
+                                                //         Text(
+                                                //           'Search by\nLocation',
+                                                //           textAlign: TextAlign.center,
+                                                //         ),
+                                                //       ],
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                              ],
                                             ),
                                           ),
-                                          // GestureDetector(
-                                          //   onTap: () {
-                                          //     setState(() {
-                                          //       contactList = false;
-                                          //       qrScreen = false;
-                                          //       byLocation = true;
-                                          //       debugPrint(qrScreen.toString());
-                                          //     });
-                                          //   },
-                                          //   child: Container(
-                                          //     child: Column(
-                                          //       children: [
-                                          //         byLocation == true
-                                          //             ? Image.asset(
-                                          //                 'assets/icons/Search-by-location-Fill-01.png',
-                                          //                 height: 80,
-                                          //                 // color: Colors.white,
-                                          //               )
-                                          //             : Image.asset(
-                                          //                 'assets/icons/Search-by-location-01.png',
-                                          //                 height: 80,
-                                          //               ),
-                                          //         SizedBox(
-                                          //           height: 5,
-                                          //         ),
-                                          //         Text(
-                                          //           'Search by\nLocation',
-                                          //           textAlign: TextAlign.center,
-                                          //         ),
-                                          //       ],
-                                          //     ),
-                                          //   ),
-                                          // ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  SliverToBoxAdapter(
-                                    child: SizedBox(
-                                      height: MediaQuery.of(context)
-                                          .size
-                                          .height *
-                                          0.02,
-                                    ),
-                                  ),
-                                  SliverToBoxAdapter(
-                                    child: contactList == true
-                                        ? Container(
-                                      // decoration: BoxDecoration(
-                                      //   boxShadow: [
-                                      //     BoxShadow(
-                                      //       color: Colors.grey
-                                      //           .withOpacity(0.3),
-                                      //       offset: Offset(3, 3),
-                                      //       blurRadius: 3.0,
-                                      //     )
-                                      //   ],
-                                      //   borderRadius:
-                                      //       BorderRadius.circular(10),
-                                      //   color: Colors.white,
-                                      // ),
-                                      child: CustomSearchBar(
-                                        CtextFormField:
-                                        TextFormField(
-                                          onChanged: (value) {
-                                            BlocProvider.of<
-                                                ContactsCubit>(
-                                                context)
-                                                .searchContacts(
-                                                value);
-                                          },
-                                          decoration: InputDecoration(
-                                              hintText:
-                                              'Search by Name',
-                                              hintStyle: TextStyle(
-                                                  color: AppTheme
-                                                      .greyish,
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .w500),
-                                              focusedBorder:
-                                              InputBorder.none,
-                                              enabledBorder:
-                                              InputBorder.none),
                                         ),
-                                        Suffix: Container(),
-                                      ),
-                                    )
-                                        : Container(),
-                                  ),
-                                  SliverToBoxAdapter(
-                                    child: SizedBox(
-                                      height: MediaQuery.of(context)
-                                          .size
-                                          .height *
-                                          0.02,
-                                    ),
-                                  ),
-                                  SliverToBoxAdapter(
-                                    child: contactList == true
-                                        ? Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 15.0,
-                                          vertical: 8),
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                          'Phone Contact List',
-                                          style: TextStyle(
-                                              color: AppTheme
-                                                  .brownishGrey,
-                                              fontSize: 18,
-                                              fontWeight:
-                                              FontWeight.w600)),
-                                    )
-                                        : Container(),
-                                  ),
-                                  contactList == true
-                                      ? BlocBuilder<ContactsCubit,
-                                      ContactsState>(
-                                    builder: (context, state) {
-                                      if (state
-                                      is SearchedContacts) {
-                                        return contactListWithOtherWidgets(
-                                            context: context,
-                                            contacts: state
-                                                .searchedCustomerList,
-                                            searchQuery: '',
-                                            navigationtoPay: true);
-                                      }
-                                      if (state
-                                      is FetchedContacts) {
-                                        return contactListWithOtherWidgets(
-                                          context: context,
-                                          contacts:
-                                          state.customerList,
-                                          searchQuery: '',
-                                          navigationtoPay: true,
-                                        );
-                                      }
-                                      return SliverToBoxAdapter(
-                                        child: Center(
-                                          child:
-                                          CircularProgressIndicator(),
-                                        ),
-                                      );
-                                    },
-                                  )
-                                      : SliverToBoxAdapter(
-                                      child: Container()),
-                                  SliverToBoxAdapter(
-                                    child: qrScreen == true
-                                        ? qrScanTabView()
-                                        : Container(),
-                                  ),
-                                  SliverToBoxAdapter(
-                                      child: byLocation == true
-                                          ? Center(
-                                        child: Text(
-                                          '',
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight:
-                                            FontWeight.w600,
+                                        SliverToBoxAdapter(
+                                          child: SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.02,
                                           ),
                                         ),
-                                      )
-                                          : Container())
-                                ],
-                              ),
-                            ),
-                            //End of 1st Tab
+                                        SliverToBoxAdapter(
+                                          child: contactList == true
+                                              ? Container(
+                                                  // decoration: BoxDecoration(
+                                                  //   boxShadow: [
+                                                  //     BoxShadow(
+                                                  //       color: Colors.grey
+                                                  //           .withOpacity(0.3),
+                                                  //       offset: Offset(3, 3),
+                                                  //       blurRadius: 3.0,
+                                                  //     )
+                                                  //   ],
+                                                  //   borderRadius:
+                                                  //       BorderRadius.circular(10),
+                                                  //   color: Colors.white,
+                                                  // ),
+                                                  child: CustomSearchBar(
+                                                    CtextFormField:
+                                                        TextFormField(
+                                                      onChanged: (value) {
+                                                        BlocProvider.of<
+                                                                    ContactsCubit>(
+                                                                context)
+                                                            .searchContacts(
+                                                                value);
+                                                      },
+                                                      decoration: InputDecoration(
+                                                          hintText:
+                                                              'Search by Name',
+                                                          hintStyle: TextStyle(
+                                                              color: AppTheme
+                                                                  .greyish,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                          focusedBorder:
+                                                              InputBorder.none,
+                                                          enabledBorder:
+                                                              InputBorder.none),
+                                                    ),
+                                                    Suffix: Container(),
+                                                  ),
+                                                )
+                                              : Container(),
+                                        ),
+                                        SliverToBoxAdapter(
+                                          child: SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.02,
+                                          ),
+                                        ),
+                                        SliverToBoxAdapter(
+                                          child: contactList == true
+                                              ? Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 15.0,
+                                                      vertical: 8),
+                                                  alignment: Alignment.topLeft,
+                                                  child: Text(
+                                                      'Phone Contact List',
+                                                      style: TextStyle(
+                                                          color: AppTheme
+                                                              .brownishGrey,
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w600)),
+                                                )
+                                              : Container(),
+                                        ),
+                                        contactList == true
+                                            ? BlocBuilder<ContactsCubit,
+                                                ContactsState>(
+                                                builder: (context, state) {
+                                                  if (state
+                                                      is SearchedContacts) {
+                                                    return contactListWithOtherWidgets(
+                                                        context: context,
+                                                        contacts: state
+                                                            .searchedCustomerList,
+                                                        searchQuery: '',
+                                                        navigationtoPay: true);
+                                                  }
+                                                  if (state
+                                                      is FetchedContacts) {
+                                                    return contactListWithOtherWidgets(
+                                                      context: context,
+                                                      contacts:
+                                                          state.customerList,
+                                                      searchQuery: '',
+                                                      navigationtoPay: true,
+                                                    );
+                                                  }
+                                                  return SliverToBoxAdapter(
+                                                    child: Center(
+                                                      child:
+                                                          CircularProgressIndicator(),
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                            : SliverToBoxAdapter(
+                                                child: Container()),
+                                        SliverToBoxAdapter(
+                                          child: qrScreen == true
+                                              ? qrScanTabView()
+                                              : Container(),
+                                        ),
+                                        SliverToBoxAdapter(
+                                            child: byLocation == true
+                                                ? Center(
+                                                    child: Text(
+                                                      '',
+                                                      style: TextStyle(
+                                                        fontSize: 25,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Container())
+                                      ],
+                                    ),
+                                  ),
+                                  //End of 1st Tab
 
-                            // second tab bar view widget
-                            Container(
-                              height: MediaQuery.of(context).size.height,
-                              child: CustomScrollView(
-                                slivers: [
-                                  SliverToBoxAdapter(
-                                    child: loading == true
-                                        ? Center(
-                                      child: shimmerPayLoading1(),
-                                    )
-                                        : Container(
-                                      child: BlocBuilder<
-                                          CustomerRankingRequestCubit,
-                                          CustomerRankingRequestState>(
-                                        builder: (ctx, state) {
-                                          if (state
-                                          is FetchingCustomerRankingRequestTransactions) {
-                                            return shimmerPayLoading1();
-                                          }
-                                          // return const Center(
-                                          //   child:
-                                          //       ShimerAvatarWithNameContainer(),
-                                          // );
+                                  // second tab bar view widget
+                                  Container(
+                                    height: MediaQuery.of(context).size.height,
+                                    child: CustomScrollView(
+                                      slivers: [
+                                        SliverToBoxAdapter(
+                                          child: loading == true
+                                              ? Center(
+                                                  child: shimmerPayLoading1(),
+                                                )
+                                              : Container(
+                                                  child: BlocBuilder<
+                                                      CustomerRankingRequestCubit,
+                                                      CustomerRankingRequestState>(
+                                                    builder: (ctx, state) {
+                                                      if (state
+                                                          is FetchingCustomerRankingRequestTransactions) {
+                                                        return shimmerPayLoading1();
+                                                      }
+                                                      // return const Center(
+                                                      //   child:
+                                                      //       ShimerAvatarWithNameContainer(),
+                                                      // );
 
-                                          if (state
-                                          is FetchedCustomerRankingRequestTransactions) {
-                                            recieve_data = state
-                                                .customerRankingRequestDataList;
-                                            customerRankingRequestPageCount =
-                                                state
-                                                    .requestPageCount;
-                                            /*data.sort((a, b) {
+                                                      if (state
+                                                          is FetchedCustomerRankingRequestTransactions) {
+                                                        recieve_data = state
+                                                            .customerRankingRequestDataList;
+                                                        customerRankingRequestPageCount =
+                                                            state
+                                                                .requestPageCount;
+                                                        /*data.sort((a, b) {
                                                            var adate =
                                                                a.updatedAt; //before -> var adate = a.expiry;
                                                            var bdate = b.updatedAt; //var bdate = b.expiry;
                                                            return -adate!.compareTo(bdate!);
                                                          });*/
 
-                                            if (recieve_data
-                                                .isEmpty) {
-                                              return Container(
-                                                height: 0,
+                                                        if (recieve_data
+                                                            .isEmpty) {
+                                                          return Container(
+                                                            height: 0,
+                                                          );
+                                                        }
+                                                        // _selectedFilter = 0;
+                                                        //  _selectedSort = 0;
+
+                                                        return Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(10.0),
+                                                          child: customerListRecentPaymentRecieved(
+                                                              customerRankingRequestPageCount,
+                                                              recieve_data,
+                                                              context
+                                                              /*  _selectedFilter,
+                                                               _selectedSort*/
+                                                              ),
+                                                        );
+                                                      }
+                                                      return Container();
+                                                    },
+                                                  ),
+                                                ),
+                                        ),
+                                        // SliverToBoxAdapter(
+                                        //   child: Container(
+                                        //     padding: EdgeInsets.symmetric(
+                                        //       horizontal: 15.0,
+                                        //     ),
+                                        //     // height: 80,
+                                        //     decoration: BoxDecoration(
+                                        //       // color: Colors.white,
+                                        //       borderRadius:
+                                        //           BorderRadius.circular(
+                                        //         5.0,
+                                        //       ),
+                                        //     ),
+                                        //     child: Row(
+                                        //       mainAxisAlignment:
+                                        //           MainAxisAlignment.center,
+                                        //       children: [
+                                        //         GestureDetector(
+                                        //           onTap: () {
+                                        //             setState(() {
+                                        //               qrScreen = false;
+                                        //               byLocation = false;
+                                        //               contactList = true;
+                                        //               debugPrint(
+                                        //                   qrScreen.toString());
+                                        //             });
+                                        //           },
+                                        //           child: Container(
+                                        //             // height: 200,
+                                        //             child: Column(
+                                        //               children: [
+                                        //                 contactList == true
+                                        //                     ? Image.asset(
+                                        //                         'assets/icons/Contact-List-Fill.png',
+                                        //                         height: 80,
+                                        //                         // color: Colors.white,
+                                        //                       )
+                                        //                     : Image.asset(
+                                        //                         'assets/icons/Contact-List-01.png',
+                                        //                         height: 80,
+                                        //                         // color: Theme.of(context).primaryColor,
+                                        //                       ),
+                                        //                 SizedBox(
+                                        //                   height: 5,
+                                        //                 ),
+                                        //                 Text(
+                                        //                   'Contact List',
+                                        //                   textAlign:
+                                        //                       TextAlign.center,
+                                        //                 ),
+                                        //               ],
+                                        //             ),
+                                        //           ),
+                                        //         ),
+                                        //         SizedBox(
+                                        //             width:
+                                        //                 MediaQuery.of(context)
+                                        //                         .size
+                                        //                         .width *
+                                        //                     0.1),
+                                        //         GestureDetector(
+                                        //           onTap: () {
+                                        //             setState(() {
+                                        //               byLocation = false;
+                                        //               contactList = false;
+                                        //               qrScreen = true;
+                                        //               debugPrint(
+                                        //                   qrScreen.toString());
+                                        //             });
+                                        //           },
+                                        //           child: Container(
+                                        //             child: Column(children: [
+                                        //               qrScreen == true
+                                        //                   ? Image.asset(
+                                        //                       'assets/icons/QR-Code-Button-Fill-01.png',
+                                        //                       height: 80,
+                                        //                       // color: Colors.white,
+                                        //                     )
+                                        //                   : Image.asset(
+                                        //                       'assets/icons/QR-Code-Button-01.png',
+                                        //                       height: 80,
+                                        //                     ),
+                                        //               SizedBox(
+                                        //                 height: 5,
+                                        //               ),
+                                        //               Text(
+                                        //                 'QR Code',
+                                        //                 textAlign:
+                                        //                     TextAlign.center,
+                                        //               ),
+                                        //             ]),
+                                        //           ),
+                                        //         ),
+                                        //         // GestureDetector(
+                                        //         //   onTap: () {
+                                        //         //     setState(() {
+                                        //         //       contactList = false;
+                                        //         //       qrScreen = false;
+                                        //         //       byLocation = true;
+                                        //         //       debugPrint(qrScreen.toString());
+                                        //         //     });
+                                        //         //   },
+                                        //         //   child: Container(
+                                        //         //     child: Column(
+                                        //         //       children: [
+                                        //         //         byLocation == true
+                                        //         //             ? Image.asset(
+                                        //         //                 'assets/icons/Search-by-location-Fill-01.png',
+                                        //         //                 height: 80,
+                                        //         //                 // color: Colors.white,
+                                        //         //               )
+                                        //         //             : Image.asset(
+                                        //         //                 'assets/icons/Search-by-location-01.png',
+                                        //         //                 height: 80,
+                                        //         //               ),
+                                        //         //         SizedBox(
+                                        //         //           height: 5,
+                                        //         //         ),
+                                        //         //         Text(
+                                        //         //           'Search by\nLocation',
+                                        //         //           textAlign: TextAlign.center,
+                                        //         //         ),
+                                        //         //       ],
+                                        //         //     ),
+                                        //         //   ),
+                                        //         // ),
+                                        //       ],
+                                        //     ),
+                                        //   ),
+                                        // ),
+
+                                        SliverToBoxAdapter(
+                                          child: Container(
+                                            // decoration: BoxDecoration(
+                                            //   boxShadow: [
+                                            //     BoxShadow(
+                                            //       color: Colors.grey.withOpacity(0.3),
+                                            //       offset: Offset(3, 3),
+                                            //       blurRadius: 3.0,
+                                            //     )
+                                            //   ],
+                                            //   borderRadius: BorderRadius.circular(10),
+                                            //   color: Colors.white,
+                                            // ),
+                                            child: CustomSearchBar(
+                                              CtextFormField: TextFormField(
+                                                onChanged: (value) {
+                                                  BlocProvider.of<
+                                                              ContactsCubit>(
+                                                          context)
+                                                      .searchContacts(value);
+                                                },
+                                                decoration: InputDecoration(
+                                                    hintText: 'Customer Name',
+                                                    hintStyle: TextStyle(
+                                                        color: AppTheme.greyish,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                    focusedBorder:
+                                                        InputBorder.none,
+                                                    enabledBorder:
+                                                        InputBorder.none),
+                                              ),
+                                              Suffix: Container(),
+                                            ),
+                                          ),
+                                        ),
+                                        SliverToBoxAdapter(
+                                            child: SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.02,
+                                        )),
+                                        SliverToBoxAdapter(
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8),
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 15.0,
+                                                  vertical: 8),
+                                              alignment: Alignment.topLeft,
+                                              child: Text('Phone Contact List',
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppTheme.brownishGrey,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                            ),
+                                          ),
+                                        ),
+                                        BlocBuilder<ContactsCubit,
+                                            ContactsState>(
+                                          builder: (context, state) {
+                                            if (state is SearchedContacts) {
+                                              return contactListWithOtherWidgets(
+                                                navigationtoPay: false,
+                                                context: context,
+                                                contacts:
+                                                    state.searchedCustomerList,
+                                                searchQuery: '',
                                               );
                                             }
-                                            // _selectedFilter = 0;
-                                            //  _selectedSort = 0;
-
-                                            return Padding(
-                                              padding:
-                                              const EdgeInsets
-                                                  .all(10.0),
-                                              child: customerListRecentPaymentRecieved(
-                                                  customerRankingRequestPageCount,
-                                                  recieve_data,
-                                                  context
-                                                /*  _selectedFilter,
-                                                               _selectedSort*/
-                                              ),
+                                            if (state is FetchedContacts) {
+                                              return contactListWithOtherWidgets(
+                                                context: context,
+                                                navigationtoPay: false,
+                                                contacts: state.customerList,
+                                                searchQuery: '',
+                                              );
+                                            }
+                                            return SliverToBoxAdapter(
+                                              child: Center(
+                                                  child:
+                                                      CircularProgressIndicator()),
                                             );
-                                          }
-                                          return Container();
-                                        },
-                                      ),
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  // SliverToBoxAdapter(
-                                  //   child: Container(
-                                  //     padding: EdgeInsets.symmetric(
-                                  //       horizontal: 15.0,
-                                  //     ),
-                                  //     // height: 80,
-                                  //     decoration: BoxDecoration(
-                                  //       // color: Colors.white,
-                                  //       borderRadius:
-                                  //           BorderRadius.circular(
-                                  //         5.0,
-                                  //       ),
-                                  //     ),
-                                  //     child: Row(
-                                  //       mainAxisAlignment:
-                                  //           MainAxisAlignment.center,
-                                  //       children: [
-                                  //         GestureDetector(
-                                  //           onTap: () {
-                                  //             setState(() {
-                                  //               qrScreen = false;
-                                  //               byLocation = false;
-                                  //               contactList = true;
-                                  //               debugPrint(
-                                  //                   qrScreen.toString());
-                                  //             });
-                                  //           },
-                                  //           child: Container(
-                                  //             // height: 200,
-                                  //             child: Column(
-                                  //               children: [
-                                  //                 contactList == true
-                                  //                     ? Image.asset(
-                                  //                         'assets/icons/Contact-List-Fill.png',
-                                  //                         height: 80,
-                                  //                         // color: Colors.white,
-                                  //                       )
-                                  //                     : Image.asset(
-                                  //                         'assets/icons/Contact-List-01.png',
-                                  //                         height: 80,
-                                  //                         // color: Theme.of(context).primaryColor,
-                                  //                       ),
-                                  //                 SizedBox(
-                                  //                   height: 5,
-                                  //                 ),
-                                  //                 Text(
-                                  //                   'Contact List',
-                                  //                   textAlign:
-                                  //                       TextAlign.center,
-                                  //                 ),
-                                  //               ],
-                                  //             ),
-                                  //           ),
-                                  //         ),
-                                  //         SizedBox(
-                                  //             width:
-                                  //                 MediaQuery.of(context)
-                                  //                         .size
-                                  //                         .width *
-                                  //                     0.1),
-                                  //         GestureDetector(
-                                  //           onTap: () {
-                                  //             setState(() {
-                                  //               byLocation = false;
-                                  //               contactList = false;
-                                  //               qrScreen = true;
-                                  //               debugPrint(
-                                  //                   qrScreen.toString());
-                                  //             });
-                                  //           },
-                                  //           child: Container(
-                                  //             child: Column(children: [
-                                  //               qrScreen == true
-                                  //                   ? Image.asset(
-                                  //                       'assets/icons/QR-Code-Button-Fill-01.png',
-                                  //                       height: 80,
-                                  //                       // color: Colors.white,
-                                  //                     )
-                                  //                   : Image.asset(
-                                  //                       'assets/icons/QR-Code-Button-01.png',
-                                  //                       height: 80,
-                                  //                     ),
-                                  //               SizedBox(
-                                  //                 height: 5,
-                                  //               ),
-                                  //               Text(
-                                  //                 'QR Code',
-                                  //                 textAlign:
-                                  //                     TextAlign.center,
-                                  //               ),
-                                  //             ]),
-                                  //           ),
-                                  //         ),
-                                  //         // GestureDetector(
-                                  //         //   onTap: () {
-                                  //         //     setState(() {
-                                  //         //       contactList = false;
-                                  //         //       qrScreen = false;
-                                  //         //       byLocation = true;
-                                  //         //       debugPrint(qrScreen.toString());
-                                  //         //     });
-                                  //         //   },
-                                  //         //   child: Container(
-                                  //         //     child: Column(
-                                  //         //       children: [
-                                  //         //         byLocation == true
-                                  //         //             ? Image.asset(
-                                  //         //                 'assets/icons/Search-by-location-Fill-01.png',
-                                  //         //                 height: 80,
-                                  //         //                 // color: Colors.white,
-                                  //         //               )
-                                  //         //             : Image.asset(
-                                  //         //                 'assets/icons/Search-by-location-01.png',
-                                  //         //                 height: 80,
-                                  //         //               ),
-                                  //         //         SizedBox(
-                                  //         //           height: 5,
-                                  //         //         ),
-                                  //         //         Text(
-                                  //         //           'Search by\nLocation',
-                                  //         //           textAlign: TextAlign.center,
-                                  //         //         ),
-                                  //         //       ],
-                                  //         //     ),
-                                  //         //   ),
-                                  //         // ),
-                                  //       ],
+                                  // Center(
+                                  //   child: Text(
+                                  //     '',
+                                  //     style: TextStyle(
+                                  //       fontSize: 25,
+                                  //       fontWeight: FontWeight.w600,
                                   //     ),
                                   //   ),
-                                  // ),
-
-                                  SliverToBoxAdapter(
-                                    child: Container(
-                                      // decoration: BoxDecoration(
-                                      //   boxShadow: [
-                                      //     BoxShadow(
-                                      //       color: Colors.grey.withOpacity(0.3),
-                                      //       offset: Offset(3, 3),
-                                      //       blurRadius: 3.0,
-                                      //     )
-                                      //   ],
-                                      //   borderRadius: BorderRadius.circular(10),
-                                      //   color: Colors.white,
-                                      // ),
-                                      child: CustomSearchBar(
-                                        CtextFormField: TextFormField(
-                                          onChanged: (value) {
-                                            BlocProvider.of<
-                                                ContactsCubit>(
-                                                context)
-                                                .searchContacts(value);
-                                          },
-                                          decoration: InputDecoration(
-                                              hintText: 'Customer Name',
-                                              hintStyle: TextStyle(
-                                                  color: AppTheme.greyish,
-                                                  fontWeight:
-                                                  FontWeight.w500),
-                                              focusedBorder:
-                                              InputBorder.none,
-                                              enabledBorder:
-                                              InputBorder.none),
-                                        ),
-                                        Suffix: Container(),
-                                      ),
-                                    ),
-                                  ),
-                                  SliverToBoxAdapter(
-                                      child: SizedBox(
-                                        height: MediaQuery.of(context)
-                                            .size
-                                            .height *
-                                            0.02,
-                                      )),
-                                  SliverToBoxAdapter(
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 8),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 15.0,
-                                            vertical: 8),
-                                        alignment: Alignment.topLeft,
-                                        child: Text('Phone Contact List',
-                                            style: TextStyle(
-                                                color:
-                                                AppTheme.brownishGrey,
-                                                fontSize: 18,
-                                                fontWeight:
-                                                FontWeight.w600)),
-                                      ),
-                                    ),
-                                  ),
-                                  BlocBuilder<ContactsCubit,
-                                      ContactsState>(
-                                    builder: (context, state) {
-                                      if (state is SearchedContacts) {
-                                        return contactListWithOtherWidgets(
-                                          navigationtoPay: false,
-                                          context: context,
-                                          contacts:
-                                          state.searchedCustomerList,
-                                          searchQuery: '',
-                                        );
-                                      }
-                                      if (state is FetchedContacts) {
-                                        return contactListWithOtherWidgets(
-                                          context: context,
-                                          navigationtoPay: false,
-                                          contacts: state.customerList,
-                                          searchQuery: '',
-                                        );
-                                      }
-                                      return SliverToBoxAdapter(
-                                        child: Center(
-                                            child:
-                                            CircularProgressIndicator()),
-                                      );
-                                    },
-                                  ),
+                                  // )
                                 ],
                               ),
                             ),
-                            // Center(
-                            //   child: Text(
-                            //     '',
-                            //     style: TextStyle(
-                            //       fontSize: 25,
-                            //       fontWeight: FontWeight.w600,
-                            //     ),
-                            //   ),
-                            // )
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -895,27 +895,27 @@ class _PayRequestScreenState extends State<PayRequestScreen>
   }
 
   Widget searchField(int filterIndex, int sortIndex) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    child: Container(
-      margin: EdgeInsets.only(
-        top: 5,
-        bottom: 5,
-      ),
-      child: Container(
-        // width: MediaQuery.of(context).size.width * 0.92,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              child: Text('Most Recent payment',
-                  style: TextStyle(
-                      color: AppTheme.brownishGrey,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold)),
-            ),
-            /*Stack(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Container(
+          margin: EdgeInsets.only(
+            top: 5,
+            bottom: 5,
+          ),
+          child: Container(
+            // width: MediaQuery.of(context).size.width * 0.92,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  child: Text('Most Recent payment',
+                      style: TextStyle(
+                          color: AppTheme.brownishGrey,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold)),
+                ),
+                /*Stack(
               clipBehavior: Clip.none,
               children: [
                 GestureDetector(
@@ -951,11 +951,11 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                 //   ),
               ],
             ),*/
-          ],
+              ],
+            ),
+          ),
         ),
-      ),
-    ),
-  );
+      );
 
   Future<void> filterBottomSheet(BuildContext ctx) async {
     int tempRadioOption = _selectedFilter;
@@ -1015,7 +1015,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                                   : AppTheme.justWhite,
                               shape: RoundedRectangleBorder(
                                   side:
-                                  BorderSide(color: AppTheme.electricBlue),
+                                      BorderSide(color: AppTheme.electricBlue),
                                   borderRadius: BorderRadius.circular(10)),
                             ),
                             child: Container(
@@ -1042,7 +1042,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                                   : AppTheme.justWhite,
                               shape: RoundedRectangleBorder(
                                   side:
-                                  BorderSide(color: AppTheme.electricBlue),
+                                      BorderSide(color: AppTheme.electricBlue),
                                   borderRadius: BorderRadius.circular(10)),
                             ),
                             child: Container(
@@ -1069,7 +1069,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                                   : AppTheme.justWhite,
                               shape: RoundedRectangleBorder(
                                   side:
-                                  BorderSide(color: AppTheme.electricBlue),
+                                      BorderSide(color: AppTheme.electricBlue),
                                   borderRadius: BorderRadius.circular(10)),
                             ),
                             child: Container(
@@ -1300,7 +1300,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                           _searchController.clear();
                           BlocProvider.of<SuspenseCubit>(ctx)
                               .filterTransactions(
-                              _selectedSort, startDate, lastDate);
+                                  _selectedSort, startDate, lastDate);
 
                           Navigator.of(context).pop();
                         },
@@ -1493,8 +1493,8 @@ class _PayRequestScreenState extends State<PayRequestScreen>
         customerRankingList.isEmpty
             ? Container()
             : Flexible(
-            child: getList(
-                RequestType.PAY, customerRankingList, pageCount, context))
+                child: getList(
+                    RequestType.PAY, customerRankingList, pageCount, context))
       ],
     );
   }
@@ -1564,8 +1564,8 @@ class _PayRequestScreenState extends State<PayRequestScreen>
         customerRankingList.isEmpty
             ? Container()
             : Flexible(
-            child: getList(RequestType.RECIEVE, customerRankingList,
-                pageCount, context))
+                child: getList(RequestType.RECIEVE, customerRankingList,
+                    pageCount, context))
       ],
     );
   }
@@ -1616,7 +1616,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
   Widget _buildQrView(BuildContext context) {
     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
-        MediaQuery.of(context).size.height < 400)
+            MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
     // To ensure the Scanner view is properly sizes after rotation
@@ -1664,12 +1664,12 @@ class _PayRequestScreenState extends State<PayRequestScreen>
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount:
-            pageCount > 1 ? _customerList.length + 1 : _customerList.length,
+                pageCount > 1 ? _customerList.length + 1 : _customerList.length,
             itemBuilder: (BuildContext ctx, int index) {
               if (pageCount > 1 && index == _customerList.length) {
                 if ((type == RequestType.PAY
-                    ? currentPayGridPage
-                    : currentRequestGridPage + 1) <=
+                        ? currentPayGridPage
+                        : currentRequestGridPage + 1) <=
                     pageCount)
                   return InkWell(
                     onTap: () {
@@ -1749,488 +1749,414 @@ class _PayRequestScreenState extends State<PayRequestScreen>
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: Repository().hiveQueries.userData.bankStatus == false &&
-                    navigation == false
+                        navigation == false
                     ? () {
-                  MerchantBankNotAdded.showBankNotAddedDialog(
-                      context, 'userBankNotAdded');
-                }
-                // : ((Repository().hiveQueries.userData.kycStatus == 0 ||
-                //                 Repository().hiveQueries.userData.kycStatus ==
-                //                     2) ||
-                //             Repository().hiveQueries.userData.premiumStatus ==
-                //                 0) &&
-                //     widget.navigation == false
-                // ? () async {
-                //     CustomLoadingDialog.showLoadingDialog(context, key);
-                //     var cid = await repository.customerApi.getCustomerID(
-                //         mobileNumber:
-                //             widget.contacts[index].mobileNo.toString());
-                //     bool? merchantSubscriptionPlan =
-                //         cid.customerInfo?.merchantSubscriptionPlan ?? false;
-                //     if (Repository().hiveQueries.userData.kycStatus == 2) {
-                //       //If KYC is Verification is Pending
-                //       await getKyc().then((value) =>
-                //           MerchantBankNotAdded.showBankNotAddedDialog(
-                //               context, 'userKYCVerificationPending'));
-                //     } else if (Repository()
-                //             .hiveQueries
-                //             .userData
-                //             .kycStatus ==
-                //         0) {
-                //       Navigator.of(context).pop(true);
-                //       //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                //       MerchantBankNotAdded.showBankNotAddedDialog(
-                //           context, 'userKYCPending');
-                //     } else if (Repository()
-                //                 .hiveQueries
-                //                 .userData
-                //                 .kycStatus ==
-                //             0 &&
-                //         Repository()
-                //                 .hiveQueries
-                //                 .userData
-                //                 .isEmiratesIdDone ==
-                //             false) {
-                //       Navigator.of(context).pop(true);
-                //       //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                //       MerchantBankNotAdded.showBankNotAddedDialog(
-                //           context, 'EmiratesIdPending');
-                //     } else if (Repository()
-                //                 .hiveQueries
-                //                 .userData
-                //                 .kycStatus ==
-                //             0 &&
-                //         Repository()
-                //                 .hiveQueries
-                //                 .userData
-                //                 .isTradeLicenseDone ==
-                //             false) {
-                //       Navigator.of(context).pop(true);
-                //       //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                //       MerchantBankNotAdded.showBankNotAddedDialog(
-                //           context, 'TradeLicensePending');
-                //     } else if (Repository()
-                //                 .hiveQueries
-                //                 .userData
-                //                 .kycStatus ==
-                //             1 &&
-                //         Repository().hiveQueries.userData.premiumStatus ==
-                //             0) {
-                //       Navigator.of(context).pop(true);
-                //       MerchantBankNotAdded.showBankNotAddedDialog(
-                //           context, 'upgradePremium');
-                //     } else if (cid.customerInfo?.kycStatus == false) {
-                //       Navigator.of(context).pop(true);
-                //       merchantBankNotAddedModalSheet(
-                //           text:
-                //               'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
-                //     } else if (merchantSubscriptionPlan == false) {
-                //       Navigator.of(context).pop(true);
-                //       merchantBankNotAddedModalSheet(
-                //           text:
-                //               'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
-                //     } else {
-                //       // CustomLoadingDialog.showLoadingDialog(context, key);
-                //       // var cid = await repository.customerApi.getCustomerID(
-                //       //     mobileNumber:
-                //       //         widget.contacts[index].mobileNo.toString());
-                //       _customerModel
-                //         ..name = getName(widget.contacts[index].name,
-                //             widget.contacts[index].mobileNo)
-                //         ..mobileNo = widget.contacts[index].mobileNo
-                //         ..ulId = cid.customerInfo?.id.toString()
-                //         ..avatar = widget.contacts[index].avatar
-                //         ..chatId = widget.contacts[index].chatId;
-                //       final localCustId = await repository.queries
-                //           .getCustomerId(widget.contacts[index].mobileNo!);
-                //       // Navigator.of(context).pop(true);
-                //       Navigator.of(context).popAndPushNamed(
-                //           AppRoutes.requestTransactionRoute,
-                //           arguments: ReceiveTransactionArgs(
-                //               _customerModel, localCustId));
-                //     }
-                //   }
-                    : () async {
-                  CustomerModel _customerModel = CustomerModel();
-                  if (navigation == true) {
-                    CustomLoadingDialog.showLoadingDialog(context, key);
-                    var cid = await repository.customerApi
-                        .getCustomerID(
-                        mobileNumber: cData.mobileNo.toString())
-                        .timeout(Duration(seconds: 30),
-                        onTimeout: () async {
-                          Navigator.of(context).pop();
-                          return Future.value(null);
-                        });
-                    bool? merchantSubscriptionPlan =
-                        cid.customerInfo?.merchantSubscriptionPlan ??
-                            false;
-                    debugPrint(cData.mobileNo.toString());
-                    debugPrint(cData.contactData?.name?.split(' ')[0]);
-                    debugPrint(cData.chatId);
-                    //    debugPrint(cid.customerInfo?.id.toString());
-                    var avatar = cData.profilePic!.isNotEmpty &&
-                        cData.profilePic != null &&
-                        cData.profilePic != 'null'
-                        ? (await NetworkAssetBundle(
-                        Uri.parse(cData.profilePic!))
-                        .load(cData.profilePic!))
-                        .buffer
-                        .asUint8List()
-                        : null;
-                    _customerModel
-                      ..name = getName(cData.contactData?.name?.split(' ')[0], cData.mobileNo)
-                      ..mobileNo = cData.mobileNo
-                      ..ulId = cid.customerInfo?.id.toString()
-                      ..avatar = avatar
-                      ..chatId = cData.chatId;
-                    final localCustId = await repository.queries
-                        .getCustomerId(cData.mobileNo!)
-                        .timeout(Duration(seconds: 30),
-                        onTimeout: () async {
-                          Navigator.of(context).pop();
-                          return Future.value(null);
-                        });
-                    final uniqueId = Uuid().v1();
-                    if (localCustId.isEmpty) {
-                      var avatar = cData.profilePic!.isNotEmpty &&
-                          cData.profilePic != null &&
-                          cData.profilePic != 'null'
-                          ? (await NetworkAssetBundle(
-                          Uri.parse(cData.profilePic!))
-                          .load(cData.profilePic!))
-                          .buffer
-                          .asUint8List()
-                          : null;
-                      final customer = CustomerModel()
-                        ..name = getName(
-                            cData.contactData?.name?.split(' ')[0].trim(), cData.mobileNo!)
-                        ..mobileNo = (cData.mobileNo!)
-                        ..avatar = avatar
-                        ..customerId = uniqueId
-                        ..businessId = Provider.of<BusinessProvider>(
-                            context,
-                            listen: false)
-                            .selectedBusiness
-                            .businessId
-                        ..chatId = cData.chatId
-                        ..isChanged = true;
-                      await repository.queries
-                          .insertCustomer(customer)
-                          .timeout(Duration(seconds: 30),
-                          onTimeout: () async {
-                            Navigator.of(context).pop();
-                            return Future.value(null);
-                          });
-                      if (await checkConnectivity) {
-                        final apiResponse = await (repository.customerApi
-                            .saveCustomer(customer, context,
-                            AddCustomers.ADD_NEW_CUSTOMER)
-                            .timeout(Duration(seconds: 30),
-                            onTimeout: () async {
-                              Navigator.of(context).pop();
-                              return Future.value(null);
-                            }).catchError((e) {
-                          recordError(e, StackTrace.current);
-                          return false;
-                        }));
-                        // if (apiResponse.isNotEmpty) {
-                        //   ///update chat id here
-                        //   await repository.queries
-                        //       .updateCustomerIsChanged(0, customer.customerId, apiResponse);
-                        // }
-                        if (apiResponse) {
-                          ///update chat id here
-                          final Messages msg =
-                          Messages(messages: '', messageType: 100);
-                          var jsondata = jsonEncode(msg);
-                          ChatRepository _chatRepository =
-                          ChatRepository();
-                          final response = await _chatRepository
-                              .sendMessage(
-                              _customerModel.mobileNo.toString(),
-                              _customerModel.name,
-                              jsondata,
-                              localCustId.isEmpty
-                                  ? uniqueId
-                                  : localCustId,
-                              Provider.of<BusinessProvider>(context,
-                                  listen: false)
-                                  .selectedBusiness
-                                  .businessId)
-                              .timeout(Duration(seconds: 30),
-                              onTimeout: () async {
-                                Navigator.of(context).pop();
-                                return Future.value(null);
-                              });
-                          final messageResponse =
-                          Map<String, dynamic>.from(
-                              jsonDecode(response.body));
-                          Message _message = Message.fromJson(
-                              messageResponse['message']);
-                          if (_message.chatId.toString().isNotEmpty) {
-                            await repository.queries
-                                .updateCustomerIsChanged(
-                                0,
-                                _customerModel.customerId!,
-                                _message.chatId)
-                                .timeout(Duration(seconds: 30),
-                                onTimeout: () async {
-                                  Navigator.of(context).pop();
-                                  return Future.value(null);
-                                });
-                          }
-                        }
+                        MerchantBankNotAdded.showBankNotAddedDialog(
+                            context, 'userBankNotAdded');
                       }
-                      BlocProvider.of<ContactsCubit>(context).getContacts(
-                          Provider.of<BusinessProvider>(context,
-                              listen: false)
-                              .selectedBusiness
-                              .businessId);
-                    }
-                    setState(() {
-                      debugPrint(
-                          'Check' + _customerModel.customerId.toString());
-                    });
-                    if (cid.customerInfo?.id == null) {
-                      Navigator.of(context).pop(true);
-                      MerchantBankNotAdded.showBankNotAddedDialog(
-                          context, 'userNotRegistered');
-                      // userNotRegisteredDialog();
-                      // showDialog(
-                      //   context: context,
-                      //   builder: (BuildContext context) {
-                      //     return NonULDialog();
-                      //   },
-                      // );
-
-                    }
-                    //else if (Repository()
-                    //         .hiveQueries
-                    //         .userData
-                    //         .kycStatus ==
-                    //     0) {
-                    //   Navigator.of(context).pop();
-                    //   MerchantBankNotAdded.showBankNotAddedDialog(
-                    //       context, 'userKYCPending');
-                    // } else if (Repository()
-                    //         .hiveQueries
-                    //         .userData
-                    //         .kycStatus ==
-                    //     2) {
-                    //   await getKyc().then((value) {
-                    //     Navigator.of(context).pop();
-                    //     MerchantBankNotAdded.showBankNotAddedDialog(
-                    //         context, 'userKYCVerificationPending');
-                    //   });
-                    // }
-                    else if (cid.customerInfo?.bankAccountStatus ==
-                        false) {
-                      Navigator.of(context).pop(true);
-
-                      merchantBankNotAddedModalSheet(
-                          text:
-                          'We have requested your merchant to add bank account.');
-                    } else if (cid.customerInfo?.kycStatus == false) {
-                      Navigator.of(context).pop(true);
-                      merchantBankNotAddedModalSheet(
-                          text:
-                          'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
-                    }
-                    // else if (Repository()
+                    // : ((Repository().hiveQueries.userData.kycStatus == 0 ||
+                    //                 Repository().hiveQueries.userData.kycStatus ==
+                    //                     2) ||
+                    //             Repository().hiveQueries.userData.premiumStatus ==
+                    //                 0) &&
+                    //     widget.navigation == false
+                    // ? () async {
+                    //     CustomLoadingDialog.showLoadingDialog(context, key);
+                    //     var cid = await repository.customerApi.getCustomerID(
+                    //         mobileNumber:
+                    //             widget.contacts[index].mobileNo.toString());
+                    //     bool? merchantSubscriptionPlan =
+                    //         cid.customerInfo?.merchantSubscriptionPlan ?? false;
+                    //     if (Repository().hiveQueries.userData.kycStatus == 2) {
+                    //       //If KYC is Verification is Pending
+                    //       await getKyc().then((value) =>
+                    //           MerchantBankNotAdded.showBankNotAddedDialog(
+                    //               context, 'userKYCVerificationPending'));
+                    //     } else if (Repository()
                     //             .hiveQueries
                     //             .userData
                     //             .kycStatus ==
-                    //         1 &&
-                    //     Repository()
-                    //             .hiveQueries
-                    //             .userData
-                    //             .premiumStatus ==
                     //         0) {
-                    //   Navigator.of(context).pop(true);
-                    //   debugPrint('Checket');
-                    //   MerchantBankNotAdded.showBankNotAddedDialog(
-                    //       context, 'upgradePremium');
-                    // }
-                    else if (merchantSubscriptionPlan == false) {
-                      Navigator.of(context).pop(true);
-                      debugPrint('Checket');
-                      merchantBankNotAddedModalSheet(
-                          text:
-                          'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
-                    } else {
-                      Map<String, dynamic> isTransaction =
-                      await repository.paymentThroughQRApi
-                          .getTransactionLimit(context);
-                      if (!(isTransaction)['isError']) {
-                        Navigator.of(context).pop(true);
-                        // showBankAccountDialog();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PayTransactionScreen(
-                                model: _customerModel,
-                                customerId: localCustId.isEmpty
-                                    ? uniqueId
-                                    : localCustId,
-                                type: 'DIRECT',
-                                suspense: true,
-                                through: 'DIRECT'),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).pop(true);
-                        '${(isTransaction)['message']}'
-                            .showSnackBar(context);
-                      }
-                    }
+                    //       Navigator.of(context).pop(true);
+                    //       //KYC WHEN USER STARTS A NEW KYC JOURNEY
+                    //       MerchantBankNotAdded.showBankNotAddedDialog(
+                    //           context, 'userKYCPending');
+                    //     } else if (Repository()
+                    //                 .hiveQueries
+                    //                 .userData
+                    //                 .kycStatus ==
+                    //             0 &&
+                    //         Repository()
+                    //                 .hiveQueries
+                    //                 .userData
+                    //                 .isEmiratesIdDone ==
+                    //             false) {
+                    //       Navigator.of(context).pop(true);
+                    //       //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                    //       MerchantBankNotAdded.showBankNotAddedDialog(
+                    //           context, 'EmiratesIdPending');
+                    //     } else if (Repository()
+                    //                 .hiveQueries
+                    //                 .userData
+                    //                 .kycStatus ==
+                    //             0 &&
+                    //         Repository()
+                    //                 .hiveQueries
+                    //                 .userData
+                    //                 .isTradeLicenseDone ==
+                    //             false) {
+                    //       Navigator.of(context).pop(true);
+                    //       //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                    //       MerchantBankNotAdded.showBankNotAddedDialog(
+                    //           context, 'TradeLicensePending');
+                    //     } else if (Repository()
+                    //                 .hiveQueries
+                    //                 .userData
+                    //                 .kycStatus ==
+                    //             1 &&
+                    //         Repository().hiveQueries.userData.premiumStatus ==
+                    //             0) {
+                    //       Navigator.of(context).pop(true);
+                    //       MerchantBankNotAdded.showBankNotAddedDialog(
+                    //           context, 'upgradePremium');
+                    //     } else if (cid.customerInfo?.kycStatus == false) {
+                    //       Navigator.of(context).pop(true);
+                    //       merchantBankNotAddedModalSheet(
+                    //           text:
+                    //               'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
+                    //     } else if (merchantSubscriptionPlan == false) {
+                    //       Navigator.of(context).pop(true);
+                    //       merchantBankNotAddedModalSheet(
+                    //           text:
+                    //               'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
+                    //     } else {
+                    //       // CustomLoadingDialog.showLoadingDialog(context, key);
+                    //       // var cid = await repository.customerApi.getCustomerID(
+                    //       //     mobileNumber:
+                    //       //         widget.contacts[index].mobileNo.toString());
+                    //       _customerModel
+                    //         ..name = getName(widget.contacts[index].name,
+                    //             widget.contacts[index].mobileNo)
+                    //         ..mobileNo = widget.contacts[index].mobileNo
+                    //         ..ulId = cid.customerInfo?.id.toString()
+                    //         ..avatar = widget.contacts[index].avatar
+                    //         ..chatId = widget.contacts[index].chatId;
+                    //       final localCustId = await repository.queries
+                    //           .getCustomerId(widget.contacts[index].mobileNo!);
+                    //       // Navigator.of(context).pop(true);
+                    //       Navigator.of(context).popAndPushNamed(
+                    //           AppRoutes.requestTransactionRoute,
+                    //           arguments: ReceiveTransactionArgs(
+                    //               _customerModel, localCustId));
+                    //     }
+                    //   }
+                    : () async {
+                        CustomerModel _customerModel = CustomerModel();
+                        if (navigation == true) {
+                          CustomLoadingDialog.showLoadingDialog(context, key);
+                          var cid = await repository.customerApi
+                              .getCustomerID(
+                                  mobileNumber: cData.mobileNo.toString())
+                              .timeout(Duration(seconds: 30),
+                                  onTimeout: () async {
+                            Navigator.of(context).pop();
+                            return Future.value(null);
+                          });
+                          bool? merchantSubscriptionPlan =
+                              cid.customerInfo?.merchantSubscriptionPlan ??
+                                  false;
+                          debugPrint(cData.mobileNo.toString());
+                          debugPrint(cData.contactData?.name?.split(' ')[0]);
+                          debugPrint(cData.chatId);
+                          //    debugPrint(cid.customerInfo?.id.toString());
+                          var avatar = cData.profilePic!.isNotEmpty &&
+                                  cData.profilePic != null &&
+                                  cData.profilePic != 'null'
+                              ? (await NetworkAssetBundle(
+                                          Uri.parse(cData.profilePic!))
+                                      .load(cData.profilePic!))
+                                  .buffer
+                                  .asUint8List()
+                              : null;
+                          _customerModel
+                            ..name = getName(
+                                cData.contactData?.name?.split(' ')[0],
+                                cData.mobileNo)
+                            ..mobileNo = cData.mobileNo
+                            ..ulId = cid.customerInfo?.id.toString()
+                            ..avatar = avatar
+                            ..chatId = cData.chatId;
+                          final localCustId = await repository.queries
+                              .getCustomerId(cData.mobileNo!)
+                              .timeout(Duration(seconds: 30),
+                                  onTimeout: () async {
+                            Navigator.of(context).pop();
+                            return Future.value(null);
+                          });
+                          final uniqueId = Uuid().v1();
+                          if (localCustId.isEmpty) {
+                            var avatar = cData.profilePic!.isNotEmpty &&
+                                    cData.profilePic != null &&
+                                    cData.profilePic != 'null'
+                                ? (await NetworkAssetBundle(
+                                            Uri.parse(cData.profilePic!))
+                                        .load(cData.profilePic!))
+                                    .buffer
+                                    .asUint8List()
+                                : null;
+                            final customer = CustomerModel()
+                              ..name = getName(
+                                  cData.contactData?.name?.split(' ')[0].trim(),
+                                  cData.mobileNo!)
+                              ..mobileNo = (cData.mobileNo!)
+                              ..avatar = avatar
+                              ..customerId = uniqueId
+                              ..businessId = Provider.of<BusinessProvider>(
+                                      context,
+                                      listen: false)
+                                  .selectedBusiness
+                                  .businessId
+                              ..chatId = cData.chatId
+                              ..isChanged = true;
+                            await repository.queries
+                                .insertCustomer(customer)
+                                .timeout(Duration(seconds: 30),
+                                    onTimeout: () async {
+                              Navigator.of(context).pop();
+                              return Future.value(null);
+                            });
+                            if (await checkConnectivity) {
+                              final apiResponse = await (repository.customerApi
+                                  .saveCustomer(customer, context,
+                                      AddCustomers.ADD_NEW_CUSTOMER)
+                                  .timeout(Duration(seconds: 30),
+                                      onTimeout: () async {
+                                Navigator.of(context).pop();
+                                return Future.value(null);
+                              }).catchError((e) {
+                                recordError(e, StackTrace.current);
+                                return false;
+                              }));
+                              // if (apiResponse.isNotEmpty) {
+                              //   ///update chat id here
+                              //   await repository.queries
+                              //       .updateCustomerIsChanged(0, customer.customerId, apiResponse);
+                              // }
+                              if (apiResponse) {
+                                ///update chat id here
+                                final Messages msg =
+                                    Messages(messages: '', messageType: 100);
+                                var jsondata = jsonEncode(msg);
+                                ChatRepository _chatRepository =
+                                    ChatRepository();
+                                final response = await _chatRepository
+                                    .sendMessage(
+                                        _customerModel.mobileNo.toString(),
+                                        _customerModel.name,
+                                        jsondata,
+                                        localCustId.isEmpty
+                                            ? uniqueId
+                                            : localCustId,
+                                        Provider.of<BusinessProvider>(context,
+                                                listen: false)
+                                            .selectedBusiness
+                                            .businessId)
+                                    .timeout(Duration(seconds: 30),
+                                        onTimeout: () async {
+                                  Navigator.of(context).pop();
+                                  return Future.value(null);
+                                });
+                                final messageResponse =
+                                    Map<String, dynamic>.from(
+                                        jsonDecode(response.body));
+                                Message _message = Message.fromJson(
+                                    messageResponse['message']);
+                                if (_message.chatId.toString().isNotEmpty) {
+                                  await repository.queries
+                                      .updateCustomerIsChanged(
+                                          0,
+                                          _customerModel.customerId!,
+                                          _message.chatId)
+                                      .timeout(Duration(seconds: 30),
+                                          onTimeout: () async {
+                                    Navigator.of(context).pop();
+                                    return Future.value(null);
+                                  });
+                                }
+                              }
+                            }
+                            BlocProvider.of<ContactsCubit>(context).getContacts(
+                                Provider.of<BusinessProvider>(context,
+                                        listen: false)
+                                    .selectedBusiness
+                                    .businessId);
+                          }
+                          setState(() {
+                            debugPrint(
+                                'Check' + _customerModel.customerId.toString());
+                          });
+                          if (cid.customerInfo?.id == null) {
+                            Navigator.of(context).pop(true);
+                            MerchantBankNotAdded.showBankNotAddedDialog(
+                                context, 'userNotRegistered');
+                            // userNotRegisteredDialog();
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (BuildContext context) {
+                            //     return NonULDialog();
+                            //   },
+                            // );
 
-                    // Navigator.of(context).pop();
+                          }
+                          //else if (Repository()
+                          //         .hiveQueries
+                          //         .userData
+                          //         .kycStatus ==
+                          //     0) {
+                          //   Navigator.of(context).pop();
+                          //   MerchantBankNotAdded.showBankNotAddedDialog(
+                          //       context, 'userKYCPending');
+                          // } else if (Repository()
+                          //         .hiveQueries
+                          //         .userData
+                          //         .kycStatus ==
+                          //     2) {
+                          //   await getKyc().then((value) {
+                          //     Navigator.of(context).pop();
+                          //     MerchantBankNotAdded.showBankNotAddedDialog(
+                          //         context, 'userKYCVerificationPending');
+                          //   });
+                          // }
+                          else if (cid.customerInfo?.bankAccountStatus ==
+                              false) {
+                            Navigator.of(context).pop(true);
 
-                    //Navigation func to make the naviagation dynamic
+                            merchantBankNotAddedModalSheet(
+                                text:
+                                    'We have requested your merchant to add bank account.');
+                          } else if (cid.customerInfo?.kycStatus == false) {
+                            Navigator.of(context).pop(true);
+                            merchantBankNotAddedModalSheet(
+                                text:
+                                    'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
+                          }
+                          // else if (Repository()
+                          //             .hiveQueries
+                          //             .userData
+                          //             .kycStatus ==
+                          //         1 &&
+                          //     Repository()
+                          //             .hiveQueries
+                          //             .userData
+                          //             .premiumStatus ==
+                          //         0) {
+                          //   Navigator.of(context).pop(true);
+                          //   debugPrint('Checket');
+                          //   MerchantBankNotAdded.showBankNotAddedDialog(
+                          //       context, 'upgradePremium');
+                          // }
+                          else if (merchantSubscriptionPlan == false) {
+                            Navigator.of(context).pop(true);
+                            debugPrint('Checket');
+                            merchantBankNotAddedModalSheet(
+                                text:
+                                    'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
+                          } else {
+                            Map<String, dynamic> isTransaction =
+                                await repository.paymentThroughQRApi
+                                    .getTransactionLimit(context);
+                            if (!(isTransaction)['isError']) {
+                              Navigator.of(context).pop(true);
+                              // showBankAccountDialog();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PayTransactionScreen(
+                                      model: _customerModel,
+                                      customerId: localCustId.isEmpty
+                                          ? uniqueId
+                                          : localCustId,
+                                      type: 'DIRECT',
+                                      suspense: true,
+                                      through: 'DIRECT'),
+                                ),
+                              );
+                            } else {
+                              Navigator.of(context).pop(true);
+                              '${(isTransaction)['message']}'
+                                  .showSnackBar(context);
+                            }
+                          }
 
-                    //TODO
+                          // Navigator.of(context).pop();
 
-                  } else {
-                    // CustomLoadingDialog.showLoadingDialog(context, key);
-                    // var cid = await repository.customerApi
-                    //     .getCustomerID(
-                    //         mobileNumber: widget
-                    //             .contacts[index].mobileNo
-                    //             .toString());
-                    // bool? merchantSubscriptionPlan =
-                    //     cid.customerInfo?.merchantSubscriptionPlan ??
-                    //         false;
-                   if(Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Rejected' || Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Expired') {
-                                          MerchantBankNotAdded
-                                          .showBankNotAddedDialog(context,
-                                              'userKYCExpired');
-                                } else if (Repository().hiveQueries.userData.kycStatus ==
-                        2) {
-                      //If KYC is Verification is Pending
-                      await getKyc().then((value) =>
-                          MerchantBankNotAdded.showBankNotAddedDialog(
-                              context, 'userKYCVerificationPending'));
-                    } else if (Repository()
-                        .hiveQueries
-                        .userData
-                        .kycStatus ==
-                        0) {
-                      //Navigator.of(context).pop(true);
-                      //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                      MerchantBankNotAdded.showBankNotAddedDialog(
-                          context, 'userKYCPending');
-                    } else if (Repository()
-                        .hiveQueries
-                        .userData
-                        .kycStatus ==
-                        0 &&
-                        Repository()
-                            .hiveQueries
-                            .userData
-                            .isEmiratesIdDone ==
-                            false) {
-                      //Navigator.of(context).pop(true);
-                      //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                      MerchantBankNotAdded.showBankNotAddedDialog(
-                          context, 'EmiratesIdPending');
-                    } else if (Repository()
-                        .hiveQueries
-                        .userData
-                        .kycStatus ==
-                        0 &&
-                        Repository()
-                            .hiveQueries
-                            .userData
-                            .isTradeLicenseDone ==
-                            false) {
-                      // Navigator.of(context).pop(true);
-                      //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                      MerchantBankNotAdded.showBankNotAddedDialog(
-                          context, 'TradeLicensePending');
-                    } else if (Repository()
-                        .hiveQueries
-                        .userData
-                        .kycStatus ==
-                        1 &&
-                        Repository().hiveQueries.userData.premiumStatus ==
-                            0) {
-                      // Navigator.of(context).pop(true);
-                      MerchantBankNotAdded.showBankNotAddedDialog(
-                          context, 'upgradePremium');
-                    }
+                          //Navigation func to make the naviagation dynamic
 
-                    //MERCHANT CHECK
-                    // else if (cid.customerInfo?.kycStatus == false) {
-                    //   Navigator.of(context).pop(true);
-                    //   merchantBankNotAddedModalSheet(
-                    //       text:
-                    //           'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
-                    // } else if (merchantSubscriptionPlan == false) {
-                    //   Navigator.of(context).pop(true);
-                    //   merchantBankNotAddedModalSheet(
-                    //       text:
-                    //           'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
-                    // }
+                          //TODO
 
-                    else {
-                       CustomLoadingDialog.showLoadingDialog(context, key);
-                      // var cid = await repository.customerApi.getCustomerID(
-                      //     mobileNumber:
-                      //         widget.contacts[index].mobileNo.toString());
-                      var avatar = cData.profilePic!.isNotEmpty &&
-                          cData.profilePic != null &&
-                          cData.profilePic != 'null'
-                          ? (await NetworkAssetBundle(
-                          Uri.parse(cData.profilePic!))
-                          .load(cData.profilePic!))
-                          .buffer
-                          .asUint8List()
-                          : null;
-                      _customerModel
-                        ..name = getName(cData.contactData?.name?.split(' ')[0], cData.mobileNo)
-                        ..mobileNo = cData.mobileNo
-                        ..ulId = cData.id
-                        ..avatar = avatar
-                        ..chatId = cData.chatId;
-                      final localCustId = await repository.queries
-                          .getCustomerId(cData.mobileNo!);
-                      debugPrint('ww: ' + _customerModel.toString());
-                      Navigator.of(context).pop(true);
-                    await  Navigator.of(context).pushNamed(
-                          AppRoutes.requestTransactionRoute,
-                          arguments: ReceiveTransactionArgs(
-                              _customerModel, localCustId));
-                      print('teest');
-                    }
-                  }
-                },
+                        } else {
+                          // CustomLoadingDialog.showLoadingDialog(context, key);
+                          // var cid = await repository.customerApi
+                          //     .getCustomerID(
+                          //         mobileNumber: widget
+                          //             .contacts[index].mobileNo
+                          //             .toString());
+                          // bool? merchantSubscriptionPlan =
+                          //     cid.customerInfo?.merchantSubscriptionPlan ??
+                          //         false;
+                          if (await allChecker(context)) {
+                            CustomLoadingDialog.showLoadingDialog(context, key);
+                            // var cid = await repository.customerApi.getCustomerID(
+                            //     mobileNumber:
+                            //         widget.contacts[index].mobileNo.toString());
+                            var avatar = cData.profilePic!.isNotEmpty &&
+                                    cData.profilePic != null &&
+                                    cData.profilePic != 'null'
+                                ? (await NetworkAssetBundle(
+                                            Uri.parse(cData.profilePic!))
+                                        .load(cData.profilePic!))
+                                    .buffer
+                                    .asUint8List()
+                                : null;
+                            _customerModel
+                              ..name = getName(
+                                  cData.contactData?.name?.split(' ')[0],
+                                  cData.mobileNo)
+                              ..mobileNo = cData.mobileNo
+                              ..ulId = cData.id
+                              ..avatar = avatar
+                              ..chatId = cData.chatId;
+                            final localCustId = await repository.queries
+                                .getCustomerId(cData.mobileNo!);
+                            debugPrint('ww: ' + _customerModel.toString());
+                            Navigator.of(context).pop(true);
+                            await Navigator.of(context).pushNamed(
+                                AppRoutes.requestTransactionRoute,
+                                arguments: ReceiveTransactionArgs(
+                                    _customerModel, localCustId));
+                            print('teest');
+                          }
+                        }
+                      },
                 child: GridTile(
                   header: CircleAvatar(
                     radius: 28.0,
                     backgroundImage: cData.profilePic != null &&
-                        cData.profilePic!.isNotEmpty &&
-                        cData.profilePic! != "null"
+                            cData.profilePic!.isNotEmpty &&
+                            cData.profilePic! != "null"
                         ? NetworkImage('$baseImageUrl' + cData.profilePic!)
                         : null,
                     child: cData.profilePic != null &&
-                        cData.profilePic!.isNotEmpty &&
-                        cData.profilePic! != "null"
+                            cData.profilePic!.isNotEmpty &&
+                            cData.profilePic! != "null"
                         ? Container()
                         : CustomText(
-                      getInitials(
-                          cData.contactData?.name,
-                          cData.mobileNo?.trim() ?? '')
-                          .toUpperCase(),
-                      color: AppTheme.circularAvatarTextColor,
-                      size: 22,
-                    ),
+                            getInitials(cData.contactData?.name,
+                                    cData.mobileNo?.trim() ?? '')
+                                .toUpperCase(),
+                            color: AppTheme.circularAvatarTextColor,
+                            size: 22,
+                          ),
                     //  backgroundColor: _colors[Random().nextInt(_colors.length)],
                     backgroundColor: bg_color,
                   ),
@@ -2263,7 +2189,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
             .getCustomerRankingPayTransactions(type, pageNo, context);
       } else {
         await BlocProvider.of<CustomerRankingRequestCubit>(context,
-            listen: false)
+                listen: false)
             .getCustomerRankingRequestTransactions(type, pageNo, context);
       }
     } else {
@@ -2272,7 +2198,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
             .getCustomerRankingPayTransactionsOffline(type, pageNo);
       } else {
         await BlocProvider.of<CustomerRankingRequestCubit>(context,
-            listen: false)
+                listen: false)
             .getCustomerRankingRequestTransactionsOffline(type, pageNo);
       }
     }
@@ -2314,7 +2240,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                             fontFamily: 'SFProDisplay',
                             fontSize: 18,
                             letterSpacing:
-                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                0 /*percentages not used in flutter. defaulting to zero*/,
                             fontWeight: FontWeight.normal,
                             height: 1),
                       ),
@@ -2331,7 +2257,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                             fontFamily: 'SFProDisplay',
                             fontSize: 18,
                             letterSpacing:
-                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                0 /*percentages not used in flutter. defaulting to zero*/,
                             fontWeight: FontWeight.w700,
                             height: 1),
                       ),
@@ -2357,64 +2283,64 @@ class _PayRequestScreenState extends State<PayRequestScreen>
         });
   }
 
-  Future getKyc() async {
-    setState(() {
-      isLoading = true;
-    });
+  // Future getKyc() async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
 
-    await KycAPI.kycApiProvider.kycCheker().then((value) {
-      setState(() {
-        isLoading = false;
-      });
-      debugPrint('Check the value : ' + value['status'].toString());
+  //   await KycAPI.kycApiProvider.kycCheker().then((value) {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //     debugPrint('Check the value : ' + value['status'].toString());
 
-      if (value != null && value.toString().isNotEmpty) {
-        if (mounted) {
-          setState(() {
-            Repository().hiveQueries.insertUserData(Repository()
-                .hiveQueries
-                .userData
-                .copyWith(
-                kycStatus:
-                (value['isVerified'] == true && value['status'] == true)
-                    ? 1
-                    : (value['emirates'] &&
-                    value['tl'] == true &&
-                    value['status'] == false)
-                    ? 2
-                    : 0,
-                premiumStatus:
-                value['planDuration'].toString() == 0.toString()
-                    ? 0
-                    : int.tryParse(value['planDuration']),
-                isEmiratesIdDone: value['emirates'] ?? false,
-                isTradeLicenseDone: value['tl'] ?? false));
+  //     if (value != null && value.toString().isNotEmpty) {
+  //       if (mounted) {
+  //         setState(() {
+  //           Repository().hiveQueries.insertUserData(Repository()
+  //               .hiveQueries
+  //               .userData
+  //               .copyWith(
+  //                   kycStatus:
+  //                       (value['isVerified'] == true && value['status'] == true)
+  //                           ? 1
+  //                           : (value['emirates'] &&
+  //                                   value['tl'] == true &&
+  //                                   value['status'] == false)
+  //                               ? 2
+  //                               : 0,
+  //                   premiumStatus:
+  //                       value['planDuration'].toString() == 0.toString()
+  //                           ? 0
+  //                           : int.tryParse(value['planDuration']),
+  //                   isEmiratesIdDone: value['emirates'] ?? false,
+  //                   isTradeLicenseDone: value['tl'] ?? false));
 
-            //TODO Need to set emirates iD and TradeLicense ID Values
-            // isEmiratesIdDone = value['emirates'] ?? false;
-            // isTradeLicenseDone = value['tl'] ?? false;
-            // status = value['status'] ?? false;
-            // isPremium = value['premium'] ?? false;
+  //           //TODO Need to set emirates iD and TradeLicense ID Values
+  //           // isEmiratesIdDone = value['emirates'] ?? false;
+  //           // isTradeLicenseDone = value['tl'] ?? false;
+  //           // status = value['status'] ?? false;
+  //           // isPremium = value['premium'] ?? false;
 
-            // debugPrint('check1' + status.toString());
-            // debugPrint('check' + isEmiratesIdDone.toString());
-          });
-          return;
-        }
-      }
-    });
-    calculatePremiumDate();
-    setState(() {
-      isLoading = false;
-    });
-  }
+  //           // debugPrint('check1' + status.toString());
+  //           // debugPrint('check' + isEmiratesIdDone.toString());
+  //         });
+  //         return;
+  //       }
+  //     }
+  //   });
+  //   calculatePremiumDate();
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  // }
 }
 
 Widget contactListWithOtherWidgets(
-    {required List<CustomerModel> contacts,
-      String? searchQuery,
-      bool? navigationtoPay,
-      required BuildContext context}) =>
+        {required List<CustomerModel> contacts,
+        String? searchQuery,
+        bool? navigationtoPay,
+        required BuildContext context}) =>
     ImportContactsListWidget(
       contacts: contacts,
       navigation: navigationtoPay,
@@ -2925,25 +2851,25 @@ class _ImportContactsListWidgetState extends State<ImportContactsListWidget> {
   //       });
   // }
 
-Future getKyc() async {
-    setState(() {
-      isLoading = true;
-    });
-    await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      setState(() {
-        isLoading = false;
-      });
-      'Something went wrong. Please try again later.'.showSnackBar(context);
-    }).then((value) {
-      setState(() {
-        isLoading = false;
-      });
-    });
-    calculatePremiumDate();
-    setState(() {
-      isLoading = false;
-    });
-  }
+  // Future getKyc() async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //   await KycAPI.kycApiProvider.kycCheker().catchError((e) {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //     'Something went wrong. Please try again later.'.showSnackBar(context);
+  //   }).then((value) {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   });
+  //   calculatePremiumDate();
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  // }
 
   // getKyc() async {
   //   await KycAPI.kycApiProvider.kycCheker().then((value) {
@@ -3006,7 +2932,7 @@ Future getKyc() async {
                           fontFamily: 'SFProDisplay',
                           fontSize: 18,
                           letterSpacing:
-                          0 /*percentages not used in flutter. defaulting to zero*/,
+                              0 /*percentages not used in flutter. defaulting to zero*/,
                           fontWeight: FontWeight.normal,
                           height: 1),
                     ),
@@ -3021,7 +2947,7 @@ Future getKyc() async {
                           fontFamily: 'SFProDisplay',
                           fontSize: 18,
                           letterSpacing:
-                          0 /*percentages not used in flutter. defaulting to zero*/,
+                              0 /*percentages not used in flutter. defaulting to zero*/,
                           fontWeight: FontWeight.w700,
                           height: 1),
                     ),
@@ -3049,10 +2975,10 @@ Future getKyc() async {
     // removed loader for performance issue
     return isLoading == true
         ? SliverToBoxAdapter(
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
-    )
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
         : /*ListView.builder(
           //padding: EdgeInsets.zero,
           itemCount: widget.contacts.length,
@@ -3060,775 +2986,694 @@ Future getKyc() async {
 
           },
         );*/
-    SliverList(
-        delegate: SliverChildBuilderDelegate(
-              (context, index) {
-            return GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: Repository().hiveQueries.userData.bankStatus == false &&
-                  widget.navigation == false
-                  ? () {
-                MerchantBankNotAdded.showBankNotAddedDialog(
-                    context, 'userBankNotAdded');
-              }
-              // : ((Repository().hiveQueries.userData.kycStatus == 0 ||
-              //                 Repository().hiveQueries.userData.kycStatus ==
-              //                     2) ||
-              //             Repository().hiveQueries.userData.premiumStatus ==
-              //                 0) &&
-              //     widget.navigation == false
-              // ? () async {
-              //     CustomLoadingDialog.showLoadingDialog(context, key);
-              //     var cid = await repository.customerApi.getCustomerID(
-              //         mobileNumber:
-              //             widget.contacts[index].mobileNo.toString());
-              //     bool? merchantSubscriptionPlan =
-              //         cid.customerInfo?.merchantSubscriptionPlan ?? false;
-              //     if (Repository().hiveQueries.userData.kycStatus == 2) {
-              //       //If KYC is Verification is Pending
-              //       await getKyc().then((value) =>
-              //           MerchantBankNotAdded.showBankNotAddedDialog(
-              //               context, 'userKYCVerificationPending'));
-              //     } else if (Repository()
-              //             .hiveQueries
-              //             .userData
-              //             .kycStatus ==
-              //         0) {
-              //       Navigator.of(context).pop(true);
-              //       //KYC WHEN USER STARTS A NEW KYC JOURNEY
-              //       MerchantBankNotAdded.showBankNotAddedDialog(
-              //           context, 'userKYCPending');
-              //     } else if (Repository()
-              //                 .hiveQueries
-              //                 .userData
-              //                 .kycStatus ==
-              //             0 &&
-              //         Repository()
-              //                 .hiveQueries
-              //                 .userData
-              //                 .isEmiratesIdDone ==
-              //             false) {
-              //       Navigator.of(context).pop(true);
-              //       //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-              //       MerchantBankNotAdded.showBankNotAddedDialog(
-              //           context, 'EmiratesIdPending');
-              //     } else if (Repository()
-              //                 .hiveQueries
-              //                 .userData
-              //                 .kycStatus ==
-              //             0 &&
-              //         Repository()
-              //                 .hiveQueries
-              //                 .userData
-              //                 .isTradeLicenseDone ==
-              //             false) {
-              //       Navigator.of(context).pop(true);
-              //       //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-              //       MerchantBankNotAdded.showBankNotAddedDialog(
-              //           context, 'TradeLicensePending');
-              //     } else if (Repository()
-              //                 .hiveQueries
-              //                 .userData
-              //                 .kycStatus ==
-              //             1 &&
-              //         Repository().hiveQueries.userData.premiumStatus ==
-              //             0) {
-              //       Navigator.of(context).pop(true);
-              //       MerchantBankNotAdded.showBankNotAddedDialog(
-              //           context, 'upgradePremium');
-              //     } else if (cid.customerInfo?.kycStatus == false) {
-              //       Navigator.of(context).pop(true);
-              //       merchantBankNotAddedModalSheet(
-              //           text:
-              //               'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
-              //     } else if (merchantSubscriptionPlan == false) {
-              //       Navigator.of(context).pop(true);
-              //       merchantBankNotAddedModalSheet(
-              //           text:
-              //               'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
-              //     } else {
-              //       // CustomLoadingDialog.showLoadingDialog(context, key);
-              //       // var cid = await repository.customerApi.getCustomerID(
-              //       //     mobileNumber:
-              //       //         widget.contacts[index].mobileNo.toString());
-              //       _customerModel
-              //         ..name = getName(widget.contacts[index].name,
-              //             widget.contacts[index].mobileNo)
-              //         ..mobileNo = widget.contacts[index].mobileNo
-              //         ..ulId = cid.customerInfo?.id.toString()
-              //         ..avatar = widget.contacts[index].avatar
-              //         ..chatId = widget.contacts[index].chatId;
-              //       final localCustId = await repository.queries
-              //           .getCustomerId(widget.contacts[index].mobileNo!);
-              //       // Navigator.of(context).pop(true);
-              //       Navigator.of(context).popAndPushNamed(
-              //           AppRoutes.requestTransactionRoute,
-              //           arguments: ReceiveTransactionArgs(
-              //               _customerModel, localCustId));
-              //     }
-              //   }
-                  : () async {
-                if (widget.navigation == true) {
-                  CustomLoadingDialog.showLoadingDialog(context, key);
-                  var cid = await repository.customerApi
-                      .getCustomerID(
-                      mobileNumber: widget.contacts[index].mobileNo
-                          .toString())
-                      .timeout(Duration(seconds: 30),
-                      onTimeout: () async {
-                        Navigator.of(context).pop();
-                        return Future.value(null);
-                      }).catchError((e){
-                        
-                          Navigator.of(context).pop();
-                          'Please check internet connectivity and try again.'
-                                    .showSnackBar(context);
-                        });
-                  bool? merchantSubscriptionPlan =
-                      cid.customerInfo?.merchantSubscriptionPlan ??
-                          false;
-                  debugPrint(
-                      widget.contacts[index].mobileNo.toString());
-                  debugPrint(widget.contacts[index].name);
-                  debugPrint(widget.contacts[index].chatId);
-                  debugPrint(cid.customerInfo?.id.toString());
-                  _customerModel
-                    ..name = getName(widget.contacts[index].name,
-                        widget.contacts[index].mobileNo)
-                    ..mobileNo = widget.contacts[index].mobileNo
-                    ..ulId = cid.customerInfo?.id.toString()
-                    ..avatar = widget.contacts[index].avatar
-                    ..chatId = widget.contacts[index].chatId;
-                  final localCustId = await repository.queries
-                      .getCustomerId(widget.contacts[index].mobileNo!)
-                      .timeout(Duration(seconds: 30),
-                      onTimeout: () async {
-                        Navigator.of(context).pop();
-                        return Future.value(null);
-                      });
-                  final uniqueId = Uuid().v1();
-                  if (localCustId.isEmpty) {
-                    final customer = CustomerModel()
-                      ..name = getName(
-                          widget.contacts[index].name!.trim(),
-                          widget.contacts[index].mobileNo!)
-                      ..mobileNo = (widget.contacts[index].mobileNo!)
-                      ..avatar = widget.contacts[index].avatar
-                      ..customerId = uniqueId
-                      ..businessId = Provider.of<BusinessProvider>(
-                          context,
-                          listen: false)
-                          .selectedBusiness
-                          .businessId
-                      ..chatId = widget.contacts[index].chatId
-                      ..isChanged = true;
-                    await repository.queries
-                        .insertCustomer(customer)
-                        .timeout(Duration(seconds: 30),
-                        onTimeout: () async {
-                          Navigator.of(context).pop();
-                          return Future.value(null);
-                        });
-                    if (await checkConnectivity) {
-                      final apiResponse = await (repository.customerApi
-                          .saveCustomer(customer, context,
-                          AddCustomers.ADD_NEW_CUSTOMER)
-                          .timeout(Duration(seconds: 30),
-                          onTimeout: () async {
+        SliverList(
+            delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: Repository().hiveQueries.userData.bankStatus == false &&
+                        widget.navigation == false
+                    ? () {
+                        MerchantBankNotAdded.showBankNotAddedDialog(
+                            context, 'userBankNotAdded');
+                      }
+                    // : ((Repository().hiveQueries.userData.kycStatus == 0 ||
+                    //                 Repository().hiveQueries.userData.kycStatus ==
+                    //                     2) ||
+                    //             Repository().hiveQueries.userData.premiumStatus ==
+                    //                 0) &&
+                    //     widget.navigation == false
+                    // ? () async {
+                    //     CustomLoadingDialog.showLoadingDialog(context, key);
+                    //     var cid = await repository.customerApi.getCustomerID(
+                    //         mobileNumber:
+                    //             widget.contacts[index].mobileNo.toString());
+                    //     bool? merchantSubscriptionPlan =
+                    //         cid.customerInfo?.merchantSubscriptionPlan ?? false;
+                    //     if (Repository().hiveQueries.userData.kycStatus == 2) {
+                    //       //If KYC is Verification is Pending
+                    //       await getKyc().then((value) =>
+                    //           MerchantBankNotAdded.showBankNotAddedDialog(
+                    //               context, 'userKYCVerificationPending'));
+                    //     } else if (Repository()
+                    //             .hiveQueries
+                    //             .userData
+                    //             .kycStatus ==
+                    //         0) {
+                    //       Navigator.of(context).pop(true);
+                    //       //KYC WHEN USER STARTS A NEW KYC JOURNEY
+                    //       MerchantBankNotAdded.showBankNotAddedDialog(
+                    //           context, 'userKYCPending');
+                    //     } else if (Repository()
+                    //                 .hiveQueries
+                    //                 .userData
+                    //                 .kycStatus ==
+                    //             0 &&
+                    //         Repository()
+                    //                 .hiveQueries
+                    //                 .userData
+                    //                 .isEmiratesIdDone ==
+                    //             false) {
+                    //       Navigator.of(context).pop(true);
+                    //       //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                    //       MerchantBankNotAdded.showBankNotAddedDialog(
+                    //           context, 'EmiratesIdPending');
+                    //     } else if (Repository()
+                    //                 .hiveQueries
+                    //                 .userData
+                    //                 .kycStatus ==
+                    //             0 &&
+                    //         Repository()
+                    //                 .hiveQueries
+                    //                 .userData
+                    //                 .isTradeLicenseDone ==
+                    //             false) {
+                    //       Navigator.of(context).pop(true);
+                    //       //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
+                    //       MerchantBankNotAdded.showBankNotAddedDialog(
+                    //           context, 'TradeLicensePending');
+                    //     } else if (Repository()
+                    //                 .hiveQueries
+                    //                 .userData
+                    //                 .kycStatus ==
+                    //             1 &&
+                    //         Repository().hiveQueries.userData.premiumStatus ==
+                    //             0) {
+                    //       Navigator.of(context).pop(true);
+                    //       MerchantBankNotAdded.showBankNotAddedDialog(
+                    //           context, 'upgradePremium');
+                    //     } else if (cid.customerInfo?.kycStatus == false) {
+                    //       Navigator.of(context).pop(true);
+                    //       merchantBankNotAddedModalSheet(
+                    //           text:
+                    //               'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
+                    //     } else if (merchantSubscriptionPlan == false) {
+                    //       Navigator.of(context).pop(true);
+                    //       merchantBankNotAddedModalSheet(
+                    //           text:
+                    //               'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
+                    //     } else {
+                    //       // CustomLoadingDialog.showLoadingDialog(context, key);
+                    //       // var cid = await repository.customerApi.getCustomerID(
+                    //       //     mobileNumber:
+                    //       //         widget.contacts[index].mobileNo.toString());
+                    //       _customerModel
+                    //         ..name = getName(widget.contacts[index].name,
+                    //             widget.contacts[index].mobileNo)
+                    //         ..mobileNo = widget.contacts[index].mobileNo
+                    //         ..ulId = cid.customerInfo?.id.toString()
+                    //         ..avatar = widget.contacts[index].avatar
+                    //         ..chatId = widget.contacts[index].chatId;
+                    //       final localCustId = await repository.queries
+                    //           .getCustomerId(widget.contacts[index].mobileNo!);
+                    //       // Navigator.of(context).pop(true);
+                    //       Navigator.of(context).popAndPushNamed(
+                    //           AppRoutes.requestTransactionRoute,
+                    //           arguments: ReceiveTransactionArgs(
+                    //               _customerModel, localCustId));
+                    //     }
+                    //   }
+                    : () async {
+                        if (widget.navigation == true) {
+                          CustomLoadingDialog.showLoadingDialog(context, key);
+                          var cid = await repository.customerApi
+                              .getCustomerID(
+                                  mobileNumber: widget.contacts[index].mobileNo
+                                      .toString())
+                              .timeout(Duration(seconds: 30),
+                                  onTimeout: () async {
                             Navigator.of(context).pop();
                             return Future.value(null);
-                          }).catchError((e){
-                          Navigator.of(context).pop();
-                          'Please check internet connectivity and try again.'
-                                    .showSnackBar(context);
-                        }));
-                      // if (apiResponse.isNotEmpty) {
-                      //   ///update chat id here
-                      //   await repository.queries
-                      //       .updateCustomerIsChanged(0, customer.customerId, apiResponse);
-                      // }
-                      if (apiResponse) {
-                        ///update chat id here
-                        final Messages msg =
-                        Messages(messages: '', messageType: 100);
-                        var jsondata = jsonEncode(msg);
-                        final response = await _chatRepository
-                            .sendMessage(
-                            _customerModel.mobileNo.toString(),
-                            _customerModel.name,
-                            jsondata,
-                            localCustId.isEmpty
-                                ? uniqueId
-                                : localCustId,
-                            Provider.of<BusinessProvider>(context,
-                                listen: false)
-                                .selectedBusiness
-                                .businessId)
-                            .timeout(Duration(seconds: 30),
-                            onTimeout: () async {
+                          }).catchError((e) {
+                            Navigator.of(context).pop();
+                            'Please check internet connectivity and try again.'
+                                .showSnackBar(context);
+                          });
+                          bool? merchantSubscriptionPlan =
+                              cid.customerInfo?.merchantSubscriptionPlan ??
+                                  false;
+                          debugPrint(
+                              widget.contacts[index].mobileNo.toString());
+                          debugPrint(widget.contacts[index].name);
+                          debugPrint(widget.contacts[index].chatId);
+                          debugPrint(cid.customerInfo?.id.toString());
+                          _customerModel
+                            ..name = getName(widget.contacts[index].name,
+                                widget.contacts[index].mobileNo)
+                            ..mobileNo = widget.contacts[index].mobileNo
+                            ..ulId = cid.customerInfo?.id.toString()
+                            ..avatar = widget.contacts[index].avatar
+                            ..chatId = widget.contacts[index].chatId;
+                          final localCustId = await repository.queries
+                              .getCustomerId(widget.contacts[index].mobileNo!)
+                              .timeout(Duration(seconds: 30),
+                                  onTimeout: () async {
+                            Navigator.of(context).pop();
+                            return Future.value(null);
+                          });
+                          final uniqueId = Uuid().v1();
+                          if (localCustId.isEmpty) {
+                            final customer = CustomerModel()
+                              ..name = getName(
+                                  widget.contacts[index].name!.trim(),
+                                  widget.contacts[index].mobileNo!)
+                              ..mobileNo = (widget.contacts[index].mobileNo!)
+                              ..avatar = widget.contacts[index].avatar
+                              ..customerId = uniqueId
+                              ..businessId = Provider.of<BusinessProvider>(
+                                      context,
+                                      listen: false)
+                                  .selectedBusiness
+                                  .businessId
+                              ..chatId = widget.contacts[index].chatId
+                              ..isChanged = true;
+                            await repository.queries
+                                .insertCustomer(customer)
+                                .timeout(Duration(seconds: 30),
+                                    onTimeout: () async {
                               Navigator.of(context).pop();
                               return Future.value(null);
                             });
-                        final messageResponse =
-                        Map<String, dynamic>.from(
-                            jsonDecode(response.body));
-                        Message _message = Message.fromJson(
-                            messageResponse['message']);
-                        if (_message.chatId.toString().isNotEmpty) {
-                          await repository.queries
-                              .updateCustomerIsChanged(
-                              0,
-                              _customerModel.customerId!,
-                              _message.chatId)
-                              .timeout(Duration(seconds: 30),
-                              onTimeout: () async {
+                            if (await checkConnectivity) {
+                              final apiResponse = await (repository.customerApi
+                                  .saveCustomer(customer, context,
+                                      AddCustomers.ADD_NEW_CUSTOMER)
+                                  .timeout(Duration(seconds: 30),
+                                      onTimeout: () async {
                                 Navigator.of(context).pop();
                                 return Future.value(null);
-                              });
+                              }).catchError((e) {
+                                Navigator.of(context).pop();
+                                'Please check internet connectivity and try again.'
+                                    .showSnackBar(context);
+                              }));
+                              // if (apiResponse.isNotEmpty) {
+                              //   ///update chat id here
+                              //   await repository.queries
+                              //       .updateCustomerIsChanged(0, customer.customerId, apiResponse);
+                              // }
+                              if (apiResponse) {
+                                ///update chat id here
+                                final Messages msg =
+                                    Messages(messages: '', messageType: 100);
+                                var jsondata = jsonEncode(msg);
+                                final response = await _chatRepository
+                                    .sendMessage(
+                                        _customerModel.mobileNo.toString(),
+                                        _customerModel.name,
+                                        jsondata,
+                                        localCustId.isEmpty
+                                            ? uniqueId
+                                            : localCustId,
+                                        Provider.of<BusinessProvider>(context,
+                                                listen: false)
+                                            .selectedBusiness
+                                            .businessId)
+                                    .timeout(Duration(seconds: 30),
+                                        onTimeout: () async {
+                                  Navigator.of(context).pop();
+                                  return Future.value(null);
+                                });
+                                final messageResponse =
+                                    Map<String, dynamic>.from(
+                                        jsonDecode(response.body));
+                                Message _message = Message.fromJson(
+                                    messageResponse['message']);
+                                if (_message.chatId.toString().isNotEmpty) {
+                                  await repository.queries
+                                      .updateCustomerIsChanged(
+                                          0,
+                                          _customerModel.customerId!,
+                                          _message.chatId)
+                                      .timeout(Duration(seconds: 30),
+                                          onTimeout: () async {
+                                    Navigator.of(context).pop();
+                                    return Future.value(null);
+                                  });
+                                }
+                              }
+                            }
+                            BlocProvider.of<ContactsCubit>(context).getContacts(
+                                Provider.of<BusinessProvider>(context,
+                                        listen: false)
+                                    .selectedBusiness
+                                    .businessId);
+                          }
+                          setState(() {
+                            debugPrint(
+                                'Check' + _customerModel.customerId.toString());
+                          });
+                          if (cid.customerInfo?.id == null) {
+                            Navigator.of(context).pop(true);
+                            MerchantBankNotAdded.showBankNotAddedDialog(
+                                context, 'userNotRegistered');
+                            // userNotRegisteredDialog();
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (BuildContext context) {
+                            //     return NonULDialog();
+                            //   },
+                            // );
+
+                          }
+                          //else if (Repository()
+                          //         .hiveQueries
+                          //         .userData
+                          //         .kycStatus ==
+                          //     0) {
+                          //   Navigator.of(context).pop();
+                          //   MerchantBankNotAdded.showBankNotAddedDialog(
+                          //       context, 'userKYCPending');
+                          // } else if (Repository()
+                          //         .hiveQueries
+                          //         .userData
+                          //         .kycStatus ==
+                          //     2) {
+                          //   await getKyc().then((value) {
+                          //     Navigator.of(context).pop();
+                          //     MerchantBankNotAdded.showBankNotAddedDialog(
+                          //         context, 'userKYCVerificationPending');
+                          //   });
+                          // }
+                          else if (cid.customerInfo?.bankAccountStatus ==
+                              false) {
+                            Navigator.of(context).pop(true);
+
+                            merchantBankNotAddedModalSheet(
+                                text:
+                                    'We have requested your merchant to add bank account.');
+                          } else if (cid.customerInfo?.kycStatus == false) {
+                            Navigator.of(context).pop(true);
+                            merchantBankNotAddedModalSheet(
+                                text:
+                                    'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
+                          }
+                          // else if (Repository()
+                          //             .hiveQueries
+                          //             .userData
+                          //             .kycStatus ==
+                          //         1 &&
+                          //     Repository()
+                          //             .hiveQueries
+                          //             .userData
+                          //             .premiumStatus ==
+                          //         0) {
+                          //   Navigator.of(context).pop(true);
+                          //   debugPrint('Checket');
+                          //   MerchantBankNotAdded.showBankNotAddedDialog(
+                          //       context, 'upgradePremium');
+                          // }
+                          else if (merchantSubscriptionPlan == false) {
+                            Navigator.of(context).pop(true);
+                            debugPrint('Checket');
+                            merchantBankNotAddedModalSheet(
+                                text:
+                                    'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
+                          } else {
+                            Map<String, dynamic> isTransaction =
+                                await repository.paymentThroughQRApi
+                                    .getTransactionLimit(context)
+                                    .catchError((e) {
+                              Navigator.of(context).pop();
+                              'Please check internet connectivity and try again.'
+                                  .showSnackBar(context);
+                            });
+                            if (!(isTransaction)['isError']) {
+                              Navigator.of(context).pop(true);
+                              // showBankAccountDialog();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PayTransactionScreen(
+                                      model: _customerModel,
+                                      customerId: localCustId.isEmpty
+                                          ? uniqueId
+                                          : localCustId,
+                                      type: 'DIRECT',
+                                      suspense: true,
+                                      through: 'DIRECT'),
+                                ),
+                              );
+                            } else {
+                              Navigator.of(context).pop(true);
+                              '${(isTransaction)['message']}'
+                                  .showSnackBar(context);
+                            }
+                          }
+
+                          // Navigator.of(context).pop();
+
+                          //Navigation func to make the naviagation dynamic
+
+                          //TODO
+
+                        } else {
+                          // CustomLoadingDialog.showLoadingDialog(context, key);
+                          // var cid = await repository.customerApi
+                          //     .getCustomerID(
+                          //         mobileNumber: widget
+                          //             .contacts[index].mobileNo
+                          //             .toString());
+                          // bool? merchantSubscriptionPlan =
+                          //     cid.customerInfo?.merchantSubscriptionPlan ??
+                          //         false;
+                          if (await allChecker(context)) {
+                            CustomLoadingDialog.showLoadingDialog(context, key);
+                            var cid = await repository.customerApi
+                                .getCustomerID(
+                                    mobileNumber: widget
+                                        .contacts[index].mobileNo
+                                        .toString())
+                                .catchError((e) {
+                              Navigator.of(context).pop();
+                              'Please check internet connectivity and try again.'
+                                  .showSnackBar(context);
+                            });
+                            _customerModel
+                              ..name = getName(widget.contacts[index].name,
+                                  widget.contacts[index].mobileNo)
+                              ..mobileNo = widget.contacts[index].mobileNo
+                              ..ulId = widget.contacts[index].customerId
+                              ..customerId = cid.customerInfo?.id ?? cid.id
+                              ..avatar = widget.contacts[index].avatar
+                              ..chatId = widget.contacts[index].chatId;
+                            final localCustId = await repository.queries
+                                .getCustomerId(
+                                    widget.contacts[index].mobileNo!);
+                            debugPrint('ww: ' +
+                                widget.contacts[index].customerId.toString());
+                            Navigator.of(context).pop(true);
+                            Navigator.of(context).pushNamed(
+                                AppRoutes.requestTransactionRoute,
+                                arguments: ReceiveTransactionArgs(
+                                    _customerModel, localCustId));
+                            print('teest');
+                          }
                         }
-                      }
-                    }
-                    BlocProvider.of<ContactsCubit>(context).getContacts(
-                        Provider.of<BusinessProvider>(context,
-                            listen: false)
-                            .selectedBusiness
-                            .businessId);
-                  }
-                  setState(() {
-                    debugPrint(
-                        'Check' + _customerModel.customerId.toString());
-                  });
-                  if (cid.customerInfo?.id == null) {
-                    Navigator.of(context).pop(true);
-                    MerchantBankNotAdded.showBankNotAddedDialog(
-                        context, 'userNotRegistered');
-                    // userNotRegisteredDialog();
-                    // showDialog(
-                    //   context: context,
-                    //   builder: (BuildContext context) {
-                    //     return NonULDialog();
-                    //   },
-                    // );
-
-                  }
-                  //else if (Repository()
-                  //         .hiveQueries
-                  //         .userData
-                  //         .kycStatus ==
-                  //     0) {
-                  //   Navigator.of(context).pop();
-                  //   MerchantBankNotAdded.showBankNotAddedDialog(
-                  //       context, 'userKYCPending');
-                  // } else if (Repository()
-                  //         .hiveQueries
-                  //         .userData
-                  //         .kycStatus ==
-                  //     2) {
-                  //   await getKyc().then((value) {
-                  //     Navigator.of(context).pop();
-                  //     MerchantBankNotAdded.showBankNotAddedDialog(
-                  //         context, 'userKYCVerificationPending');
-                  //   });
-                  // }
-                  else if (cid.customerInfo?.bankAccountStatus ==
-                      false) {
-                    Navigator.of(context).pop(true);
-
-                    merchantBankNotAddedModalSheet(
-                        text:
-                        'We have requested your merchant to add bank account.');
-                  } else if (cid.customerInfo?.kycStatus == false) {
-                    Navigator.of(context).pop(true);
-                    merchantBankNotAddedModalSheet(
-                        text:
-                        'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
-                  }
-                  // else if (Repository()
-                  //             .hiveQueries
-                  //             .userData
-                  //             .kycStatus ==
-                  //         1 &&
-                  //     Repository()
-                  //             .hiveQueries
-                  //             .userData
-                  //             .premiumStatus ==
-                  //         0) {
-                  //   Navigator.of(context).pop(true);
-                  //   debugPrint('Checket');
-                  //   MerchantBankNotAdded.showBankNotAddedDialog(
-                  //       context, 'upgradePremium');
-                  // }
-                  else if (merchantSubscriptionPlan == false) {
-                    Navigator.of(context).pop(true);
-                    debugPrint('Checket');
-                    merchantBankNotAddedModalSheet(
-                        text:
-                        'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
-                  } else {
-                    Map<String, dynamic> isTransaction =
-                    await repository.paymentThroughQRApi
-                        .getTransactionLimit(context).catchError((e){
-                          
-                          Navigator.of(context).pop();
-                          'Please check internet connectivity and try again.'
-                                    .showSnackBar(context);
-                        });
-                    if (!(isTransaction)['isError']) {
-                      Navigator.of(context).pop(true);
-                      // showBankAccountDialog();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PayTransactionScreen(
-                              model: _customerModel,
-                              customerId: localCustId.isEmpty
-                                  ? uniqueId
-                                  : localCustId,
-                              type: 'DIRECT',
-                              suspense: true,
-                              through: 'DIRECT'),
-                        ),
-                      );
-                    } else {
-                      Navigator.of(context).pop(true);
-                      '${(isTransaction)['message']}'
-                          .showSnackBar(context);
-                    }
-                  }
-
-                  // Navigator.of(context).pop();
-
-                  //Navigation func to make the naviagation dynamic
-
-                  //TODO
-
-                } else {
-                  // CustomLoadingDialog.showLoadingDialog(context, key);
-                  // var cid = await repository.customerApi
-                  //     .getCustomerID(
-                  //         mobileNumber: widget
-                  //             .contacts[index].mobileNo
-                  //             .toString());
-                  // bool? merchantSubscriptionPlan =
-                  //     cid.customerInfo?.merchantSubscriptionPlan ??
-                  //         false;
-                 if(Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Rejected' || Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Expired') {
-                                          MerchantBankNotAdded
-                                          .showBankNotAddedDialog(context,
-                                              'userKYCExpired');
-                                } else if (Repository().hiveQueries.userData.kycStatus ==
-                      2) {
-                    //If KYC is Verification is Pending
-                    MerchantBankNotAdded.showBankNotAddedDialog(
-                        context, 'userKYCVerificationPending')
-                        .whenComplete(() async {
-                      await getKyc();
-                    });
-                  } else if (Repository()
-                      .hiveQueries
-                      .userData
-                      .kycStatus ==
-                      0) {
-                    //Navigator.of(context).pop(true);
-                    //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                    MerchantBankNotAdded.showBankNotAddedDialog(
-                        context, 'userKYCPending');
-                  } else if (Repository()
-                      .hiveQueries
-                      .userData
-                      .kycStatus ==
-                      0 &&
-                      Repository()
-                          .hiveQueries
-                          .userData
-                          .isEmiratesIdDone ==
-                          false) {
-                    //Navigator.of(context).pop(true);
-                    //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                    MerchantBankNotAdded.showBankNotAddedDialog(
-                        context, 'EmiratesIdPending');
-                  } else if (Repository()
-                      .hiveQueries
-                      .userData
-                      .kycStatus ==
-                      0 &&
-                      Repository()
-                          .hiveQueries
-                          .userData
-                          .isTradeLicenseDone ==
-                          false) {
-                    // Navigator.of(context).pop(true);
-                    //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                    MerchantBankNotAdded.showBankNotAddedDialog(
-                        context, 'TradeLicensePending');
-                  } else if (Repository()
-                      .hiveQueries
-                      .userData
-                      .kycStatus ==
-                      1 &&
-                      Repository().hiveQueries.userData.premiumStatus ==
-                          0) {
-                    // Navigator.of(context).pop(true);
-                    MerchantBankNotAdded.showBankNotAddedDialog(
-                        context, 'upgradePremium');
-                  }
-
-                  //MERCHANT CHECK
-                  // else if (cid.customerInfo?.kycStatus == false) {
-                  //   Navigator.of(context).pop(true);
-                  //   merchantBankNotAddedModalSheet(
-                  //       text:
-                  //           'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
-                  // } else if (merchantSubscriptionPlan == false) {
-                  //   Navigator.of(context).pop(true);
-                  //   merchantBankNotAddedModalSheet(
-                  //       text:
-                  //           'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
-                  // }
-
-                  else {
-                    CustomLoadingDialog.showLoadingDialog(context, key);
-                    var cid = await repository.customerApi
-                        .getCustomerID(
-                        mobileNumber: widget
-                            .contacts[index].mobileNo
-                            .toString()).catchError((e){
-                         
-                          Navigator.of(context).pop();
-                          'Please check internet connectivity and try again.'
-                                    .showSnackBar(context);
-                        });
-                    _customerModel
-                      ..name = getName(widget.contacts[index].name,
-                          widget.contacts[index].mobileNo)
-                      ..mobileNo = widget.contacts[index].mobileNo
-                      ..ulId = widget.contacts[index].customerId
-                      ..customerId = cid.customerInfo?.id ?? cid.id
-                      ..avatar = widget.contacts[index].avatar
-                      ..chatId = widget.contacts[index].chatId;
-                    final localCustId = await repository.queries
-                        .getCustomerId(
-                        widget.contacts[index].mobileNo!);
-                    debugPrint('ww: ' +
-                        widget.contacts[index].customerId.toString());
-                    Navigator.of(context).pop(true);
-                    Navigator.of(context).pushNamed(
-                        AppRoutes.requestTransactionRoute,
-                        arguments: ReceiveTransactionArgs(
-                            _customerModel, localCustId));
-                    print('teest');
-                  }
-                }
-              },
-              child: Padding(
-                padding: EdgeInsets.only(top: 10),
+                      },
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: CustomProfileImage(
-                          avatar: widget.contacts[index].avatar,
-                          mobileNo: widget.contacts[index].mobileNo,
-                          name: widget.contacts[index].name,
-                        ),
+                  padding: EdgeInsets.only(top: 10),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: CustomProfileImage(
+                            avatar: widget.contacts[index].avatar,
+                            mobileNo: widget.contacts[index].mobileNo,
+                            name: widget.contacts[index].name,
+                          ),
 
-                        // child: CircleAvatar(
-                        //   radius: 25,
-                        //   backgroundColor: _colors[random.nextInt(_colors.length)],
-                        //   backgroundImage: widget.contacts[index].avatar!.isEmpty
-                        //       ? null
-                        //       : MemoryImage(widget.contacts[index].avatar!),
-                        //   child: widget.contacts[index].avatar!.isEmpty
-                        //       ? CustomText(
-                        //           getInitials(widget.contacts[index].name,
-                        //               widget.contacts[index].mobileNo),
-                        //           color: AppTheme.circularAvatarTextColor,
-                        //           size: 27,
-                        //         )
-                        //       : null,
-                        // ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          // width: screenWidth(context) * 0.49,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomText(
-                                getName(widget.contacts[index].name,
-                                    widget.contacts[index].mobileNo),
-                                bold: FontWeight.w500,
-                              ),
-                              CustomText(
-                                '+' +
-                                    widget.contacts[index].mobileNo
-                                        .toString() ??
-                                    '',
-                                color: AppTheme.greyish,
-                              ),
-                            ],
+                          // child: CircleAvatar(
+                          //   radius: 25,
+                          //   backgroundColor: _colors[random.nextInt(_colors.length)],
+                          //   backgroundImage: widget.contacts[index].avatar!.isEmpty
+                          //       ? null
+                          //       : MemoryImage(widget.contacts[index].avatar!),
+                          //   child: widget.contacts[index].avatar!.isEmpty
+                          //       ? CustomText(
+                          //           getInitials(widget.contacts[index].name,
+                          //               widget.contacts[index].mobileNo),
+                          //           color: AppTheme.circularAvatarTextColor,
+                          //           size: 27,
+                          //         )
+                          //       : null,
+                          // ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            // width: screenWidth(context) * 0.49,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomText(
+                                  getName(widget.contacts[index].name,
+                                      widget.contacts[index].mobileNo),
+                                  bold: FontWeight.w500,
+                                ),
+                                CustomText(
+                                  '+' +
+                                          widget.contacts[index].mobileNo
+                                              .toString() ??
+                                      '',
+                                  color: AppTheme.greyish,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Spacer(),
-                      FutureBuilder<bool>(
-                        future: widget.contacts[index].isAdded,
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
-                          if (snapshot.data != null)
-                            return CustomText(
-                              snapshot.data ? 'Already Added' : '',
-                              color: AppTheme.greyish,
-                            );
-                          return Container();
-                        },
-                      ),
-                    ],
+                        Spacer(),
+                        FutureBuilder<bool>(
+                          future: widget.contacts[index].isAdded,
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.data != null)
+                              return CustomText(
+                                snapshot.data ? 'Already Added' : '',
+                                color: AppTheme.greyish,
+                              );
+                            return Container();
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-          childCount: widget.contacts.length,
-        ));
+              );
+            },
+            childCount: widget.contacts.length,
+          ));
   }
 
   userNotRegisteredDialog() async => await showDialog(
       builder: (context) => Dialog(
-        // backgroundColor: AppTheme.electricBlue,
-        insetPadding:
-        EdgeInsets.only(left: 20, right: 20, top: deviceHeight * 0.70),
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Padding(
-            //   padding: EdgeInsets.symmetric(vertical:10, horizontal:10),
-            //   child: Image.asset(AppAssets.notregistered,width: MediaQuery.of(context).size.width * 0.5,),
-            // ),
-            Padding(
-              padding: const EdgeInsets.only(top: 15.0, bottom: 5),
-              child: CustomText(
-                "The user is not registered with",
-                color: AppTheme.tomato,
-                bold: FontWeight.w500,
-                size: 18,
-              ),
-            ),
-            CustomText(
-              'the Urban Ledger app.',
-              color: AppTheme.brownishGrey,
-              bold: FontWeight.w500,
-              size: 18,
-            ),
-            Padding(
-              padding:
-              const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: RaisedButton(
-                        padding: EdgeInsets.all(15),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        // color: Color.fromRGBO(137, 172, 255, 1),
-                        color: AppTheme.electricBlue,
-                        child: CustomText(
-                          'Got it'.toUpperCase(),
-                          color: Colors.white,
-                          size: (18),
-                          bold: FontWeight.w500,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context, true);
-                        },
-                      ),
-                    ),
+            // backgroundColor: AppTheme.electricBlue,
+            insetPadding:
+                EdgeInsets.only(left: 20, right: 20, top: deviceHeight * 0.70),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Padding(
+                //   padding: EdgeInsets.symmetric(vertical:10, horizontal:10),
+                //   child: Image.asset(AppAssets.notregistered,width: MediaQuery.of(context).size.width * 0.5,),
+                // ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 15.0, bottom: 5),
+                  child: CustomText(
+                    "The user is not registered with",
+                    color: AppTheme.tomato,
+                    bold: FontWeight.w500,
+                    size: 18,
                   ),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: RaisedButton(
-                        padding: EdgeInsets.all(15),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        // color: Color.fromRGBO(137, 172, 255, 1),
-                        color: AppTheme.electricBlue,
-                        child: CustomText(
-                          'invite'.toUpperCase(),
-                          color: Colors.white,
-                          size: (18),
-                          bold: FontWeight.w500,
+                ),
+                CustomText(
+                  'the Urban Ledger app.',
+                  color: AppTheme.brownishGrey,
+                  bold: FontWeight.w500,
+                  size: 18,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: RaisedButton(
+                            padding: EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            // color: Color.fromRGBO(137, 172, 255, 1),
+                            color: AppTheme.electricBlue,
+                            child: CustomText(
+                              'Got it'.toUpperCase(),
+                              color: Colors.white,
+                              size: (18),
+                              bold: FontWeight.w500,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                          ),
                         ),
-                        onPressed: () {
-                          Navigator.of(context).pop(true);
-                        },
                       ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: RaisedButton(
+                            padding: EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            // color: Color.fromRGBO(137, 172, 255, 1),
+                            color: AppTheme.electricBlue,
+                            child: CustomText(
+                              'invite'.toUpperCase(),
+                              color: Colors.white,
+                              size: (18),
+                              bold: FontWeight.w500,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop(true);
+                            },
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
       barrierDismissible: false,
       context: context);
 
   showBankAccountDialog() async => await showDialog(
       builder: (context) => Dialog(
-        insetPadding:
-        EdgeInsets.only(left: 20, right: 20, top: deviceHeight * 0.75),
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 15.0, bottom: 5),
-              child: CustomText(
-                "No Bank Account Found.",
-                color: AppTheme.tomato,
-                bold: FontWeight.w500,
-                size: 18,
-              ),
-            ),
-            CustomText(
-              'Please Add Your Bank Account.',
-              size: 16,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: RaisedButton(
-                        padding: EdgeInsets.all(15),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        color: AppTheme.electricBlue,
-                        child: CustomText(
-                          'Add Account'.toUpperCase(),
-                          color: Colors.white,
-                          size: (18),
-                          bold: FontWeight.w500,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context, true);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AddBankAccount()));
-                        },
-                      ),
-                    ),
+            insetPadding:
+                EdgeInsets.only(left: 20, right: 20, top: deviceHeight * 0.75),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 15.0, bottom: 5),
+                  child: CustomText(
+                    "No Bank Account Found.",
+                    color: AppTheme.tomato,
+                    bold: FontWeight.w500,
+                    size: 18,
                   ),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: RaisedButton(
-                        padding: EdgeInsets.all(15),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        color: AppTheme.electricBlue,
-                        child: CustomText(
-                          'Not now'.toUpperCase(),
-                          color: Colors.white,
-                          size: (18),
-                          bold: FontWeight.w500,
+                ),
+                CustomText(
+                  'Please Add Your Bank Account.',
+                  size: 16,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: RaisedButton(
+                            padding: EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            color: AppTheme.electricBlue,
+                            child: CustomText(
+                              'Add Account'.toUpperCase(),
+                              color: Colors.white,
+                              size: (18),
+                              bold: FontWeight.w500,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AddBankAccount()));
+                            },
+                          ),
                         ),
-                        onPressed: () {
-                          Navigator.of(context).pop(true);
-                        },
                       ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: RaisedButton(
+                            padding: EdgeInsets.all(15),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            color: AppTheme.electricBlue,
+                            child: CustomText(
+                              'Not now'.toUpperCase(),
+                              color: Colors.white,
+                              size: (18),
+                              bold: FontWeight.w500,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop(true);
+                            },
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
       barrierDismissible: false,
       context: context);
 
   showBankValidationDialog() async => await showDialog(
       builder: (context) => Dialog(
-        insetPadding:
-        EdgeInsets.only(left: 20, right: 20, top: deviceHeight * 0.66),
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 15.0, bottom: 5),
-              child: CustomText(
-                "402 Invalid card.",
-                color: AppTheme.tomato,
-                bold: FontWeight.w500,
-                size: 18,
-              ),
-            ),
-            Image.asset(
-              AppAssets.payIconActive,
-              height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 10, top: 5),
-                    padding: EdgeInsets.symmetric(
-                        horizontal:
-                        MediaQuery.of(context).size.width * 0.30),
-                    child: RaisedButton(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal:
-                          MediaQuery.of(context).size.width * 0.1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      color: AppTheme.electricBlue,
-                      child: CustomText(
-                        'ok'.toUpperCase(),
-                        color: Colors.white,
-                        size: (18),
-                        bold: FontWeight.w500,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      },
-                    ),
+            insetPadding:
+                EdgeInsets.only(left: 20, right: 20, top: deviceHeight * 0.66),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 15.0, bottom: 5),
+                  child: CustomText(
+                    "402 Invalid card.",
+                    color: AppTheme.tomato,
+                    bold: FontWeight.w500,
+                    size: 18,
                   ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+                ),
+                Image.asset(
+                  AppAssets.payIconActive,
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10, top: 5),
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.30),
+                        child: RaisedButton(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 15,
+                              horizontal:
+                                  MediaQuery.of(context).size.width * 0.1),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          color: AppTheme.electricBlue,
+                          child: CustomText(
+                            'ok'.toUpperCase(),
+                            color: Colors.white,
+                            size: (18),
+                            bold: FontWeight.w500,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
       barrierDismissible: false,
       context: context);
 }

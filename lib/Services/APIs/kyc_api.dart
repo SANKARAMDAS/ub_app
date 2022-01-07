@@ -60,6 +60,7 @@ class KycAPI {
     Map<String, String> requestBody = <String, String>{
       'kycId': "${Repository().hiveQueries.userData.kycID}"
     };
+    debugPrint('CCCCCCCC : '+requestBody.toString());
     var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url_new))
       ..files.add(await http.MultipartFile.fromPath('file', path.toString()))
       ..fields.addAll(requestBody)
@@ -118,17 +119,9 @@ class KycAPI {
                 tradeLicenseVerified:
                     jsonDecode(response.body)['tradeLicenseVerified'],
                 isEmiratesIdDone:
-                    jsonDecode(response.body)['kycStatus'] == 'Rejected' ||
-                            jsonDecode(response.body)['kycStatus'] == 'Expired'
-                        ? false
-                        : documentLifecycle(
-                            jsonDecode(response.body)['emiratesIdVerified']),
+                    jsonDecode(response.body)['emirates'],
                 isTradeLicenseDone:
-                    jsonDecode(response.body)['kycStatus'] == 'Rejected' ||
-                            jsonDecode(response.body)['kycStatus'] == 'Expired'
-                        ? false
-                        : documentLifecycle(
-                            jsonDecode(response.body)['tradeLicenseVerified']),
+                    jsonDecode(response.body)['tl'],
               ));
       return jsonDecode(response.body);
     }

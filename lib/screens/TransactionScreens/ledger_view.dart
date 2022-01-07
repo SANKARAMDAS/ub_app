@@ -564,26 +564,26 @@ class _LedgerViewState extends State<LedgerView> {
   //       });
   // }
 
-  Future getKyc() async {
-    setState(() {
-      isLoading = true;
-    });
+  // Future getKyc() async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
 
-    await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      setState(() {
-        isLoading = false;
-      });
-      'Something went wrong. Please try again later.'.showSnackBar(context);
-    }).then((value) {
-      setState(() {
-        isLoading = false;
-      });
-    });
-    calculatePremiumDate();
-    setState(() {
-      isLoading = false;
-    });
-  }
+  //   await KycAPI.kycApiProvider.kycCheker().catchError((e) {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //     'Something went wrong. Please try again later.'.showSnackBar(context);
+  //   }).then((value) {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   });
+  //   calculatePremiumDate();
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  // }
 
   Widget bottomButtons() => SafeArea(
         child: Container(
@@ -879,135 +879,13 @@ class _LedgerViewState extends State<LedgerView> {
                       child: NewCustomButton(
                         onSubmit: () async {
                           Navigator.of(context).pop(true);
-                          // CustomLoadingDialog.showLoadingDialog(context, key);
-                          // var Cid = await repository.customerApi.getCustomerID(
-                          //     mobileNumber:
-                          //         widget.customerModel.mobileNo.toString());
-                          // bool? merchantSubscriptionPlan =
-                          //     Cid.customerInfo?.merchantSubscriptionPlan ??
-                          //         false;
-                          // // debugPrint(widget.contacts[index].mobileNo.toString());
-                          // // debugPrint(widget.contacts[index].name);
-                          // debugPrint(Cid.customerInfo?.id.toString());
-                          // customerModel
-                          //   ..ulId = Cid.customerInfo?.id
-                          //   ..name = getName(widget.customerModel.name,
-                          //       widget.customerModel.mobileNo)
-                          //   ..mobileNo = widget.customerModel.mobileNo;
-
-                          debugPrint(
-                              'Bank Acc Status: ' + isNotAccount.toString());
-                          if (Repository().hiveQueries.userData.bankStatus ==
-                              false) {
-                            // Navigator.of(context).pop(true);
-
-                            MerchantBankNotAdded.showBankNotAddedDialog(
-                                context, 'userBankNotAdded');
-                          } else if ((Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .kycStatus ==
-                                      0 ||
-                                  Repository().hiveQueries.userData.kycStatus ==
-                                      1 ||
-                                  Repository().hiveQueries.userData.kycStatus ==
-                                      2) ||
-                              (Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .premiumStatus ==
-                                  0)) {
-                            if(Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Rejected' || Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Expired') {
-                                          MerchantBankNotAdded
-                                          .showBankNotAddedDialog(context,
-                                              'userKYCExpired');
-                                } else if (Repository().hiveQueries.userData.kycStatus ==
-                                2) {
-                              //Navigator.of(context).pop(true);
-
-                              //If KYC is Verification is Pending
-                              await getKyc().then((value) =>
-                                  MerchantBankNotAdded.showBankNotAddedDialog(
-                                      context, 'userKYCVerificationPending'));
-                            } else if (Repository()
-                                    .hiveQueries
-                                    .userData
-                                    .kycStatus ==
-                                0) {
+                          if (await allChecker(context)) {
                               // Navigator.of(context).pop(true);
-
-                              //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                              MerchantBankNotAdded.showBankNotAddedDialog(
-                                  context, 'userKYCPending');
-                            } else if (Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus ==
-                                    0 &&
-                                Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .isEmiratesIdDone ==
-                                    false) {
-                              // Navigator.of(context).pop(true);
-
-                              //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                              MerchantBankNotAdded.showBankNotAddedDialog(
-                                  context, 'EmiratesIdPending');
-                            } else if (Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus ==
-                                    0 &&
-                                Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .isTradeLicenseDone ==
-                                    false) {
-                              //Navigator.of(context).pop(true);
-
-                              //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                              MerchantBankNotAdded.showBankNotAddedDialog(
-                                  context, 'TradeLicensePending');
-                            } else if (Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus ==
-                                    1 &&
-                                Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .premiumStatus ==
-                                    0) {
-                              // Navigator.of(context).pop(true);
-
-                              MerchantBankNotAdded.showBankNotAddedDialog(
-                                  context, 'upgradePremium');
-                            }
-                            // else if (Cid.customerInfo?.kycStatus == false) {
-                            //   Navigator.of(context).pop(true);
-                            //   merchantBankNotAddedModalSheet(
-                            //       text:
-                            //           'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
-                            // } else if (merchantSubscriptionPlan == false) {
-                            //   Navigator.of(context).pop(true);
-                            //   merchantBankNotAddedModalSheet(
-                            //       text:
-                            //           'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
-                            // }
-                            else {
-                              // Navigator.of(context).pop(true);
-                              Navigator.of(context).popAndPushNamed(
+                              Navigator.of(context).pushNamed(
                                   AppRoutes.requestTransactionRoute,
                                   arguments: ReceiveTransactionArgs(
                                       customerModel, localCustomerId));
-                            }
+                            
                           }
 
                           // if (!isNotAccount == false) {
