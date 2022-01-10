@@ -38,7 +38,7 @@ class SuspenseAccountApi {
     }
   }
 
-  Future<bool>? moveLedger() async {
+  Future<bool> moveLedger() async {
     bool? status = false;
     const url = "/suspense/movetoledger";
 

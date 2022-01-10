@@ -113,25 +113,25 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
     }
   }
 
-Future getKyc() async {
-    setState(() {
-      isLoading = true;
-    });
-    await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      setState(() {
-        isLoading = false;
-      });
-      'Something went wrong. Please try again later.'.showSnackBar(context);
-    }).then((value) {
-      setState(() {
-        isLoading = false;
-      });
-    });
-    calculatePremiumDate();
-    setState(() {
-      isLoading = false;
-    });
-  }
+// Future getKyc() async {
+//     setState(() {
+//       isLoading = true;
+//     });
+//     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
+//       setState(() {
+//         isLoading = false;
+//       });
+//       'Something went wrong. Please try again later.'.showSnackBar(context);
+//     }).then((value) {
+//       setState(() {
+//         isLoading = false;
+//       });
+//     });
+//     calculatePremiumDate();
+//     setState(() {
+//       isLoading = false;
+//     });
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -408,7 +408,7 @@ Future getKyc() async {
                                     await anaylticsEvents.initCurrentUser();
                                     await anaylticsEvents
                                         .sendPremiumPurchaseEvent();
-                                    await getKyc();
+                                    // await getKyc();
                                   
                                     Navigator.of(context).pop(true);
                                     Provider.of<FreemiumProvider>(context,

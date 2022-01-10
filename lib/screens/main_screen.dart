@@ -15,6 +15,7 @@ import 'package:urbanledger/Models/customer_model.dart';
 import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Models/transaction_model.dart';
+import 'package:urbanledger/Services/APIs/kyc_api.dart';
 import 'package:urbanledger/Utility/app_services.dart';
 import 'package:urbanledger/chat_module/data/models/message.dart';
 import 'package:urbanledger/chat_module/data/providers/chats_provider.dart';
@@ -73,6 +74,7 @@ class _MainScreenState extends State<MainScreen> {
                 .businessId);
       }
     });
+    
 
     // BlocProvider.of<ImportContactsCubit>(context).getContactsFromDevice();
 
@@ -97,6 +99,11 @@ class _MainScreenState extends State<MainScreen> {
       debugPrint(message.data.toString());
       onMessageTap(message);
     });
+    getKyc();
+  }
+
+  getKyc() async {
+    await KycAPI.kycApiProvider.kycCheker();
   }
 
   

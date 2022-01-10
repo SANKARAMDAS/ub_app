@@ -38,6 +38,7 @@ import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 import 'package:urbanledger/screens/Components/extensions.dart';
 import 'package:urbanledger/screens/Components/new_custom_button.dart';
 import 'package:urbanledger/screens/Components/shimmer_widgets.dart';
+import 'package:urbanledger/screens/SuspenseAccount/suspense_account_screen.dart';
 import 'package:urbanledger/screens/TransactionScreens/ReceiveTransaction/receive_transaction_screen.dart';
 import 'package:urbanledger/screens/TransactionScreens/add_cards_provider.dart';
 import 'package:urbanledger/screens/TransactionScreens/pay_recieve.dart';
@@ -115,25 +116,25 @@ class _SuspenseAccountCustomerScreenState
   bool loading = false;
   bool isloading = false;
 
-Future getKyc() async {
-    setState(() {
-      loading = true;
-    });
-    await KycAPI.kycApiProvider.kycCheker().catchError((e) {
-      setState(() {
-        loading = false;
-      });
-      'Something went wrong. Please try again later.'.showSnackBar(context);
-    }).then((value) {
-      setState(() {
-        loading = false;
-      });
-    });
-    calculatePremiumDate();
-    setState(() {
-      loading = false;
-    });
-  }
+// Future getKyc() async {
+//     setState(() {
+//       loading = true;
+//     });
+//     await KycAPI.kycApiProvider.kycCheker().catchError((e) {
+//       setState(() {
+//         loading = false;
+//       });
+//       'Something went wrong. Please try again later.'.showSnackBar(context);
+//     }).then((value) {
+//       setState(() {
+//         loading = false;
+//       });
+//     });
+//     calculatePremiumDate();
+//     setState(() {
+//       loading = false;
+//     });
+//   }
 
   getAllCards() async {
     Provider.of<AddCardsProvider>(context, listen: false).getCard();
@@ -614,117 +615,11 @@ Future getKyc() async {
                                         .profilePic)))),
                     15.0.widthBox,
                     InkWell(
-                      onTap: ((Repository().hiveQueries.userData.kycStatus !=
-                                  1) ||
-                              (Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .premiumStatus ==
-                                  0))
-                          ? () async {
-                              print("Premium Status " +
-                                  repository.hiveQueries.userData.premiumStatus
-                                      .toString());
-                              debugPrint('qwerty2');
-                              debugPrint('KYC STATUS: ' +
-                                  Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .kycStatus
-                                      .toString());
-                             if(Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Rejected' || Repository()
-                                        .hiveQueries
-                                        .userData
-                                        .kycStatus2 == 'Expired') {
-                                          MerchantBankNotAdded
-                                          .showBankNotAddedDialog(context,
-                                              'userKYCExpired');
-                                } else if (Repository().hiveQueries.userData.kycStatus ==
-                                  2) {
-                                await getKyc();
-                                MerchantBankNotAdded.showBankNotAddedDialog(
-                                    key.currentState!.context,
-                                    'userKYCVerificationPending');
-                              } else if (Repository()
-                                      .hiveQueries
-                                      .userData
-                                      .kycStatus ==
-                                  0) {
-                                setState(() {
-                                  loading = true;
-                                });
-                                //KYC WHEN USER STARTS A NEW KYC JOURNEY
-                                MerchantBankNotAdded.showBankNotAddedDialog(
-                                        context, 'userKYCPending')
-                                    .then((value) => setState(() {
-                                          loading = false;
-                                        }));
-                              } else if (Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .kycStatus ==
-                                      0 &&
-                                  Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .isEmiratesIdDone ==
-                                      false) {
-                                setState(() {
-                                  loading = true;
-                                });
-                                //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                MerchantBankNotAdded.showBankNotAddedDialog(
-                                        context, 'EmiratesIdPending')
-                                    .then((value) => setState(() {
-                                          loading = false;
-                                        }));
-                              } else if (Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .kycStatus ==
-                                      0 &&
-                                  Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .isTradeLicenseDone ==
-                                      false) {
-                                setState(() {
-                                  loading = true;
-                                });
-                                //KYC WHEN USER STARTS EMirates ID Journey but not done TRade License
-                                MerchantBankNotAdded.showBankNotAddedDialog(
-                                        context, 'TradeLicensePending')
-                                    .then((value) => setState(() {
-                                          loading = false;
-                                        }));
-                              } else if (Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .kycStatus ==
-                                      1 &&
-                                  Repository()
-                                          .hiveQueries
-                                          .userData
-                                          .premiumStatus ==
-                                      0) {
-                                setState(() {
-                                  loading = true;
-                                });
-                                MerchantBankNotAdded.showBankNotAddedDialog(
-                                        context, 'upgradePremium')
-                                    .then((value) => setState(() {
-                                          loading = false;
-                                        }));
-                              } else {
+                      onTap: () async {
+                              if (await allChecker(context)) {
                                 debugPrint('abc');
                                 switchBusinessSheet;
                               }
-                            }
-                          : () {
-                              switchBusinessSheet;
                             },
                       child: Container(
                         // width: screenWidth(context) * 0.5,
@@ -1083,8 +978,12 @@ Future getKyc() async {
                                         'Selected transaction moved\nsuccessfully!'
                                             .showSnackBar(context);
 
-                                        Navigator.pushReplacementNamed(
-                                        context, AppRoutes.suspenseAccountRoute);
+                                       /* Navigator.pushReplacementNamed(
+                                        context, AppRoutes.suspenseAccountRoute);*/
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(builder: (context) => SuspenseAccountScreen()),
+                                              ModalRoute.withName(AppRoutes.myProfileScreenRoute));
                                         }
                                         });
                                        /* Provider.of<BusinessProvider>(context,

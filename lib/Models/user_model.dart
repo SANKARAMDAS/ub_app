@@ -134,6 +134,7 @@ class SignUpModel extends Equatable {
     required String referral_link,
     required String referral_code,
         required bool email_status,
+        required String id,
     // required String kycID,
   }) {
     return SignUpModel(
@@ -141,7 +142,7 @@ class SignUpModel extends Equatable {
         lastName: json['last_name'] ?? '',
         mobileNo: json['mobile_no'] ?? '',
         email: json['email_id'] ?? '',
-        id: json['_id'] ?? '',
+        id: id ?? '',
         profilePic: filePath,
         bankStatus: bankStatus,
         kycExpDate: kycExpDate.isEmpty

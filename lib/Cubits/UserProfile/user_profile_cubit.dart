@@ -10,17 +10,17 @@ class UserProfileCubit extends Cubit<UserProfileState>{
   UserProfileCubit() : super(UserProfileInitialState());
 
   Repository repository = Repository();
-  UserProfileModel userProfileModel=new UserProfileModel();
+  UserProfileModel? userProfileModel;
 
 
   Future<void> getUserProfileData() async {
     emit(FetchingUserProfileState());
-    userProfileModel =  await getDataFromUserProfile();
-    emit(FetchedUserProfileState(userProfileModel));
+    userProfileModel =  (await getDataFromUserProfile())!;
+    emit(FetchedUserProfileState(userProfileModel!));
   }
 
-  Future<UserProfileModel> getDataFromUserProfile() async {
-    UserProfileModel data =  await UserProfileAPI.userProfileAPI.getUserProfileApi();
+  Future<UserProfileModel?> getDataFromUserProfile() async {
+    UserProfileModel? data =  (await UserProfileAPI.userProfileAPI.getUserProfileApi())??null;
     return data;
   }
 

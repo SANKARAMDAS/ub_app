@@ -119,7 +119,9 @@ class LoginAPI {
                   '${repository.hiveQueries.userData.paymentLink}',
               referral_code: map['customerDetails']['referral_code'] ?? '',
               referral_link: map['customerDetails']['referral_link'] ?? '',
-              email_status: map['customerDetails']['email_status'] ?? false));
+              email_status: map['customerDetails']['email_status'] ?? false,
+              id: map['customerDetails']['_id']),
+            );
         }
         return map['customerDetails']['first_name'] ?? '';
       }

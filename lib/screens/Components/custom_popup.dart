@@ -376,7 +376,8 @@ class MerchantBankNotAdded {
                                 ],
                               ),
                               type == 'userKYCPending' ||
-                                      type == 'TradeLicensePending'
+                                      type == 'TradeLicensePending' ||
+                                      type == 'EmiratesIdPending'
                                   ? Container()
                                   : CircleAvatar(
                                       backgroundColor: Colors.green,

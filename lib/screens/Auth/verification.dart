@@ -54,7 +54,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
   final GlobalKey<State> key = GlobalKey<State>();
   late bool _serviceEnabled;
   final location = Location();
-  bool isResendOtpClickable = true;
+  bool isResendOtpClickable = false;
   int _resendOtpCount = 30;
  // late Timer _timer;
 
@@ -77,6 +77,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
 
     _controller =
         AnimationController(vsync: this, duration: Duration(seconds: 30));
+    _controller.forward();
 
   }
 
@@ -118,7 +119,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
       child: Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.only(
+          padding: isPlatformiOS()? EdgeInsets.only(
+            bottom: 25,
+          ): EdgeInsets.only(
             bottom: 10,
           ),
           child: Row(
