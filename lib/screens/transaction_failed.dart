@@ -296,35 +296,39 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
       child: Column(
         children: [
           widget.model!.containsKey('error')
-              ? Row(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.28,
-                      child: Text(
-                        "Error :",
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: AppTheme.brownishGrey,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 2, 0),
-                        child: Container(
-                          alignment: Alignment.bottomLeft,
+              ? Column(
+                children: [
+                  Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.28,
                           child: Text(
-                              "${widget.model!['error'].toString().toUpperCase()}",
-                              // overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: AppTheme.coolGrey,
-                                  fontWeight: FontWeight.bold)),
+                            "Request Id :",
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: AppTheme.brownishGrey,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 2, 0),
+                            child: Container(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                  "${widget.model!['error']['body']['request_id'].toString().toUpperCase()}",
+                                  // overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppTheme.coolGrey,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                )
+                ],
+              )
               : Container(),
           widget.model!.containsKey('transactionData')
           ? Row(
