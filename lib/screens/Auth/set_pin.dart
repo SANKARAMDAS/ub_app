@@ -472,12 +472,11 @@ class _SetPinScreenState extends State<SetPinScreen> {
                 padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
                   onPressed: () async {
-
-
-                   await Navigator.of(ctx).pushNamed(AppRoutes.setPinRoute,
+                    Navigator.of(ctx).pop();
+                    Navigator.of(ctx).pushNamed(AppRoutes.setPinRoute,
                         arguments: SetPinRouteArgs(setPinNotifier.value, true,
                             widget.isResetPinState, widget.isRegister));
-                    Navigator.of(ctx).pop();
+
                     },
                   child: CustomText(
                     'YES',

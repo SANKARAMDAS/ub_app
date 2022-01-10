@@ -474,11 +474,11 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                     child: ElevatedButton(
                         onPressed: () async {
 
-
-                      await Navigator.of(ctx).pushNamed(AppRoutes.setNewPinRoute,
+                          Navigator.of(ctx).pop();
+                      Navigator.of(ctx).pushNamed(AppRoutes.setNewPinRoute,
                               arguments: SetPinRouteArgs(
                                   setPinNotifier.value, true, widget.isResetPinState, false));
-                        Navigator.of(ctx).pop();
+
                         },
                         child: CustomText(
                           'YES',
