@@ -968,25 +968,19 @@ class _SuspenseAccountCustomerScreenState
                                         data2[i].suspense == true ? 1 : 0);
                                         }
                                         }
-                                        await SuspenseAccountApi.suspenseAccountApi
-                                            .removeFromSuspenseEntry(
-                                        TransctionIDS: transactionIDS)
-                                            .then((value) {
-                                        debugPrint('delete' + value.toString());
-                                        if (value == true) {
-                                          Navigator.pop(context);
+                                        await delDataFromSuspenseAccount();
+                                        Navigator.pop(context);
                                         'Selected transaction moved\nsuccessfully!'
                                             .showSnackBar(context);
 
-                                       /* Navigator.pushReplacementNamed(
+                                        /* Navigator.pushReplacementNamed(
                                         context, AppRoutes.suspenseAccountRoute);*/
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(builder: (context) => SuspenseAccountScreen()),
-                                              ModalRoute.withName(AppRoutes.myProfileScreenRoute));
-                                        }
-                                        });
-                                       /* Provider.of<BusinessProvider>(context,
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => SuspenseAccountScreen()),
+                                            ModalRoute.withName(AppRoutes.myProfileScreenRoute));
+
+                                        /* Provider.of<BusinessProvider>(context,
                                         listen: false)
                                             .updateSelectedBusiness();*/
                                         debugPrint('Ht5');
@@ -1046,6 +1040,19 @@ class _SuspenseAccountCustomerScreenState
 
 
     });
+  }
+  delDataFromSuspenseAccount() async {
+    List<String>? delTrans = [];
+    List<SuspenseData>? delList =
+    await Repository().queries.getSuspenseOfflineAccount();
+    delList.forEach((element) {
+      delTrans.add(element.transactionId.toString());
+    });
+    debugPrint("offline entry count: " + delTrans.length.toString());
+    await SuspenseAccountApi.suspenseAccountApi
+        .removeFromSuspenseEntry(TransctionIDS: delTrans);
+/*    Provider.of<BusinessProvider>(context, listen: false)
+        .updateSelectedBusiness();*/
   }
 
 
