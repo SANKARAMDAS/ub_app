@@ -657,6 +657,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               ),
                               onTap: () async {
                                await showNotificationListDialog(context,data);
+
                                setState(() {
 
                                });

@@ -377,7 +377,7 @@ class _UserNotificationsState extends State<UserNotifications> {
                 /*
 
                        */
-                child: CustomListItem(data: data)
+                child: customListItem(data)
               ),
             ),
             Container(
@@ -404,26 +404,8 @@ class _UserNotificationsState extends State<UserNotifications> {
     );
 
   }
-}
 
-class CustomListItem extends StatefulWidget {
-  const CustomListItem({
-    Key? key,
-    required this.data,
-
-  }) : super(key: key);
-
-
-  final NotificationData data;
-
-
-  @override
-  State<CustomListItem> createState() => _CustomListItemState();
-}
-
-class _CustomListItemState extends State<CustomListItem> {
-  @override
-  Widget build(BuildContext context) {
+  Widget customListItem(NotificationData data){
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -440,22 +422,23 @@ class _CustomListItemState extends State<CustomListItem> {
                     top: 10,
                     left:10,
                     child: Image.asset(
-                      widget.data.read??false?AppAssets.notification_unselected:AppAssets.notification_selected,
+                      data.read??false?AppAssets.notification_unselected:AppAssets.notification_selected,
                       height: 60,
                       width: 60,
                     ),
                   ),
-                  Positioned(
-                    top:30,
-                    left:30,
-                    child: Container(
-                      child: Image.asset(
-                        widget.data.isSelected?AppAssets.check_selected:AppAssets.check_unselected,
-                        height: 60,
-                        width: 60,
+                  if(itemSelectedCount>0)
+                    Positioned(
+                      top:30,
+                      left:30,
+                      child: Container(
+                        child: Image.asset(
+                          data.isSelected?AppAssets.check_selected:AppAssets.check_unselected,
+                          height: 60,
+                          width: 60,
+                        ),
                       ),
                     ),
-                  ),
 
                 ],
               ),
@@ -465,17 +448,17 @@ class _CustomListItemState extends State<CustomListItem> {
         Expanded(
           flex: 3,
           child: _NotificationDescription(
-            data: widget.data,
+            data: data,
           ),
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
           child: CustomText(
             // "${DateFormat('dd MMM yyyy | hh:mm aa').format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))}"
-            timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${widget.data.createdAt}'))
+            timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))
             ,
             size: 12,
-            color: widget.data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
+            color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
             bold: FontWeight.w600,
           ),
         ),
@@ -483,6 +466,11 @@ class _CustomListItemState extends State<CustomListItem> {
     );
   }
 }
+
+
+
+
+
 
 class _NotificationDescription extends StatelessWidget {
   const _NotificationDescription({
