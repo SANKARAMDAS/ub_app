@@ -453,7 +453,7 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
 
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal:40),
-                  child: CustomText('This PIN Can Be Easily Guessed. Please try again with a different PIN'
+                  child: CustomText('The PIN you have entered can be easily guessed. Do you want to proceed with this PIN?'
                     ,
                     size: 18,
                     centerAlign: true,

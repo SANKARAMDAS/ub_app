@@ -286,12 +286,24 @@ void onStart() async {
                                 bool isLogin = await Repository()
                                     .queries
                                     .isLoginUser(loginModel);
-        if (!isLogin) {
+                                bool isSetPin = await Repository()
+                                    .queries
+                                    .isSetPin(loginModel);
+                                    // if(!isLogin && !isSetPin) {
+                                    //   debugPrint('AA'+isSetPin.toString());
+                                    // } else {
+                                    //   debugPrint('QQ'+isSetPin.toString());
+                                    // }
+        if (!isLogin && isSetPin) {
           Navigator.of(context).pushReplacementNamed(AppRoutes.setPinRoute,
               arguments: SetPinRouteArgs('', false, false, false));
         } else {
           if (repository.hiveQueries.pinStatus ||
               repository.hiveQueries.fingerPrintStatus) {
+            if(!isSetPin) {
+              Navigator.of(context).pushReplacementNamed(AppRoutes.setPinRoute,
+              arguments: SetPinRouteArgs('', false, false, false));
+            } else {
             final loginTime = repository.hiveQueries.unAuthData.loginTime;
             final diff = DateTime.now().difference(loginTime!).inDays;
             debugPrint(diff.toString());
@@ -309,7 +321,7 @@ void onStart() async {
               repository.hiveQueries.insertUnAuthData(repository
                   .hiveQueries.unAuthData
                   .copyWith(loginTime: DateTime.now(), seen: true));
-            }
+            }}
           } else {
             Navigator.of(context).pushReplacementNamed(AppRoutes.mainRoute);
           }

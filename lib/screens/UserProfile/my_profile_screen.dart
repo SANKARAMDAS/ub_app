@@ -751,16 +751,16 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               ),
                               trailing: Icon(Icons.chevron_right_rounded),
                               onTap: () async {
-                                if (await allChecker(context)) {
-                                  setState(() {
-                                    loading = true;
-                                  });
+                                if (await kycAndPremium(context)) {
+                                  // setState(() {
+                                  //   loading = true;
+                                  // });
                                   Navigator.pushNamed(
-                                          context, AppRoutes.myBusinessRoute)
-                                      .then((value) {
-                                    key1.currentState!.initState();
-                                    key1.currentState!.build(context);
-                                  }).then((value) => loading = true);
+                                          context, AppRoutes.myBusinessRoute);
+                                  //     .then((value) {
+                                  //   key1.currentState!.initState();
+                                  //   key1.currentState!.build(context);
+                                  // }).then((value) => loading = true);
                                 }
                               },
                               // : () {
@@ -785,15 +785,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               trailing: Icon(Icons.chevron_right_rounded),
                               onTap: () async {
                                 if (await allChecker(context)) {
-                                  setState(() {
-                                    loading = true;
-                                  });
+                                  // setState(() {
+                                  //   loading = true;
+                                  // });
                                   Navigator.of(context)
-                                      .pushNamed(AppRoutes.globalReportRoute)
-                                      .then((value) {
-                                    key1.currentState!.initState();
-                                    key1.currentState!.build(context);
-                                  }).then((value) => loading = true);
+                                      .pushNamed(AppRoutes.globalReportRoute);
+                                  //     .then((value) {
+                                  //   key1.currentState!.initState();
+                                  //   key1.currentState!.build(context);
+                                  // }).then((value) => loading = true);
                                 }
                               },
                             ),

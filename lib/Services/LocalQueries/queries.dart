@@ -1347,6 +1347,29 @@ class Queries with MobileAnalyticsQueries {
     }
   }
 
+  Future<bool> isSetPin(LoginModel loginModel) async {
+    final _db = await db;
+    try {
+      debugPrint('SELECT * FROM ${LoginModel.tableName} WHERE ${LoginModel.column_mobile_no} = "${loginModel.mobileNo}" AND ${LoginModel.column_status} = 1');
+      List<Map> m = await _db.rawQuery(
+        '''SELECT * FROM ${LoginModel.tableName} WHERE ${LoginModel.column_mobile_no} = "${loginModel.mobileNo}" AND ${LoginModel.column_status} = 1''',
+      );
+      if (m.length > 0) {
+        debugPrint('SSSSS : '+m.first['pin'].toString());
+        if (m.first['pin'] != null){
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } catch (e) {
+      recordError(e, StackTrace.current);
+      return false;
+    }
+  }
+
   Future<List<ImportContactModel>> getContacts() async {
     final _db = await db;
     try {

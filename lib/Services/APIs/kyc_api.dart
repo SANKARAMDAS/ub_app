@@ -109,9 +109,7 @@ class KycAPI {
                             jsonDecode(response.body)['status'] == false)
                         ? 2
                         : 0,
-                premiumStatus: isPremium == true
-                    ? int.parse(jsonDecode(response.body)['planDuration'])
-                    : 0,
+                premiumStatus: int.parse(jsonDecode(response.body)['planDuration']),
                 kycStatus2: jsonDecode(response.body)['kycStatus'],
                 kycID: jsonDecode(response.body)['kycId'],
                 emiratesIdVerified:

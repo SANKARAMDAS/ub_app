@@ -483,7 +483,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           //   content: CustomText(
                                           //       'Please check internet connectivity and try again.'),
                                           // ));
-                                          'Please check internet connectivity and try again.'.showSnackBar(context);
+                                          'Please check internet connectivity and try again.'
+                                              .showSnackBar(context);
                                           return false;
                                         }));
 
@@ -570,6 +571,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               setState(() {
                                                 isLoading = false;
                                               });
+                                              debugPrint('qqqqqqqqqqq');
                                               recordError(
                                                   e, StackTrace.current);
                                               return false;
@@ -587,12 +589,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           setState(() {
                                             isLoading = false;
                                           });
-                                          Navigator.of(context)
-                                              .pushReplacementNamed(
-                                            AppRoutes.setPinRoute,
-                                            arguments: SetPinRouteArgs(
-                                                '', false, false, true),
-                                          );
+                                          Future.delayed(Duration(seconds: 1))
+                                              .then((value) {
+                                            Navigator.of(context)
+                                                .pushReplacementNamed(
+                                              AppRoutes.setPinRoute,
+                                              arguments: SetPinRouteArgs(
+                                                  '', false, false, true),
+                                            );
+                                          });
+
                                           // Navigator.of(context)
                                           //     .pushReplacementNamed(
                                           //         AppRoutes.welcomeuserRoute,

@@ -5894,7 +5894,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                           if (isPlatformiOS()) {
                             var documentDirectory =
                                 await (getApplicationDocumentsDirectory());
-                            String path = documentDirectory!.absolute.path;
+                            String path = documentDirectory!.absolute.path+'/';
                             if (await File(path + message.details!).exists()) {
                               debugPrint('yesss');
                               // await PdfDocument.openFile(path+message.details!);
@@ -5908,10 +5908,11 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                             }
                           } else {
                             var documentDirectory =
-                                await (getApplicationDocumentsDirectory());
-                            String path = documentDirectory!.absolute.path;
+                                await (getExternalStorageDirectory());
+                            String path = documentDirectory!.absolute.path+'/';
+                            debugPrint('yesss'+path+message.details.toString());
                             if (await File(path + message.details!).exists()) {
-                              debugPrint('yesss');
+                              
                               // await PdfDocument.openFile(path+message.details!);
                               File(path + message.details!)
                                   .open(mode: FileMode.read);
