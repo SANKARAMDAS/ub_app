@@ -4,8 +4,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/app_constants.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
+import 'package:urbanledger/chat_module/data/local_database/db_provider.dart';
+import 'package:urbanledger/chat_module/utils/custom_shared_preferences.dart';
+import 'package:urbanledger/main.dart';
 
 Future<http.Response> postRequest(
     {String? endpoint,
@@ -20,11 +24,8 @@ Future<http.Response> postRequest(
   final request = await http
       .post(Uri.parse(url != null ? "$url" : "$baseUrl$endpoint"),
           body: body, encoding: encoding, headers: headers)
-      .timeout(
-        timeout ?? Duration(seconds: 30),
-      )
+      .timeout(timeout ?? Duration(seconds: 30))
       .catchError((e) {
-    // debugPrint(e.toString());
     recordError(e.toString(), StackTrace.current);
     if (e is TimeoutException || e is SocketException)
       return http.Response(
@@ -32,7 +33,24 @@ Future<http.Response> postRequest(
               {"message": 'Please check internet connectivity and try again.'}),
           400);
   });
+  if (jsonDecode(request.body)['statuscode'] == 400 || jsonDecode(request.body)['statuscode'] == 401) {
+    debugPrint('LLLLLLLLLLLLLLL' + request.body.toString());
+    logout();
+  }
   return request;
+}
+
+logout() async {
+  await Repository().hiveQueries.clearHiveData();
+  await Repository().queries.clearULTables();
+  await DBProvider.db.clearDatabase();
+  await CustomSharedPreferences.setBool('chatSync', false);
+  await CustomSharedPreferences.remove('primaryBusiness');
+  Repository().hiveQueries.insertUnAuthData(
+      Repository().hiveQueries.unAuthData.copyWith(seen: true));
+  // await repository.loginApi.logout();
+  // restartAppNotifier.value = !restartAppNotifier.value;
+  RestartWidget.restartApp(Constants.navigatorKey.currentContext!);
 }
 
 Future<http.Response> getRequest(

@@ -341,7 +341,7 @@ class MyApp extends StatelessWidget {
       home: SplashScreen(),
       onGenerateRoute: router.Router.generateRoutes,
       navigatorObservers: <NavigatorObserver>[observer],
-      // navigatorKey: globalNavigatorKey,
+      navigatorKey: Constants.navigatorKey,
     );
   }
 }

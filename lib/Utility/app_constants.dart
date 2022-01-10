@@ -6,6 +6,8 @@ String appVersion = "0.0.1";
 
 bool showMemoryButton = false;
 
+late BuildContext globalNavigatorKey;
+
 late double deviceHeight;
 
 late String localCustomerId;
@@ -32,6 +34,8 @@ class Constants {
   static const String paymentGatewayLiveKey = "";
  */
   ///HiveBoxes
+  static GlobalKey<NavigatorState> navigatorKey = 
+  GlobalKey<NavigatorState>();
 
   static const String authBox = 'AuthBox';
 
