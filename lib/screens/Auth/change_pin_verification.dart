@@ -56,7 +56,7 @@ class _ChangePinVerificationState extends State<ChangePinVerification>
   final GlobalKey<State> key = GlobalKey<State>();
   late bool _serviceEnabled;
   final location = Location();
-  bool isResendOtpClickable = true;
+  bool isResendOtpClickable = false;
   int _resendOtpCount = 30;
   // late Timer _timer;
 
@@ -329,8 +329,8 @@ class _ChangePinVerificationState extends State<ChangePinVerification>
                         InkWell(
                           child: CustomText(
                             isResendOtpClickable
-                                ? 'RESEND CODE'
-                                : 'RESEND CODE IN ',
+                                ? 'RESEND OTP'
+                                : 'RESEND OTP IN ',
                             size: (18),
                             color: isResendOtpClickable
                                 ? AppTheme.electricBlue

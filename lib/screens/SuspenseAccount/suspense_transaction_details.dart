@@ -589,27 +589,20 @@ class _SuspenseDtState extends State<SuspenseDt> {
                                 }, context);
                               }
                             }
-                            await SuspenseAccountApi.suspenseAccountApi
-                                .removeFromSuspenseEntry(
-                                    TransctionIDS: transactionIDS)
-                                .then((value) {
-                              debugPrint('delete' + value.toString());
-                              if (value == true) {
-                                setState(() {
-                                  loading = false;
-                                });
-                                'Selected transaction moved\nsuccessfully!'
-                                    .showSnackBar(context);
-                                Navigator.pop(context);
-                              /*  Navigator.pushReplacementNamed(
-                                    context, AppRoutes.suspenseAccountRoute);*/
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => SuspenseAccountScreen()),
-                                    ModalRoute.withName(AppRoutes.myProfileScreenRoute));
-
-                              }
+                            await delDataFromSuspenseAccount();
+                            setState(() {
+                              loading = false;
                             });
+                            'Selected transaction moved\nsuccessfully!'
+                                .showSnackBar(context);
+                            Navigator.pop(context);
+                            /*  Navigator.pushReplacementNamed(
+                                    context, AppRoutes.suspenseAccountRoute);*/
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => SuspenseAccountScreen()),
+                                ModalRoute.withName(AppRoutes.myProfileScreenRoute));
+
                             Provider.of<BusinessProvider>(context,
                                     listen: false)
                                 .updateSelectedBusiness();
@@ -628,6 +621,19 @@ class _SuspenseDtState extends State<SuspenseDt> {
                 );
               });
             });
+  }
+  delDataFromSuspenseAccount() async {
+    List<String>? delTrans = [];
+    List<SuspenseData>? delList =
+    await Repository().queries.getSuspenseOfflineAccount();
+    delList.forEach((element) {
+      delTrans.add(element.transactionId.toString());
+    });
+    debugPrint("offline entry count: " + delTrans.length.toString());
+    await SuspenseAccountApi.suspenseAccountApi
+        .removeFromSuspenseEntry(TransctionIDS: delTrans);
+/*    Provider.of<BusinessProvider>(context, listen: false)
+        .updateSelectedBusiness();*/
   }
   ledgerBussinessModelSelectionBottomSheet(BuildContext context, List<SuspenseData> suspenseData) {
     return showModalBottomSheet(
