@@ -71,8 +71,20 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                   child: Column(
                     children: [
                       Container(
-                        height: deviceHeight * 0.13,
+                        height: deviceHeight * 0.17,
+                        width: double.maxFinite,
+                        alignment: Alignment.topCenter,
+                        decoration: BoxDecoration(
+                          // color: Color(0xffE5E5E5),
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: AssetImage('assets/images/back.png'),
+                              alignment: Alignment.topCenter),
+                        ),
                       ),
+                      // Container(
+                      //   height: deviceHeight * 0.13,
+                      // ),
                       Container(
                         // height: deviceHeight * 0.37,
                         margin:

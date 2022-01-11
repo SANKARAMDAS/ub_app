@@ -25,6 +25,12 @@ import '../../chat_module/data/repositories/login_repository.dart';
 import '../Components/extensions.dart';
 
 class ChangePinVerification extends StatefulWidget {
+  // final String phoneNo;
+  // final bool isRegister;
+
+  // const ChangePinVerification(
+  //     {Key? key, required this.phoneNo, required this.isRegister})
+  //     : super(key: key);
   final String token;
   final bool fromSettings;
   ChangePinVerification(
@@ -172,39 +178,56 @@ class _ChangePinVerificationState extends State<ChangePinVerification>
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             //TODO: To handle location permission when denied.
+
+                            // await checkService();
+                            // final _location = await location.getLocation();
+                            CustomLoadingDialog.showLoadingDialog(context, key);
                             final status = await repository.changePinApi
-                        .verifyChangePin(
-                            widget.token, _digit1! +
-                                                _digit2! +
-                                                _digit3! +
-                                                _digit4!)
-                        .catchError((e) {
-                          oneController.text = ' ';
-                                    twoController.text = ' ';
-                                    threeController.text = ' ';
-                                    fourController.text = ' ';
-                                    fiveController.text = ' ';
-                                    sixController.text = ' ';
-                                    setState(() {});
-                      e.toString().showSnackBar(context);
-                      Navigator.of(context).pop();
-                                    return 'Incorrect';
-                    });
-                    if (status) {
-                      repository.hiveQueries.insertUserPin('');
-                      Navigator.of(context)
-                        ..pop()
-                        ..pop()
-                        ..pushNamed(
-                            widget.fromSettings
-                                ? AppRoutes.setNewPinRoute
-                                : AppRoutes.setPinRoute,
-                            arguments: SetPinRouteArgs('', false, true, false));
-                    } //else {
-                    //   Navigator.pop(context);
-                    //}
-                  }
-                          
+                                .verifyChangePin(
+                              widget.token,
+                              _digit1! + _digit2! + _digit3! + _digit4!,
+                              // _location.latitude,
+                              // _location.longitude,
+                            )
+                                .timeout(Duration(seconds: 30),
+                                    onTimeout: () async {
+                              Navigator.of(context).pop();
+                              return Future.value(null);
+                            }).catchError((e) {
+                              oneController.text = ' ';
+                              twoController.text = ' ';
+                              threeController.text = ' ';
+                              fourController.text = ' ';
+                              fiveController.text = ' ';
+                              sixController.text = ' ';
+                              setState(() {});
+                              e.toString().showSnackBar(context);
+                              Navigator.of(context).pop();
+                              return 'Incorrect';
+                            });
+
+                            if (status) {
+                            repository.hiveQueries.insertUserPin('');
+                            Navigator.of(context)
+                              ..pop()
+                              ..pop()
+                              ..pushNamed(
+                                  widget.fromSettings
+                                      ? AppRoutes.setNewPinRoute
+                                      : AppRoutes.setPinRoute,
+                                  arguments:
+                                      SetPinRouteArgs('', false, true, false));
+                          } 
+                            
+                            //  else {
+                            //   Navigator.of(context)
+                            //     ..pop()
+                            //     ..pop()
+                            //     ..pushReplacementNamed(AppRoutes.signupRoute,
+                            //         arguments:
+                            //             widget.phoneNo.replaceAll(' ', ''));
+                            // }
+                          }
                         }
                       : () {},
                 ),
@@ -250,8 +273,9 @@ class _ChangePinVerificationState extends State<ChangePinVerification>
                   ),
                   (deviceHeight * 0.04).heightBox,
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(

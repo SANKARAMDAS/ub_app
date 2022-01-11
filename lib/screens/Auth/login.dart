@@ -11,6 +11,8 @@ import 'package:urbanledger/chat_module/utils/custom_shared_preferences.dart';
 import 'package:urbanledger/main.dart';
 import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
+// import 'package:phone_selector/phone_selector.dart';
+import 'package:phone_selector/phone_selector.dart';
 
 class LoginScreen extends StatefulWidget {
   final bool isRegister;
@@ -24,6 +26,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String? _country = 'AE';
   String? _countryCode = '+971';
+  String _phoneNumber = '';
   final GlobalKey<State> key = GlobalKey<State>();
 
   final TextEditingController _mobileController = TextEditingController();
@@ -33,6 +36,24 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     // _mobileController.text = '';
+    _getPhoneNumber();
+  }
+
+  _getPhoneNumber() async {
+    String phoneNumber = '';
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      phoneNumber = (await PhoneSelector.getPhoneNumber())!;
+      print(phoneNumber);
+    } catch (e) {
+      print(e); //_mobileController .focus
+      // phoneNumber = 'Failed to get Phone Number.';
+    }
+    if (mounted) {
+      setState(() {
+        _mobileController.text = phoneNumber;
+      });
+    }
   }
 
   @override
@@ -133,6 +154,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 });
                                 _country = value.code;
                                 _countryCode = value.dialCode;
+                                if (_country == 'IN' ||
+                                    _country == 'AE') {
+                                  _getPhoneNumber();
+                                }
                                 debugPrint(_country);
                               },
                             ),
@@ -259,6 +284,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         //   content: Text('This mobile is already registered with us, please Login with this number.'),
                                         // ));
                                         'This mobile is already registered with us, please Login with this number.'.showSnackBar(context);
+
                                         if (e.toString().contains('registered'))
                                           Future.delayed(Duration(seconds: 2),
                                               () {

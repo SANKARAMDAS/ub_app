@@ -162,6 +162,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                   SizedBox(
                     height: 6,
                   ),
+                // (deviceHeight * 0.02).heightBox,
                 if (widget.showConfirmPinState)
                   ValueListenableBuilder<String>(
                       valueListenable: confirmPinNotifier,
@@ -379,8 +380,8 @@ class _SetPinScreenState extends State<SetPinScreen> {
             _repository.hiveQueries.setPinStatus(true);
             _repository.hiveQueries.setFingerPrintStatus(true);
             if (widget.showConfirmPinState && widget.isResetPinState) {
-
-              debugPrint('CCCCCCCCCC : '+_repository.hiveQueries.userData.toString());
+              debugPrint('CCCCCCCCCC : ' +
+                  _repository.hiveQueries.userData.toString());
               LoginModel loginModel = LoginModel(
                 mobileNo: _repository.hiveQueries.userData.mobileNo,
                 pin: confirmPinNotifier.value,
@@ -390,13 +391,14 @@ class _SetPinScreenState extends State<SetPinScreen> {
               'Pin Reset Successful'.showSnackBar(context);
               await Future.delayed(Duration(seconds: 1));
             }
-            debugPrint('CCCCCCCCCC : '+_repository.hiveQueries.userData.toString());
-              LoginModel loginModel = LoginModel(
-                mobileNo: _repository.hiveQueries.userData.mobileNo,
-                pin: confirmPinNotifier.value,
-                status: true,
-              );
-              repository.queries.checkLoginUser(loginModel);
+            debugPrint(
+                'CCCCCCCCCC : ' + _repository.hiveQueries.userData.toString());
+            LoginModel loginModel = LoginModel(
+              mobileNo: _repository.hiveQueries.userData.mobileNo,
+              pin: confirmPinNotifier.value,
+              status: true,
+            );
+            repository.queries.checkLoginUser(loginModel);
             Navigator.of(context)
               ..pop()
               ..pop();
@@ -406,16 +408,13 @@ class _SetPinScreenState extends State<SetPinScreen> {
                 : AppRoutes.mainRoute);
             // Navigator.of(context).pushNamed(AppRoutes.introscreenRoute, arguments: IntroRouteArgs(widget.isRegister));
           } else {
-            
-            Future.delayed(Duration(milliseconds: 300),
-                                              () {
-                                                confirmPinNotifier.value = '';
-                                                setState(() {
-              showError = true;
+            Future.delayed(Duration(milliseconds: 300), () {
+              confirmPinNotifier.value = '';
+              setState(() {
+                showError = true;
+              });
+              // Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
             });
-                                            // Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
-                                          });
-            
           }
         }
       }
@@ -576,9 +575,13 @@ class PinField extends StatelessWidget {
     required this.isSetField,
   }) : super(key: key);
 
-  final bool showError; ///
+  final bool showError;
+
+  ///
   final bool isFilled;
-  final bool isSetField; ///
+  final bool isSetField;
+
+  ///
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -591,8 +594,7 @@ class PinField extends StatelessWidget {
           decoration: new BoxDecoration(
               color: Colors.white,
               border: new Border.all(width: 2.0, color: Colors.white),
-              borderRadius: new BorderRadius.circular(7)
-              ),
+              borderRadius: new BorderRadius.circular(7)),
           child: Container(
             height: 18,
             width: 18,

@@ -92,7 +92,8 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image.asset(AppAssets.lockIcon, color: Colors.white,),
+                                    Image.asset(AppAssets.lockIcon,
+                                        color: Colors.white),
                                     SizedBox(
                                       width: 8,
                                     ),
@@ -100,9 +101,11 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                                       'Enter New Urban Ledger PIN'
                                           .toUpperCase(),
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600),
+                                        // color: AppTheme.brownishGrey,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -146,59 +149,61 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                       builder: (context, value, _) {
                         return Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20),
-                         
-                            child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  SizedBox(
-                                    height: 12,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(AppAssets.lockIcon,color: Colors.white,),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Text(
-                                        'CONFIRM NEW URBAN LEDGER PIN',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      PinField(
-                                          showError: showError,
-                                          isFilled: value.length > 0,
-                                          isSetField: false),
-                                      PinField(
-                                          showError: showError,
-                                          isFilled: value.length > 1,
-                                          isSetField: false),
-                                      PinField(
-                                          showError: showError,
-                                          isFilled: value.length > 2,
-                                          isSetField: false),
-                                      PinField(
-                                          showError: showError,
-                                          isFilled: value.length > 3,
-                                          isSetField: false),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 12,
-                                  ),
-                                ]),
-                          
+                          child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 12,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      AppAssets.lockIcon,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      'CONFIRM NEW URBAN LEDGER PIN',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    PinField(
+                                      showError: showError,
+                                      isSetField: false,
+                                      isFilled: value.length > 0,
+                                    ),
+                                    PinField(
+                                        showError: showError,
+                                        isFilled: value.length > 1,
+                                        isSetField: false),
+                                    PinField(
+                                        showError: showError,
+                                        isFilled: value.length > 2,
+                                        isSetField: false),
+                                    PinField(
+                                        showError: showError,
+                                        isFilled: value.length > 3,
+                                        isSetField: false),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 12,
+                                ),
+                              ]),
                         );
                       }),
                 // (height * 0.11).heightBox,
@@ -236,7 +241,7 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                 Spacer(),
                 Container(
                   child: keyBoard(),
-                  height: height * 0.32,
+                  height: height * 0.30,
                 )
               ],
             ),
@@ -326,15 +331,15 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
       );
 
   Widget pinBox(bool value) => Padding(
-        padding: EdgeInsets.all(22),
+        padding: EdgeInsets.all(10),
         child: new Container(
-            height: 20,
-            width: 20,
+            height: 75,
+            width: 50,
             alignment: Alignment.center,
             decoration: new BoxDecoration(
                 color: Colors.white,
                 border: new Border.all(width: 2.0, color: Colors.white),
-                borderRadius: new BorderRadius.circular(20)),
+                borderRadius: new BorderRadius.circular(7)),
             child: Container(
               height: 18,
               width: 18,
@@ -381,19 +386,17 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
               await Future.delayed(Duration(seconds: 1));
             } */
             LoginModel loginModel = LoginModel(
-                mobileNo: repository.hiveQueries.userData.mobileNo,
-                pin: confirmPinNotifier.value,
-                status: true,
-              );
-              repository.queries.checkLoginUser(loginModel);
+              mobileNo: repository.hiveQueries.userData.mobileNo,
+              pin: confirmPinNotifier.value,
+              status: true,
+            );
+            repository.queries.checkLoginUser(loginModel);
             var anaylticsEvents = AnalyticsEvents(context);
             await anaylticsEvents.initCurrentUser();
             await anaylticsEvents.changePinEvent();
-            Navigator.of(context)..pop()..pop();
-            if (Navigator.of(context).canPop()) Navigator.of(context).pop();
-            Navigator.of(context).pushNamed(widget.isResetPinState
-                ? AppRoutes.welcomeuserRoute
-                : AppRoutes.mainRoute);
+            Navigator.of(context)
+              ..pop()
+              ..pop();
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 margin: const EdgeInsets.all(60),
                 backgroundColor: Colors.white,
@@ -563,6 +566,7 @@ class PinField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
+        // padding: const EdgeInsets.only(left: 15.0, right: 15),
         padding: EdgeInsets.all(10),
         child: new Container(
           height: 75,
@@ -571,14 +575,14 @@ class PinField extends StatelessWidget {
           decoration: new BoxDecoration(
               color: Colors.white,
               border: new Border.all(width: 2.0, color: Colors.white),
-              borderRadius: new BorderRadius.circular(7)
-              ),
-            child: Container(
-              height: 18,
-              width: 18,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: isFilled ? AppTheme.brownishGrey : Colors.white),
-            )),
+              borderRadius: new BorderRadius.circular(7)),
+          child: Container(
+            height: 18,
+            width: 18,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: isFilled ? AppTheme.brownishGrey : Colors.white),
+          ),
+        ),
       );
 }

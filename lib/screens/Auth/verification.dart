@@ -343,8 +343,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                   ),
                   (deviceHeight * 0.04).heightBox,
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -454,6 +455,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                       ],
                     ),
                   ),
+                  
                   (deviceHeight * 0.09).heightBox,
                   Center(
                     child: CustomText(
@@ -470,6 +472,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
             ),
           ),
         ),
+      
       ),
     );
   }

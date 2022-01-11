@@ -536,7 +536,7 @@ class PinLoginPageState extends State<PinLoginScreen> {
                                 CustomText(
                                   incorrectPinCount > 3
                                       ? 'Too many incorrect attempts.'
-                                      : 'You have entered an invalid PIN. You have ${4 - incorrectPinCount} more attempts left.',
+                                      : 'You have entered an invalid PIN.\n You have ${4 - incorrectPinCount} more attempts left.',
                                   size: 16,
                                   bold: FontWeight.w400,
                                   color: AppTheme.brownishGrey,
@@ -711,14 +711,13 @@ class PinLoginPageState extends State<PinLoginScreen> {
   Widget pinBox(bool value) => Padding(
         padding: EdgeInsets.all(10),
         child: new Container(
-          height: 75,
-          width: 50,
-          alignment: Alignment.center,
-          decoration: new BoxDecoration(
-              color: Colors.white,
-              border: new Border.all(width: 2.0, color: Colors.white),
-              borderRadius: new BorderRadius.circular(7)
-              ),
+            height: 75,
+            width: 50,
+            alignment: Alignment.center,
+            decoration: new BoxDecoration(
+                color: Colors.white,
+                border: new Border.all(width: 2.0, color: Colors.white),
+                borderRadius: new BorderRadius.circular(7)),
             child: Container(
               height: 18,
               width: 18,
@@ -733,7 +732,9 @@ class PinLoginPageState extends State<PinLoginScreen> {
       pinNotifier.value = pinNotifier.value + str;
     }
     if (pinNotifier.value.length == 4) {
-      LoginModel loginModel = LoginModel(mobileNo: Repository().hiveQueries.userData.mobileNo, pin: pinNotifier.value);
+      LoginModel loginModel = LoginModel(
+          mobileNo: Repository().hiveQueries.userData.mobileNo,
+          pin: pinNotifier.value);
       bool isLogin = await Repository().queries.fetchLoginUser(loginModel);
       if (isLogin) {
         repository.hiveQueries.setPinStatus(true);
