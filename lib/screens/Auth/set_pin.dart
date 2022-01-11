@@ -129,7 +129,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                                 ],
                               ),
                               SizedBox(
-                                height: 10,
+                                height: 5,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -191,7 +191,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
                                 ],
                               ),
                               SizedBox(
-                                height: 10,
+                                height: 5,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -360,7 +360,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
             setState(() {
               showError = true;
             });
-           await showWeakPinDialog(context);
+           showWeakPinDialog(context);
 
           }
           else{
@@ -368,7 +368,6 @@ class _SetPinScreenState extends State<SetPinScreen> {
                 arguments: SetPinRouteArgs(setPinNotifier.value, true,
                     widget.isResetPinState, widget.isRegister));
           }
-
         }
       }
     } else {
@@ -421,8 +420,8 @@ class _SetPinScreenState extends State<SetPinScreen> {
     }
   }
 
-  showWeakPinDialog(BuildContext ctx){
-    return  showGeneralDialog(
+  showWeakPinDialog(BuildContext ctx) {
+    return showGeneralDialog(
       barrierLabel: "Barrier",
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.5),
@@ -588,7 +587,7 @@ class PinField extends StatelessWidget {
         // padding: const EdgeInsets.only(left: 15.0, right: 15),
         padding: EdgeInsets.all(10),
         child: new Container(
-          height: 75,
+          height: 70,
           width: 50,
           alignment: Alignment.center,
           decoration: new BoxDecoration(

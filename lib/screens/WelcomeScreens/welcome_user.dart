@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
+import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/app_assets.dart';
 import 'package:urbanledger/Utility/app_constants.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
@@ -142,11 +143,17 @@ class _WelcomeUserState extends State<WelcomeUser> {
               icon: theImage,
               text: 'Personal',
               onSubmit: () async {
-                
+                final response = (Repository()
+                                            .userProfileAPI
+                                            .userTypeChangeApi(
+                                                'PERSONAL',
+                                                context));
+                                              
                 await CustomSharedPreferences.setString(      //set flag
                     'accounttype', 'PERSONAL');
-                String data1 =
-                    await (CustomSharedPreferences.get('accounttype'));   //
+                // String data1 =
+                //     await (CustomSharedPreferences.get('accounttype')); 
+                    
                 //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
                 Navigator.pushReplacementNamed(context, AppRoutes.mainRoute);
               },
@@ -159,10 +166,15 @@ class _WelcomeUserState extends State<WelcomeUser> {
                 icon: theImage2,
                 text: 'Business',
                 onSubmit: () async{
+                  final response = (Repository()
+                                            .userProfileAPI
+                                            .userTypeChangeApi(
+                                                'BUSINESS',
+                                                context));
                   await CustomSharedPreferences.setString(                      //set flag
                     'accounttype', 'BUSINESS');
-                String data1 =
-                    await (CustomSharedPreferences.get('accounttype'));         //
+                // String data1 =
+                //     await (CustomSharedPreferences.get('accounttype'));         //
                   //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
                   Navigator.pushReplacementNamed(context, AppRoutes.mainRoute);
                 },
