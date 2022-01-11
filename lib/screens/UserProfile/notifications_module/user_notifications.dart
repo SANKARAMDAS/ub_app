@@ -1,13 +1,25 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:urbanledger/Cubits/Ledger/ledger_cubit.dart';
 import 'package:urbanledger/Cubits/Notifications/notificationlist_cubit.dart';
+import 'package:urbanledger/Models/customer_model.dart';
 import 'package:urbanledger/Models/notification_list_model.dart';
+import 'package:urbanledger/Models/routeArgs.dart';
+import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/app_services.dart';
+import 'package:urbanledger/chat_module/data/repositories/chat_repository.dart';
+import 'package:urbanledger/chat_module/screens/contact/contact_controller.dart';
+import 'package:urbanledger/chat_module/utils/custom_shared_preferences.dart';
+import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 import 'package:urbanledger/screens/Components/extensions.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:urbanledger/screens/UserProfile/MyLedger/business_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class UserNotifications extends StatefulWidget {
   final List<NotificationData>? dataList;
@@ -21,11 +33,15 @@ class UserNotifications extends StatefulWidget {
 class _UserNotificationsState extends State<UserNotifications> {
   // bool isItemSelected = false;
   int itemSelectedCount = 0;
+  ChatRepository _chatRepository = ChatRepository();
+  final GlobalKey<State> key = GlobalKey<State>();
+  final repository = Repository();
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
+      key: key,
       body: Container(
         color: Colors.white,
         child: Column(children: [
@@ -46,7 +62,7 @@ class _UserNotificationsState extends State<UserNotifications> {
                       Text('Notification (${widget.dataList?.length})',style: TextStyle(color: Colors.white,fontSize: 20)),
                     ],
                   ),
-                  itemSelectedCount>0?Text('${itemSelectedCount} items selected',style: TextStyle(color: Colors.white,fontSize: 16),):InkWell(child: Text('Mark all as Read',style: TextStyle(color: Colors.white,fontSize: 16),),onTap: (){
+                  itemSelectedCount>0?Text(itemSelectedCount>1?'${itemSelectedCount} items selected':'${itemSelectedCount} item selected',style: TextStyle(color: Colors.white,fontSize: 16),):InkWell(child: Text('Mark all as Read',style: TextStyle(color: Colors.white,fontSize: 16),),onTap: (){
                     BlocProvider.of<NotificationListCubit>(context,listen:false).markAllAsRead();
 
                   },),
@@ -103,6 +119,214 @@ class _UserNotificationsState extends State<UserNotifications> {
           },)),
     );
   }
+
+  Future<void> onNotificationTap(RemoteMessage message) async {
+    CustomerModel _customerModel = CustomerModel();
+    switch (message.data['type']) {
+    // code commented Waiting for client confimation
+    // case 'ledger_gave':
+    //   _customerModel
+    //     ..customerId = message.data['customerId']
+    //     ..mobileNo = message.data['mobile_no']
+    //     ..name = message.data['name']
+    //     ..chatId = message.data['chatId']
+    //     ..businessId = message.data['businessId'];
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => PayTransactionScreen(
+    //         model: _customerModel,
+    //         customerId: message.data['customerId'],
+    //         amount: message.data['amount'],
+    //       ),
+    //     ),
+    //   );
+    //   break;
+    // case 'update_ledger_gave':
+    //   _customerModel
+    //     ..customerId = message.data['customerId']
+    //     ..mobileNo = message.data['mobile_no']
+    //     ..name = message.data['name']
+    //     ..chatId = message.data['chatId']
+    //     ..businessId = message.data['businessId'];
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => PayTransactionScreen(
+    //         model: _customerModel,
+    //         customerId: message.data['customerId'],
+    //         amount: message.data['amount'],
+    //       ),
+    //     ),
+    //   );
+    //   break;
+    // case 'delete_ledger_gave':
+    //   Navigator.of(context).pushNamed(AppRoutes.mainRoute);
+    //   break;
+      case 'payment':
+        debugPrint('payment .... ... ');
+        paymentNotification(message.data['transactionId']);
+        Navigator.of(context).pushNamed(AppRoutes.paymentDetailsRoute,
+            arguments: TransactionDetailsArgs(
+              urbanledgerId: message.data['urbanledgerId'],
+              transactionId: message.data['transactionId'],
+              to: message.data['to'],
+              toEmail: message.data['toEmail'],
+              from: message.data['from'],
+              fromEmail: message.data['fromEmail'],
+              completed: message.data['completed'],
+              paymentMethod: message.data['paymentMethod'],
+              amount: message.data['amount'],
+              cardImage:
+              message.data['cardImage'].toString().replaceAll(' ', ''),
+              endingWith: message.data['endingWith'],
+              customerName: message.data['customerName'],
+              mobileNo: message.data['fromMobileNumber'],
+              paymentStatus: message.data['paymentStatus'],
+            ));
+        break;
+      case 'bank_account': //in progress from back end
+        await CustomSharedPreferences.setBool('isBankAccount', true);
+        debugPrint('fffffffffffL');
+        Navigator.of(context).pushNamed(AppRoutes.profileBankAccountRoute);
+        CustomLoadingDialog.showLoadingDialog(context, key);
+        break;
+      case 'payment_request':
+        CustomLoadingDialog.showLoadingDialog(context);
+        debugPrint('payment_request : ');
+        double amount = double.parse(message.data['amount'].toString());
+        var cid = await repository.customerApi
+            .getCustomerID(mobileNumber: message.data['mobileNo'].toString())
+            .timeout(Duration(seconds: 30), onTimeout: () async {
+          Navigator.of(context).pop();
+          return Future.value(null);
+        });
+        _customerModel
+          ..ulId = cid.customerInfo?.id != null ? cid.customerInfo?.id : cid.id
+          ..mobileNo = message.data['mobileNo']
+          ..name = message.data['name']
+          ..chatId = message.data['chatId']
+          ..businessId = message.data['businessId'];
+        final localCustId =
+        await repository.queries.getCustomerId(_customerModel.mobileNo!);
+        // final localCustId = '76aeff10-f8f8-11eb-bd60-0d0a52481fd7';
+        final uniqueId = Uuid().v1();
+        if (localCustId.isEmpty) {
+          final customer = CustomerModel()
+            ..name =
+            getName(_customerModel.name!.trim(), _customerModel.mobileNo!)
+            ..mobileNo = (_customerModel.mobileNo!)
+            ..avatar = _customerModel.avatar
+            ..customerId = uniqueId
+            ..businessId = Provider.of<BusinessProvider>(context, listen: false)
+                .selectedBusiness
+                .businessId
+            ..chatId = _customerModel.chatId
+            ..isChanged = true;
+          await repository.queries.insertCustomer(customer);
+        }
+
+        // Navigator.of(context).pushNamed(
+        //   AppRoutes.payTransactionRoute,
+        //   arguments: QRDataArgs(
+        //       customerModel: _customerModel,
+        //       customerId: localCustId.isEmpty ? uniqueId : localCustId,
+        //       amount: amount.toInt().toString(),
+        //       requestId: message.data['request_id'],
+        //       type: 'DIRECT',
+        //       suspense: false,
+        //       through: 'DIRECT'),
+        // );
+
+        Map<String, dynamic> isTransaction =
+        await repository.paymentThroughQRApi.getTransactionLimit(context);
+        if (!(isTransaction)['isError']) {
+          // Navigator.of(context).pop(true);
+          // showBankAccountDialog();
+          debugPrint('Customer iiid: ' + message.data['customerId'].toString());
+          Navigator.of(context).popAndPushNamed(
+            AppRoutes.payTransactionRoute,
+            arguments: QRDataArgs(
+                customerModel: _customerModel,
+                customerId: localCustId.isEmpty ? uniqueId : localCustId,
+                amount: amount.toInt().toString(),
+                requestId: message.data['request_id'],
+                type: 'DIRECT',
+                suspense: false,
+                through: 'DIRECT'),
+          );
+        } else {
+          Navigator.of(context).pop(true);
+          '${(isTransaction)['message']}'.showSnackBar(context);
+        }
+        break;
+      case 'add_customer':
+        Navigator.of(context).pushNamed(AppRoutes.mainRoute);
+        break;
+      case 'add_kyc':
+        await CustomSharedPreferences.setBool('isKYC', true);
+        Navigator.of(context).pushNamed(AppRoutes.manageKyc1Route);
+        break;
+      case 'complete_kyc_reminder':
+        await CustomSharedPreferences.setBool('isKYC', true);
+        Navigator.of(context).pushNamed(AppRoutes.manageKyc1Route);
+        break;
+      case 'premium':
+        await CustomSharedPreferences.setBool('isKYC', true);
+        Navigator.of(context).pushNamed(AppRoutes.manageKyc1Route);
+        break;
+      case 'ledger_addentry':
+        Navigator.of(context).pushNamed(AppRoutes.mainRoute);
+        break;
+      case 'premium_reminder':
+        Navigator.of(context).pushNamed(AppRoutes.urbanLedgerPremiumRoute);
+        CustomLoadingDialog.showLoadingDialog(context, key);
+        break;
+      case 'chat':
+        _customerModel
+          ..customerId = message.data['customer_id']
+          ..mobileNo = message.data['mobileNo']
+          ..name = message.data['name']
+          ..chatId = message.data['chatId']
+          ..businessId = message.data['business_id'];
+        debugPrint('dddaattta' + _customerModel.toJson().toString());
+        ContactController.initChat(context, _customerModel.chatId);
+        localCustomerId = _customerModel.customerId!;
+        BlocProvider.of<LedgerCubit>(context)
+            .getLedgerData(_customerModel.customerId!);
+        Navigator.of(context).pushNamed(AppRoutes.transactionListRoute,
+            arguments: TransactionListArgs(true, _customerModel));
+        break;
+      default:
+        Navigator.of(context).pushNamed(AppRoutes.mainRoute);
+    }
+  }
+
+  paymentNotification(String transactionId) async {
+
+    Map<String?, dynamic>? response =
+    await _chatRepository.getTransactionDetails(transactionId);
+    debugPrint(response.toString());
+    // Navigator.of(context).popAndPushNamed(
+    //                 AppRoutes.paymentDetailsRoute,
+    //                 arguments: TransactionDetailsArgs(
+    //                     urbanledgerId: (response)?['urbanledgerId'],
+    //                     transactionId: (response)?['transactionId'],
+    //                     to: (response)?['to'],
+    //                     toEmail: (response)?['toEmail'],
+    //                     from: (response)?['from'],
+    //                     fromEmail: (response)?['fromEmail'],
+    //                     completed: (response)?['completed'],
+    //                     paymentMethod: (response)?['paymentMethod'],
+    //                     amount: (response)?['amount'].toString(),
+    //                     cardImage: (response)?['cardImage']
+    //                         .toString()
+    //                         .replaceAll(' ', ''),
+    //                     endingWith: (response)?['endingWith'],
+    //                     customerName: widget.customerModel.name,
+    //                     mobileNo: widget.customerModel.mobileNo,
+    //                     paymentStatus: message.paymentStatus));
+  }
   Widget listItem(NotificationData data,int index){
     return Dismissible(
 
@@ -130,6 +354,10 @@ class _UserNotificationsState extends State<UserNotifications> {
 
 
         },
+        onTap: (){
+          BlocProvider.of<NotificationListCubit>(context,listen:false).markAsRead(index);
+         // onNotificationTap(NotificationData data);
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           // crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -149,7 +377,7 @@ class _UserNotificationsState extends State<UserNotifications> {
                 /*
 
                        */
-                child: CustomListItem(data: data)
+                child: customListItem(data)
               ),
             ),
             Container(
@@ -176,26 +404,8 @@ class _UserNotificationsState extends State<UserNotifications> {
     );
 
   }
-}
 
-class CustomListItem extends StatefulWidget {
-  const CustomListItem({
-    Key? key,
-    required this.data,
-
-  }) : super(key: key);
-
-
-  final NotificationData data;
-
-
-  @override
-  State<CustomListItem> createState() => _CustomListItemState();
-}
-
-class _CustomListItemState extends State<CustomListItem> {
-  @override
-  Widget build(BuildContext context) {
+  Widget customListItem(NotificationData data){
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -212,22 +422,23 @@ class _CustomListItemState extends State<CustomListItem> {
                     top: 10,
                     left:10,
                     child: Image.asset(
-                      widget.data.read??false?AppAssets.notification_unselected:AppAssets.notification_selected,
+                      data.read??false?AppAssets.notification_unselected:AppAssets.notification_selected,
                       height: 60,
                       width: 60,
                     ),
                   ),
-                  Positioned(
-                    top:30,
-                    left:30,
-                    child: Container(
-                      child: Image.asset(
-                        widget.data.isSelected?AppAssets.check_selected:AppAssets.check_unselected,
-                        height: 60,
-                        width: 60,
+                  if(itemSelectedCount>0)
+                    Positioned(
+                      top:30,
+                      left:30,
+                      child: Container(
+                        child: Image.asset(
+                          data.isSelected?AppAssets.check_selected:AppAssets.check_unselected,
+                          height: 60,
+                          width: 60,
+                        ),
                       ),
                     ),
-                  ),
 
                 ],
               ),
@@ -237,17 +448,17 @@ class _CustomListItemState extends State<CustomListItem> {
         Expanded(
           flex: 3,
           child: _NotificationDescription(
-            data: widget.data,
+            data: data,
           ),
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
           child: CustomText(
             // "${DateFormat('dd MMM yyyy | hh:mm aa').format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))}"
-            timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${widget.data.createdAt}'))
+            timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))
             ,
             size: 12,
-            color: widget.data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
+            color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
             bold: FontWeight.w600,
           ),
         ),
@@ -255,6 +466,11 @@ class _CustomListItemState extends State<CustomListItem> {
     );
   }
 }
+
+
+
+
+
 
 class _NotificationDescription extends StatelessWidget {
   const _NotificationDescription({

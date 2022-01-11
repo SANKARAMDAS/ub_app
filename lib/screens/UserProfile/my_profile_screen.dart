@@ -585,102 +585,110 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         ]),
                   ),
                   Spacer(),
-                  Row(
-                    children: [
-                      Repository().hiveQueries.userData.premiumStatus != 0
-                          ? Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 18),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              // width: 126,
-                              height: 27,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: Color(0xffebebeb),
-                                  width: 1,
-                                ),
-                                color: AppTheme.electricBlue,
-                              ),
-                              child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      child: Container(
-                                        child: Image.asset(
-                                          'assets/images/crown.png',
-                                          height: 15,
-                                          width: 15,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 3),
-                                    FittedBox(
-                                      child: Container(
-                                        child: Text(
-                                          'Premium',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: 'SFProDisplay',
-                                              fontWeight: FontWeight
-                                                  .w500, //FontWeight.w500
-                                              fontSize: 16),
-                                        ),
-                                      ),
-                                    ),
-                                  ]),
-                            )
-                          : Container(),
-                      BlocConsumer<NotificationListCubit,
-                          NotificationListState>(
-                        listener: (context, state) {
-                          // do stuff here based on BlocA's state
-                        },
-                        buildWhen: (previous, current) {
-                          return current != previous;
-                          // return true/false to determine whether or not
-                          // to rebuild the widget with state
-                        },
-                        builder: (context, state) {
-                          if (state is FetchedNotificationListState) {
-                            List<NotificationData> data =
-                                state.notificationList;
-                            return Badge(
-                              child: InkWell(
-                                child: Image.asset(
-                                  AppAssets.notification_bell,
-                                  height: 50,
-                                  width: 50,
-                                ),
-                                onTap: () async {
-                                  await showNotificationListDialog(
-                                      context, data);
-                                  setState(() {});
-                                },
-                              ),
-                              value: data.length.toString() ?? '0',
-                              color: Colors.grey,
-                              countColor: Colors.white,
-                            );
-                          }
-
-                          return Container();
-
-                          // return widget here based on BlocA's state
-                        },
+                                    Row(children: [
+                    Repository().hiveQueries.userData.premiumStatus != 0
+                        ? Container(
+                      margin: EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 18),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
                       ),
+                      // width: 126,
+                      height: 27,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Color(0xffebebeb),
+                          width: 1,
+                        ),
+                        color: AppTheme.electricBlue,
+                      ),
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              child: Container(
+                                child: Image.asset(
+                                  'assets/images/crown.png',
+                                  height: 15,
+                                  width: 15,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 3),
+                            FittedBox(
+                              child: Container(
+                                child: Text(
+                                  'Premium',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'SFProDisplay',
+                                      fontWeight:
+                                      FontWeight.w500, //FontWeight.w500
+                                      fontSize: 16),
+                                ),
+                              ),
+                            ),
 
-                      /*BlocBuilder<NotificationListCubit,
+                          ]),
+                    )
+                        : Container(),
+
+                    BlocConsumer<NotificationListCubit, NotificationListState>(
+                      listener: (context, state) {
+                        // do stuff here based on BlocA's state
+                      },
+                      buildWhen: (previous, current) {
+                        return current!=previous;
+                        // return true/false to determine whether or not
+                        // to rebuild the widget with state
+                      },
+                      builder: (context, state) {
+
+                        if (state is FetchedNotificationListState) {
+                          List<NotificationData> data =  state.notificationList;
+                          int unreadNotifications = data.where((element) => element.read==false).toList().length;
+                          return Badge(
+                            child: InkWell(
+                              child: Image.asset(
+                                AppAssets.notification_bell,
+                                height: 50,
+                                width:50,
+                              ),
+                              onTap: () async {
+                               await showNotificationListDialog(context,data);
+
+                               setState(() {
+
+                               });
+                              },
+                            )
+
+                            ,
+                            value: unreadNotifications.toString() ?? '0',
+                            color: Colors.grey,
+                            countColor: Colors.white,
+                          );
+                        }
+
+                        return Container();
+
+
+                        // return widget here based on BlocA's state
+                      },
+
+
+                    ),
+
+                    /*BlocBuilder<NotificationListCubit,
                   NotificationListState>(
                   builder: (context, state) {
 
                   })*/
-                    ],
-                  )
+                  ],)
+
                 ],
               ),
             ),

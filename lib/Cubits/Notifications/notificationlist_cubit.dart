@@ -42,6 +42,15 @@ class NotificationListCubit extends Cubit<NotificationListState>{
     emit(FetchedNotificationListState(notificationList));
 
   }
+
+  Future<void> markAsRead(int index) async {
+    emit(FetchingNotificationListState());
+    NotificationListApi.notificationListApi.markAllAsRead(['${notificationList[index].id}']);
+    notificationList[index].read = true;
+    emit(FetchedNotificationListState(notificationList));
+
+  }
+
   Future<void> deleteNotifications() async {
    List<NotificationData> data =notificationList.where((NotificationData element) => element.isSelected).toList();
     List<String> ids = data.map((e) => e.id.toString()).toList();
