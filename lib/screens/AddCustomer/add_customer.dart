@@ -16,6 +16,7 @@ import 'package:urbanledger/chat_module/data/models/message.dart';
 import 'package:urbanledger/chat_module/data/repositories/chat_repository.dart';
 import 'package:urbanledger/screens/Components/custom_bottom_nav_bar_new.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
+import 'package:urbanledger/screens/Components/shimmer_widgets.dart';
 import 'package:urbanledger/screens/TransactionScreens/pay_recieve.dart';
 import 'package:urbanledger/screens/UserProfile/MyLedger/business_provider.dart';
 import 'package:urbanledger/screens/mobile_analytics/analytics_events.dart';
@@ -215,13 +216,49 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                         BlocBuilder<ImportContactsCubit, ImportContactsState>(
                       builder: (context, state) {
                         if (state is ImportContactsInitial) {
-                          return Center(child: CircularProgressIndicator());
+                          return Expanded(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.03,
+                                ),
+                                // ShimmerListTile5(),
+                                ShimmerListTile(),
+                                ShimmerListTile(),
+                                ShimmerListTile(),
+                                ShimmerListTile(),
+                                // ShimmerListTile(),
+                                // ShimmerListTile(),
+                                // ShimmerListTile(),
+                              ],
+                            ),
+                            // Center(child:  ShimmerListTile())
+                          );
                         }
                         if (state is ContactPermissionStatus) {
                           if (state.status == false) {
                             return contactListWithOtherWidgets([], '', context);
                           } else {
-                            return Center(child: CircularProgressIndicator());
+                            return Expanded(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.03,
+                                  ),
+                                  ShimmerListTile5(),
+                                  ShimmerListTile(),
+                                  ShimmerListTile(),
+                                  ShimmerListTile(),
+                                  ShimmerListTile(),
+                                  // ShimmerListTile(),
+                                  // ShimmerListTile(),
+                                  // ShimmerListTile(),
+                                ],
+                              ),
+                              // Center(child:  ShimmerListTile())
+                            );
                           }
                         }
 
@@ -429,9 +466,9 @@ class _ImportContactsListWidgetState extends State<ImportContactsListWidget> {
                     }
                   }
                 } else {
-                          'Please check your internet connection or try again later.'
-                              .showSnackBar(context);
-                        }
+                  'Please check your internet connection or try again later.'
+                      .showSnackBar(context);
+                }
                 BlocProvider.of<ContactsCubit>(context).getContacts(
                     Provider.of<BusinessProvider>(context, listen: false)
                         .selectedBusiness

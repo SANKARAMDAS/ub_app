@@ -50,18 +50,19 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          //toolbarHeight: 0,
-          leading: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
-              },
-            ),
-          ),
-        ),
+        // appBar: AppBar(
+        //   //toolbarHeight: 0,
+        //   leading: Padding(
+        //     padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        //     // child: IconButton(
+        //     //   icon: Icon(Icons.arrow_back_ios),
+        //     //   onPressed: () {
+        //     //     Navigator.of(context)
+        //     //         .pushReplacementNamed(AppRoutes.welcomescreenRoute);
+        //     //   },
+        //     // ),
+        //   ),
+        // ),
         // resizeToAvoidBottomInset: false,
         // resizeToAvoidBottomPadding: false,
         // appBar: AppBar(
@@ -261,7 +262,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                         if (e.toString().contains('registered'))
                                           Future.delayed(Duration(seconds: 2),
                                               () {
-                                            Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
+                                            Navigator.of(context)
+                                                .pushReplacementNamed(AppRoutes
+                                                    .welcomescreenRoute);
                                           });
                                         return false;
                                       }))

@@ -178,6 +178,8 @@ class AppAssets {
   static const String freemiumIcon = 'assets/icons/freemium.png';
   static const String freemium2Icon = 'assets/icons/freemium2.png';
   static const String kycIcon = 'assets/icons/kyc.png';
+  static const String persIcon = 'assets/icons/personal & business-02.png';
+  static const String busnIcon = 'assets/icons/personal & business-01.png';
   static const String saveCardsIcon = 'assets/icons/cards01.png';
   static const String bankIcon = 'assets/icons/bank01.png';
   static const String settingsIcon = 'assets/icons/settings01.png';
