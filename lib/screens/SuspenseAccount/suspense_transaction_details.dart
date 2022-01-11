@@ -430,6 +430,7 @@ class _SuspenseDtState extends State<SuspenseDt> {
     // bool _value = false;
     int val = -1;
     String? Bid;
+    bool isClickable = false;
 
     loading == true
         ? CircularProgressIndicator()
@@ -469,6 +470,7 @@ class _SuspenseDtState extends State<SuspenseDt> {
                                         listen: false)
                                     .businesses[index]
                                     .businessId;
+                                isClickable = true;
                               });
                               debugPrint(
                                   'Check this Business ID: ' + Bid.toString());
@@ -513,8 +515,9 @@ class _SuspenseDtState extends State<SuspenseDt> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                           ),
-                          onPressed: () async {
+                          onPressed:isClickable? () async {
                             setState(() {
+                              isClickable = false;
                               loading = true;
                             });
                             List<String>? transactionIDS = [];
@@ -607,7 +610,7 @@ class _SuspenseDtState extends State<SuspenseDt> {
                                     listen: false)
                                 .updateSelectedBusiness();
                             debugPrint('Ht5');
-                          },
+                          }:null,
                           child: CustomText(
                             'Move'.toUpperCase(),
                             color: Colors.white,
