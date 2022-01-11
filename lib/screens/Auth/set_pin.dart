@@ -359,7 +359,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
             setState(() {
               showError = true;
             });
-            showWeakPinDialog(context);
+           await showWeakPinDialog(context);
 
           }
           else{
@@ -428,12 +428,12 @@ class _SetPinScreenState extends State<SetPinScreen> {
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: Duration(milliseconds: 300),
-      context: context,
+      context: ctx,
       pageBuilder: (_, __, ___) {
         return Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: MediaQuery.of(context).size.height*0.3 ,
+            height: MediaQuery.of(ctx).size.height*0.3 ,
             child: SizedBox.expand(child: ClipRRect(
                 borderRadius: BorderRadius.circular(12.0),child: Scaffold(body: Container(child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -451,14 +451,16 @@ class _SetPinScreenState extends State<SetPinScreen> {
                 ),
                 SizedBox(height: 8,),
 
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal:40),
-                child: CustomText('The PIN you have entered can be easily guessed. Do you want to proceed with this PIN?'
-                ,
-                  size: 18,
-                  centerAlign: true,
-                  color: AppTheme.brownishGrey,
-                  bold: FontWeight.w400,
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal:40),
+                  child: CustomText('The PIN you have entered can be easily guessed. Do you want to proceed with this PIN?'
+                  ,
+                    size: 18,
+                    centerAlign: true,
+                    color: AppTheme.brownishGrey,
+                    bold: FontWeight.w400,
+                  ),
                 ),
               ),
               SizedBox(height: 8,),
@@ -469,13 +471,13 @@ class _SetPinScreenState extends State<SetPinScreen> {
                 child: Padding(
                 padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                  onPressed: () {
-
-
-                    Navigator.of(context).pushNamed(AppRoutes.setPinRoute,
+                  onPressed: () async {
+                    Navigator.of(ctx).pop();
+                    Navigator.of(ctx).pushNamed(AppRoutes.setPinRoute,
                         arguments: SetPinRouteArgs(setPinNotifier.value, true,
                             widget.isResetPinState, widget.isRegister));
-                  },
+
+                    },
                   child: CustomText(
                     'YES',
                     size: (18),

@@ -353,7 +353,8 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
             setState(() {
               showError = true;
             });
-            showWeakPinDialog(context);
+             showWeakPinDialog(context);
+
           }
           else{
             Navigator.of(context).pushNamed(AppRoutes.setNewPinRoute,
@@ -428,12 +429,12 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: Duration(milliseconds: 300),
-      context: context,
+      context: ctx,
       pageBuilder: (_, __, ___) {
         return Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: MediaQuery.of(context).size.height*0.3 ,
+            height: MediaQuery.of(ctx).size.height*0.3 ,
             child: SizedBox.expand(child: ClipRRect(
                 borderRadius: BorderRadius.circular(12.0),child: Scaffold(body: Container(child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -469,12 +470,13 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
 
-
-                          Navigator.of(context).pushNamed(AppRoutes.setNewPinRoute,
+                          Navigator.of(ctx).pop();
+                      Navigator.of(ctx).pushNamed(AppRoutes.setNewPinRoute,
                               arguments: SetPinRouteArgs(
                                   setPinNotifier.value, true, widget.isResetPinState, false));
+
                         },
                         child: CustomText(
                           'YES',
@@ -497,7 +499,7 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                     child: ElevatedButton(
                         onPressed: () {
                           setPinNotifier.value = '';
-                          Navigator.of(context).pop();
+                          Navigator.of(ctx).pop();
                         },
                         child: CustomText(
                           'NO',
