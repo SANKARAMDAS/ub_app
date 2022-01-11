@@ -10,6 +10,7 @@ import 'package:urbanledger/Utility/app_methods.dart';
 import 'package:urbanledger/chat_module/data/local_database/db_provider.dart';
 import 'package:urbanledger/chat_module/utils/custom_shared_preferences.dart';
 import 'package:urbanledger/main.dart';
+import 'package:urbanledger/screens/Components/extensions.dart';
 
 Future<http.Response> postRequest(
     {String? endpoint,
@@ -33,11 +34,12 @@ Future<http.Response> postRequest(
               {"message": 'Please check internet connectivity and try again.'}),
           400);
   });
-  if (jsonDecode(request.body)['statuscode'] == 400 || jsonDecode(request.body)['statuscode'] == 401) {
-    debugPrint('LLLLLLLLLLLLLLL' + request.body.toString());
+  if (request.statusCode == 401) {
     logout();
-  }
-  return request;
+    
+  } 
+    return request;
+  
 }
 
 logout() async {
@@ -51,6 +53,7 @@ logout() async {
   // await repository.loginApi.logout();
   // restartAppNotifier.value = !restartAppNotifier.value;
   RestartWidget.restartApp(Constants.navigatorKey.currentContext!);
+  'Token Expired'.showSnackBar(Constants.navigatorKey.currentContext!);
 }
 
 Future<http.Response> getRequest(
