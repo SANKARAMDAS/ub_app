@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -22,6 +23,7 @@ import 'package:urbanledger/chat_module/utils/custom_shared_preferences.dart';
 import 'package:urbanledger/main.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:urbanledger/screens/DynamicLinks/dynamicLinkService.dart';
 import 'package:urbanledger/screens/UserProfile/MyLedger/business_provider.dart';
 import 'package:urbanledger/screens/mobile_analytics/analytics_events.dart';
 import 'package:uuid/uuid.dart';
@@ -52,10 +54,12 @@ class PinLoginPageState extends State<PinLoginScreen> {
   late bool isPinOn;
   bool isFingerPrintDisabledFromPhone = false;
   String businessId = '';
+  late StreamSubscription _subscription;
 
   @override
   void initState() {
     super.initState();
+    _subscription = DynamicLinkService().handleDynamicLinks(context);
     BlocProvider.of<ImportContactsCubit>(context).getContactsFromDevice();
     isFingerPrintOn = _repository.hiveQueries.fingerPrintStatus;
     isPinOn = _repository.hiveQueries.pinStatus;
@@ -80,7 +84,7 @@ class PinLoginPageState extends State<PinLoginScreen> {
       }
     }
   }
-
+  
   static const iosStrings = const IOSAuthMessages(
       cancelButton: 'cancel',
       goToSettingsButton: 'settings',
@@ -264,8 +268,9 @@ class PinLoginPageState extends State<PinLoginScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     pinNotifier.dispose();
+    _subscription.cancel();
+    super.dispose();
     // _localAuthentication.stopAuthentication();
   }
 

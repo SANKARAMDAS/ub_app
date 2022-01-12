@@ -567,14 +567,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                         context,
                                                         false)
                                                     .catchError((e) {
-                                              debugPrint(e);
+                                           
                                               setState(() {
                                                 isLoading = false;
                                               });
-                                              debugPrint('qqqqqqqqqqq');
-                                              recordError(
-                                                  e, StackTrace.current);
-                                              return false;
+                                               'Please check your internet connection or try again later.'
+                                                .showSnackBar(context);
                                             }));
                                             if (apiResponse) {
                                               await repository.queries

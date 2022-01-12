@@ -132,7 +132,7 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
       Navigator.of(context).pop();
     }).catchError((e) {
       Navigator.of(context).pop();
-      'Something went wrong. Please try again later.'.showSnackBar(context);
+      'Please check your internet connection or try again later.'.showSnackBar(context);
     });
 
     // Future ft = Future(() {});
