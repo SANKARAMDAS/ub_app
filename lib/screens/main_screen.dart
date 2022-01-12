@@ -74,7 +74,6 @@ class _MainScreenState extends State<MainScreen> {
                 .businessId);
       }
     });
-    
 
     // BlocProvider.of<ImportContactsCubit>(context).getContactsFromDevice();
 
@@ -105,8 +104,6 @@ class _MainScreenState extends State<MainScreen> {
   getKyc() async {
     await KycAPI.kycApiProvider.kycCheker();
   }
-
-  
 
   paymentNotification(String transactionId) async {
     Map<String?, dynamic>? response =
@@ -365,6 +362,11 @@ class _MainScreenState extends State<MainScreen> {
         Navigator.of(context).pushNamed(AppRoutes.transactionListRoute,
             arguments: TransactionListArgs(true, _customerModel));
         break;
+        
+      case 'move_unknown_transactions':
+        Navigator.of(context).pushNamed(AppRoutes.suspenseAccountRoute);
+        break;
+
       default:
         Navigator.of(context).pushNamed(AppRoutes.mainRoute);
     }
