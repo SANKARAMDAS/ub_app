@@ -40,7 +40,7 @@ class _UrbanLedgerPremiumState extends State<UrbanLedgerPremium> {
 //       setState(() {
 //         isLoading = false;
 //       });
-//       'Something went wrong. Please try again later.'.showSnackBar(context);
+//       'Please check your internet connection or try again later.'.showSnackBar(context);
 //     }).then((value) {
 //       setState(() {
 //         isLoading = false;

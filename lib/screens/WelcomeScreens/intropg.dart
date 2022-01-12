@@ -8,7 +8,6 @@ import 'package:urbanledger/Utility/app_theme.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 import 'package:pausable_timer/pausable_timer.dart';
 
-
 class IntroductionScreen extends StatefulWidget {
   final bool isRegister;
 
@@ -46,12 +45,15 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     if (_currentPage >= 4) {
       if (widget.isRegister) {
         Future.delayed(Duration(seconds: 2), () {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);});
+          Navigator.of(context)
+              .pushReplacementNamed(AppRoutes.welcomescreenRoute);
+        });
       } else {
         Future.delayed(Duration(seconds: 2), () {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.pinLoginRoute,arguments:PinRouteArgs(
-                                                Repository().hiveQueries.userData.mobileNo,
-                                                true));});
+          Navigator.of(context).pushReplacementNamed(AppRoutes.pinLoginRoute,
+              arguments: PinRouteArgs(
+                  Repository().hiveQueries.userData.mobileNo, true));
+        });
       }
     } else {
       timer = PausableTimer(Duration(seconds: 3), () async {
@@ -81,10 +83,10 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: GestureDetector(
-        onLongPress: (){
+        onLongPress: () {
           timer.pause();
         },
-        onLongPressUp: (){
+        onLongPressUp: () {
           timer.start();
         },
         child: Scaffold(
@@ -92,10 +94,10 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
           body: Container(
             decoration: new BoxDecoration(color: Colors.white),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
+                Container(
+                  // padding: const EdgeInsets.all(4.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -115,10 +117,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                             Navigator.of(context).pushReplacementNamed(
                                 AppRoutes.welcomescreenRoute);
                           } else {
-                            Navigator.of(context)
-                                .pushReplacementNamed(AppRoutes.pinLoginRoute,arguments:PinRouteArgs(
-                                                Repository().hiveQueries.userData.mobileNo,
-                                                true));
+                            Navigator.of(context).pushReplacementNamed(
+                                AppRoutes.pinLoginRoute,
+                                arguments: PinRouteArgs(
+                                    Repository().hiveQueries.userData.mobileNo,
+                                    true));
                           }
                         },
                         child: Container(
@@ -148,7 +151,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.75,
                     child: PageView(
-                      physics: NeverScrollableScrollPhysics(),
+                      // physics: NeverScrollableScrollPhysics(),
                       controller: _pageController,
                       // reverse: true,
                       onPageChanged: (int page) {
@@ -158,13 +161,16 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                         setState(() {});
                       },
                       children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(top: 40.0, left: 0.0),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: 10.0,
+                              right: MediaQuery.of(context).size.width * 0.05),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               new Container(
-                                height: MediaQuery.of(context).size.height * 0.45,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.45,
                                 decoration: new BoxDecoration(
                                   image: new DecorationImage(
                                     image: new AssetImage(
@@ -176,7 +182,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.050,
+                                    MediaQuery.of(context).size.height * 0.040,
                               ),
                               Container(
                                 child: Padding(
@@ -194,8 +200,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                               SizedBox(height: 15.0),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    left:
-                                        MediaQuery.of(context).size.width * 0.1),
+                                    left: MediaQuery.of(context).size.width *
+                                        0.1),
                                 child: CustomText(
                                   "Now you can add a ledger \nenter for each transaction from\nyour customer and suppliers",
                                   color: AppTheme.coolGrey,
@@ -206,13 +212,16 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 40.0, left: 0.0),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: 10.0,
+                              right: MediaQuery.of(context).size.width * 0.05),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               new Container(
-                                height: MediaQuery.of(context).size.height * 0.45,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.45,
                                 decoration: new BoxDecoration(
                                   image: new DecorationImage(
                                     image: new AssetImage(
@@ -224,7 +233,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.050,
+                                    MediaQuery.of(context).size.height * 0.040,
                               ),
                               Container(
                                 child: Padding(
@@ -242,8 +251,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                               SizedBox(height: 15.0),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    left:
-                                        MediaQuery.of(context).size.width * 0.1),
+                                    left: MediaQuery.of(context).size.width *
+                                        0.1),
                                 child: CustomText(
                                   "Keep track of your\nreceivables by setting up a\nreminder to collect money",
                                   color: AppTheme.coolGrey,
@@ -254,13 +263,16 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 40.0, left: 0.0),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: 10.0,
+                              right: MediaQuery.of(context).size.width * 0.05),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               new Container(
-                                height: MediaQuery.of(context).size.height * 0.45,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.45,
                                 decoration: new BoxDecoration(
                                   image: new DecorationImage(
                                     image: new AssetImage(
@@ -272,7 +284,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.050,
+                                    MediaQuery.of(context).size.height * 0.040,
                               ),
                               Container(
                                 child: Padding(
@@ -290,8 +302,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                               SizedBox(height: 15.0),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    left:
-                                        MediaQuery.of(context).size.width * 0.1),
+                                    left: MediaQuery.of(context).size.width *
+                                        0.1),
                                 child: CustomText(
                                   "Use your permanent QR code or\npayment links to collect payments or\ncreate a customized one on the go",
                                   color: AppTheme.coolGrey,
@@ -302,13 +314,16 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 40.0, left: 0.0),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: 10.0,
+                              right: MediaQuery.of(context).size.width * 0.05),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               new Container(
-                                height: MediaQuery.of(context).size.height * 0.45,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.45,
                                 decoration: new BoxDecoration(
                                   image: new DecorationImage(
                                     image: new AssetImage(
@@ -320,7 +335,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.050,
+                                    MediaQuery.of(context).size.height * 0.040,
                               ),
                               Container(
                                 child: Padding(
@@ -338,8 +353,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                               SizedBox(height: 15.0),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    left:
-                                        MediaQuery.of(context).size.width * 0.1),
+                                    left: MediaQuery.of(context).size.width *
+                                        0.1),
                                 child: CustomText(
                                   "Now collect orders and\npayments on the chat and\nkeep track of your interactions",
                                   color: AppTheme.coolGrey,
@@ -350,13 +365,16 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 40.0, left: 0.0),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: 10.0,
+                              right: MediaQuery.of(context).size.width * 0.05),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               new Container(
-                                height: MediaQuery.of(context).size.height * 0.45,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.45,
                                 decoration: new BoxDecoration(
                                   image: new DecorationImage(
                                     image: new AssetImage(
@@ -368,7 +386,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                               ),
                               SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.050,
+                                    MediaQuery.of(context).size.height * 0.040,
                               ),
                               Container(
                                 child: Padding(
@@ -386,8 +404,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                               SizedBox(height: 15.0),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    left:
-                                        MediaQuery.of(context).size.width * 0.1),
+                                    left: MediaQuery.of(context).size.width *
+                                        0.1),
                                 child: CustomText(
                                   "Get insights on your\nbusiness right from the app",
                                   color: AppTheme.coolGrey,

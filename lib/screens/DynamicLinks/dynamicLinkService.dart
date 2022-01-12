@@ -54,6 +54,7 @@ class DynamicLinkService {
         CustomLoadingDialog.showLoadingDialog(context);
         Map<String, dynamic> data = await repository.paymentThroughQRApi
             .getQRData(paths.queryParameters['paymentrequest_link']!);
+            Navigator.of(Constants.navigatorKey.currentContext!).pop();
         debugPrint('qq :' + data.toString());
         await CustomSharedPreferences.setString(
             'DynamicQRData', jsonEncode(data));
@@ -163,7 +164,7 @@ class DynamicLinkService {
           
           Provider.of<BusinessProvider>(context, listen: false)
               .updateSelectedBusiness();
-          CustomLoadingDialog.showLoadingDialog(context);
+          // CustomLoadingDialog.showLoadingDialog(context);
           String data2 = await (CustomSharedPreferences.get('DynamicQRData'));
           Map<String, dynamic> dynamicQRData = jsonDecode(data2);
           final id = await getlocalCustId(
@@ -181,7 +182,7 @@ class DynamicLinkService {
           // Map<String, dynamic> isTransaction =
           //     await repository.paymentThroughQRApi.getTransactionLimit();
           // if (!(isTransaction)['isError']) {
-          Navigator.of(context).pop();
+          // Navigator.of(context).pop();
           Navigator.pushNamed(
             context,
             AppRoutes.payTransactionRoute,

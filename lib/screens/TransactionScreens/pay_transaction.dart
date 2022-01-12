@@ -358,7 +358,7 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
 //       setState(() {
 //         isLoading = false;
 //       });
-//       'Something went wrong. Please try again later.'.showSnackBar(context);
+//       'Please check your internet connection or try again later.'.showSnackBar(context);
 //     }).then((value) {
 //       setState(() {
 //         isLoading = false;
@@ -633,7 +633,7 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
                                           .catchError((e) {
                                         
                                         Navigator.of(context).pop();
-                                        'Something went wrong. Please try again later.'
+                                        'Please check your internet connection or try again later.'
                                             .showSnackBar(context);
                                       });
                                       // .timeout(Duration(seconds: 30),
@@ -810,7 +810,7 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
                                         }).catchError((e) {
                                           
                                           Navigator.of(context).pop();
-                                          'Something went wrong. Please try again later.'
+                                          'Please check your internet connection or try again later.'
                                               .showSnackBar(context);
                                         }).then((value) async {
                                           debugPrint(

@@ -56,7 +56,7 @@ class _BackupInformationScreenState extends State<BackupInformationScreen> {
                             isLoading = false;
                           });
 
-                          'Please Check Your Internet Connectivity and Try Again'
+                          'Please check your internet connection or try again later.'
                               .showSnackBar(context);
                         }
                       })),
