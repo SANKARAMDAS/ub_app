@@ -14,6 +14,7 @@ class NotificationListCubit extends Cubit<NotificationListState>{
 
 
   Future<void> getNotificationListData() async {
+    if(state is! FetchedNotificationListState)
     emit(FetchingNotificationListState());
     notificationList =  await getDataFromNotificationList();
     emit(FetchedNotificationListState(notificationList));
@@ -51,12 +52,11 @@ class NotificationListCubit extends Cubit<NotificationListState>{
 
   }
 
-  Future<void> deleteNotifications() async {
-   List<NotificationData> data =notificationList.where((NotificationData element) => element.isSelected).toList();
-    List<String> ids = data.map((e) => e.id.toString()).toList();
+  Future<void> deleteNotifications(List<NotificationData> selectedList) async {
+    List<String> ids = selectedList.map((e) => e.id.toString()).toList();
 
     NotificationListApi.notificationListApi.deleteNotifications(ids);
-    notificationList.removeWhere((element) => element.isSelected);
+    notificationList.removeWhere((element) => selectedList.contains(element));
     print(notificationList.length);
     emit(FetchedNotificationListState(notificationList));
 

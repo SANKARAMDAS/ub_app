@@ -32,10 +32,11 @@ class UserNotifications extends StatefulWidget {
 
 class _UserNotificationsState extends State<UserNotifications> {
   // bool isItemSelected = false;
-  int itemSelectedCount = 0;
+  //int itemSelectedCount = 0;
   ChatRepository _chatRepository = ChatRepository();
   final GlobalKey<State> key = GlobalKey<State>();
   final repository = Repository();
+  List<NotificationData> selectedList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +63,8 @@ class _UserNotificationsState extends State<UserNotifications> {
                       Text('Notification (${widget.dataList?.length})',style: TextStyle(color: Colors.white,fontSize: 20)),
                     ],
                   ),
-                  itemSelectedCount>0?Text(itemSelectedCount>1?'${itemSelectedCount} items selected':'${itemSelectedCount} item selected',style: TextStyle(color: Colors.white,fontSize: 16),):InkWell(child: Text('Mark all as Read',style: TextStyle(color: Colors.white,fontSize: 16),),onTap: (){
+
+                  selectedList.length >0?Text(selectedList.length>1?'${selectedList.length} items selected':'${selectedList.length} item selected',style: TextStyle(color: Colors.white,fontSize: 16),):InkWell(child: Text('Mark all as Read',style: TextStyle(color: Colors.white,fontSize: 16),),onTap: (){
                     BlocProvider.of<NotificationListCubit>(context,listen:false).markAllAsRead();
 
                   },),
@@ -72,11 +74,11 @@ class _UserNotificationsState extends State<UserNotifications> {
               listener: (context, state) {
                 // do stuff here based on BlocA's state
               },
-              buildWhen: (previous, current) {
+            /*  buildWhen: (previous, current) {
                 return current is FetchedNotificationListState;
                 // return true/false to determine whether or not
                 // to rebuild the widget with state
-              },
+              },*/
               builder: (context, state) {
                 if(state is FetchedNotificationListState){
                   return  state.notificationList.length > 0?ListView.builder(
@@ -93,15 +95,15 @@ class _UserNotificationsState extends State<UserNotifications> {
       bottomNavigationBar: Container(
           color: Colors.white,
           padding: EdgeInsets.all(20),
-          child:itemSelectedCount>0?InkWell(
+          child:selectedList.length>0?InkWell(
             child: Image.asset(
              AppAssets.delete_notification_icon,
               height: 45,
               width: 45,
             ),onTap: () async {
-           await BlocProvider.of<NotificationListCubit>(context,listen:false).deleteNotifications();
+           await BlocProvider.of<NotificationListCubit>(context,listen:false).deleteNotifications(selectedList);
            setState(() {
-             itemSelectedCount = 0;
+             selectedList = [];
            });
           },):InkWell(
             child: Container(
@@ -114,7 +116,7 @@ class _UserNotificationsState extends State<UserNotifications> {
                 )),onTap: () async {
             await BlocProvider.of<NotificationListCubit>(context,listen:false).clearAllNotification();
             setState(() {
-              itemSelectedCount = 0;
+              selectedList = [];
             });
           },)),
     );
@@ -335,11 +337,13 @@ class _UserNotificationsState extends State<UserNotifications> {
       // what to do after an item has been swiped away.
       onDismissed: (direction) async {
         // Remove the item from the data source.
+        setState(() {
+          selectedList.removeWhere((element) =>element ==data);
+        });
         await BlocProvider.of<NotificationListCubit>(context,listen:false).clearNotification(index);
 
-           setState(() {
-             --itemSelectedCount;
-           });
+
+
 
         // Then show a snackbar.
       /*  ScaffoldMessenger.of(context)
@@ -347,9 +351,19 @@ class _UserNotificationsState extends State<UserNotifications> {
       },
       child: GestureDetector(
         onLongPress: (){
-          setState(() {
+          /*setState(() {
             data.isSelected = !data.isSelected;
             data.isSelected?++itemSelectedCount:--itemSelectedCount;
+          });*/
+
+          setState(() {
+            if(selectedList.contains(data)){
+              selectedList.remove(data);
+            }
+            else{
+              selectedList.add(data);
+            }
+
           });
 
 
@@ -368,7 +382,7 @@ class _UserNotificationsState extends State<UserNotifications> {
               padding: EdgeInsets.symmetric(
                   horizontal: 0, vertical: 18), //horizonal-4
               decoration: BoxDecoration(
-                color:  data.isSelected ?Colors.grey[200]:Colors.white,
+                color:  selectedList.contains(data) ?Colors.grey[200]:Colors.white,
               ),
               child: GestureDetector(
                 // onTap: () {
@@ -427,13 +441,13 @@ class _UserNotificationsState extends State<UserNotifications> {
                       width: 60,
                     ),
                   ),
-                  if(itemSelectedCount>0)
+                  if(selectedList.length>0)
                     Positioned(
                       top:30,
                       left:30,
                       child: Container(
                         child: Image.asset(
-                          data.isSelected?AppAssets.check_selected:AppAssets.check_unselected,
+                         selectedList.contains(data)?AppAssets.check_selected:AppAssets.check_unselected,
                           height: 60,
                           width: 60,
                         ),
@@ -508,4 +522,7 @@ class _NotificationDescription extends StatelessWidget {
     );
   }
 }
+
+
+
 
