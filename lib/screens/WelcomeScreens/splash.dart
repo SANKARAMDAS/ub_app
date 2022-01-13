@@ -373,31 +373,12 @@ void onStart() async {
     // });
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: Stack(alignment: Alignment.topCenter, children: [
-        AppAssets.backgroundImage.background,
-        /* Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            width: double.infinity,
-            height: 20,
-            color: AppTheme.brownishGrey,
-          ),
-        ), */
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ULLogoWidget(
-              height: 80,
-            ),
-            CustomText(
-              'Track. Remind. Pay.',
-              size: 22,
-              bold: FontWeight.w500,
-              color: AppTheme.brownishGrey,
-            ),
-          ],
-        ),
-      ]),
+      backgroundColor: AppTheme.splashBGColor,
+      body: Container(
+        margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*0.2),
+        alignment: Alignment.center,
+        child: Image.asset(AppAssets.portraitLogo, color: AppTheme.whiteColor,),
+      )
     );
   }
 }

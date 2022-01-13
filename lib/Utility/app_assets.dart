@@ -241,6 +241,7 @@ class AppAssets {
       'assets/images/resend_email_verification.png';
   static const String emailVerified = 'assets/images/email_verified.png';
 
+  static const String portraitLogo = 'assets/icons/v2/p_logo.png';
   ///Fonts
   static const String sFProDisplayFont = 'SFProDisplay';
 }

@@ -37,6 +37,12 @@ class AppTheme {
   static const Color greencyan = Color.fromRGBO(78, 216, 167, 1);
   static const Color highlightColor = Color.fromRGBO(224, 224, 224, 1);
   static const Color baseColor = Color.fromRGBO(245, 245, 245, 1);
-
-
+// new UI Skin colors
+  static const Color paleBlue = Color.fromRGBO(242,244,246, 1);
+  static const Color purpleActive = Color.fromRGBO(124,77,255, 1);
+  static const Color purpleStartColor = Color.fromRGBO(106,57,155, 1);
+  static const Color purpleEndColor = Color.fromRGBO(109,71,219, 1);
+  static const Color whiteColor = Color.fromRGBO(255,255,255, 1);
+  static const Color blackColor = Color.fromRGBO(0,0,0,1);
+  static const Color splashBGColor = Color.fromRGBO(29,25,64,1);
 }
