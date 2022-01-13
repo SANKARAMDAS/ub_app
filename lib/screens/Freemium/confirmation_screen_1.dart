@@ -57,7 +57,13 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
   }
 
   Osess() async {
+    setState(() {
+      isLoading = true;
+    });
     OSession = await FreemiumAPI.freemiumApi.startOrderSessionPremiumPLan();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   cancelOsession({PremiumStartOrderSession? OSession}) async {
@@ -143,7 +149,7 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
       },
       child: Scaffold(
         backgroundColor: AppTheme.paleGrey,
-        bottomNavigationBar: Container(
+        bottomNavigationBar: isLoading?Container():Container(
           margin: EdgeInsets.only(bottom: 20),
           child: Consumer<AddCardsProvider>(
             builder: (ctx, card, child) {
@@ -240,202 +246,211 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
                             // width: 185,
                           )
                         : NewCustomButton(
-                            onSubmit: () async {
-                              setState(() {});
-                              if (Provider.of<FreemiumProvider>(context,
+                            onSubmit:OSession !=null? () async {
+
+                              try{
+                                setState(() {});
+                                if (Provider.of<FreemiumProvider>(context,
+                                    listen: false)
+                                    .cardID !=
+                                    null) {
+                                  cardId = Provider.of<FreemiumProvider>(context,
+                                      listen: false)
+                                      .cardID
+                                      .toString();
+                                  debugPrint('Plan ID:' +
+                                      Provider.of<FreemiumProvider>(context,
                                           listen: false)
-                                      .cardID !=
-                                  null) {
-                                cardId = Provider.of<FreemiumProvider>(context,
-                                        listen: false)
-                                    .cardID
-                                    .toString();
-                                debugPrint('Plan ID:' +
-                                    Provider.of<FreemiumProvider>(context,
-                                            listen: false)
-                                        .planID
-                                        .toString() +
-                                    ' ' +
-                                    'Card id : ' +
-                                    Provider.of<FreemiumProvider>(context,
-                                            listen: false)
-                                        .cardID
-                                        .toString());
-                                CustomLoadingDialog.showLoadingDialog(
-                                    context, key);
-                                Map payDetails = {
-                                  "card_id": cardId,
-                                  "amount": amount,
-                                  "currency": "AED",
-                                  "send_to": "60eda791f9f00d49bbe2eacb"
-                                };
-
-                                debugPrint('Init' + payDetails.toString());
-                                // Provider.of<AddCardsProvider>(context,
-                                //         listen: false)
-                                //     .paymentThroughCard(payDetails)
-                                //     .timeout(Duration(seconds: 30),
-                                //         onTimeout: () async {
-                                //   Navigator.of(context).pop();
-                                //   return Future.value(null);
-                                // }).then((value) async {
-                                //   debugPrint('Checks' + value.toString());
-                                //
-                                // });
-
-                                if (OSession != null &&
-                                    OSession!.id!.isNotEmpty) {
-                                  Map<String, dynamic> data = {
-                                    "planId": widget
-                                        .planModel[
-                                            selected == check.monthly ? 0 : 1]
-                                        .id,
-                                    "cardId": Provider.of<FreemiumProvider>(
-                                            context,
-                                            listen: false)
-                                        .cardID
-                                        .toString(),
-                                    "order_id": "${OSession!.id}",
+                                          .planID
+                                          .toString() +
+                                      ' ' +
+                                      'Card id : ' +
+                                      Provider.of<FreemiumProvider>(context,
+                                          listen: false)
+                                          .cardID
+                                          .toString());
+                                  CustomLoadingDialog.showLoadingDialog(
+                                      context, key);
+                                  Map payDetails = {
+                                    "card_id": cardId,
+                                    "amount": amount,
+                                    "currency": "AED",
+                                    "send_to": "60eda791f9f00d49bbe2eacb"
                                   };
-                                  // cc.selectedCard = null;
-                                  debugPrint('Init' + data.toString());
-                                  var subscriptionResponse = await repository
-                                      .freemiumApi
-                                      .purchaseSubscriptionPlan(data);
-                                  if (subscriptionResponse['status'] == true) {
-                                    var anaylticsEvents =
-                                        AnalyticsEvents(context);
-                                    await anaylticsEvents.initCurrentUser();
-                                    await anaylticsEvents
-                                        .sendPremiumPurchaseEvent();
 
-                                    Provider.of<FreemiumProvider>(context,
-                                            listen: false)
-                                        .cardNumber = null;
-                                    await KycAPI.kycApiProvider
-                                        .kycCheker()
-                                        .then((value) {
-                                      bool? isPremium =
-                                          value['premium'] ?? false;
-                                      setState(() {
-                                        Repository().hiveQueries.insertUserData(
-                                              Repository()
-                                                  .hiveQueries
-                                                  .userData
-                                                  .copyWith(
-                                                      premiumStatus: isPremium ==
-                                                              true
-                                                          ? int.parse(value[
-                                                              'planDuration'])
-                                                          : 0,
-                                                      premiumExpDate:
-                                                          DateTime.parse(
-                                                              value['expDate']
-                                                                  .toString()),
-                                              ),
-                                            );
+                                  debugPrint('Init' + payDetails.toString());
+                                  // Provider.of<AddCardsProvider>(context,
+                                  //         listen: false)
+                                  //     .paymentThroughCard(payDetails)
+                                  //     .timeout(Duration(seconds: 30),
+                                  //         onTimeout: () async {
+                                  //   Navigator.of(context).pop();
+                                  //   return Future.value(null);
+                                  // }).then((value) async {
+                                  //   debugPrint('Checks' + value.toString());
+                                  //
+                                  // });
+
+                                  if (OSession != null &&
+                                      OSession!.id!.isNotEmpty) {
+                                    Map<String, dynamic> data = {
+                                      "planId": widget
+                                          .planModel[
+                                      selected == check.monthly ? 0 : 1]
+                                          .id,
+                                      "cardId": Provider.of<FreemiumProvider>(
+                                          context,
+                                          listen: false)
+                                          .cardID
+                                          .toString(),
+                                      "order_id": "${OSession!.id}",
+                                    };
+                                    // cc.selectedCard = null;
+                                    debugPrint('Init' + data.toString());
+                                    var subscriptionResponse = await repository
+                                        .freemiumApi
+                                        .purchaseSubscriptionPlan(data);
+                                    if (subscriptionResponse['status'] == true) {
+                                      var anaylticsEvents =
+                                      AnalyticsEvents(context);
+                                      await anaylticsEvents.initCurrentUser();
+                                      await anaylticsEvents
+                                          .sendPremiumPurchaseEvent();
+
+                                      Provider.of<FreemiumProvider>(context,
+                                          listen: false)
+                                          .cardNumber = null;
+                                      await KycAPI.kycApiProvider
+                                          .kycCheker()
+                                          .then((value) {
+                                        bool? isPremium =
+                                            value['premium'] ?? false;
+                                        setState(() {
+                                          Repository().hiveQueries.insertUserData(
+                                            Repository()
+                                                .hiveQueries
+                                                .userData
+                                                .copyWith(
+                                              premiumStatus: isPremium ==
+                                                  true
+                                                  ? int.parse(value[
+                                              'planDuration'])
+                                                  : 0,
+                                              premiumExpDate:
+                                              DateTime.parse(
+                                                  value['expDate']
+                                                      .toString()),
+                                            ),
+                                          );
+                                        });
                                       });
-                                    });
 
-                                    Navigator.of(context).pop(true);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              UrbanLedgerPremiumWelcome()),
-                                    );
-                                  } else {
-                                    Navigator.of(context).pop(true);
-                                    Navigator.push(
+                                      Navigator.of(context).pop(true);
+                                      Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              TransactionFailedScreen(
-                                            model: subscriptionResponse,
-                                            // customermodel: widget.model,
-                                          ),
-                                        ));
-                                  }
-                                }
-                              } else {
-                                // cardId = cardId;
-                                debugPrint('Plan ID:' +
-                                    Provider.of<FreemiumProvider>(context,
-                                            listen: false)
-                                        .planID
-                                        .toString());
-                                CustomLoadingDialog.showLoadingDialog(
-                                    context, key);
-                                Map payDetails = {
-                                  "card_id": cardId,
-                                  "amount": amount,
-                                  "currency": "AED",
-                                  "send_to": "60eda791f9f00d49bbe2eacb"
-                                };
-                                debugPrint(payDetails.toString());
-                                // Provider.of<AddCardsProvider>(context,
-                                //         listen: false)
-                                //     .paymentThroughCard(payDetails)
-                                //     .timeout(Duration(seconds: 30),
-                                //         onTimeout: () async {
-                                //   Navigator.of(context).pop();
-                                //   return Future.value(null);
-                                // }).then((value) async {
-                                //   debugPrint('Checks' + value.toString());
-                                //
-                                //
-                                // });
-
-                                if (OSession != null &&
-                                    OSession!.id!.isNotEmpty) {
-                                  Map<String, dynamic> data = {
-                                    "planId": Provider.of<FreemiumProvider>(
-                                            context,
-                                            listen: false)
-                                        .planID
-                                        .toString(),
-                                    "cardId": cardId,
-                                    "order_id": "${OSession!.id}",
-                                  };
-                                  // cc.selectedCard = null;
-                                  debugPrint(data.toString());
-                                  var subscriptionResponse = await repository
-                                      .freemiumApi
-                                      .purchaseSubscriptionPlan(data);
-                                  if (subscriptionResponse['status'] == true) {
-                                    var anaylticsEvents =
-                                        AnalyticsEvents(context);
-                                    await anaylticsEvents.initCurrentUser();
-                                    await anaylticsEvents
-                                        .sendPremiumPurchaseEvent();
-                                    // await getKyc();
-                                  
-                                    Navigator.of(context).pop(true);
-                                    Provider.of<FreemiumProvider>(context,
-                                            listen: false)
-                                        .cardID = null;
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              UrbanLedgerPremiumWelcome()),
-                                    );
-                                  } else {
-                                    Navigator.of(context).pop(true);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              TransactionFailedScreen(
-                                            model: subscriptionResponse,
-                                            // customermodel: widget.model,
-                                          ),
-                                        ));
+                                            builder: (context) =>
+                                                UrbanLedgerPremiumWelcome()),
+                                      );
+                                    } else {
+                                      Navigator.of(context).pop(true);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                TransactionFailedScreen(
+                                                  model: subscriptionResponse,
+                                                  // customermodel: widget.model,
+                                                ),
+                                          ));
+                                    }
                                   }
                                 } else {
-                                  Navigator.pop(context);
+                                  // cardId = cardId;
+                                  debugPrint('Plan ID:' +
+                                      Provider.of<FreemiumProvider>(context,
+                                          listen: false)
+                                          .planID
+                                          .toString());
+                                  CustomLoadingDialog.showLoadingDialog(
+                                      context, key);
+                                  Map payDetails = {
+                                    "card_id": cardId,
+                                    "amount": amount,
+                                    "currency": "AED",
+                                    "send_to": "60eda791f9f00d49bbe2eacb"
+                                  };
+                                  debugPrint(payDetails.toString());
+                                  // Provider.of<AddCardsProvider>(context,
+                                  //         listen: false)
+                                  //     .paymentThroughCard(payDetails)
+                                  //     .timeout(Duration(seconds: 30),
+                                  //         onTimeout: () async {
+                                  //   Navigator.of(context).pop();
+                                  //   return Future.value(null);
+                                  // }).then((value) async {
+                                  //   debugPrint('Checks' + value.toString());
+                                  //
+                                  //
+                                  // });
+
+                                  if (OSession != null &&
+                                      OSession!.id!.isNotEmpty) {
+                                    Map<String, dynamic> data = {
+                                      "planId": Provider.of<FreemiumProvider>(
+                                          context,
+                                          listen: false)
+                                          .planID
+                                          .toString(),
+                                      "cardId": cardId,
+                                      "order_id": "${OSession!.id}",
+                                    };
+                                    // cc.selectedCard = null;
+                                    debugPrint(data.toString());
+                                    var subscriptionResponse = await repository
+                                        .freemiumApi
+                                        .purchaseSubscriptionPlan(data);
+                                    if (subscriptionResponse['status'] == true) {
+                                      var anaylticsEvents =
+                                      AnalyticsEvents(context);
+                                      await anaylticsEvents.initCurrentUser();
+                                      await anaylticsEvents
+                                          .sendPremiumPurchaseEvent();
+                                      // await getKyc();
+
+                                      Navigator.of(context).pop(true);
+                                      Provider.of<FreemiumProvider>(context,
+                                          listen: false)
+                                          .cardID = null;
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                UrbanLedgerPremiumWelcome()),
+                                      );
+                                    } else {
+                                      Navigator.of(context).pop(true);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                TransactionFailedScreen(
+                                                  model: subscriptionResponse,
+                                                  // customermodel: widget.model,
+                                                ),
+                                          ));
+                                    }
+                                  } else {
+                                    Navigator.pop(context);
+                                  }
                                 }
                               }
+                              catch(e){
+                                print(e);
+                                Navigator.of(context).pop();
+
+                              }
+
                               // if (Provider.of<FreemiumProvider>(context,
                               //             listen: false)
                               //         .cardID
@@ -448,6 +463,8 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
                               //         .isNotEmpty) {
 
                               // }
+                            }:(){
+
                             },
                             text: 'pay $currencyAED $amount'.toUpperCase(),
                             textColor: Colors.white,

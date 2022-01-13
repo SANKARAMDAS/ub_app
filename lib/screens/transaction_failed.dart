@@ -303,7 +303,7 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.28,
                           child: Text(
-                            "Request Id :",
+                            "Order Id :",
                             style: TextStyle(
                                 fontSize: 16,
                                 color: AppTheme.brownishGrey,
