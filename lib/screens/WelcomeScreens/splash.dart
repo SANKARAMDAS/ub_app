@@ -323,7 +323,11 @@ void onStart() async {
                   .copyWith(loginTime: DateTime.now(), seen: true));
             }}
           } else {
-            Navigator.of(context).pushReplacementNamed(AppRoutes.mainRoute);
+            if(!isSetPin) {
+              Navigator.of(context).pushReplacementNamed(AppRoutes.setPinRoute,
+              arguments: SetPinRouteArgs('', false, false, true));
+            } else {
+            Navigator.of(context).pushReplacementNamed(AppRoutes.mainRoute);}
           }
         }
       } else {
