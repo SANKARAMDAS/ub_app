@@ -295,13 +295,13 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          widget.model!.containsKey('error')
+          widget.model!.containsKey('card')
               ? Row(
                   children: [
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.28,
                       child: Text(
-                        "Error :",
+                        "Card Details: ",
                         style: TextStyle(
                             fontSize: 16,
                             color: AppTheme.brownishGrey,
@@ -314,7 +314,7 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                         child: Container(
                           alignment: Alignment.bottomLeft,
                           child: Text(
-                              "${widget.model!['error'].toString().toUpperCase()}",
+                              "${widget.model!['card'].toString().toUpperCase()}",
                               // overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 16,
@@ -376,7 +376,7 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                         child: Container(
                           alignment: Alignment.bottomLeft,
                           child: Text(
-                              "${widget.model!['amount'].toString().toUpperCase()}",
+                              "${widget.model!['amount'].toString().toUpperCase()} ${widget.model!['currency'].toString().toUpperCase()}",
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 16,
@@ -524,7 +524,7 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.28,
                       child: Text(
-                        "Transaction ID:",
+                        "Order ID:",
                         style: TextStyle(
                             fontSize: 16,
                             color: AppTheme.brownishGrey,
