@@ -295,40 +295,36 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          widget.model!.containsKey('error')
-              ? Column(
-                children: [
-                  Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.28,
-                          child: Text(
-                            "Order Id :",
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: AppTheme.brownishGrey,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 2, 0),
-                            child: Container(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                  "${widget.model!['error']['body']['request_id'].toString().toUpperCase()}",
-                                  // overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: AppTheme.coolGrey,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ),
-                        ),
-                      ],
+          widget.model!.containsKey('card')
+              ? Row(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.28,
+                      child: Text(
+                        "Card Details: ",
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: AppTheme.brownishGrey,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
-                ],
-              )
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 2, 0),
+                        child: Container(
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                              "${widget.model!['card'].toString().toUpperCase()}",
+                              // overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: AppTheme.coolGrey,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
               : Container(),
           widget.model!.containsKey('transactionData')
           ? Row(
@@ -380,7 +376,7 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                         child: Container(
                           alignment: Alignment.bottomLeft,
                           child: Text(
-                              "${widget.model!['amount'].toString().toUpperCase()}",
+                              "${widget.model!['amount'].toString().toUpperCase()} ${widget.model!['currency'].toString().toUpperCase()}",
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 16,
@@ -528,7 +524,7 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.28,
                       child: Text(
-                        "Transaction ID:",
+                        "Order ID:",
                         style: TextStyle(
                             fontSize: 16,
                             color: AppTheme.brownishGrey,
