@@ -74,7 +74,7 @@ class RegisterAPI {
     }
     return Future.error(jsonDecode(response.body)['message']);
     } catch (e) {
-      return Future.error('Something went wrong. Please try again later.');
+      return Future.error('Please check your internet connection or try again later.');
     }
     
   }
@@ -139,7 +139,7 @@ class RegisterAPI {
     print(jsonDecode(response.body)['message'].toString());
     return Future.error(jsonDecode(response.body)['message'].toString());
     } catch (e) {
-      return Future.error('Something went wrong. Please try again later.');
+      return Future.error('Please check your internet connection or try again later.');
     }
   }
 

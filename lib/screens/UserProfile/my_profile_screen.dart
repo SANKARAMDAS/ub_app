@@ -468,7 +468,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   //     setState(() {
   //       isLoading = false;
   //     });
-  //     'Something went wrong. Please try again later.'.showSnackBar(context);
+  //     'Please check your internet connection or try again later.'.showSnackBar(context);
   //   }).then((value) {
   //     setState(() {
   //       loading = false;

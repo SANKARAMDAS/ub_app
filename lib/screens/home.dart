@@ -556,7 +556,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   //     setState(() {
   //       loading = false;
   //     });
-  //     'Something went wrong. Please try again later.'.showSnackBar(context);
+  //     'Please check your internet connection or try again later.'.showSnackBar(context);
   //   }).then((value) {
   //     setState(() {
   //       loading = false;
@@ -2528,7 +2528,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
   //     setState(() {
   //       isLoading = false;
   //     });
-  //     'Something went wrong. Please try again later.'.showSnackBar(context);
+  //     'Please check your internet connection or try again later.'.showSnackBar(context);
   //   }).then((value) {
   //     setState(() {
   //       isLoading = false;
@@ -2568,7 +2568,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                               widget._customerList[index].mobileNo.toString())
                       .catchError((e) {
                     Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
+                    'Please check your internet connection or try again later.'
                         .showSnackBar(context);
                   }).timeout(Duration(seconds: 30), onTimeout: () async {
                     Navigator.of(context).pop();
@@ -2591,7 +2591,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       .getCustomerId(widget._customerList[index].mobileNo!)
                       .catchError((e) {
                     Navigator.of(context).pop();
-                    'Something went wrong. Please try again later.'
+                    'Please check your internet connection or try again later.'
                         .showSnackBar(context);
                   }).timeout(Duration(seconds: 30), onTimeout: () async {
                     Navigator.of(context).pop();
@@ -2615,7 +2615,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         .insertCustomer(customer)
                         .catchError((e) {
                       Navigator.of(context).pop();
-                      'Something went wrong. Please try again later.'
+                      'Please check your internet connection or try again later.'
                           .showSnackBar(context);
                     }).timeout(Duration(seconds: 30), onTimeout: () async {
                       Navigator.of(context).pop();
@@ -2630,7 +2630,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         return Future.value(null);
                       }).catchError((e) {
                         Navigator.of(context).pop();
-                        'Something went wrong. Please try again later.'
+                        'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       }));
                       // if (apiResponse.isNotEmpty) {
@@ -2714,14 +2714,14 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
                         Navigator.of(context).pop();
-                        'Something went wrong. Please try again later.'
+                        'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
                       await anaylticsEvents
                           .customerDetailsPayEvent()
                           .catchError((e) {
                         Navigator.of(context).pop();
-                        'Something went wrong. Please try again later.'
+                        'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
                       // Navigator.push(
@@ -2764,14 +2764,14 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
                         Navigator.of(context).pop();
-                        'Something went wrong. Please try again later.'
+                        'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
                       await anaylticsEvents
                           .customerDetailsPayEvent()
                           .catchError((e) {
                         Navigator.of(context).pop();
-                        'Something went wrong. Please try again later.'
+                        'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
                       // Navigator.push(
@@ -2813,14 +2813,14 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
                         Navigator.of(context).pop();
-                        'Something went wrong. Please try again later.'
+                        'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
                       await anaylticsEvents
                           .customerDetailsPayEvent()
                           .catchError((e) {
                         Navigator.of(context).pop();
-                        'Something went wrong. Please try again later.'
+                        'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
                       // Navigator.push(
@@ -2844,7 +2844,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                           .getTransactionLimit(context)
                           .catchError((e) {
                         Navigator.of(context).pop();
-                        'Something went wrong. Please try again later.'
+                        'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
                       if (!(isTransaction)['isError']) {

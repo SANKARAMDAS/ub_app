@@ -358,7 +358,7 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
 //       setState(() {
 //         isLoading = false;
 //       });
-//       'Something went wrong. Please try again later.'.showSnackBar(context);
+//       'Please check your internet connection or try again later.'.showSnackBar(context);
 //     }).then((value) {
 //       setState(() {
 //         isLoading = false;
@@ -633,7 +633,7 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
                                           .catchError((e) {
                                         
                                         Navigator.of(context).pop();
-                                        'Something went wrong. Please try again later.'
+                                        'Please check your internet connection or try again later.'
                                             .showSnackBar(context);
                                       });
                                       // .timeout(Duration(seconds: 30),
@@ -810,7 +810,7 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
                                         }).catchError((e) {
                                           
                                           Navigator.of(context).pop();
-                                          'Something went wrong. Please try again later.'
+                                          'Please check your internet connection or try again later.'
                                               .showSnackBar(context);
                                         }).then((value) async {
                                           debugPrint(
@@ -832,14 +832,6 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
                                                 .updateSelectedBusiness();
                                             // }
                                             // debugPrint('qwerty1');
-                                            final amt = await repository.queries
-                                                .getPaidMinusReceived(
-                                                    widget.customerId)
-                                                .timeout(Duration(seconds: 30),
-                                                    onTimeout: () async {
-                                              Navigator.of(context).pop();
-                                              return Future.value(null);
-                                            });
                                             List<CustomerModel> customerModel =
                                             await repository.queries
                                                 .getCustomerDetails(widget.mobileNo ?? widget.model!.mobileNo!,
@@ -848,12 +840,22 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
                                                             listen: false)
                                                         .selectedBusiness
                                                         .businessId);
+                                                        CustomerModel _customerModel =
+                                            customerModel.first;
+                                            final amt = await repository.queries
+                                                .getPaidMinusReceived(
+                                                    _customerModel.customerId!)
+                                                .timeout(Duration(seconds: 30),
+                                                    onTimeout: () async {
+                                              Navigator.of(context).pop();
+                                              return Future.value(null);
+                                            });
+                                            
                                         debugPrint('ss ::' +
                                             customerModel.first
                                                 .toJson()
                                                 .toString());
-                                        CustomerModel _customerModel =
-                                            customerModel.first;
+                                        
                                             final _transactionModel =
                                                 TransactionModel()
                                                   ..transactionId = Uuid().v1()
@@ -932,7 +934,7 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
                                                           ? TransactionType.Pay
                                                           : TransactionType
                                                               .Receive,
-                                                      widget.customerId)
+                                                      _customerModel.customerId!)
                                                   .timeout(
                                                       Duration(seconds: 30),
                                                       onTimeout: () async {

@@ -314,7 +314,7 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
                             .generatedDynamicPaymentLinkEvent();
                         getLink('whatsapp', [file.path]);
                       } else {
-                        Navigator.of(context).pop();
+                        // Navigator.of(context).pop();
                         'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       }
@@ -351,7 +351,7 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
                           print(e.toString());
                         }
                       } else {
-                        Navigator.of(context).pop();
+                        // Navigator.of(context).pop();
                         'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       }

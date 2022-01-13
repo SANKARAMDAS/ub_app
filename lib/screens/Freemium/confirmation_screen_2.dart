@@ -51,7 +51,7 @@ class _ConfirmationScreen2State extends State<ConfirmationScreen2> {
     Provider.of<AddCardsProvider>(context, listen: false).getCard().catchError((e) {
                                           
                                           Navigator.of(context).pop();
-                                          'Something went wrong. Please try again later.'
+                                          'Please check your internet connection or try again later.'
                                               .showSnackBar(context);
                                         });
   }
@@ -177,7 +177,7 @@ class _ConfirmationScreen2State extends State<ConfirmationScreen2> {
                                   .paymentThroughCard(payDetails)
                                   .catchError((e) {
                                 Navigator.of(context).pop();
-                                'Something went wrong. Please try again later.'
+                                'Please check your internet connection or try again later.'
                                     .showSnackBar(context);
                               }).then((value) async {
                                 debugPrint('Checks' + value.toString());

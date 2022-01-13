@@ -83,7 +83,7 @@ class _ScanedCardState extends State<ScanedCard> {
                       }).catchError((onError) {
                         
                         Navigator.of(context).pop();
-                        'Something went wrong. Please try again later.'
+                        'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
                       /* Navigator.of(context)

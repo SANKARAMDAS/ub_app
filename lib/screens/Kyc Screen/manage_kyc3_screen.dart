@@ -45,7 +45,7 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
       setState(() {
         isLoading = false;
       });
-      'Something went wrong. Please try again later.'.showSnackBar(context);
+      'Please check your internet connection or try again later.'.showSnackBar(context);
     }).then((value) {
       setState(() {
         isLoading = false;
@@ -219,33 +219,18 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                       InkWell(
                         onTap: checkedValue == false
                             ? () {}
-                            : (repository.hiveQueries.userData
-                                            .tradeLicenseVerified ==
-                                        'Rejected' ||
-                                    repository
-                                            .hiveQueries.userData.kycStatus2 ==
-                                        'Expired')
+                            : isRejectedCheker() == true
                                 ? () {
                                     if (repository.hiveQueries.userData
                                                 .isEmiratesIdDone ==
                                             true &&
-                                        (repository.hiveQueries.userData
-                                                    .kycStatus2 ==
-                                                'Rejected' ||
-                                            repository.hiveQueries.userData
-                                                    .kycStatus2 ==
-                                                'Expired')) {
+                                        isRejectedCheker() == true) {
                                       Navigator.pushReplacementNamed(
                                           context, AppRoutes.scanEmiratesID);
                                     } else if (repository.hiveQueries.userData
                                                 .isTradeLicenseDone ==
                                             true &&
-                                        (repository.hiveQueries.userData
-                                                    .kycStatus2 ==
-                                                'Rejected' ||
-                                            repository.hiveQueries.userData
-                                                    .kycStatus2 ==
-                                                'Expired')) {
+                                        isRejectedCheker() == true) {
                                       Navigator.pushReplacementNamed(
                                           context, AppRoutes.scanTradeLicense);
                                     }
@@ -330,12 +315,7 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                                   : repository.hiveQueries.userData
                                                   .isEmiratesIdDone ==
                                               true &&
-                                          (repository.hiveQueries.userData
-                                                      .emiratesIdVerified ==
-                                                  'Rejected' ||
-                                              repository.hiveQueries.userData
-                                                      .kycStatus2 ==
-                                                  'Expired')
+                                          isRejectedCheker() == true
                                       ? Icon(
                                           Icons.chevron_right,
                                           size: 32,
@@ -371,66 +351,68 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                         ),
                       ),
                       InkWell(
-                        onTap: repository.hiveQueries.userData.isEmiratesIdDone ==
+                        onTap:
+                            repository.hiveQueries.userData.isEmiratesIdDone ==
                                         true &&
                                     repository.hiveQueries.userData
                                             .isTradeLicenseDone ==
-                                        false && checkedValue == true
+                                        false &&
+                                    checkedValue == true
                                 ? () {
                                     Navigator.pushReplacementNamed(
                                         context, AppRoutes.scanTradeLicense);
                                   }
                                 : () {},
-                            // checkedValue == false
-                            //     ? () {}
-                            //     : (repository.hiveQueries.userData
-                            //                     .tradeLicenseVerified ==
-                            //                 'Rejected' ||
-                            //             repository.hiveQueries.userData
-                            //                     .kycStatus2 ==
-                            //                 'Expired')
-                            //         ? () {
-                            //             if (repository.hiveQueries.userData
-                            //                         .isEmiratesIdDone ==
-                            //                     true &&
-                            //                 (repository.hiveQueries.userData
-                            //                             .kycStatus2 ==
-                            //                         'Rejected' ||
-                            //                     repository.hiveQueries.userData
-                            //                             .kycStatus2 ==
-                            //                         'Expired')) {
-                            //               Navigator.pushReplacementNamed(
-                            //                   context,
-                            //                   AppRoutes.scanEmiratesID);
-                            //             } else if (repository
-                            //                         .hiveQueries
-                            //                         .userData
-                            //                         .isTradeLicenseDone ==
-                            //                     true &&
-                            //                 (repository.hiveQueries.userData
-                            //                             .kycStatus2 ==
-                            //                         'Rejected' ||
-                            //                     repository.hiveQueries.userData
-                            //                             .kycStatus2 ==
-                            //                         'Expired')) {
-                            //               Navigator.pushReplacementNamed(
-                            //                   context,
-                            //                   AppRoutes.scanTradeLicense);
-                            //             }
-                            //           }
-                            //         : () {
-                            //             if (repository.hiveQueries
-                            //                         .userData.isEmiratesIdDone ==
-                            //                     true &&
-                            //                 repository.hiveQueries.userData
-                            //                         .isTradeLicenseDone ==
-                            //                     false &&
-                            //                 checkedValue == true) {
-                            //               Navigator.pushReplacementNamed(
-                            //                   context,
-                            //                   AppRoutes.scanTradeLicense);
-                            //             }
-                            //           },
+                        // checkedValue == false
+                        //     ? () {}
+                        //     : (repository.hiveQueries.userData
+                        //                     .tradeLicenseVerified ==
+                        //                 'Rejected' ||
+                        //             repository.hiveQueries.userData
+                        //                     .kycStatus2 ==
+                        //                 'Expired')
+                        //         ? () {
+                        //             if (repository.hiveQueries.userData
+                        //                         .isEmiratesIdDone ==
+                        //                     true &&
+                        //                 (repository.hiveQueries.userData
+                        //                             .kycStatus2 ==
+                        //                         'Rejected' ||
+                        //                     repository.hiveQueries.userData
+                        //                             .kycStatus2 ==
+                        //                         'Expired')) {
+                        //               Navigator.pushReplacementNamed(
+                        //                   context,
+                        //                   AppRoutes.scanEmiratesID);
+                        //             } else if (repository
+                        //                         .hiveQueries
+                        //                         .userData
+                        //                         .isTradeLicenseDone ==
+                        //                     true &&
+                        //                 (repository.hiveQueries.userData
+                        //                             .kycStatus2 ==
+                        //                         'Rejected' ||
+                        //                     repository.hiveQueries.userData
+                        //                             .kycStatus2 ==
+                        //                         'Expired')) {
+                        //               Navigator.pushReplacementNamed(
+                        //                   context,
+                        //                   AppRoutes.scanTradeLicense);
+                        //             }
+                        //           }
+                        //         : () {
+                        //             if (repository.hiveQueries
+                        //                         .userData.isEmiratesIdDone ==
+                        //                     true &&
+                        //                 repository.hiveQueries.userData
+                        //                         .isTradeLicenseDone ==
+                        //                     false &&
+                        //                 checkedValue == true) {
+                        //               Navigator.pushReplacementNamed(
+                        //                   context,
+                        //                   AppRoutes.scanTradeLicense);
+                        //             }
+                        //           },
                         child: Container(
                           margin: EdgeInsets.symmetric(
                               horizontal: 15, vertical: 10),
@@ -444,12 +426,7 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                                 : repository.hiveQueries.userData
                                                 .isTradeLicenseDone ==
                                             true &&
-                                        (repository.hiveQueries.userData
-                                                    .tradeLicenseVerified ==
-                                                'Rejected' ||
-                                            repository.hiveQueries.userData
-                                                    .kycStatus2 ==
-                                                'Expired')
+                                        isRejectedCheker() == true
                                     ? AppTheme.greyish
                                     : Colors.white,
                             borderRadius: BorderRadius.circular(20),
@@ -488,12 +465,7 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                                   : repository.hiveQueries.userData
                                                   .isTradeLicenseDone ==
                                               true &&
-                                          (repository.hiveQueries.userData
-                                                      .tradeLicenseVerified ==
-                                                  'Rejected' ||
-                                              repository.hiveQueries.userData
-                                                      .kycStatus2 ==
-                                                  'Expired')
+                                          isRejectedCheker() == true
                                       ? Icon(
                                           Icons.chevron_right,
                                           size: 32,
@@ -544,33 +516,18 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                         child: ElevatedButton(
                           onPressed: checkedValue == false
                               ? () {}
-                              : (repository.hiveQueries.userData
-                                              .tradeLicenseVerified ==
-                                          'Rejected' ||
-                                      repository.hiveQueries.userData
-                                              .kycStatus2 ==
-                                          'Expired')
+                              : isRejectedCheker() == true
                                   ? () {
                                       if (repository.hiveQueries.userData
                                                   .isEmiratesIdDone ==
                                               true &&
-                                          (repository.hiveQueries.userData
-                                                      .kycStatus2 ==
-                                                  'Rejected' ||
-                                              repository.hiveQueries.userData
-                                                      .kycStatus2 ==
-                                                  'Expired')) {
+                                          isRejectedCheker() == true) {
                                         Navigator.pushReplacementNamed(
                                             context, AppRoutes.scanEmiratesID);
                                       } else if (repository.hiveQueries.userData
                                                   .isTradeLicenseDone ==
                                               true &&
-                                          (repository.hiveQueries.userData
-                                                      .kycStatus2 ==
-                                                  'Rejected' ||
-                                              repository.hiveQueries.userData
-                                                      .kycStatus2 ==
-                                                  'Expired')) {
+                                          isRejectedCheker() == true) {
                                         Navigator.pushReplacementNamed(context,
                                             AppRoutes.scanTradeLicense);
                                       }
@@ -615,12 +572,7 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                                   ? AppTheme.greyish
                                   : AppTheme.electricBlue),
                           child: CustomText(
-                              (repository.hiveQueries.userData
-                                              .tradeLicenseVerified ==
-                                          'Rejected' ||
-                                      repository.hiveQueries.userData
-                                              .kycStatus2 ==
-                                          'Expired')
+                              isRejectedCheker() == true
                                   ? 'SCAN NOW'
                                   : (repository.hiveQueries.userData
                                                   .isEmiratesIdDone ==
@@ -641,5 +593,26 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
               ),
             ),
     );
+  }
+
+  bool isRejectedCheker() {
+    if (repository.hiveQueries.userData.emiratesIdVerified == 'Rejected') {
+      return true;
+    } else if (repository.hiveQueries.userData.emiratesIdVerified ==
+        'Expired') {
+      return true;
+    } else if (repository.hiveQueries.userData.tradeLicenseVerified ==
+        'Rejected') {
+      return true;
+    } else if (repository.hiveQueries.userData.emiratesIdVerified ==
+        'Expired') {
+      return true;
+    } else if (repository.hiveQueries.userData.kycStatus2 == 'Rejected') {
+      return true;
+    } else if (repository.hiveQueries.userData.kycStatus2 == 'Expired') {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

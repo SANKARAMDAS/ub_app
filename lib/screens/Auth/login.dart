@@ -308,7 +308,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     //     .showSnackBar(SnackBar(
                                     //   content: Text(e.toString()),
                                     // ));
-                                    '${e.toString()}'.showSnackBar(context);
+                                    'Please check your internet connection or try again later.'.showSnackBar(context);
                                     if (e.toString().contains('register'))
                                       Future.delayed(Duration(seconds: 2), () {
                                         Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
