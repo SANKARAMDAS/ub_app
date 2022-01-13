@@ -344,6 +344,7 @@ void onStart() async {
 
   @override
   Widget build(BuildContext context) {
+    
     deviceHeight = MediaQuery.of(context).size.height;
     initMethod();
     // timer = Timer(Duration(milliseconds: 2000), () {
@@ -372,12 +373,13 @@ void onStart() async {
     //   timer.cancel();
     // });
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      // extendBodyBehindAppBar: true,
       backgroundColor: AppTheme.splashBGColor,
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*0.2),
         alignment: Alignment.center,
-        child: Image.asset(AppAssets.portraitLogo, color: AppTheme.whiteColor,),
+        child: Image.asset(AppAssets.splashLogo),
+        // child: Text('qwert')
       )
     );
   }

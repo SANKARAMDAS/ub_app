@@ -51,6 +51,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    precacheImage(AssetImage(AppAssets.portraitLogo), context);
     return Scaffold(
       backgroundColor: AppTheme.paleBlue,
       bottomNavigationBar: Container(

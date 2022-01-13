@@ -70,54 +70,169 @@ class _LoginScreenState extends State<LoginScreen> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
-        // appBar: AppBar(
-        //   //toolbarHeight: 0,
-        //   leading: Padding(
-        //     padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        //     // child: IconButton(
-        //     //   icon: Icon(Icons.arrow_back_ios),
-        //     //   onPressed: () {
-        //     //     Navigator.of(context)
-        //     //         .pushReplacementNamed(AppRoutes.welcomescreenRoute);
-        //     //   },
-        //     // ),
-        //   ),
-        // ),
-        // resizeToAvoidBottomInset: false,
-        // resizeToAvoidBottomPadding: false,
-        // appBar: AppBar(
-        //   toolbarHeight: 0,
-        // ),
-        body: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(AppAssets.backgroundImage),
-              Container(
-                padding: EdgeInsets.only(bottom: bottom),
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  SizedBox(height: 1),
-                  (deviceHeight * 0.05).heightBox,
-                  ULLogoWidget(
-                    height: 80,
-                  ),
-                  (deviceHeight * 0.07).heightBox,
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                    child: CustomText(
-                      'Please select the country code and\nenter your mobile number where Urban Ledger\nwill share the OTP for mobile number verification.',
-                      centerAlign: true,
-                      size: 15,
-                      bold: FontWeight.w500,
-                      color: AppTheme.coolGrey,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  (deviceHeight * 0.07).heightBox,
+        backgroundColor: AppTheme.paleBlue,
+        appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            leading: GestureDetector(
+                onTap: () {
+                  Navigator.of(context)
+                      .pushReplacementNamed(AppRoutes.welcomescreenRoute);
+                },
+                child: Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: Image.asset(AppAssets.backButtonIcon,
+                        width: MediaQuery.of(context).size.width * 0.9))),
+            title: Container(
+                // margin: EdgeInsets.symmetric(vertical: 500),
+                child: Image.asset(AppAssets.landscapeLogo,
+                    width: MediaQuery.of(context).size.width * 0.4)),
+            centerTitle: true),
+        bottomNavigationBar: Container(
+          width: double.infinity,
+          margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.015, vertical: MediaQuery.of(context).size.height * 0.02),
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
+          child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.all(15),
+              // side: BorderSide(
+              //     color: validate() == true
+              //         ? Color(0xff1058ff)
+              //         : AppTheme.disabledColor,
+              //     width: 2),
+              primary: validate() == true ? AppTheme.purpleActive : AppTheme.disabledColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(7)),
+            ),
+            onPressed: validate() == true
+                ? () async {
+                    _isMobileNoValid = await PhoneNumberUtil.isValidPhoneNumber(
+                        phoneNumber:
+                            _countryCode! + _mobileController.text.trim(),
+                        isoCode: _country!);
+                    if (_isMobileNoValid!) {
+                      debugPrint(_country);
+                      repository.hiveQueries.insertUserIsoCode(_country!);
+                      CustomLoadingDialog.showLoadingDialog(context, key);
+                      final status = widget.isRegister
+                          ? await (repository.registerApi
+                              .signUpOtpRequest(
+                                  (_countryCode! + _mobileController.text)
+                                      .trim()
+                                      .replaceAll('+', ''))
+                              .timeout(Duration(seconds: 30),
+                                  onTimeout: () async {
+                              Navigator.of(context).pop();
+                              return Future.value(null);
+                            }).catchError((e) {
+                              Navigator.of(context).pop();
+                              // ScaffoldMessenger.of(context)
+                              //     .showSnackBar(SnackBar(
+                              //   content: Text('This mobile is already registered with us, please Login with this number.'),
+                              // ));
+                              'This mobile is already registered with us, please Login with this number.'
+                                  .showSnackBar(context);
+
+                              if (e.toString().contains('registered'))
+                                Future.delayed(Duration(seconds: 2), () {
+                                  Navigator.of(context).pushReplacementNamed(
+                                      AppRoutes.welcomescreenRoute);
+                                });
+                              return false;
+                            }))
+                          : await (repository.loginApi
+                              .loginOtpRequest(
+                                  (_countryCode! + _mobileController.text)
+                                      .trim()
+                                      .replaceAll('+', ''))
+                              .timeout(Duration(seconds: 30),
+                                  onTimeout: () async {
+                              Navigator.of(context).pop();
+                              return Future.value(null);
+                            }).catchError((e) {
+                              Navigator.of(context).pop();
+                              debugPrint(e.toString());
+                              // ScaffoldMessenger.of(context)
+                              //     .showSnackBar(SnackBar(
+                              //   content: Text(e.toString()),
+                              // ));
+                              '${e.toString()}'.showSnackBar(context);
+                              if (e.toString().contains('register'))
+                                Future.delayed(Duration(seconds: 2), () {
+                                  Navigator.of(context).pushReplacementNamed(
+                                      AppRoutes.welcomescreenRoute);
+                                });
+
+                              return false;
+                            }));
+                      if (status) {
+                        await CustomSharedPreferences.setString(
+                            'ph_no_without_co', _mobileController.text);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pushNamed(
+                            AppRoutes.verificationRoute,
+                            arguments: VerificationScreenRouteArgs(
+                                _countryCode! + ' ' + _mobileController.text,
+                                widget.isRegister));
+                      }
+                      /* else {
+                            if (!widget.isRegister)
+                              _scaffoldKey.currentState.showSnackBar(SnackBar(
+                                content: Text('User not registered'),
+                              ));
+                          } */
+                    } else
+                      setState(() {});
+                  }
+                : () {},
+            child: CustomText(
+              'Get OTP',
+              size: (18),
+              color: validate() == true ? AppTheme.whiteColor : AppTheme.coolGrey,
+              // color: AppTheme.electricBlue,
+              bold: FontWeight.bold,
+            ),
+          ),
+        ),
+        body: Center(
+          child: Container(
+            child: Column(
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                ),
+                Text(
+                  'Continue with Mobile',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.purpleActive),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.03,
+                ),
+                Text(
+                  'Enter your Mobile Number\nwhere we can share OTP for verification.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: AppTheme.brownishGrey),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                
+                Flexible(
+                  child: Stack(
+                        children: [
+                          Container(
+                    margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*0.2),
+                    child: Image.asset(AppAssets.loginArtImage)),
+                        ]),
+                ),
+                (deviceHeight * 0.03).heightBox,
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
@@ -135,14 +250,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           Flexible(
                             flex: 3,
                             child: CountryCodePicker(
+                              flagDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                               padding: EdgeInsets.only(top: 10),
                               dialogSize: Size(screenWidth(context) * 0.9,
                                   screenHeight(context) * 0.8),
                               barrierColor: Colors.black45,
                               initialSelection: 'AE',
+                              // initialSelection: 'IT',
+                              favorite: ['AE', 'IN'],
+                              // countryFilter: ['AE', 'IN'],
+                              flagWidth: 40,
                               textStyle: TextStyle(
                                 fontSize: (19),
-                                color: AppTheme.coolGrey,
+                                color: AppTheme.brownishGrey,
+                                fontWeight: FontWeight.bold
                               ),
                               searchDecoration: InputDecoration(
                                   hintText: "Search",
@@ -172,6 +295,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 style: TextStyle(
                                   fontSize: (19),
                                   color: Color(0xff666666),
+                                  fontWeight: FontWeight.bold
                                 ),
                                 cursorColor: Color(0xff1058ff),
                                 onChanged: (value) {
@@ -202,7 +326,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             : null,
                                     contentPadding: EdgeInsets.only(top: 10),
                                     border: InputBorder.none,
-                                    hintText: 'Phone number',
+                                    hintText: 'Enter your Mobile Number',
                                     hintStyle: TextStyle(
                                         fontSize: (19),
                                         color: AppTheme.coolGrey,
@@ -233,126 +357,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                  (deviceHeight * 0.10).heightBox,
-                  Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.symmetric(vertical: 20),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 15),
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        padding: EdgeInsets.all(15),
-                        side: BorderSide(
-                            color: validate() == true
-                                ? Color(0xff1058ff)
-                                : AppTheme.coolGrey,
-                            width: 2),
-                        primary: validate() == true
-                            ? Colors.white
-                            : AppTheme.coolGrey,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                      ),
-                      onPressed: validate() == true
-                          ? () async {
-                              _isMobileNoValid =
-                                  await PhoneNumberUtil.isValidPhoneNumber(
-                                      phoneNumber: _countryCode! +
-                                          _mobileController.text.trim(),
-                                      isoCode: _country!);
-                              if (_isMobileNoValid!) {
-                                debugPrint(_country);
-                                repository.hiveQueries
-                                    .insertUserIsoCode(_country!);
-                                CustomLoadingDialog.showLoadingDialog(
-                                    context, key);
-                                final status = widget.isRegister
-                                    ? await (repository.registerApi
-                                        .signUpOtpRequest((_countryCode! +
-                                                _mobileController.text)
-                                            .trim()
-                                            .replaceAll('+', ''))
-                                        .timeout(Duration(seconds: 30),
-                                            onTimeout: () async {
-                                        Navigator.of(context).pop();
-                                        return Future.value(null);
-                                      }).catchError((e) {
-                                        Navigator.of(context).pop();
-                                        // ScaffoldMessenger.of(context)
-                                        //     .showSnackBar(SnackBar(
-                                        //   content: Text('This mobile is already registered with us, please Login with this number.'),
-                                        // ));
-                                        'This mobile is already registered with us, please Login with this number.'.showSnackBar(context);
-
-                                        if (e.toString().contains('registered'))
-                                          Future.delayed(Duration(seconds: 2),
-                                              () {
-                                            Navigator.of(context)
-                                                .pushReplacementNamed(AppRoutes
-                                                    .welcomescreenRoute);
-                                          });
-                                        return false;
-                                      }))
-                                    : await (repository.loginApi
-                                        .loginOtpRequest((_countryCode! +
-                                                _mobileController.text)
-                                            .trim()
-                                            .replaceAll('+', '')).timeout(Duration(seconds: 30),
-                                      onTimeout: () async {
-                                Navigator.of(context).pop();
-                                return Future.value(null);
-                              }).catchError((e) {
-                                    Navigator.of(context).pop();
-                                    debugPrint(e.toString());
-                                    // ScaffoldMessenger.of(context)
-                                    //     .showSnackBar(SnackBar(
-                                    //   content: Text(e.toString()),
-                                    // ));
-                                    '${e.toString()}'.showSnackBar(context);
-                                    if (e.toString().contains('register'))
-                                      Future.delayed(Duration(seconds: 2), () {
-                                        Navigator.of(context).pushReplacementNamed(AppRoutes.welcomescreenRoute);
-                                      });
-
-                                        return false;
-                                      }));
-                                if (status) {
-                                  await CustomSharedPreferences.setString('ph_no_without_co',_mobileController.text);
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pushNamed(
-                                      AppRoutes.verificationRoute,
-                                      arguments: VerificationScreenRouteArgs(
-                                          _countryCode! +
-                                              ' ' +
-                                              _mobileController.text,
-                                          widget.isRegister));
-                                }
-                                /* else {
-                            if (!widget.isRegister)
-                              _scaffoldKey.currentState.showSnackBar(SnackBar(
-                                content: Text('User not registered'),
-                              ));
-                          } */
-                              } else
-                                setState(() {});
-                            }
-                          : () {},
-                      child: CustomText(
-                        'Get OTP',
-                        size: (18),
-                        color: validate() == true
-                            ? AppTheme.electricBlue
-                            : AppTheme.coolGrey,
-                        // color: AppTheme.electricBlue,
-                        bold: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ]),
-              ),
-              // SizedBox(height: 100),
-              // Spacer()
-            ],
+                  // (deviceHeight * 0.10).heightBox,
+              ],
+            ),
           ),
         ),
       ),

@@ -43,6 +43,8 @@ class AppTheme {
   static const Color purpleStartColor = Color.fromRGBO(106,57,155, 1);
   static const Color purpleEndColor = Color.fromRGBO(109,71,219, 1);
   static const Color whiteColor = Color.fromRGBO(255,255,255, 1);
-  static const Color blackColor = Color.fromRGBO(0,0,0,1);
+  static const Color blackColor = Color.fromRGBO(22,22,22,1);
   static const Color splashBGColor = Color.fromRGBO(29,25,64,1);
+  static const Color disabledColor = Color.fromRGBO(222,227,230,1);
+  static const Color redColor = Color.fromRGBO(227,76,58,1);
 }

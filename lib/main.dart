@@ -291,6 +291,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    precacheImage(AssetImage(AppAssets.splashLogo), context);
+    precacheImage(AssetImage(AppAssets.portraitLogo), context);
     FirebaseAnalyticsObserver observer =
     Provider.of<FirebaseAnalyticsObserver>(context);
     return MaterialApp(

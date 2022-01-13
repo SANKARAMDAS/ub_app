@@ -242,6 +242,11 @@ class AppAssets {
   static const String emailVerified = 'assets/images/email_verified.png';
 
   static const String portraitLogo = 'assets/icons/v2/p_logo.png';
+  static const String landscapeLogo = 'assets/icons/v2/l_logo.png';
+  static const String splashLogo = 'assets/icons/v2/splash_logo.png';
+  static const String backButtonIcon = 'assets/icons/v2/back_button.png';
+  static const String loginArtImage = 'assets/icons/v2/login_artwork.png';
+  static const String otpArtImage = 'assets/icons/v2/otp_artwork.png';
   ///Fonts
   static const String sFProDisplayFont = 'SFProDisplay';
 }
