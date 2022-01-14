@@ -74,6 +74,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       });
     });
 
+
+
     // _contactController = ContactController(
     //   context: context,
     // );
@@ -2541,6 +2543,14 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
   // }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchContacts();
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
       physics: BouncingScrollPhysics(),
@@ -3109,7 +3119,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       AppRoutes.transactionListRoute,
                       arguments: TransactionListArgs(
                           false, widget._customerList[index]));
-                  await fetchContacts();
+
                 },
               ),
             ),
@@ -3127,12 +3137,19 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
     final _customerList =
         await repository.customerApi.getAllCustomers(selectedBusinessId);
 
-    await Future.forEach<CustomerModel>(_customerList,
-        (element) async => await repository.queries.insertCustomer(element));
+
+
+  /*  await Future.forEach<CustomerModel>(_customerList,
+        (element) async => await repository.queries.insertCustomer(element));*/
     BlocProvider.of<ContactsCubit>(context, listen: false)
         .getContacts(selectedBusinessId);
     setState(() {});
     _customerList.forEach((e) async {
+      await repository.queries.updateCustomerDetails(
+          e.transactionAmount!,
+          e.transactionType,
+          e.customerId);
+
       final _ledgerTransactionList =
           await repository.ledgerApi.getLedger(e.customerId);
       _ledgerTransactionList.forEach(

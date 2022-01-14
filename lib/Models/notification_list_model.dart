@@ -47,7 +47,7 @@ class NotificationData {
     this.createdAt,
     this.updatedAt,
     this.v,
-    this.isSelected = false
+   // this.isSelected = false
   });
 
   bool? read;
@@ -59,7 +59,7 @@ class NotificationData {
   DateTime? createdAt;
   DateTime? updatedAt;
   int? v;
-  bool isSelected;
+ // bool isSelected;
 
   factory NotificationData.fromJson(Map<String, dynamic> json) => NotificationData(
     read: json["read"],

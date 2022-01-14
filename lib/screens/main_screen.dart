@@ -618,7 +618,7 @@ Future<void> _insertData(BusinessModel element, BuildContext context) async {
 
   await Future.forEach<CustomerModel>(_customerList,
       (element) async => await repository.queries.insertCustomer(element));
-  BlocProvider.of<ContactsCubit>(context).getContacts(
+ await BlocProvider.of<ContactsCubit>(context).getContacts(
       Provider.of<BusinessProvider>(context, listen: false)
           .selectedBusiness
           .businessId);
