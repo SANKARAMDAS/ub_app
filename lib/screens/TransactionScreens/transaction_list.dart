@@ -4027,11 +4027,14 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                           String request = message.requestId!;
                           Map<String, dynamic> requestDetails = await repository
                               .paymentThroughQRApi
-                              .getQRData(request)
+                              .getQRData(request).catchError((e){
+                                Navigator.of(context).pop();
+                                'w $e'.showSnackBar(context);
+                              })
                               .timeout(Duration(seconds: 30),
                                   onTimeout: () async {
                             Navigator.of(context).pop();
-                            return Future.value(null);
+                            // return Future.value(null);
                           });
                           String attachment = requestDetails['bills']
                               .toString()

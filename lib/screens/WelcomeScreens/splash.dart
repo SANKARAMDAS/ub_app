@@ -301,13 +301,13 @@ void onStart() async {
                                     // }
         if (!isLogin && isSetPin) {
           Navigator.of(context).pushReplacementNamed(AppRoutes.setPinRoute,
-              arguments: SetPinRouteArgs('', false, false, false));
+              arguments: SetPinRouteArgs('', false, false, true));
         } else {
           if (repository.hiveQueries.pinStatus ||
               repository.hiveQueries.fingerPrintStatus) {
             if(!isSetPin) {
               Navigator.of(context).pushReplacementNamed(AppRoutes.setPinRoute,
-              arguments: SetPinRouteArgs('', false, false, false));
+              arguments: SetPinRouteArgs('', false, false, true));
             } else {
             final loginTime = repository.hiveQueries.unAuthData.loginTime;
             final diff = DateTime.now().difference(loginTime!).inDays;
