@@ -366,6 +366,11 @@ class _MainScreenState extends State<MainScreen> {
         Navigator.of(context).pushNamed(AppRoutes.transactionListRoute,
             arguments: TransactionListArgs(true, _customerModel));
         break;
+        
+      case 'move_unknown_transactions':
+        Navigator.of(context).pushNamed(AppRoutes.suspenseAccountRoute);
+        break;
+
       default:
         Navigator.of(context).pushNamed(AppRoutes.mainRoute);
     }
