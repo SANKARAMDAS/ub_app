@@ -40,7 +40,7 @@ class AppTheme {
 // new UI Skin colors
   static const Color paleBlue = Color.fromRGBO(242,244,246, 1);
   static const Color purpleActive = Color.fromRGBO(124,77,255, 1);
-  static const Color purpleStartColor = Color.fromRGBO(106,57,155, 1);
+  static const Color purpleStartColor = Color.fromRGBO(106,57,156, 1);
   static const Color purpleEndColor = Color.fromRGBO(109,71,219, 1);
   static const Color whiteColor = Color.fromRGBO(255,255,255, 1);
   static const Color blackColor = Color.fromRGBO(22,22,22,1);

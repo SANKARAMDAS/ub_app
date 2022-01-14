@@ -247,6 +247,8 @@ class AppAssets {
   static const String backButtonIcon = 'assets/icons/v2/back_button.png';
   static const String loginArtImage = 'assets/icons/v2/login_artwork.png';
   static const String otpArtImage = 'assets/icons/v2/otp_artwork.png';
+  static const String userIcon1 = 'assets/icons/v2/user_icon_1.png';
+  static const String userIcon2 = 'assets/icons/v2/user_icon_2.png';
   ///Fonts
   static const String sFProDisplayFont = 'SFProDisplay';
 }

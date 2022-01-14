@@ -204,44 +204,45 @@ class _LoginScreenState extends State<LoginScreen> {
               // crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
+               
                 Flexible(
-                    child: Column(children: [
+                    child: Container(
+                      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.05),
+                      child: Column(children: [
                   Text(
-                    'Continue with Mobile',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.purpleActive),
+                      'Continue with Mobile',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.purpleActive),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.03,
+                      height: MediaQuery.of(context).size.height * 0.03,
                   ),
                   Text(
-                    'Enter your Mobile Number\nwhere we can share OTP for verification.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: AppTheme.brownishGrey),
+                      'Enter your Mobile Number\nwhere we can share OTP for verification.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: AppTheme.brownishGrey),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.03,
+                      height: MediaQuery.of(context).size.height * 0.03,
                   ),
-                ])),
+                ]),
+                    )),
                 Flexible(
                   child: Stack(children: [
                     Container(
                         margin: EdgeInsets.symmetric(
                             horizontal:
-                                MediaQuery.of(context).size.width * 0.2),
+                                MediaQuery.of(context).size.width * 0.15),
                         child: Image.asset(AppAssets.loginArtImage)),
                   ]),
                 ),
-                (deviceHeight * 0.03).heightBox,
+                // (deviceHeight * 0.03).heightBox,
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
@@ -361,7 +362,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
-                (deviceHeight * 0.10).heightBox,
+                SizedBox(height: MediaQuery.of(context).size.height*0.05)
               ],
             ),
           ),

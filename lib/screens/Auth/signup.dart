@@ -40,6 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isLoading = false;
   bool isReferralEditable = true;
   String? referralShowText;
+  final double profileImage = 100;
 
   @override
   void initState() {
@@ -76,340 +77,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final coverHeight = MediaQuery.of(context).size.height / 5;
+    final top = coverHeight - profileImage / 2;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: Scaffold(
-        body: SingleChildScrollView(
-          padding: EdgeInsets.zero,
-          child: Form(
-            key: _formKey,
-            child: Column(
-                // mainAxisAlignment: MainAxisAlignment.start,
-                // mainAxisSize: MainAxisSize.max,
-                children: [
-                  Container(
-                    alignment: Alignment.topCenter,
-                    child: Image.asset(AppAssets.backgroundImage),
-                    height: 200,
+      child: gradientBackground(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            title: titleName(color: AppTheme.whiteColor),
+            centerTitle: true,
+          ),
+          bottomSheet: Container(
+            color: AppTheme.whiteColor,
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Center(
+                child: Text(
+                  'By clicking the register button, you agree to our Terms and Conditions',
+                  style: TextStyle(
+                    color: AppTheme.greyish,
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.bold,
                   ),
-                  CustomText(
-                    'Sign Up',
-                    size: (25),
-                    color: AppTheme.brownishGrey,
-                    bold: FontWeight.bold,
-                  ),
-                  const SizedBox(height: 5),
-                  const Text('Please provide a few details about yourself.',
-                      style: TextStyle(
-                        color: AppTheme.greyish,
-                        fontSize: (15),
-                      )),
-                  const SizedBox(height: 10),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 4.0),
-                          child: SignUpTextField(
-                              formKey: _formKey,
-                              onChanged: (value) {
-                                if (value.length == 0) {
-                                  setState(() {
-                                    firstNameError = null;
-                                  });
-                                  return;
-                                }
-                                /*     var resultText = value;
-                                List<String> text = value.split(' ');
-                                for(int i = 0;i<text.length;i++){
-                                String innerText = text[i].characters.first.toUpperCase();
-                                resultText += '${innerText+(i!=text.length-1?' ':'')}';
-                                }
-
-                                _firstNameController.text = resultText;*/
-
-                                firstNameError = validateFirstName(value);
-                                setState(() {});
-                              },
-                              validator: (value) {
-                                return validateFirstName(value);
-                              },
-                              controller: _firstNameController,
-                              keyboardType: TextInputType.name,
-                              hintText: 'First Name'),
-                        ),
-                        if (firstNameError != null)
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: CustomText(
-                              firstNameError ?? '',
-                              color: AppTheme.tomato,
-                              bold: FontWeight.w500,
-                              size: 12,
-                            ),
-                          ),
-                        const SizedBox(height: 12),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 4.0),
-                          child: SignUpTextField(
-                              formKey: _formKey,
-                              onChanged: (value) {
-                                if (value.length == 0) {
-                                  setState(() {
-                                    lastNameError = null;
-                                  });
-                                  return;
-                                }
-                                lastNameError = validateLastName(value);
-                                setState(() {});
-                              },
-                              validator: (value) {
-                                return validateLastName(value);
-                              },
-                              controller: _lastNameController,
-                              keyboardType: TextInputType.name,
-                              hintText: 'Last Name'),
-                        ),
-                        if (lastNameError != null)
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: CustomText(
-                              lastNameError ?? '',
-                              color: AppTheme.tomato,
-                              bold: FontWeight.w500,
-                              size: 12,
-                            ),
-                          ),
-                        SizedBox(height: 12),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15.0, vertical: 4.0),
-                          child: SignUpTextField(
-                              formKey: _formKey,
-                              onChanged: (value) {
-                                if (value.length == 0) {
-                                  setState(() {
-                                    emailError = null;
-                                  });
-                                  return;
-                                }
-                                emailError = validateEmail(value);
-                                setState(() {});
-                              },
-                              validator: (value) {
-                                return validateEmail(value);
-                              },
-                              controller: _emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              hintText: 'Email ID'),
-                        ),
-                        if (emailError != null)
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: CustomText(
-                              emailError ?? '',
-                              color: AppTheme.tomato,
-                              bold: FontWeight.w500,
-                              size: 12,
-                            ),
-                          ),
-                        SizedBox(height: 95).flexible,
-                        Spacer(),
-                        /* Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8.0, horizontal: 15),
-                          child: Center(
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  AppAssets.ref8Icon,
-                                  width: 70,
-                                ),
-                                Text(
-                                  'Referral program is applicable for new users',
-                                  style: TextStyle(
-                                    color: AppTheme.brownishGrey,
-                                    fontSize: 18.0,
-                                  ),
-                                ),
-                                SizedBox(height: 8,),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      child: Container(
-                                          alignment: Alignment.center,
-
-
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                            BorderRadius.circular(50),
-                                            border: Border.all(
-                                                width: 0.5,
-                                                color: AppTheme.coolGrey),
-                                            color: Colors.white,
-                                          ),
-                                          child: Container(
-                                            width:
-                                            MediaQuery.of(context)
-                                                .size
-                                                .width *
-                                                0.45,//added line
-                                            // padding: EdgeInsets.only(left: 15),
-                                            height: MediaQuery.of(context)
-                                                .size
-                                                .height *
-                                                0.05 ,
-
-
-                                            // padding:
-                                            //     EdgeInsets.symmetric(
-                                            //   horizontal: 3,
-                                            // ),
-                                            child: (!isReferralEditable)
-                                                ? Center(
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                    const EdgeInsets
-                                                        .all(
-                                                        8.0),
-                                                    child: Image
-                                                        .asset(
-                                                      AppAssets
-                                                          .transactionSuccess,
-                                                      height: 20,
-                                                      width: 20,
-                                                    ),
-                                                  ),
-                                                  SizedBox(width: 8,),
-                                                  Text(_referralController.text,style: TextStyle(
-                                                    color: AppTheme
-                                                        .electricBlue,
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .bold,
-                                                  )),
-                                                  SizedBox(width: 8,),
-                                                  InkWell(
-                                                    onTap:
-                                                        () async {
-                                                      makeReferalEditable();
-
-                                                      _referralController
-                                                          .clear();
-                                                      'Referral Code Removed'
-                                                          .showSnackBar(
-                                                          context);
-
-
-
-                                                    },
-                                                    child:
-                                                    Padding(
-                                                      padding:
-                                                      const EdgeInsets.all(
-                                                          8.0),
-                                                      child: Image
-                                                          .asset(
-                                                        AppAssets
-                                                            .delete1Icon,
-                                                        height: 20,
-                                                        width: 20,
-                                                      ),
-                                                    ),
-                                                  )
-
-
-
-                                                ],
-                                              ),
-                                            )
-                                                :  Center(
-                                              child: TextField(
-                                                textCapitalization:
-                                                TextCapitalization
-                                                    .characters,
-                                                inputFormatters: [
-                                                  LengthLimitingTextInputFormatter(
-                                                      8),
-                                                  UpperCaseTextFormatter()
-                                                ],
-                                                controller:
-                                                _referralController,
-                                                // textCapitalization: TextCapitalization.characters,
-                                                textAlign:
-                                                TextAlign
-                                                    .center,
-                                                decoration:
-                                                InputDecoration(
-                                                  fillColor: AppTheme
-                                                      .electricBlue,
-                                                  hintText:
-                                                  "Enter referral code",
-                                                  hintStyle:
-                                                  TextStyle(
-                                                    color: AppTheme
-                                                        .greyish,
-                                                    fontSize: 16,
-                                                  ),
-                                                  // suffix: InkWell(
-                                                  //   onTap: () async {
-                                                  //     _referralController
-                                                  //         .clear();
-                                                  //   },
-                                                  //   child: Image.asset(
-                                                  //     AppAssets
-                                                  //         .delete1Icon,
-                                                  //     height: 20,
-                                                  //     width: 20,
-                                                  //   ),
-                                                  // ),
-                                                  border:
-                                                  InputBorder
-                                                      .none,
-                                                  isDense: true,// this will remove the default content padding
-                                                  // now you can customize it here or add padding widget
-                                                  contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                                                ),
-                                                keyboardType:
-                                                TextInputType
-                                                    .text,
-                                                onChanged: (value){
-                                                  if(value.length==8){
-                                                    setState(() {
-                                                      isReferralEditable= false;
-                                                    });
-                                                  }
-
-
-                                                },
-                                              ),
-                                            ),
-                                          )),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),*/
-                        Container(
+                ),
+              ),
+              Container(
                           width: double.infinity,
-                          margin: EdgeInsets.symmetric(vertical: 10),
+                          margin: EdgeInsets.symmetric(vertical: 15),
                           padding: const EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 15),
                           child: ElevatedButton(
@@ -679,59 +376,119 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => UlAppBrowser(
-                                  url:
-                                      'https://urbanledger.app/terms-and-conditions',
-                                  title: 'Terms & Conditions',
-                                ),
-                              ),
-                            );
-                          },
-                          child: Center(
-                            child: RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                    text:
-                                        'By clicking the register button,\n you agree to our ',
-                                    style: TextStyle(
-                                      color: AppTheme.greyish,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: 'Terms and Conditions',
-                                    style: TextStyle(
-                                      color: AppTheme.electricBlue,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  )
-                                ])),
+            ]),
+          ),
+          body: Container(
+            child: Column(
+              children: [
+                Stack(children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 30),
+                    alignment: Alignment.center,
+                    child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: 'Sign Up',
+                            style: TextStyle(
+                                color: AppTheme.whiteColor,
+                                fontSize: 40,
+                                height: 1,
+                                fontFamily: 'Hind'),
                           ),
-                        )
-                        // Center(
-                        //   child: CustomText(
-                        //       'By clicking the register button,\n you agree to our Terms and Conditions',
-                        //       centerAlign: true,
-                        //       color: AppTheme.greyish,
-                        //       bold: FontWeight.w500,
-                        //       size: (15)),
-                        // ),
-                      ],
+                          TextSpan(
+                            text: '\n${widget.mobile}',
+                            // textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: AppTheme.whiteColor,
+                                fontSize: 22,
+                                height: 1,
+                                fontFamily: 'Hind'),
+                          )
+                        ])),
+                    // child: Text('Sign Up',
+                    //   textAlign: TextAlign.center,
+                    //   style: TextStyle(
+                    //     color: AppTheme.whiteColor,
+                    //     fontSize: 40,
+                    //     fontFamily: 'Hind'
+                    //   ),
+                    // ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: coverHeight),
+                    height:
+                        MediaQuery.of(context).size.height - coverHeight - 84,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25),
+                      ),
                     ),
                   ),
-
-                  // Flexible(child: (deviceHeight * 0.05).heightBox)
-                ]),
+                  Positioned(
+                      top: top,
+                      left: MediaQuery.of(context).size.width * 0.38,
+                      right: MediaQuery.of(context).size.width * 0.38,
+                      child: Container(
+                        width: profileImage,
+                        height: profileImage,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          // border: Border.all(color: AppTheme.coolGrey, width: 1),
+                          color: AppTheme.whiteColor,
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Colors.black54.withOpacity(0.2),
+                                blurRadius: 5.0,
+                                offset: Offset(2, 3))
+                          ],
+                        ),
+                        child: Image.asset(AppAssets.userIcon1),
+                      )),
+                ])
+              ],
+            ),
           ),
+          // body: Column(
+          //   mainAxisSize: MainAxisSize.min,
+          //   children: [
+          //     Flexible(
+          //       flex: 1,
+          //       child: Stack(
+          //         alignment: Alignment.topCenter,
+          //         children: [
+          //           // Container(
+          //           //   child: RichText(text: TextSpan(
+          //           //     children: [
+          //           //       TextSpan(
+          //           //         text: 'Sign Up',
+          //           //         style: TextStyle(
+          //           //           fontSize: 30,
+          //           //           color: AppTheme.whiteColor
+          //           //         ),
+          //           //       ),
+
+          //           //     ]
+          //           //   )),
+          //           // ),
+          //         Positioned(
+          //           top: top,
+          //           child: buildProfileImage()),
+          //         ],
+          //       ),
+          //     ),
+          //     Flexible(
+          //       flex: 3,
+          //       child: Container(
+          //         // height: 250,
+          //         color: AppTheme.whiteColor,
+          //       ),
+          //     ),
+          //   ],
+
+          // ),
         ),
       ),
     );

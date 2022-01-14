@@ -332,9 +332,7 @@ class _VerificationScreenState extends State<VerificationScreen>
                 children: [
                   Flexible(
                       child: Column(children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                    ),
+                   
                     Text(
                       'Verify Mobile Number',
                       textAlign: TextAlign.center,
@@ -367,7 +365,7 @@ class _VerificationScreenState extends State<VerificationScreen>
                           child: Image.asset(AppAssets.otpArtImage)),
                     ]),
                   ),
-                  (deviceHeight * 0.03).heightBox,
+                  // (deviceHeight * 0.03).heightBox,
                   Text(
                     'Sit back and relax while we try to read\nthe OTP from your device.',
                     textAlign: TextAlign.center,

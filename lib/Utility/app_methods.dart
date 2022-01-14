@@ -78,25 +78,41 @@ bool documentLifecycle(String document) {
   }
 }
 
-Widget titleName() {
+Widget titleName({required Color color}) {
   return RichText(text: TextSpan(
     children: [
       TextSpan(
         text: 'urban ',
         style: TextStyle(
-          color: AppTheme.whiteColor,
-          fontWeight: FontWeight.w500
+          fontSize: 30,
+          color: color,
+          // fontWeight: FontWeight.w500
         ),
       ),
       TextSpan(
         text: 'ledger',
         style: TextStyle(
-          color: AppTheme.whiteColor,
-          fontWeight: FontWeight.w900
+          fontSize: 30,
+          color: color,
+          fontWeight: FontWeight.bold
         ),
       ),
     ]
   ),);
+}
+
+Widget gradientBackground({required Widget child}) {
+  return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: [
+                  AppTheme.purpleStartColor,
+                  AppTheme.purpleEndColor,
+                ],
+                ),
+          ),
+          child: child
+        );
 }
 
 Future<bool> allChecker(BuildContext context) async {
