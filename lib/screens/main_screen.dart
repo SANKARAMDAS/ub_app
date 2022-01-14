@@ -28,6 +28,7 @@ import 'package:urbanledger/screens/Components/custom_bottom_nav_bar.dart';
 import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
 import 'package:urbanledger/screens/DynamicLinks/dynamicLinkService.dart';
 import 'package:urbanledger/screens/UserProfile/MyLedger/business_provider.dart';
+import 'package:urbanledger/screens/UserProfile/user_profile_new.dart';
 import 'package:urbanledger/screens/mobile_analytics/analytics_events.dart';
 import 'package:uuid/uuid.dart';
 import 'package:urbanledger/screens/Components/extensions.dart';
@@ -74,7 +75,6 @@ class _MainScreenState extends State<MainScreen> {
                 .businessId);
       }
     });
-    
 
     // BlocProvider.of<ImportContactsCubit>(context).getContactsFromDevice();
 
@@ -105,8 +105,6 @@ class _MainScreenState extends State<MainScreen> {
   getKyc() async {
     await KycAPI.kycApiProvider.kycCheker();
   }
-
-  
 
   paymentNotification(String transactionId) async {
     Map<String?, dynamic>? response =
@@ -349,6 +347,9 @@ class _MainScreenState extends State<MainScreen> {
       case 'premium_reminder':
         Navigator.of(context).pushNamed(AppRoutes.urbanLedgerPremiumRoute);
         CustomLoadingDialog.showLoadingDialog(context, key);
+        break;
+      case 'complete_email_verification_reminder':
+        Navigator.of(context).pushNamed(AppRoutes.edituserProfileRoute);
         break;
       case 'chat':
         _customerModel

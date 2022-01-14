@@ -43,7 +43,7 @@ class WelcomeScreen extends StatelessWidget {
                   .pushReplacementNamed(AppRoutes.loginRoute, arguments: true);
             },
             child: CustomText(
-              'Sign up',
+              'Sign up with phone no',
               size: (18),
               color: Colors.white, 
               bold: FontWeight.w500,

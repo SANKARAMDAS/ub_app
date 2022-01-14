@@ -75,6 +75,7 @@ import 'package:urbanledger/screens/UserProfile/add_address.dart';
 import 'package:urbanledger/screens/UserProfile/my_profile_screen.dart';
 import 'package:urbanledger/screens/UserProfile/profile_qr.dart';
 import 'package:urbanledger/screens/UserProfile/user_profile.dart';
+import 'package:urbanledger/screens/UserProfile/user_profile_new.dart';
 import 'package:urbanledger/screens/WelcomeScreens/intropg.dart';
 import 'package:urbanledger/screens/WelcomeScreens/welcome_screen.dart';
 import 'package:urbanledger/screens/WelcomeScreens/welcome_user.dart';
@@ -455,6 +456,9 @@ class Router {
       case (AppRoutes.userProfileRoute):
         return MaterialPageRoute(
             builder: (_) => UserProfile(), settings: routeSettings);
+      case (AppRoutes.edituserProfileRoute):
+        return MaterialPageRoute(
+            builder: (_) => UserProfileNew(), settings: routeSettings);            
       case (AppRoutes.addCustomerRoute):
         return MaterialPageRoute(
             builder: (_) => AddCustomerScreen(), settings: routeSettings);

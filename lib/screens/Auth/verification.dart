@@ -34,7 +34,8 @@ class VerificationScreen extends StatefulWidget {
   _VerificationScreenState createState() => _VerificationScreenState();
 }
 
-class _VerificationScreenState extends State<VerificationScreen> with SingleTickerProviderStateMixin {
+class _VerificationScreenState extends State<VerificationScreen>
+    with SingleTickerProviderStateMixin {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Repository repository = Repository();
   String? _digit1, _digit2, _digit3, _digit4, _digit5, _digit6;
@@ -56,7 +57,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
   final location = Location();
   bool isResendOtpClickable = false;
   int _resendOtpCount = 30;
- // late Timer _timer;
+  // late Timer _timer;
 
   late AnimationController _controller;
   // final FirebaseAnalytics analytics = FirebaseAnalytics();
@@ -78,7 +79,6 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
     _controller =
         AnimationController(vsync: this, duration: Duration(seconds: 30));
     _controller.forward();
-
   }
 
   @override
@@ -95,7 +95,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
     fourthFocusNode.dispose();
     fifthFocusNode.dispose();
     sixthFocusNode.dispose();
-   // _timer.cancel();
+    // _timer.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -119,16 +119,18 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
       child: Scaffold(
         backgroundColor: Colors.white,
         bottomNavigationBar: Padding(
-          padding: isPlatformiOS()? EdgeInsets.only(
-            bottom: 25,
-          ): EdgeInsets.only(
-            bottom: 10,
-          ),
+          padding: isPlatformiOS()
+              ? EdgeInsets.only(
+                  bottom: 25,
+                )
+              : EdgeInsets.only(
+                  bottom: 10,
+                ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               (screenWidth(context) * 0.035).widthBox,
-             /* Expanded(
+              /* Expanded(
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     padding: EdgeInsets.all(15),
@@ -170,9 +172,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                   ),
                   onPressed: validate() == true
                       ? () async {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      //TODO: To handle location permission when denied.
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            //TODO: To handle location permission when denied.
 
                             // await checkService();
                             // final _location = await location.getLocation();
@@ -201,8 +203,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                                     sixController.text = ' ';
                                     setState(() {});
                                     e.toString().showSnackBar(context);
-                                    Navigator.of(context).pop();
-                                    return 'Incorrect';
+                                    debugPrint('Incorrect12345');
+                                    // Navigator.of(context).pop();
+                                    // return 'Incorrect';
                                   })
                                 : await (repository.loginApi
                                         .loginOtpVerification(
@@ -227,10 +230,18 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                                     Navigator.of(context).pop();
                                     return 'Incorrect';
                                   });
+                            debugPrint('abcdnfndfnsdf' + status.toString());
                             if (status.isNotEmpty) {
-                              if (status == 'Incorrect') return;
+                              debugPrint("isNotEmpt");
+                              if (status == 'Incorrect') {
+                                'Incorrect OTP'.showSnackBar(context);
+                                debugPrint("Incorrect");
+                              }
+
+                              debugPrint("Incorrect");
                               _formKey.currentState!.reset();
                               if (!widget.isRegister) {
+                                debugPrint("isREgister");
                                 // await analytics.logLogin();
                                 LoginRepository().login(
                                     widget.phoneNo.replaceAll(' ', ''),
@@ -280,26 +291,24 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                                 /*    var anaylticsEvents = await AnalyticsEvents(context);
                             anaylticsEvents.signUpEvent(withReferral);*/
 
-                          Navigator.of(context)
-                            ..pop()
-                            ..pop()
-                            ..pushReplacementNamed(
-                                AppRoutes.signupRoute,
-                                arguments:
-                                widget.phoneNo.replaceAll(' ', ''));
+                                Navigator.of(context)
+                                  ..pop()
+                                  ..pop()
+                                  ..pushReplacementNamed(AppRoutes.signupRoute,
+                                      arguments:
+                                          widget.phoneNo.replaceAll(' ', ''));
+                              }
+                            } else {
+                              Navigator.of(context)
+                                ..pop()
+                                ..pop()
+                                ..pushReplacementNamed(AppRoutes.signupRoute,
+                                    arguments:
+                                        widget.phoneNo.replaceAll(' ', ''));
+                            }
+                          }
                         }
-                      } else {
-                        Navigator.of(context)
-                          ..pop()
-                          ..pop()
-                          ..pushReplacementNamed(AppRoutes.signupRoute,
-                              arguments:
-                              widget.phoneNo.replaceAll(' ', ''));
-                      }
-                    }
-                  }
                       : () {},
-
                 ),
               ),
               (screenWidth(context) * 0.035).widthBox,
@@ -422,40 +431,46 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                       children: [
                         InkWell(
                           child: CustomText(
-                            isResendOtpClickable?'RESEND OTP':'RESEND OTP IN ',
+                            isResendOtpClickable
+                                ? 'RESEND OTP'
+                                : 'RESEND OTP IN ',
                             size: (18),
-                            color: isResendOtpClickable?AppTheme.electricBlue:Colors.grey,
+                            color: isResendOtpClickable
+                                ? AppTheme.electricBlue
+                                : Colors.grey,
                             bold: FontWeight.w800,
                           ),
-                          onTap:isResendOtpClickable? (){
-                            clearTextControllers();
-                            setState(() {
-                              isResendOtpClickable = false;
-                              _resendOtpCount = 30;
-                            });
-                            //startTimer();
+                          onTap: isResendOtpClickable
+                              ? () {
+                                  clearTextControllers();
+                                  setState(() {
+                                    isResendOtpClickable = false;
+                                    _resendOtpCount = 30;
+                                  });
+                                  //startTimer();
 
-                            _controller.forward();
-                          }:(){},
+                                  _controller.forward();
+                                }
+                              : () {},
                         ),
-                        if(!isResendOtpClickable)
+                        if (!isResendOtpClickable)
                           Countdown(
                             animation: StepTween(
                               begin: 30,
                               end: 0,
-                            ).animate(_controller)..addStatusListener((status) {
-                              if(status == AnimationStatus.completed){
-                                _controller.reset();
-                                setState(() {
-                                isResendOtpClickable = true;
-                              });
-                              }
-                            }),
+                            ).animate(_controller)
+                              ..addStatusListener((status) {
+                                if (status == AnimationStatus.completed) {
+                                  _controller.reset();
+                                  setState(() {
+                                    isResendOtpClickable = true;
+                                  });
+                                }
+                              }),
                           )
                       ],
                     ),
                   ),
-                  
                   (deviceHeight * 0.09).heightBox,
                   Center(
                     child: CustomText(
@@ -472,7 +487,6 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
             ),
           ),
         ),
-      
       ),
     );
   }
@@ -527,7 +541,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                   } else {
                     FocusScope.of(context).requestFocus(previousFocusNode);
                   }
-                  if(validate()){
+                  if (validate()) {
                     FocusScope.of(context).requestFocus(FocusNode());
                   }
                 },
@@ -569,7 +583,6 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
     }
   }
 
-
   //********************************************************************************* */
   // BUSINESS LOGIC
   //********************************************************************************* */
@@ -585,9 +598,6 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
     fiveController.clear();
     sixController.clear();
   }
-
-
-
 
   /* Future<void> _sendVerificationCode(String phone) async {
     try {
@@ -697,9 +707,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
 }
 
 class Countdown extends AnimatedWidget {
-  Countdown({Key? key, this.animation}) : super(key: key, listenable: animation!);
+  Countdown({Key? key, this.animation})
+      : super(key: key, listenable: animation!);
   Animation<int>? animation;
-
 
   @override
   build(BuildContext context) {
@@ -716,7 +726,7 @@ class Countdown extends AnimatedWidget {
       ),
     );*/
 
-   return CustomText(
+    return CustomText(
       '${timerText}',
       size: (18),
       color: AppTheme.electricBlue,
