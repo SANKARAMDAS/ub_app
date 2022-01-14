@@ -34,7 +34,8 @@ class VerificationScreen extends StatefulWidget {
   _VerificationScreenState createState() => _VerificationScreenState();
 }
 
-class _VerificationScreenState extends State<VerificationScreen> with SingleTickerProviderStateMixin {
+class _VerificationScreenState extends State<VerificationScreen>
+    with SingleTickerProviderStateMixin {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Repository repository = Repository();
   String? _digit1, _digit2, _digit3, _digit4, _digit5, _digit6;
@@ -56,7 +57,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
   final location = Location();
   bool isResendOtpClickable = false;
   int _resendOtpCount = 30;
- // late Timer _timer;
+  // late Timer _timer;
 
   late AnimationController _controller;
   // final FirebaseAnalytics analytics = FirebaseAnalytics();
@@ -78,7 +79,6 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
     _controller =
         AnimationController(vsync: this, duration: Duration(seconds: 30));
     _controller.forward();
-
   }
 
   @override
@@ -95,7 +95,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
     fourthFocusNode.dispose();
     fifthFocusNode.dispose();
     sixthFocusNode.dispose();
-   // _timer.cancel();
+    // _timer.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -119,16 +119,18 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
       child: Scaffold(
         backgroundColor: AppTheme.paleBlue,
         bottomNavigationBar: Padding(
-          padding: isPlatformiOS()? EdgeInsets.only(
-            bottom: 25,
-          ): EdgeInsets.only(
-            bottom: 10,
-          ),
+          padding: isPlatformiOS()
+              ? EdgeInsets.only(
+                  bottom: 25,
+                )
+              : EdgeInsets.only(
+                  bottom: 10,
+                ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               (screenWidth(context) * 0.035).widthBox,
-             /* Expanded(
+              /* Expanded(
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     padding: EdgeInsets.all(15),
@@ -166,13 +168,15 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                     'VERIFY OTP',
                     size: (18),
                     bold: FontWeight.bold,
-                    color: validate() == true ? AppTheme.whiteColor: AppTheme.coolGrey,
+                    color: validate() == true
+                        ? AppTheme.whiteColor
+                        : AppTheme.coolGrey,
                   ),
                   onPressed: validate() == true
                       ? () async {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      //TODO: To handle location permission when denied.
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            //TODO: To handle location permission when denied.
 
                             // await checkService();
                             // final _location = await location.getLocation();
@@ -280,26 +284,24 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                                 /*    var anaylticsEvents = await AnalyticsEvents(context);
                             anaylticsEvents.signUpEvent(withReferral);*/
 
-                          Navigator.of(context)
-                            ..pop()
-                            ..pop()
-                            ..pushReplacementNamed(
-                                AppRoutes.signupRoute,
-                                arguments:
-                                widget.phoneNo.replaceAll(' ', ''));
+                                Navigator.of(context)
+                                  ..pop()
+                                  ..pop()
+                                  ..pushReplacementNamed(AppRoutes.signupRoute,
+                                      arguments:
+                                          widget.phoneNo.replaceAll(' ', ''));
+                              }
+                            } else {
+                              Navigator.of(context)
+                                ..pop()
+                                ..pop()
+                                ..pushReplacementNamed(AppRoutes.signupRoute,
+                                    arguments:
+                                        widget.phoneNo.replaceAll(' ', ''));
+                            }
+                          }
                         }
-                      } else {
-                        Navigator.of(context)
-                          ..pop()
-                          ..pop()
-                          ..pushReplacementNamed(AppRoutes.signupRoute,
-                              arguments:
-                              widget.phoneNo.replaceAll(' ', ''));
-                      }
-                    }
-                  }
                       : () {},
-
                 ),
               ),
               (screenWidth(context) * 0.035).widthBox,
@@ -323,44 +325,47 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
             centerTitle: true),
         body: Center(
           child: Container(
-            
             child: Form(
               key: _formKey,
               child: Column(
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
-                  ),
-                  Text(
-                    'Verify Mobile Number',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        color: AppTheme.purpleActive),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.02,
-                  ),
-                  Text(
-                    'We have sent a 6-Digit OTP to\n${widget.phoneNo}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: AppTheme.brownishGrey),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.02,
-                  ),
                   Flexible(
-                    child: Stack(
-                          children: [
-                            Container(
-                      margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*0.2),
-                      child: Image.asset(AppAssets.otpArtImage)),
-                          ]),
+                      child: Column(children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.05,
+                    ),
+                    Text(
+                      'Verify Mobile Number',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          color: AppTheme.purpleActive),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
+                    ),
+                    Text(
+                      'We have sent a 6-Digit OTP to\n${widget.phoneNo}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: AppTheme.brownishGrey),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
+                    ),
+                  ])),
+                  Flexible(
+                    child: Stack(children: [
+                      Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal:
+                                  MediaQuery.of(context).size.width * 0.2),
+                          child: Image.asset(AppAssets.otpArtImage)),
+                    ]),
                   ),
                   (deviceHeight * 0.03).heightBox,
                   Text(
@@ -372,123 +377,131 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                         color: AppTheme.brownishGrey),
                   ),
                   Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 7.0, vertical: 15.0),
-                            child: otpTextField(
-                              controller: oneController,
-                              onSaved: (value) => _digit1 = value,
-                              focusNode: firstFocusNode,
-                              nextFocusNode: secondFocusNode,
-                            ),
-                          ).flexible,
-                          Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 7.0, vertical: 15.0),
-                            child: otpTextField(
-                              controller: twoController,
-                              onSaved: (value) => _digit2 = value,
-                              focusNode: secondFocusNode,
-                              nextFocusNode: thirdFocusNode,
-                              previousFocusNode: firstFocusNode,
-                            ),
-                          ).flexible,
-                          Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 7.0, vertical: 15.0),
-                            child: otpTextField(
-                              controller: threeController,
-                              onSaved: (value) => _digit3 = value,
-                              focusNode: thirdFocusNode,
-                              nextFocusNode: fourthFocusNode,
-                              previousFocusNode: secondFocusNode,
-                            ),
-                          ).flexible,
-                          Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 7.0, vertical: 15.0),
-                            child: otpTextField(
-                              controller: fourController,
-                              onSaved: (value) => _digit4 = value,
-                              focusNode: fourthFocusNode,
-                              nextFocusNode: fifthFocusNode,
-                              previousFocusNode: thirdFocusNode,
-                            ),
-                          ).flexible,
-                          Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 7.0, vertical: 15.0),
-                            child: otpTextField(
-                                controller: fiveController,
-                                onSaved: (value) => _digit5 = value,
-                                focusNode: fifthFocusNode,
-                                nextFocusNode: sixthFocusNode,
-                                previousFocusNode: fourthFocusNode),
-                          ).flexible,
-                          Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 7.0, vertical: 15.0),
-                            child: otpTextField(
-                              controller: sixController,
-                              focusNode: sixthFocusNode,
-                              nextFocusNode: sixthFocusNode,
-                              previousFocusNode: fifthFocusNode,
-                              onSaved: (value) => _digit6 = value,
-                            ),
-                          ).flexible,
-                        ],
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 40.0, vertical: 15.0),
-                      child: Row(
-                        children: [
-                          InkWell(
-                            child: CustomText(
-                              isResendOtpClickable?'RESEND OTP':'RESEND CODE IN ',
-                              size: (18),
-                              color: isResendOtpClickable?AppTheme.redColor:AppTheme.brownishGrey,
-                              bold: FontWeight.w800,
-                            ),
-                            onTap:isResendOtpClickable? (){
-                              clearTextControllers();
-                              setState(() {
-                                isResendOtpClickable = false;
-                                _resendOtpCount = 30;
-                              });
-                              //startTimer();
-
-                              _controller.forward();
-                            }:(){},
+                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 7.0, vertical: 15.0),
+                          child: otpTextField(
+                            controller: oneController,
+                            onSaved: (value) => _digit1 = value,
+                            focusNode: firstFocusNode,
+                            nextFocusNode: secondFocusNode,
                           ),
-                          if(!isResendOtpClickable)
-                            Countdown(
-                              animation: StepTween(
-                                begin: 30,
-                                end: 0,
-                              ).animate(_controller)..addStatusListener((status) {
-                                if(status == AnimationStatus.completed){
+                        ).flexible,
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 7.0, vertical: 15.0),
+                          child: otpTextField(
+                            controller: twoController,
+                            onSaved: (value) => _digit2 = value,
+                            focusNode: secondFocusNode,
+                            nextFocusNode: thirdFocusNode,
+                            previousFocusNode: firstFocusNode,
+                          ),
+                        ).flexible,
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 7.0, vertical: 15.0),
+                          child: otpTextField(
+                            controller: threeController,
+                            onSaved: (value) => _digit3 = value,
+                            focusNode: thirdFocusNode,
+                            nextFocusNode: fourthFocusNode,
+                            previousFocusNode: secondFocusNode,
+                          ),
+                        ).flexible,
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 7.0, vertical: 15.0),
+                          child: otpTextField(
+                            controller: fourController,
+                            onSaved: (value) => _digit4 = value,
+                            focusNode: fourthFocusNode,
+                            nextFocusNode: fifthFocusNode,
+                            previousFocusNode: thirdFocusNode,
+                          ),
+                        ).flexible,
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 7.0, vertical: 15.0),
+                          child: otpTextField(
+                              controller: fiveController,
+                              onSaved: (value) => _digit5 = value,
+                              focusNode: fifthFocusNode,
+                              nextFocusNode: sixthFocusNode,
+                              previousFocusNode: fourthFocusNode),
+                        ).flexible,
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 7.0, vertical: 15.0),
+                          child: otpTextField(
+                            controller: sixController,
+                            focusNode: sixthFocusNode,
+                            nextFocusNode: sixthFocusNode,
+                            previousFocusNode: fifthFocusNode,
+                            onSaved: (value) => _digit6 = value,
+                          ),
+                        ).flexible,
+                      ],
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 40.0, vertical: 15.0),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          child: CustomText(
+                            isResendOtpClickable
+                                ? 'RESEND OTP'
+                                : 'RESEND CODE IN ',
+                            size: (18),
+                            color: isResendOtpClickable
+                                ? AppTheme.redColor
+                                : AppTheme.brownishGrey,
+                            bold: FontWeight.w800,
+                          ),
+                          onTap: isResendOtpClickable
+                              ? () {
+                                  clearTextControllers();
+                                  setState(() {
+                                    isResendOtpClickable = false;
+                                    _resendOtpCount = 30;
+                                  });
+                                  //startTimer();
+
+                                  _controller.forward();
+                                }
+                              : () {},
+                        ),
+                        if (!isResendOtpClickable)
+                          Countdown(
+                            animation: StepTween(
+                              begin: 30,
+                              end: 0,
+                            ).animate(_controller)
+                              ..addStatusListener((status) {
+                                if (status == AnimationStatus.completed) {
                                   _controller.reset();
                                   setState(() {
-                                  isResendOtpClickable = true;
-                                });
+                                    isResendOtpClickable = true;
+                                  });
                                 }
                               }),
-                            )
-                        ],
-                      ),
+                          )
+                      ],
                     ),
+                  ),
                 ],
               ),
             ),
           ),
-      ),),
+        ),
+      ),
     );
   }
 
@@ -542,7 +555,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                   } else {
                     FocusScope.of(context).requestFocus(previousFocusNode);
                   }
-                  if(validate()){
+                  if (validate()) {
                     FocusScope.of(context).requestFocus(FocusNode());
                   }
                 },
@@ -585,7 +598,6 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
     }
   }
 
-
   //********************************************************************************* */
   // BUSINESS LOGIC
   //********************************************************************************* */
@@ -601,9 +613,6 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
     fiveController.clear();
     sixController.clear();
   }
-
-
-
 
   /* Future<void> _sendVerificationCode(String phone) async {
     try {
@@ -713,9 +722,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
 }
 
 class Countdown extends AnimatedWidget {
-  Countdown({Key? key, this.animation}) : super(key: key, listenable: animation!);
+  Countdown({Key? key, this.animation})
+      : super(key: key, listenable: animation!);
   Animation<int>? animation;
-
 
   @override
   build(BuildContext context) {
@@ -732,7 +741,7 @@ class Countdown extends AnimatedWidget {
       ),
     );*/
 
-   return CustomText(
+    return CustomText(
       '${timerText} secs',
       size: (18),
       color: AppTheme.redColor,

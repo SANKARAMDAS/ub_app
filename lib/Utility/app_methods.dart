@@ -9,6 +9,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:urbanledger/Services/APIs/kyc_api.dart';
 import 'package:urbanledger/Services/repository.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
 import 'package:urbanledger/screens/Components/custom_popup.dart';
 
@@ -75,6 +76,27 @@ bool documentLifecycle(String document) {
   } else {
     return true;
   }
+}
+
+Widget titleName() {
+  return RichText(text: TextSpan(
+    children: [
+      TextSpan(
+        text: 'urban ',
+        style: TextStyle(
+          color: AppTheme.whiteColor,
+          fontWeight: FontWeight.w500
+        ),
+      ),
+      TextSpan(
+        text: 'ledger',
+        style: TextStyle(
+          color: AppTheme.whiteColor,
+          fontWeight: FontWeight.w900
+        ),
+      ),
+    ]
+  ),);
 }
 
 Future<bool> allChecker(BuildContext context) async {

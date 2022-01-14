@@ -89,17 +89,21 @@ class _LoginScreenState extends State<LoginScreen> {
             centerTitle: true),
         bottomNavigationBar: Container(
           width: double.infinity,
-          margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.015, vertical: MediaQuery.of(context).size.height * 0.02),
+          margin: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.015,
+              vertical: MediaQuery.of(context).size.height * 0.02),
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
           child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
+            style: ElevatedButton.styleFrom(
               padding: EdgeInsets.all(15),
               // side: BorderSide(
               //     color: validate() == true
               //         ? Color(0xff1058ff)
               //         : AppTheme.disabledColor,
               //     width: 2),
-              primary: validate() == true ? AppTheme.purpleActive : AppTheme.disabledColor,
+              primary: validate() == true
+                  ? AppTheme.purpleActive
+                  : AppTheme.disabledColor,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(7)),
             ),
@@ -187,7 +191,8 @@ class _LoginScreenState extends State<LoginScreen> {
             child: CustomText(
               'Get OTP',
               size: (18),
-              color: validate() == true ? AppTheme.whiteColor : AppTheme.coolGrey,
+              color:
+                  validate() == true ? AppTheme.whiteColor : AppTheme.coolGrey,
               // color: AppTheme.electricBlue,
               bold: FontWeight.bold,
             ),
@@ -197,167 +202,166 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Container(
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.05,
                 ),
-                Text(
-                  'Continue with Mobile',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.purpleActive),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                ),
-                Text(
-                  'Enter your Mobile Number\nwhere we can share OTP for verification.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: AppTheme.brownishGrey),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                
                 Flexible(
-                  child: Stack(
-                        children: [
-                          Container(
-                    margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*0.2),
-                    child: Image.asset(AppAssets.loginArtImage)),
-                        ]),
+                    child: Column(children: [
+                  Text(
+                    'Continue with Mobile',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.purpleActive),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.03,
+                  ),
+                  Text(
+                    'Enter your Mobile Number\nwhere we can share OTP for verification.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: AppTheme.brownishGrey),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.03,
+                  ),
+                ])),
+                Flexible(
+                  child: Stack(children: [
+                    Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.2),
+                        child: Image.asset(AppAssets.loginArtImage)),
+                  ]),
                 ),
                 (deviceHeight * 0.03).heightBox,
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                        border: Border(
-                      bottom: BorderSide(
-                        color: Color(0xff1058ff),
-                        width: 1.0,
-                      ),
-                    )),
-                    child: Container(
-                      // height: MediaQuery.of(context).size.height * 0.06,
-                      // margin: EdgeInsets.symmetric(horizontal: 15),
-                      child: Row(
-                        children: [
-                          Flexible(
-                            flex: 3,
-                            child: CountryCodePicker(
-                              flagDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                              padding: EdgeInsets.only(top: 10),
-                              dialogSize: Size(screenWidth(context) * 0.9,
-                                  screenHeight(context) * 0.8),
-                              barrierColor: Colors.black45,
-                              initialSelection: 'AE',
-                              // initialSelection: 'IT',
-                              favorite: ['AE', 'IN'],
-                              // countryFilter: ['AE', 'IN'],
-                              flagWidth: 40,
-                              textStyle: TextStyle(
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                      border: Border(
+                    bottom: BorderSide(
+                      color: Color(0xff1058ff),
+                      width: 1.0,
+                    ),
+                  )),
+                  child: Container(
+                    // height: MediaQuery.of(context).size.height * 0.06,
+                    // margin: EdgeInsets.symmetric(horizontal: 15),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          flex: 3,
+                          child: CountryCodePicker(
+                            flagDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: EdgeInsets.only(top: 10),
+                            dialogSize: Size(screenWidth(context) * 0.9,
+                                screenHeight(context) * 0.8),
+                            barrierColor: Colors.black45,
+                            initialSelection: 'AE',
+                            // initialSelection: 'IT',
+                            favorite: ['AE', 'IN'],
+                            // countryFilter: ['AE', 'IN'],
+                            flagWidth: 40,
+                            textStyle: TextStyle(
                                 fontSize: (19),
                                 color: AppTheme.brownishGrey,
-                                fontWeight: FontWeight.bold
-                              ),
-                              searchDecoration: InputDecoration(
-                                  hintText: "Search",
-                                  hintStyle:
-                                      TextStyle(color: AppTheme.greyish)),
-                              onChanged: (value) {
-                                setState(() {
-                                  _isMobileNoValid = null;
-                                });
-                                _country = value.code;
-                                _countryCode = value.dialCode;
-                                if (_country == 'IN' || _country == 'AE') {
-                                  _getPhoneNumber();
-                                }
-                                debugPrint(_country);
-                              },
-                            ),
+                                fontWeight: FontWeight.bold),
+                            searchDecoration: InputDecoration(
+                                hintText: "Search",
+                                hintStyle: TextStyle(color: AppTheme.greyish)),
+                            onChanged: (value) {
+                              setState(() {
+                                _isMobileNoValid = null;
+                              });
+                              _country = value.code;
+                              _countryCode = value.dialCode;
+                              if (_country == 'IN' || _country == 'AE') {
+                                _getPhoneNumber();
+                              }
+                              debugPrint(_country);
+                            },
                           ),
-                          Flexible(
-                            flex: 7,
-                            fit: FlexFit.tight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 15),
-                              child: TextFormField(
-                                controller: _mobileController,
-                                keyboardType: TextInputType.phone,
-                                style: TextStyle(
+                        ),
+                        Flexible(
+                          flex: 7,
+                          fit: FlexFit.tight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: TextFormField(
+                              controller: _mobileController,
+                              keyboardType: TextInputType.phone,
+                              style: TextStyle(
                                   fontSize: (19),
                                   color: Color(0xff666666),
-                                  fontWeight: FontWeight.bold
+                                  fontWeight: FontWeight.bold),
+                              cursorColor: Color(0xff1058ff),
+                              onChanged: (value) {
+                                if (_isMobileNoValid == false) {
+                                  setState(() {
+                                    _isMobileNoValid = null;
+                                  });
+                                }
+                              },
+                              decoration: InputDecoration(
+                                  suffixIconConstraints: BoxConstraints.tight(
+                                      Size(20, screenHeight(context) * 0.03)),
+                                  suffixIcon: _mobileController.text.isNotEmpty
+                                      ? IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _isMobileNoValid = null;
+                                            });
+                                            _mobileController.clear();
+                                          },
+                                          icon: Icon(
+                                            Icons.clear,
+                                            size: (22),
+                                            color: AppTheme.greyish,
+                                          ),
+                                        )
+                                      : null,
+                                  contentPadding: EdgeInsets.only(top: 10),
+                                  border: InputBorder.none,
+                                  hintText: 'Enter your Mobile Number',
+                                  hintStyle: TextStyle(
+                                      fontSize: (19),
+                                      color: AppTheme.coolGrey,
+                                      fontWeight: FontWeight.w500)),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                _isMobileNoValid == null
+                    ? Container()
+                    : _isMobileNoValid!
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.only(left: 20.0, top: 4),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'The number entered is invalid. Please enter a valid number.',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: AppTheme.tomato,
+                                  fontSize: (14),
                                 ),
-                                cursorColor: Color(0xff1058ff),
-                                onChanged: (value) {
-                                  if (_isMobileNoValid == false) {
-                                    setState(() {
-                                      _isMobileNoValid = null;
-                                    });
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                    suffixIconConstraints: BoxConstraints.tight(
-                                        Size(20, screenHeight(context) * 0.03)),
-                                    suffixIcon:
-                                        _mobileController.text.isNotEmpty
-                                            ? IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    _isMobileNoValid = null;
-                                                  });
-                                                  _mobileController.clear();
-                                                },
-                                                icon: Icon(
-                                                  Icons.clear,
-                                                  size: (22),
-                                                  color: AppTheme.greyish,
-                                                ),
-                                              )
-                                            : null,
-                                    contentPadding: EdgeInsets.only(top: 10),
-                                    border: InputBorder.none,
-                                    hintText: 'Enter your Mobile Number',
-                                    hintStyle: TextStyle(
-                                        fontSize: (19),
-                                        color: AppTheme.coolGrey,
-                                        fontWeight: FontWeight.w500)),
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  _isMobileNoValid == null
-                      ? Container()
-                      : _isMobileNoValid!
-                          ? Container()
-                          : Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 20.0, top: 4),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  'The number entered is invalid. Please enter a valid number.',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: AppTheme.tomato,
-                                    fontSize: (14),
-                                  ),
-                                ),
-                              ),
-                            ),
-                  // (deviceHeight * 0.10).heightBox,
+                (deviceHeight * 0.10).heightBox,
               ],
             ),
           ),
