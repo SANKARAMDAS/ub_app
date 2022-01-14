@@ -49,7 +49,7 @@ class PaymentThroughQRAPI {
       // var map = jsonDecode(data);
       Map<String, String> jsonData = {"requestid": "$data"};
       debugPrint('json Data' + jsonData.toString());
-      final response = await postRequest(endpoint: url, body: (jsonData));
+      final response = await postRequest(endpoint: url, headers: apiAuthHeaderWithOnlyToken(), body: (jsonData));
       debugPrint('Data' + response.toString());
 
       var map2 = jsonDecode(response.body);
