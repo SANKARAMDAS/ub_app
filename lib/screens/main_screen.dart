@@ -238,9 +238,9 @@ class _MainScreenState extends State<MainScreen> {
             arguments: TransactionDetailsArgs(
               urbanledgerId: message.data['urbanledgerId'],
               transactionId: message.data['transactionId'],
-              to: message.data['to'],
+              to: message.data['to_id'],
               toEmail: message.data['toEmail'],
-              from: message.data['from'],
+              from: message.data['from_id'],
               fromEmail: message.data['fromEmail'],
               completed: message.data['completed'],
               paymentMethod: message.data['paymentMethod'],
