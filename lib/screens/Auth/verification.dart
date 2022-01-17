@@ -77,7 +77,21 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
 
     _controller =
         AnimationController(vsync: this, duration: Duration(seconds: 30));
-    _controller.forward();
+
+
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    Future.delayed(const Duration(seconds: 1), () {
+
+// Here you can write your code
+
+      _controller.forward();
+
+    });
 
   }
 
