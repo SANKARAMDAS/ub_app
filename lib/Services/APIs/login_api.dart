@@ -79,7 +79,7 @@ class LoginAPI {
         final map = jsonDecode(response.body);
         debugPrint('Checking link' +
             map['customerDetails']['referral_code'].toString());
-        debugPrint('Check15' + map['customerDetails'].toString());
+        debugPrint('Check15' + map.toString());
         debugPrint(
             'Check16' + '${repository.hiveQueries.userData.paymentLink}');
 

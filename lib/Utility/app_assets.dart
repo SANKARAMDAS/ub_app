@@ -249,6 +249,8 @@ class AppAssets {
   static const String otpArtImage = 'assets/icons/v2/otp_artwork.png';
   static const String userIcon1 = 'assets/icons/v2/user_icon_1.png';
   static const String userIcon2 = 'assets/icons/v2/user_icon_2.png';
+  static const String emailIcon = 'assets/icons/v2/email_icon.png';
+  static const String pinArtImage = 'assets/icons/v2/set_pin.png';
   ///Fonts
   static const String sFProDisplayFont = 'SFProDisplay';
 }
