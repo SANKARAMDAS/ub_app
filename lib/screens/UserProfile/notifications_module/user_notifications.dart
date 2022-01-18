@@ -74,11 +74,11 @@ class _UserNotificationsState extends State<UserNotifications> {
               listener: (context, state) {
                 // do stuff here based on BlocA's state
               },
-            /*  buildWhen: (previous, current) {
+              buildWhen: (previous, current) {
                 return current is FetchedNotificationListState;
                 // return true/false to determine whether or not
                 // to rebuild the widget with state
-              },*/
+              },
               builder: (context, state) {
                 if(state is FetchedNotificationListState){
                   return  state.notificationList.length > 0?ListView.builder(
@@ -122,9 +122,9 @@ class _UserNotificationsState extends State<UserNotifications> {
     );
   }
 
-  Future<void> onNotificationTap(RemoteMessage message) async {
+  Future<void> onNotificationTap(NotificationData message) async {
     CustomerModel _customerModel = CustomerModel();
-    switch (message.data['type']) {
+    switch (message.data?.type) {
     // code commented Waiting for client confimation
     // case 'ledger_gave':
     //   _customerModel
@@ -167,48 +167,49 @@ class _UserNotificationsState extends State<UserNotifications> {
     //   break;
       case 'payment':
         debugPrint('payment .... ... ');
-        paymentNotification(message.data['transactionId']);
+        paymentNotification(message.data?.transactionId??'');
         Navigator.of(context).pushNamed(AppRoutes.paymentDetailsRoute,
             arguments: TransactionDetailsArgs(
-              urbanledgerId: message.data['urbanledgerId'],
-              transactionId: message.data['transactionId'],
-              to: message.data['to'],
-              toEmail: message.data['toEmail'],
-              from: message.data['from'],
-              fromEmail: message.data['fromEmail'],
-              completed: message.data['completed'],
-              paymentMethod: message.data['paymentMethod'],
-              amount: message.data['amount'],
+              urbanledgerId: message.data?.urbanledgerId,
+              transactionId: message.data?.transactionId,
+              to: message.data?.toId,
+              toEmail: message.data?.toEmail,
+              from: message.data?.fromId,
+              fromEmail: message.data?.fromEmail,
+              completed: message.data?.completed?.toIso8601String(),
+              paymentMethod: message.data?.paymentMethod,
+              amount: message.data?.amount,
               cardImage:
-              message.data['cardImage'].toString().replaceAll(' ', ''),
-              endingWith: message.data['endingWith'],
-              customerName: message.data['customerName'],
-              mobileNo: message.data['fromMobileNumber'],
-              paymentStatus: message.data['paymentStatus'],
+              message.data?.cardImage?.toString().replaceAll(' ', ''),
+              endingWith: message.data?.endingWith,
+              customerName: message.data?.customerName,
+              mobileNo: message.data?.fromMobileNumber,
+              paymentStatus: message.data?.paymentStatus?.toString(),
             ));
         break;
       case 'bank_account': //in progress from back end
         await CustomSharedPreferences.setBool('isBankAccount', true);
-        debugPrint('fffffffffffL');
-        Navigator.of(context).pushNamed(AppRoutes.profileBankAccountRoute);
-        CustomLoadingDialog.showLoadingDialog(context, key);
+        debugPrint('ffffffffffffK');
+        Navigator.of(context)
+            .pushReplacementNamed(AppRoutes.profileBankAccountRoute);
+        CustomLoadingDialog.showLoadingDialog(context);
         break;
       case 'payment_request':
         CustomLoadingDialog.showLoadingDialog(context);
         debugPrint('payment_request : ');
-        double amount = double.parse(message.data['amount'].toString());
+        double amount = double.parse(message.data?.amount.toString()??'0.0');
         var cid = await repository.customerApi
-            .getCustomerID(mobileNumber: message.data['mobileNo'].toString())
+            .getCustomerID(mobileNumber: message.data?.fromMobileNumber.toString())
             .timeout(Duration(seconds: 30), onTimeout: () async {
           Navigator.of(context).pop();
           return Future.value(null);
         });
-        _customerModel
+        /*_customerModel
           ..ulId = cid.customerInfo?.id != null ? cid.customerInfo?.id : cid.id
           ..mobileNo = message.data['mobileNo']
           ..name = message.data['name']
           ..chatId = message.data['chatId']
-          ..businessId = message.data['businessId'];
+          ..businessId = message.data['businessId'];*/
         final localCustId =
         await repository.queries.getCustomerId(_customerModel.mobileNo!);
         // final localCustId = '76aeff10-f8f8-11eb-bd60-0d0a52481fd7';
@@ -245,14 +246,14 @@ class _UserNotificationsState extends State<UserNotifications> {
         if (!(isTransaction)['isError']) {
           // Navigator.of(context).pop(true);
           // showBankAccountDialog();
-          debugPrint('Customer iiid: ' + message.data['customerId'].toString());
+          debugPrint('Customer iiid: ' + message.customerId!);
           Navigator.of(context).popAndPushNamed(
             AppRoutes.payTransactionRoute,
             arguments: QRDataArgs(
                 customerModel: _customerModel,
                 customerId: localCustId.isEmpty ? uniqueId : localCustId,
                 amount: amount.toInt().toString(),
-                requestId: message.data['request_id'],
+                requestId: message.data?.requestId,
                 type: 'DIRECT',
                 suspense: false,
                 through: 'DIRECT'),
@@ -282,15 +283,15 @@ class _UserNotificationsState extends State<UserNotifications> {
         break;
       case 'premium_reminder':
         Navigator.of(context).pushNamed(AppRoutes.urbanLedgerPremiumRoute);
-        CustomLoadingDialog.showLoadingDialog(context, key);
+        CustomLoadingDialog.showLoadingDialog(context);
         break;
       case 'chat':
         _customerModel
-          ..customerId = message.data['customer_id']
-          ..mobileNo = message.data['mobileNo']
-          ..name = message.data['name']
-          ..chatId = message.data['chatId']
-          ..businessId = message.data['business_id'];
+          ..customerId = message.customerId
+          ..mobileNo = message.data?.fromMobileNumber
+          ..name = message.data?.customerName
+          ..chatId = message.data?.chatId
+          ..businessId = message.data?.businessId;
         debugPrint('dddaattta' + _customerModel.toJson().toString());
         ContactController.initChat(context, _customerModel.chatId);
         localCustomerId = _customerModel.customerId!;
@@ -370,7 +371,7 @@ class _UserNotificationsState extends State<UserNotifications> {
         },
         onTap: (){
           BlocProvider.of<NotificationListCubit>(context,listen:false).markAsRead(index);
-         // onNotificationTap(NotificationData data);
+          onNotificationTap(data);
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

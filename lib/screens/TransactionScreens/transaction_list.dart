@@ -2222,7 +2222,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                               endingWith: (response)?['endingWith'],
                               customerName: _customerData.name,
                               mobileNo: _customerData.mobileNo,
-                              paymentStatus: message.paymentStatus));
+                              paymentStatus: message.paymentStatus.toString()));
                   }
                 },
                 child: Container(
@@ -2503,7 +2503,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                               endingWith: (response)?['endingWith'],
                               customerName: _customerData.name,
                               mobileNo: _customerData.mobileNo,
-                              paymentStatus: message.paymentStatus));
+                              paymentStatus: message.paymentStatus.toString()));
                   }
                 },
                 child: Container(
