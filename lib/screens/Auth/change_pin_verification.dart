@@ -63,7 +63,6 @@ class _ChangePinVerificationState extends State<ChangePinVerification>
   late bool _serviceEnabled;
   final location = Location();
   bool isResendOtpClickable = false;
-  int _resendOtpCount = 30;
   // late Timer _timer;
 
   late AnimationController _controller;
@@ -94,11 +93,7 @@ class _ChangePinVerificationState extends State<ChangePinVerification>
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     Future.delayed(const Duration(seconds: 1), () {
-
-// Here you can write your code
-
       _controller.forward();
-
     });
 
   }
@@ -381,11 +376,12 @@ class _ChangePinVerificationState extends State<ChangePinVerification>
                                   clearTextControllers();
                                   setState(() {
                                     isResendOtpClickable = false;
-                                    _resendOtpCount = 30;
                                   });
                                   //startTimer();
 
-                                  _controller.forward();
+                                  Future.delayed(const Duration(seconds: 1), () {
+                                    _controller.forward();
+                                  });
                                 }
                               : () {},
                         ),
