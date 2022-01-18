@@ -232,13 +232,15 @@ class _VerificationScreenState extends State<VerificationScreen>
                                   });
                             debugPrint('abcdnfndfnsdf' + status.toString());
                             if (status.isNotEmpty) {
-                              debugPrint("isNotEmpt");
-                              if (status == 'Incorrect') {
-                                'Incorrect OTP'.showSnackBar(context);
-                                debugPrint("Incorrect");
+                              if (status == 'isNotRegister') {
+                                Navigator.of(context)
+                                  ..pop()
+                                  ..pop()
+                                  ..pushReplacementNamed(AppRoutes.signupRoute,
+                                      arguments:
+                                          widget.phoneNo.replaceAll(' ', ''));
                               }
-
-                              debugPrint("Incorrect");
+                              if (status == 'Incorrect') return;
                               _formKey.currentState!.reset();
                               if (!widget.isRegister) {
                                 debugPrint("isREgister");
@@ -267,13 +269,27 @@ class _VerificationScreenState extends State<VerificationScreen>
                                             true));
                                 } else {
                                   if (repository.hiveQueries.userPin.isEmpty) {
-                                    Navigator.of(context)
-                                      ..pop()
-                                      ..pop()
-                                      ..pushReplacementNamed(
-                                          AppRoutes.setPinRoute,
-                                          arguments: SetPinRouteArgs(
-                                              '', false, false, false));
+                                    if (repository.hiveQueries.userData
+                                        .firstName.isEmpty) {
+                                      Future.delayed(Duration(seconds: 1))
+                                          .then((value) {
+                                        Navigator.of(context)
+                                          ..pop()
+                                          ..pop()
+                                          ..pushReplacementNamed(
+                                              AppRoutes.signupRoute,
+                                              arguments: widget.phoneNo
+                                                  .replaceAll(' ', ''));
+                                      });
+                                    } else {
+                                      Navigator.of(context)
+                                        ..pop()
+                                        ..pop()
+                                        ..pushReplacementNamed(
+                                            AppRoutes.setPinRoute,
+                                            arguments: SetPinRouteArgs(
+                                                '', false, false, false));
+                                    }
                                   } else {
                                     Navigator.of(context)
                                       ..pop()
