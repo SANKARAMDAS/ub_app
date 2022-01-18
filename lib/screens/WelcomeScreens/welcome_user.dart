@@ -23,16 +23,12 @@ class WelcomeUser extends StatefulWidget {
 }
 
 class _WelcomeUserState extends State<WelcomeUser> {
-  // late Timer timer;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
 
-  final theImage = Image.asset(
-    AppAssets.persIcon,
-    height: 30,
-  );
-  final theImage2 = Image.asset(
-    AppAssets.busnIcon,
-    height: 30,
-  );
+  // late Timer timer;
 
   @override
   void initState() {
@@ -40,16 +36,13 @@ class _WelcomeUserState extends State<WelcomeUser> {
     requestPermission();
   }
 
-  @override
-  void didChangeDependencies() {
-    precacheImage(theImage.image, context);
-    precacheImage(theImage2.image, context);
-    super.didChangeDependencies();
-  }
-
   Future<void> requestPermission() async {
     await Permission.contacts.request();
   }
+
+  Widget get divider => const SizedBox(
+        height: 20,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -64,214 +57,215 @@ class _WelcomeUserState extends State<WelcomeUser> {
     //   timer.cancel();
     // });
     return Scaffold(
-      backgroundColor: AppTheme.greyBackground,
-      extendBodyBehindAppBar: true,
-      body: Stack(alignment: Alignment.topCenter, children: [
-        AppAssets.backgroundImage.background,
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            (deviceHeight * 0.1).heightBox,
-            CustomText(
-              repository.hiveQueries.userData.firstName +
-                  ' ' +
-                  repository.hiveQueries.userData.lastName,
-              size: 25,
-              color: AppTheme.electricBlue,
-            ),
-            // SizedBox(
-            //   height: 10,
-            // ),
-            CustomText(
-              'Welcome to',
-              size: 25,
-              color: AppTheme.brownishGrey,
-              bold: FontWeight.w500,
-            ),
-            (deviceHeight * 0.08).heightBox,
-            ULLogoWidget(
-              height: 80,
-            ),
-            CustomText(
-              'Track. Remind. Pay.',
-              size: 20,
-              color: AppTheme.brownishGrey,
-              bold: FontWeight.w500,
-            ),
-            (deviceHeight * 0.08).heightBox,
-            Center(
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text: 'Select a',
-                  style: TextStyle(
-                    color: AppTheme.brownishGrey,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w300,
-                  ),
+      backgroundColor: AppTheme.paleBlue,
+      extendBodyBehindAppBar: false,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent
+      ),
+      body: Center(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                flex: 2,
+                child: Column(
+                  // mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    TextSpan(
-                      text: ' Profile',
+                    Text(
+                      'Hello, ${repository.hiveQueries.userData.firstName} ${repository.hiveQueries.userData.lastName}',
                       style: TextStyle(
-                        color: AppTheme.brownishGrey,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w300,
-                      ),
+                          fontFamily: "Hind",
+                          color: AppTheme.blackColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
                     ),
-                    TextSpan(
-                      text: ' for a seamless experience\n',
+                    Text(
+                      'Welcome to',
                       style: TextStyle(
-                        color: AppTheme.brownishGrey,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w300,
-                      ),
+                          fontFamily: "Hind",
+                          fontSize: 44,
+                          color: AppTheme.purpleActive,
+                          fontWeight: FontWeight.w500),
                     ),
-                    TextSpan(
-                      text: 'with UrbanLedger App.',
-                      style: TextStyle(
-                        color: AppTheme.brownishGrey,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
+                    Container(
+                    margin: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.3, 
+                        vertical: MediaQuery.of(context).size.height*0.05),
+                    child: Image.asset(AppAssets.portraitLogo),
+                  )
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 30),
-            CustomList(
-              icon: theImage,
-              text: 'Personal',
-              onSubmit: () async {
-                final response = (Repository()
-                                            .userProfileAPI
-                                            .userTypeChangeApi(
-                                                'PERSONAL',
-                                                context));
-                                              
-                await CustomSharedPreferences.setString(      //set flag
-                    'accounttype', 'PERSONAL');
-                // String data1 =
-                //     await (CustomSharedPreferences.get('accounttype')); 
-                    
-                //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
-                Navigator.pushReplacementNamed(context, AppRoutes.mainRoute);
-              },
-            ),
-            divider,
-            Container(
-              // width: 100.0,
-              // height: 100.0,
-              child: CustomList(
-                icon: theImage2,
-                text: 'Business',
-                onSubmit: () async{
-                  final response = (Repository()
-                                            .userProfileAPI
-                                            .userTypeChangeApi(
-                                                'BUSINESS',
-                                                context));
-                  await CustomSharedPreferences.setString(                      //set flag
-                    'accounttype', 'BUSINESS');
-                // String data1 =
-                //     await (CustomSharedPreferences.get('accounttype'));         //
-                  //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
-                  Navigator.pushReplacementNamed(context, AppRoutes.mainRoute);
-                },
-              ),
-            ),
-            const SizedBox(height: 30),
-            Text(
-              'You can change your profile anytime while using our app.',
-              style: TextStyle(
-                color: AppTheme.brownishGrey,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-          ],
-        )
-      ]),
+              // Flexible(
+              //     flex: 2,
+              //     child: ),
+              Flexible(
+                flex: 2,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: 'Select a',
+                          style: TextStyle(
+                              fontFamily: "Hind",
+                              fontSize: 18,
+                              color: AppTheme.brownishGrey,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        TextSpan(
+                          text: ' Profile ',
+                          style: TextStyle(
+                              fontFamily: "Hind",
+                              fontSize: 18,
+                              color: AppTheme.purpleActive,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: 'for a seamless experience\n',
+                          style: TextStyle(
+                              fontFamily: "Hind",
+                              fontSize: 18,
+                              color: AppTheme.brownishGrey,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        TextSpan(
+                          text: 'with Urban ledger App.',
+                          style: TextStyle(
+                              fontFamily: "Hind",
+                              fontSize: 18,
+                              color: AppTheme.brownishGrey,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ])),
+                      SizedBox(height: MediaQuery.of(context).size.height*0.02),
+                  CustomList(
+                    icon: AppAssets.userIcon1,
+                    text: 'Personal',
+                    onSubmit: () async {
+                      final response = (Repository()
+                          .userProfileAPI
+                          .userTypeChangeApi('PERSONAL', context));
+
+                      await CustomSharedPreferences.setString(
+                          //set flag
+                          'accounttype',
+                          'PERSONAL');
+                      // String data1 =
+                      //     await (CustomSharedPreferences.get('accounttype'));
+
+                      //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
+                      Navigator.pushReplacementNamed(
+                          context, AppRoutes.mainRoute);
+                    },
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height*0.02),
+                  CustomList(
+                    icon: AppAssets.busnIcon,
+                    text: 'Business',
+                    onSubmit: () async {
+                      final response = (Repository()
+                          .userProfileAPI
+                          .userTypeChangeApi('BUSINESS', context));
+
+                      await CustomSharedPreferences.setString(
+                          //set flag
+                          'accounttype',
+                          'BUSINESS');
+                      // String data1 =
+                      //     await (CustomSharedPreferences.get('accounttype'));
+
+                      //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
+                      Navigator.pushReplacementNamed(
+                          context, AppRoutes.mainRoute);
+                    },
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height*0.03),
+                  Text('You can change your profile anytime while using our app.',
+                  style: TextStyle(fontWeight: FontWeight.w500, color: AppTheme.brownishGrey),),
+                  SizedBox(height: MediaQuery.of(context).size.height*0.03),
+                ],
+              ))
+            ]),
+      ),
     );
   }
-
-  Widget get divider => const SizedBox(
-        height: 20,
-      );
 }
 
 class CustomList extends StatelessWidget {
-  final String text;
-  final Widget icon;
-  final Function? onSubmit;
-
   const CustomList({
     required this.text,
     required this.icon,
     this.onSubmit,
   });
 
+  final String icon;
+  final Function? onSubmit;
+  final String text;
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 10,
-      margin: EdgeInsets.only(left: 20.0, right: 30.0),
-      // padding: EdgeInsets.only(
-      //                       left: MediaQuery.of(context).size.width * 0.068,
-      //                       right: MediaQuery.of(context).size.width * 0.05),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+    return Container(
+      margin: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.05),
+      padding: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(context).size.height * 0.01),
+      decoration: BoxDecoration(
+        color: AppTheme.whiteColor,
+        borderRadius: BorderRadius.circular(7),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+              color: AppTheme.blackColor.withOpacity(0.1), blurRadius: 7.0, spreadRadius: 3, offset: Offset(-5, 5))
+        ],
       ),
-// decoration: BoxDecoration(
-      //   border: Border.all(
-      //     color: Colors.white, // red as border color
-      //   ),
-      //   borderRadius: BorderRadius.circular(10.0),
-      //   color: Colors.white,
-      // ),
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: 7,
-            left: MediaQuery.of(context).size.width * 0.01,
-            bottom: 7,
-            right: MediaQuery.of(context).size.width * 0.001),
-        child: ListTile(
-          tileColor: Colors.white,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          onTap: () {
-            onSubmit!();
-          },
-          dense: true,
-          leading: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
+      child: ListTile(
+        tileColor: Colors.white,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        onTap: () {
+          onSubmit!();
+        },
+        dense: true,
+        leading: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
 // CircleAvatar(
-              //   radius: 22,
-              Container(
-                child: icon,
+            //   radius: 22,
+            Container(
+              margin: EdgeInsets.only(right: 5),
+              child: Image.asset(
+                icon,
+                height: 35,
+                color: AppTheme.purpleActive,
               ),
-              // ),
-              VerticalDivider(
-                color: AppTheme.electricBlue,
+            ),
+            // ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10),
+              child: VerticalDivider(
+                color: AppTheme.purpleActive,
                 // width: 3.0,
-                thickness: 1.0,
+                thickness: 2.0,
               ),
-            ],
-          ),
-          title: Text(
-            text,
-            style: TextStyle(
-                color: Colors.black,
-                // color: AppTheme.brownishGrey,
-                fontSize: 16,
-                fontWeight: FontWeight.bold),
-          ),
-          trailing: const Icon(
-            Icons.chevron_right_rounded,
-            color: AppTheme.electricBlue,
-            size: 30,
-          ),
+            ),
+          ],
+        ),
+        title: Text(
+          text,
+          style: TextStyle(
+              color: AppTheme.brownishGrey,
+              // color: AppTheme.brownishGrey,
+              fontSize: 18,
+              fontWeight: FontWeight.bold),
+        ),
+        trailing: const Icon(
+          Icons.arrow_forward,
+          color: AppTheme.purpleActive,
+          size: 24,
         ),
       ),
     );

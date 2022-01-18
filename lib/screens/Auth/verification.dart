@@ -328,9 +328,11 @@ class _VerificationScreenState extends State<VerificationScreen>
             child: Form(
               key: _formKey,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Flexible(
+                    flex:1,
                       child: Column(children: [
                    
                     Text(
@@ -352,11 +354,10 @@ class _VerificationScreenState extends State<VerificationScreen>
                           fontWeight: FontWeight.w500,
                           color: AppTheme.brownishGrey),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
-                    ),
+                    
                   ])),
                   Flexible(
+                    flex: 2,
                     child: Stack(children: [
                       Container(
                           margin: EdgeInsets.symmetric(
@@ -365,6 +366,9 @@ class _VerificationScreenState extends State<VerificationScreen>
                           child: Image.asset(AppAssets.otpArtImage)),
                     ]),
                   ),
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
+                    ),
                   // (deviceHeight * 0.03).heightBox,
                   Text(
                     'Sit back and relax while we try to read\nthe OTP from your device.',
@@ -561,6 +565,7 @@ class _VerificationScreenState extends State<VerificationScreen>
           // obscureText: true,
           maxLength: 1,
           cursorColor: AppTheme.coolGrey,
+          cursorHeight: 50,
           style: TextStyle(
               color: AppTheme.blackColor,
               fontSize: 40,
@@ -740,7 +745,7 @@ class Countdown extends AnimatedWidget {
     );*/
 
     return CustomText(
-      '${timerText} secs',
+      '${timerText}',
       size: (18),
       color: AppTheme.redColor,
       bold: FontWeight.w800,
