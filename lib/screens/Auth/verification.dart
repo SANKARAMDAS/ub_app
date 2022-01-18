@@ -128,7 +128,7 @@ class _VerificationScreenState extends State<VerificationScreen>
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppTheme.paleBlue,
         bottomNavigationBar: Padding(
           padding: isPlatformiOS()
               ? EdgeInsets.only(
@@ -172,14 +172,16 @@ class _VerificationScreenState extends State<VerificationScreen>
                     padding: EdgeInsets.only(
                         bottom: 15, top: 15, left: 30, right: 30),
                     primary: validate() == true
-                        ? AppTheme.electricBlue
-                        : AppTheme.coolGrey,
+                        ? AppTheme.purpleActive
+                        : AppTheme.disabledColor,
                   ),
                   child: CustomText(
                     'VERIFY OTP',
                     size: (18),
-                    bold: FontWeight.w500,
-                    color: Colors.white,
+                    bold: FontWeight.bold,
+                    color: validate() == true
+                        ? AppTheme.whiteColor
+                        : AppTheme.coolGrey,
                   ),
                   onPressed: validate() == true
                       ? () async {
@@ -342,50 +344,84 @@ class _VerificationScreenState extends State<VerificationScreen>
             ],
           ),
         ),
-        body: SingleChildScrollView(
+        appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            leading: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: Image.asset(AppAssets.backButtonIcon,
+                        width: MediaQuery.of(context).size.width * 0.9))),
+            title: Container(
+                // margin: EdgeInsets.symmetric(vertical: 500),
+                child: Image.asset(AppAssets.landscapeLogo,
+                    width: MediaQuery.of(context).size.width * 0.4)),
+            centerTitle: true),
+        body: Center(
           child: Container(
             child: Form(
               key: _formKey,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: Image.asset(
-                      AppAssets.backgroundImage,
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                  (deviceHeight * 0.09).heightBox,
-                  ULLogoWidget(
-                    height: 80,
-                  ),
-                  (deviceHeight * 0.09).heightBox,
-                  Center(
-                    child: RichText(
+                  Flexible(
+                    flex:1,
+                      child: Column(children: [
+                   
+                    Text(
+                      'Verify Mobile Number',
                       textAlign: TextAlign.center,
-                      text: TextSpan(
-                          text: 'We have sent a 6-digit OTP\nto ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: AppTheme.coolGrey,
-                            fontSize: (15),
-                          ),
-                          children: [
-                            TextSpan(
-                              text: widget.phoneNo,
-                            ),
-                          ]),
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          color: AppTheme.purpleActive),
                     ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
+                    ),
+                    Text(
+                      'We have sent a 6-Digit OTP to\n${widget.phoneNo}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: AppTheme.brownishGrey),
+                    ),
+                    
+                  ])),
+                  Flexible(
+                    flex: 2,
+                    child: Stack(children: [
+                      Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal:
+                                  MediaQuery.of(context).size.width * 0.2),
+                          child: Image.asset(AppAssets.otpArtImage)),
+                    ]),
                   ),
-                  (deviceHeight * 0.04).heightBox,
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
+                    ),
+                  // (deviceHeight * 0.03).heightBox,
+                  Text(
+                    'Sit back and relax while we try to read\nthe OTP from your device.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: AppTheme.brownishGrey),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 35.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 15.0),
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 7.0, vertical: 15.0),
                           child: otpTextField(
                             controller: oneController,
                             onSaved: (value) => _digit1 = value,
@@ -393,9 +429,9 @@ class _VerificationScreenState extends State<VerificationScreen>
                             nextFocusNode: secondFocusNode,
                           ),
                         ).flexible,
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 15.0),
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 7.0, vertical: 15.0),
                           child: otpTextField(
                             controller: twoController,
                             onSaved: (value) => _digit2 = value,
@@ -404,9 +440,9 @@ class _VerificationScreenState extends State<VerificationScreen>
                             previousFocusNode: firstFocusNode,
                           ),
                         ).flexible,
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 15.0),
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 7.0, vertical: 15.0),
                           child: otpTextField(
                             controller: threeController,
                             onSaved: (value) => _digit3 = value,
@@ -415,9 +451,9 @@ class _VerificationScreenState extends State<VerificationScreen>
                             previousFocusNode: secondFocusNode,
                           ),
                         ).flexible,
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 15.0),
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 7.0, vertical: 15.0),
                           child: otpTextField(
                             controller: fourController,
                             onSaved: (value) => _digit4 = value,
@@ -426,9 +462,9 @@ class _VerificationScreenState extends State<VerificationScreen>
                             previousFocusNode: thirdFocusNode,
                           ),
                         ).flexible,
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 15.0),
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 7.0, vertical: 15.0),
                           child: otpTextField(
                               controller: fiveController,
                               onSaved: (value) => _digit5 = value,
@@ -436,9 +472,9 @@ class _VerificationScreenState extends State<VerificationScreen>
                               nextFocusNode: sixthFocusNode,
                               previousFocusNode: fourthFocusNode),
                         ).flexible,
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0, vertical: 15.0),
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 7.0, vertical: 15.0),
                           child: otpTextField(
                             controller: sixController,
                             focusNode: sixthFocusNode,
@@ -460,11 +496,11 @@ class _VerificationScreenState extends State<VerificationScreen>
                           child: CustomText(
                             isResendOtpClickable
                                 ? 'RESEND OTP'
-                                : 'RESEND OTP IN ',
+                                : 'RESEND CODE IN ',
                             size: (18),
                             color: isResendOtpClickable
-                                ? AppTheme.electricBlue
-                                : Colors.grey,
+                                ? AppTheme.redColor
+                                : AppTheme.brownishGrey,
                             bold: FontWeight.w800,
                           ),
                           onTap: isResendOtpClickable
@@ -500,17 +536,6 @@ class _VerificationScreenState extends State<VerificationScreen>
                       ],
                     ),
                   ),
-                  (deviceHeight * 0.09).heightBox,
-                  Center(
-                    child: CustomText(
-                      'Sit tight and relax while we try to read the\nOTP from your device',
-                      centerAlign: true,
-                      size: (14),
-                      color: AppTheme.coolGrey,
-                      bold: FontWeight.w500,
-                    ),
-                  ),
-                  (deviceHeight * 0.04).heightBox,
                 ],
               ),
             ),
@@ -534,10 +559,10 @@ class _VerificationScreenState extends State<VerificationScreen>
           // ),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withOpacity(0.1),
               spreadRadius: 2,
-              blurRadius: 5,
-              offset: Offset(0, 3), // changes position of shadow
+              blurRadius: 3,
+              offset: Offset(0, 2), // changes position of shadow
             ),
           ],
           // border: Border.all(
@@ -578,14 +603,16 @@ class _VerificationScreenState extends State<VerificationScreen>
           // obscureText: true,
           maxLength: 1,
           cursorColor: AppTheme.coolGrey,
+          cursorHeight: 50,
           style: TextStyle(
-              color: AppTheme.coolGrey,
-              fontSize: 28,
-              fontWeight: FontWeight.bold),
+              color: AppTheme.blackColor,
+              fontSize: 40,
+              fontFamily: "Hind",
+              fontWeight: FontWeight.w500),
           decoration: InputDecoration(
             counterText: '',
-            hintText: '_',
-            hintStyle: TextStyle(color: AppTheme.coolGrey),
+            // hintText: '_',
+            // hintStyle: TextStyle(color: AppTheme.coolGrey),
             enabledBorder: UnderlineInputBorder(borderSide: BorderSide.none),
             focusedBorder: UnderlineInputBorder(borderSide: BorderSide.none),
           ),
@@ -758,7 +785,7 @@ class Countdown extends AnimatedWidget {
     return CustomText(
       '${timerText}',
       size: (18),
-      color: AppTheme.electricBlue,
+      color: AppTheme.redColor,
       bold: FontWeight.w800,
     );
   }

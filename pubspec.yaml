@@ -149,6 +149,7 @@ flutter:
     - assets/icons/navbar/
     - assets/icons/myprofile/
     - assets/icons/referafriend/
+    - assets/icons/v2/
 
 
   #   - images/a_dot_ham.jpeg

@@ -241,6 +241,16 @@ class AppAssets {
       'assets/images/resend_email_verification.png';
   static const String emailVerified = 'assets/images/email_verified.png';
 
+  static const String portraitLogo = 'assets/icons/v2/p_logo.png';
+  static const String landscapeLogo = 'assets/icons/v2/l_logo.png';
+  static const String splashLogo = 'assets/icons/v2/splash_logo.png';
+  static const String backButtonIcon = 'assets/icons/v2/back_button.png';
+  static const String loginArtImage = 'assets/icons/v2/login_artwork.png';
+  static const String otpArtImage = 'assets/icons/v2/otp_artwork.png';
+  static const String userIcon1 = 'assets/icons/v2/user_icon_1.png';
+  static const String userIcon2 = 'assets/icons/v2/user_icon_2.png';
+  static const String emailIcon = 'assets/icons/v2/email_icon.png';
+  static const String pinArtImage = 'assets/icons/v2/set_pin.png';
   ///Fonts
   static const String sFProDisplayFont = 'SFProDisplay';
 }
