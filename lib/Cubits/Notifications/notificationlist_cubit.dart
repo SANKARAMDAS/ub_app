@@ -56,7 +56,7 @@ class NotificationListCubit extends Cubit<NotificationListState>{
     List<String> ids = selectedList.map((e) => e.id.toString()).toList();
 
     NotificationListApi.notificationListApi.deleteNotifications(ids);
-    notificationList.removeWhere((element) => selectedList.contains(element));
+    notificationList.removeWhere((element) => ids.contains(element.id));
     print(notificationList.length);
     emit(FetchedNotificationListState(notificationList));
 

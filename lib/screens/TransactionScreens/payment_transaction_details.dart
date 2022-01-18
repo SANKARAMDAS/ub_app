@@ -23,7 +23,7 @@ class PaymentDetails extends StatelessWidget {
   final String? mobileNo;
   final String? cardImage;
   final String? endingWith;
-  final int? paymentStatus;
+  final String? paymentStatus;
 
   PaymentDetails(
       {this.urbanledgerId,

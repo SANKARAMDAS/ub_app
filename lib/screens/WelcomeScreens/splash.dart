@@ -38,6 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
   final Repository repository = Repository();
   CustomerModel _customerModel = CustomerModel();
   ChatRepository _chatRepository = ChatRepository();
+  final GlobalKey<State> key = GlobalKey<State>();
   @override
   void initState() {
     super.initState();
@@ -108,15 +109,15 @@ void onStart() async {
             arguments: TransactionDetailsArgs(
               urbanledgerId: message.data['urbanledgerId'],
               transactionId: message.data['transactionId'],
-              to: message.data['to'],
+              to: message.data['to_id'],
               toEmail: message.data['toEmail'],
-              from: message.data['from'],
+              from: message.data['from_id'],
               fromEmail: message.data['fromEmail'],
               completed: message.data['completed'],
               paymentMethod: message.data['paymentMethod'],
               amount: message.data['amount'],
               cardImage:
-                  message.data['cardImage'].toString().replaceAll(' ', ''),
+                  message.data['cardImage']?.toString().replaceAll(' ', ''),
               endingWith: message.data['endingWith'],
               customerName: message.data['customerName'],
               mobileNo: message.data['fromMobileNumber'],
@@ -382,6 +383,7 @@ void onStart() async {
     // });
     return Scaffold(
       extendBodyBehindAppBar: true,
+      key: key,
       body: Stack(alignment: Alignment.topCenter, children: [
         AppAssets.backgroundImage.background,
         /* Align(

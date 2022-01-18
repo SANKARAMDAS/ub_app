@@ -71,7 +71,7 @@ class NotificationListApi {
       final response = await http.patch(
         Uri.parse('$baseUrl$url'),
         headers: apiAuthHeader(),
-          body: jsonEncode({"id":ids})
+          body: jsonEncode({"ids":ids})
       );
 
       debugPrint('Check SUS' + jsonDecode(response.body).toString());
@@ -96,7 +96,7 @@ class NotificationListApi {
     Map<String,dynamic> responseData={};
 
     try {
-      String bodyMap =  jsonEncode({"id":ids});
+      String bodyMap =  jsonEncode({"ids":ids});
       final response = await http.delete(
         Uri.parse('$baseUrl$url'),
         headers: apiAuthHeader(),

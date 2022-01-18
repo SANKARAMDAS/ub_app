@@ -150,7 +150,7 @@ class TransactionDetailsArgs {
   final String? mobileNo;
   final String? cardImage;
   final String? endingWith;
-  final int? paymentStatus;
+  final String? paymentStatus;
   TransactionDetailsArgs(
       {this.urbanledgerId,
       this.transactionId,
