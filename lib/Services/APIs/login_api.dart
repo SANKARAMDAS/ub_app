@@ -84,6 +84,7 @@ class LoginAPI {
             'Check16' + '${repository.hiveQueries.userData.paymentLink}');
 
         if (map['status']) {
+          if (map['customerDetails'].containsKey('first_name')) {
           if (map['token'] != null)
             _repository!.hiveQueries.insertAuthToken(map['token']);
           if (map['chatToken'] != null)
@@ -103,9 +104,11 @@ class LoginAPI {
             mobileNo: map['customerDetails']['mobile_no'],
             status: true,
           );
-          _repository!.hiveQueries.setPinStatus(true);
-            _repository!.hiveQueries.setFingerPrintStatus(true);
           repository.queries.checkLoginUser(loginModel);
+          
+            _repository!.hiveQueries.setPinStatus(true);
+            _repository!.hiveQueries.setFingerPrintStatus(true);
+          
           _repository!.hiveQueries.insertUserData(SignUpModel.fromJson(
               map['customerDetails'], filePath,
               bankStatus: map['bankStatus'] ?? false,
@@ -122,8 +125,43 @@ class LoginAPI {
               email_status: map['customerDetails']['email_status'] ?? false,
               id: map['customerDetails']['_id']),
             );
+          
+          return map['customerDetails']['first_name'] ?? '';
+          } else {
+            if (map['token'] != null)
+            _repository!.hiveQueries.insertAuthToken(map['token']);
+          if (map['chatToken'] != null)
+            await CustomSharedPreferences.setString(
+                'chat_token', map['chatToken']);
+          if (map['customerDetails']['profilePic'] != null) {
+            if (map['customerDetails']['profilePic'].toString().isNotEmpty) {
+              filePath = await _repository!.ledgerApi
+                  .networkImageToFile(map['customerDetails']['profilePic']);
+            }
+          }
+            _repository!.hiveQueries.setPinStatus(true);
+            _repository!.hiveQueries.setFingerPrintStatus(true);
+          
+          _repository!.hiveQueries.insertUserData(SignUpModel.fromJson(
+              map['customerDetails'], filePath,
+              bankStatus: map['bankStatus'] ?? false,
+              kycExpDate: map['kycExpDate'] ?? '',
+              kycStatus: map['kycStatus'] ?? 0,
+              premiumExpDate: map['premiumExpDate'] ?? '',
+              premiumStatus: map['premiumStatus'] ?? 0,
+              isEmiratesIdDone: map['tl'] ?? false,
+              isTradeLicenseDone: map['emirates'] ?? false,
+              paymentLink: map['link'] ??
+                  '${repository.hiveQueries.userData.paymentLink}',
+              referral_code: map['customerDetails']['referral_code'] ?? '',
+              referral_link: map['customerDetails']['referral_link'] ?? '',
+              email_status: map['customerDetails']['email_status'] ?? false,
+              id: map['customerDetails']['_id']),
+            );
+          return 'isNotRegister';
+          }
         }
-        return map['customerDetails']['first_name'] ?? '';
+        
       }
       return Future.error(jsonDecode(response.body)['message']);
     } catch (e) {
