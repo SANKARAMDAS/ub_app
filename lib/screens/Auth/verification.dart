@@ -218,8 +218,9 @@ class _VerificationScreenState extends State<VerificationScreen>
                                     sixController.text = ' ';
                                     setState(() {});
                                     e.toString().showSnackBar(context);
-                                    Navigator.of(context).pop();
-                                    return 'Incorrect';
+                                    debugPrint('Incorrect12345');
+                                    // Navigator.of(context).pop();
+                                    // return 'Incorrect';
                                   })
                                 : await (repository.loginApi
                                         .loginOtpVerification(
@@ -244,6 +245,7 @@ class _VerificationScreenState extends State<VerificationScreen>
                                     Navigator.of(context).pop();
                                     return 'Incorrect';
                                   });
+                            debugPrint('abcdnfndfnsdf' + status.toString());
                             if (status.isNotEmpty) {
                               if (status == 'isNotRegister') {
                                 Navigator.of(context)
@@ -256,6 +258,7 @@ class _VerificationScreenState extends State<VerificationScreen>
                               if (status == 'Incorrect') return;
                               _formKey.currentState!.reset();
                               if (!widget.isRegister) {
+                                debugPrint("isREgister");
                                 // await analytics.logLogin();
                                 LoginRepository().login(
                                     widget.phoneNo.replaceAll(' ', ''),
