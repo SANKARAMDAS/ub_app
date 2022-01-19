@@ -431,7 +431,7 @@ class _CashbookListState extends State<CashbookList> {
                           height: deviceHeight * 0.045,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              onPrimary: AppTheme.electricBlue,
+                              primary: AppTheme.electricBlue,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
                             ),
@@ -462,7 +462,7 @@ class _CashbookListState extends State<CashbookList> {
                           height: deviceHeight * 0.045,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              onPrimary: AppTheme.electricBlue,
+                              primary: AppTheme.electricBlue,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
                             ),
@@ -505,7 +505,7 @@ class _CashbookListState extends State<CashbookList> {
                           height: deviceHeight * 0.045,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              onPrimary: AppTheme.electricBlue,
+                              primary: AppTheme.electricBlue,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
                             ),
@@ -748,6 +748,7 @@ class _CashbookListState extends State<CashbookList> {
                               bold: FontWeight.w500,
                             ),
                             style: ElevatedButton.styleFrom(
+                              primary: AppTheme.electricBlue,
                               padding: EdgeInsets.all(15),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),

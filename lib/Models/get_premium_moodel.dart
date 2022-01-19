@@ -72,7 +72,7 @@ class MyPlans {
     customerId: json["customer_id"] == null ? null : json["customer_id"],
     planStatus: json["planStatus"] == null ? null : json["planStatus"],
     status: json["status"] == null ? null : json["status"],
-    amount: json["amount"] == null ? null : json["amount"],
+    amount: json["amount"] == null ? null : int.tryParse(json["amount"].toString()),
     currency: json["currency"] == null ? null : json["currency"],
     urbanledgerId:
     json["urbanledgerId"] == null ? null : json["urbanledgerId"],

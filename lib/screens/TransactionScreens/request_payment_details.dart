@@ -141,7 +141,7 @@ class _RequestPaymentDetailsState extends State<RequestPaymentDetails> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(15),
-                    onPrimary: AppTheme.electricBlue,
+                    primary: AppTheme.electricBlue,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
@@ -271,7 +271,7 @@ class _RequestPaymentDetailsState extends State<RequestPaymentDetails> {
                                         '${widget.firstName ?? 'USER'} ${widget.lastName ?? ''}',
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          color: Color(0xff1058ff),
+                                          color: AppTheme.electricBlue,
                                           fontSize: 23,
                                           fontWeight: FontWeight.w500,
                                         ),

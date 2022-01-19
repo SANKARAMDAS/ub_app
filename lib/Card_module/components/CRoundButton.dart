@@ -16,7 +16,7 @@ class CButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.all(15),
-          onPrimary: AppTheme.electricBlue,
+          primary: AppTheme.electricBlue,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),

@@ -505,7 +505,7 @@ class _SettlementDetailsState extends State<SettlementDetails> {
                                       data.totalSettlementAmount!.getFormattedCurrency,
                                       // text: '46151830',
                                       style: TextStyle(
-                                          color: Color(0xff1058ff),
+                                          color: AppTheme.electricBlue,
                                           fontSize: 32,
                                           fontWeight: FontWeight.bold)),
                                 ]),
@@ -580,7 +580,7 @@ class _SettlementDetailsState extends State<SettlementDetails> {
                                               TextSpan(
                                                 text: 'App',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -677,7 +677,7 @@ class _SettlementDetailsState extends State<SettlementDetails> {
                                               TextSpan(
                                                 text: 'Links',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -773,7 +773,7 @@ class _SettlementDetailsState extends State<SettlementDetails> {
                                               TextSpan(
                                                 text: 'QR code',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),

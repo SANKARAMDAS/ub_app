@@ -987,7 +987,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       //     style: ButtonStyle(
                                       //         backgroundColor:
                                       //             MaterialStateProperty.all<
-                                      //                 Color>(Color(0xff1058ff)),
+                                      //                 Color>(AppTheme.electricBlue),
                                       //         shape: MaterialStateProperty.all<
                                       //                 OutlinedBorder>(
                                       //             RoundedRectangleBorder(
@@ -3049,7 +3049,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                 title: CustomText(
                   getName(widget._customerList[index].name,
                       widget._customerList[index].mobileNo),
-                  bold: FontWeight.w500,
+                  bold: FontWeight.bold,
                   size: 18,
                 ),
                 subtitle: CustomText(

@@ -201,7 +201,7 @@ class _BankAddedSuccessfullyState extends State<BankAddedSuccessfully> {
                               //         vertical: 8, horizontal: 20),
                               //     margin: EdgeInsets.only(top: 16),
                               //     decoration: BoxDecoration(
-                              //         color: Color(0xff1058FF),
+                              //         color: AppTheme.electricBlue,
                               //         borderRadius: BorderRadius.only(
                               //             topLeft: Radius.circular(15),
                               //             topRight: Radius.circular(15))),

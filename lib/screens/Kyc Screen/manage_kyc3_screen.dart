@@ -210,7 +210,7 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                           'Step 1',
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              color: Color(0xff1058FF),
+                              color: AppTheme.electricBlue,
                               fontFamily: 'SFProDisplay',
                               fontWeight: FontWeight.w700,
                               fontSize: 18),
@@ -343,8 +343,8 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                           'Step 2',
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              color: Color(0xff1058FF),
-                              //Color(0xffB6B6B6)      color: Color(0xff1058FF),
+                              color: AppTheme.electricBlue,
+                              //Color(0xffB6B6B6)      color: AppTheme.electricBlue,
                               fontFamily: 'SFProDisplay',
                               fontWeight: FontWeight.w700,
                               fontSize: 18),

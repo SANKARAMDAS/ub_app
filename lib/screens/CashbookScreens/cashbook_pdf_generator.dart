@@ -146,7 +146,7 @@ class CashbookPdfGenerator {
             children: [
               pw.Text('Cashbook Statement',
                   style: pw.TextStyle(
-                    color: PdfColor.fromHex('#1058ff'),
+                    color: PdfColor.fromHex('#7C4DFF'),
                     fontSize: 20,
                     fontWeight: pw.FontWeight.bold,
                   )),
@@ -205,7 +205,7 @@ class CashbookPdfGenerator {
               // pw.VerticalDivider(
               //   indent: 20,
               //   endIndent: 20,
-              //   color: PdfColor.fromHex('#1058ff'),
+              //   color: PdfColor.fromHex('#7C4DFF'),
               // ),
               pw.Column(
                   mainAxisAlignment: pw.MainAxisAlignment.start,
@@ -239,7 +239,7 @@ class CashbookPdfGenerator {
               // pw.VerticalDivider(
               //   indent: 20,
               //   endIndent: 20,
-              //   color: PdfColor.fromHex('#1058ff'),
+              //   color: PdfColor.fromHex('#7C4DFF'),
               // ),
               pw.Column(
                   mainAxisAlignment: pw.MainAxisAlignment.start,

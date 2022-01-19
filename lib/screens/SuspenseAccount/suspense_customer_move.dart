@@ -244,7 +244,7 @@ class _SuspenseAccountCustomerScreenState
                                                 backgroundColor:
                                                     MaterialStateProperty.all<
                                                             Color>(
-                                                        Color(0xff1058ff)),
+                                                        AppTheme.electricBlue),
                                                 shape: MaterialStateProperty
                                                     .all<OutlinedBorder>(
                                                         RoundedRectangleBorder(

@@ -205,6 +205,7 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
             bold: FontWeight.w500,
           ),
           style: ElevatedButton.styleFrom(
+            primary: AppTheme.electricBlue,
             padding: EdgeInsets.all(15),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

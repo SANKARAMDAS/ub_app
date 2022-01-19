@@ -355,7 +355,7 @@ class _AttachBillScreenState extends State<AttachBillScreen> {
                                                           EdgeInsets.all(8),
                                                       borderSide: BorderSide(
                                                           color:
-                                                              Color(0xff1058ff),
+                                                              AppTheme.electricBlue,
                                                           width: 2),
                                                       color: Colors.white,
                                                       onPressed: () {

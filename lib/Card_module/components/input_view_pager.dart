@@ -609,7 +609,7 @@ class _InputFormState extends State<InputForm> {
                           borderSide: BorderSide(width: 1, color: Colors.black38),
                           borderRadius: BorderRadius.circular(5)),
                       focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Color(0xff1058FF)),
+                          borderSide: BorderSide(width: 1, color: AppTheme.electricBlue),
                           borderRadius: BorderRadius.circular(5)),
                     ),
                   ),

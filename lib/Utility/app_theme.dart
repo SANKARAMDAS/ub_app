@@ -11,7 +11,7 @@ class AppTheme {
     600: Color.fromRGBO(16, 88, 255, .7),
     700: Color.fromRGBO(16, 88, 255, .8),
     800: Color.fromRGBO(16, 88, 255, .9),
-    900: Color.fromRGBO(16, 88, 255, 1),
+    900: AppTheme.electricBlue,
   };
 
   // static Color themeColor = Color.fromRGBO(42, 68, 197, 1);
@@ -33,7 +33,7 @@ class AppTheme {
   static const Color justWhite = Color.fromRGBO(242, 241, 246, 1);
   static const Color buttonSplashGrey = Color.fromRGBO(231, 231, 231, 1);
   static const Color calculatorBlue = Color.fromRGBO(185, 206, 249, 1);
-  static const Color disabledBlue = Color.fromRGBO(16, 88, 255, 1);
+  static const Color disabledBlue = AppTheme.electricBlue;
   static const Color greencyan = Color.fromRGBO(78, 216, 167, 1);
   static const Color highlightColor = Color.fromRGBO(224, 224, 224, 1);
   static const Color baseColor = Color.fromRGBO(245, 245, 245, 1);

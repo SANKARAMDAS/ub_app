@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 class CustomText extends StatefulWidget {
   final double? size;
@@ -39,9 +40,9 @@ class _CustomTextState extends State<CustomText> {
       style: TextStyle(
           height: widget.height,
           fontSize: widget.size,
-          color: widget.color,
+          color: widget.color ?? AppTheme.electricBlue,
           fontWeight: widget.bold == null ? FontWeight.normal : widget.bold,
-          fontFamily: widget.fontFamily ?? null,
+          fontFamily: widget.fontFamily ?? 'Hind',
           fontStyle:
               widget.italic == null ? FontStyle.normal : FontStyle.italic,
           decoration: widget.underline == null

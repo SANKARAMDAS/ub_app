@@ -133,7 +133,7 @@ class _EnterDetailsState extends State<EnterDetails> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(15),
-                    onPrimary: AppTheme.electricBlue,
+                    primary: AppTheme.electricBlue,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
@@ -256,7 +256,7 @@ class _EnterDetailsState extends State<EnterDetails> {
                                   children: [
                                     CustomText(
                                       '${widget.customerModel!.name}',
-                                      color: Color(0xff1058ff),
+                                      color: AppTheme.electricBlue,
                                       size: 23,
                                       bold: FontWeight.w500,
                                     ),

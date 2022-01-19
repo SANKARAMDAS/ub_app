@@ -652,7 +652,7 @@ class __PremiumtranactionlistState extends State<_Premiumtranactionlist> {
                                               TextSpan(
                                                 text: 'App',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -749,7 +749,7 @@ class __PremiumtranactionlistState extends State<_Premiumtranactionlist> {
                                               TextSpan(
                                                 text: 'Links',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -845,7 +845,7 @@ class __PremiumtranactionlistState extends State<_Premiumtranactionlist> {
                                               TextSpan(
                                                 text: 'QR code',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -1047,8 +1047,8 @@ class __PremiumtranactionlistState extends State<_Premiumtranactionlist> {
       MaterialState.focused,
     };
     if (states.any(interactiveStates.contains)) {
-      return Color(0xff1058ff);
+      return AppTheme.electricBlue;
     }
-    return Color(0xff1058ff);
+    return AppTheme.electricBlue;
   }
 }

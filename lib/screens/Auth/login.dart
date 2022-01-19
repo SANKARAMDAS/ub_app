@@ -99,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: EdgeInsets.all(15),
               // side: BorderSide(
               //     color: validate() == true
-              //         ? Color(0xff1058ff)
+              //         ? AppTheme.electricBlue
               //         : AppTheme.disabledColor,
               //     width: 2),
               primary: validate() == true
@@ -252,7 +252,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // decoration: BoxDecoration(
                   //     border: Border(
                   //   bottom: BorderSide(
-                  //     color: Color(0xff1058ff),
+                  //     color: AppTheme.electricBlue,
                   //     width: 1.0,
                   //   ),
                   // )),
@@ -313,7 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       fontSize: (22),
                                       color: Color(0xff666666),
                                       fontWeight: FontWeight.bold),
-                                  cursorColor: Color(0xff1058ff),
+                                  cursorColor: AppTheme.electricBlue,
                                   onChanged: (value) {
                                     if (validate()) {
                                       onSubmit();

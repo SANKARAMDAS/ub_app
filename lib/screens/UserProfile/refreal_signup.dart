@@ -549,11 +549,11 @@ class SignUpTextField extends StatelessWidget {
           contentPadding: EdgeInsets.only(left: 15, bottom: 5, top: 20),
           enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-            color: Color(0xff1058ff),
+            color: AppTheme.electricBlue,
           )),
           focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-            color: Color(0xff1058ff),
+            color: AppTheme.electricBlue,
           )),
           suffixIconConstraints: BoxConstraints.tight(Size(25, 25)),
           suffixIcon: GestureDetector(

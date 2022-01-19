@@ -401,7 +401,7 @@ class _GeneratedPayQRState extends State<GeneratedPayQR> {
                                   //             charts.BarLabelPosition.outside,
                                   //         outsideLabelStyleSpec: charts.TextStyleSpec(
                                   //             color: charts.Color.fromHex(
-                                  //                 code: '#1058FF'))),
+                                  //                 code: '#7C4DFF'))),
                                   // domainAxis: new charts.OrdinalAxisSpec(),
                                   behaviors: [
                                     new charts.SlidingViewport(),
@@ -785,7 +785,7 @@ class _GeneratedPayQRState extends State<GeneratedPayQR> {
     return [
       new charts.Series<LinkGenModel, String>(
           id: 'QR generated',
-          colorFn: (_, __) => charts.Color.fromHex(code: '#1058FF'),
+          colorFn: (_, __) => charts.Color.fromHex(code: '#7C4DFF'),
           domainFn: (LinkGenModel c, _) => c.xDomain,
           measureFn: (LinkGenModel c, _) => c.linkCount,
           data: data,

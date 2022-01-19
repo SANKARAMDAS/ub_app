@@ -637,7 +637,7 @@ class _LedgerViewState extends State<LedgerView> {
                 ),
                 // ElevatedButton(
                 //   style: ElevatedButton.styleFrom(
-                //     onPrimary: AppTheme.electricBlue,
+                //     primary: AppTheme.electricBlue,
                 //     shape: RoundedRectangleBorder(
                 //         borderRadius: BorderRadius.circular(15)),
                 //   ),

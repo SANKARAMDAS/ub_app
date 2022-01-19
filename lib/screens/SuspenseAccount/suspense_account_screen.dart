@@ -1135,9 +1135,9 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                       width: double.infinity,
                       decoration: BoxDecoration(
                           /*  border: Border.all(
-                                color: Color(0xff1058ff),
+                                color: AppTheme.electricBlue,
                               ),*/
-                          color: Color(0xff1058ff),
+                          color: AppTheme.electricBlue,
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
@@ -1223,7 +1223,7 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                                               TextSpan(
                                                 text: 'App',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -1320,7 +1320,7 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                                               TextSpan(
                                                 text: 'Links',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -1416,7 +1416,7 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                                               TextSpan(
                                                 text: 'QR code',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -2350,7 +2350,7 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                             //   child: Text(
                             //     'Attachment (5)',
                             //     style: TextStyle(
-                            //         color: Color(0xff1058ff),
+                            //         color: AppTheme.electricBlue,
                             //         fontWeight: FontWeight.bold,
                             //         fontSize: 14),
                             //   ),
@@ -2566,9 +2566,9 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
       MaterialState.focused,
     };
     if (states.any(interactiveStates.contains)) {
-      return Color(0xff1058ff);
+      return AppTheme.electricBlue;
     }
-    return Color(0xff1058ff);
+    return AppTheme.electricBlue;
   }
 
   // void ledgerBussinessModelSelectionBottomSheet() {

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:urbanledger/Utility/app_routes.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 class ChooseCard extends StatefulWidget {
   @override
@@ -155,15 +156,15 @@ class _ChooseCardState extends State<ChooseCard> {
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
-                                  color: Color(0xff1058FF)),
+                                  color: AppTheme.electricBlue),
                             ),
                             CupertinoSwitch(
                               onChanged: toggleSwitch,
                               value: isSwitched,
-                              activeColor: Color(0xff1058ff),
+                              activeColor: AppTheme.electricBlue,
 
-                              // activeTrackColor: Color(0xff1058ff),
-                              // inactiveThumbColor: Color(0xff1058ff),
+                              // activeTrackColor: AppTheme.electricBlue,
+                              // inactiveThumbColor: AppTheme.electricBlue,
                               // inactiveTrackColor: Colors.white,
                             )
                           ],

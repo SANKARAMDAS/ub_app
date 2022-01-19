@@ -330,6 +330,7 @@ class _CustomBottomNavBarNewState extends State<CustomBottomNavBarNew> {
                     AppAssets.homeSelectedIcon,
                     scale: 1.5,
                     height: 26,
+                    color: AppTheme.electricBlue,
                   ),
                   Expanded(
                     child: Text(

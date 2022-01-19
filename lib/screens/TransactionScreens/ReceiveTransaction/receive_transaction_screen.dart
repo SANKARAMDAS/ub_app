@@ -1505,7 +1505,7 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
                     child: OutlineButton(
                       padding: EdgeInsets.all(8),
                       borderSide:
-                          BorderSide(color: Color(0xff1058ff), width: 2),
+                          BorderSide(color: AppTheme.electricBlue, width: 2),
                       color: Colors.white,
                       onPressed: () {
                         _pickedFiles.removeAt(index);

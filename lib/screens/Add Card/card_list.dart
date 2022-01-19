@@ -227,9 +227,9 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
               Navigator.of(context).pop();
             },
             child: Icon(Icons.chevron_left,
-                color: Color.fromRGBO(16, 88, 255, 1), size: 35)),
+                color: AppTheme.electricBlue, size: 35)),
         title: Text('My Saved Cards',
-            style: TextStyle(color: Color.fromRGBO(16, 88, 255, 1))),
+            style: TextStyle(color: AppTheme.electricBlue)),
       ),
       bottomNavigationBar: Container(
         color: Colors.white,

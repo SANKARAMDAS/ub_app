@@ -3410,7 +3410,7 @@ class _ImportContactsListWidgetState extends State<ImportContactsListWidget> {
                                 CustomText(
                                   getName(widget.contacts[index].name,
                                       widget.contacts[index].mobileNo),
-                                  bold: FontWeight.w500,
+                                  bold: FontWeight.bold,
                                 ),
                                 CustomText(
                                   '+' +
