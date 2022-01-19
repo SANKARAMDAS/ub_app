@@ -1597,7 +1597,7 @@ class _SettlementHistoryScreenState extends State<_SettlementHistoryScreen> {
                                   .businesses[index]
                                   .businessName,
                               bold: FontWeight.w600,
-                              color: Theme.of(context).primaryColor,
+                              color: AppTheme.electricBlue,
                               size: 18,
                               overflow: TextOverflow.ellipsis,
                             ),

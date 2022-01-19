@@ -1274,7 +1274,7 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
           right: MediaQuery.of(context).size.width * 0.040),
       child: RaisedButton(
         padding: EdgeInsets.all(15),
-        color: Theme.of(context).primaryColor,
+        color: AppTheme.electricBlue,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         onPressed: () {},
         child: Text(
@@ -1447,7 +1447,7 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
             await showDeleteImageDialog(index);
           },
           child: DottedBorder(
-            color: Theme.of(context).primaryColor,
+            color: AppTheme.electricBlue,
             radius: Radius.circular(10),
             dashPattern: [5, 5, 5, 5],
             borderType: BorderType.RRect,

@@ -861,7 +861,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                   backgroundColor:
                                                       MaterialStateProperty.all<
                                                               Color>(
-                                                          Color(0xff1058ff)),
+                                                          AppTheme.electricBlue),
                                                   shape: MaterialStateProperty
                                                       .all<OutlinedBorder>(
                                                           RoundedRectangleBorder(
@@ -1092,7 +1092,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(Color(0xff1058ff)),
+                          MaterialStateProperty.all<Color>(AppTheme.electricBlue),
                       shape: MaterialStateProperty.all<OutlinedBorder>(
                           RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
@@ -1680,7 +1680,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       .selectedBusiness
                                       .businessName,
                                   bold: FontWeight.w600,
-                                  color: Theme.of(context).primaryColor,
+                                  color: AppTheme.electricBlue,
                                   size: 18,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -1866,7 +1866,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                             .businesses[index]
                                             .businessName,
                                         bold: FontWeight.w600,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.electricBlue,
                                         size: 18,
                                         overflow: TextOverflow.ellipsis,
                                       ),

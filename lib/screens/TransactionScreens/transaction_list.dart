@@ -1084,7 +1084,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
               decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(
-                    color: Theme.of(context).primaryColor,
+                    color: AppTheme.electricBlue,
                     width: 0.5,
                   ),
                   borderRadius: BorderRadius.only(
@@ -1102,7 +1102,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                     /*  decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
-                        color: Theme.of(context).primaryColor,
+                        color: AppTheme.electricBlue,
                         width: 0.5,
                       ),
                     ), */
@@ -1126,7 +1126,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                     : 'You will Give'
                                 : 'You will Get',
                             style: TextStyle(
-                                color: Theme.of(context).primaryColor,
+                                color: AppTheme.electricBlue,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -1140,7 +1140,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                           //           : AppAssets.outIcon
                           //       : AppAssets.inIcon,
                           //   scale: 1.2,
-                          //   color: Theme.of(context).primaryColor,
+                          //   color: AppTheme.electricBlue,
                           //   height: 20,
                           // ),
                         ],
@@ -1154,7 +1154,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
+                                color: AppTheme.electricBlue,
                               ),
                             ),
                             TextSpan(
@@ -1168,7 +1168,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
+                                color: AppTheme.electricBlue,
                               ),
                             ),
                           ],
@@ -1207,7 +1207,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                 Text(
                                   'Collection',
                                   style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
+                                      color: AppTheme.electricBlue,
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500),
                                 ),
@@ -1234,7 +1234,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                         fontSize: 16,
                                         color: isLoad == true
                                             ? AppTheme.coolGrey
-                                            : Theme.of(context).primaryColor,
+                                            : AppTheme.electricBlue,
                                         fontWeight: FontWeight.w500),
                                   ),
                                   WidgetSpan(
@@ -1245,7 +1245,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                         height: 18,
                                         color: isLoad == true
                                             ? AppTheme.coolGrey
-                                            : Theme.of(context).primaryColor,
+                                            : AppTheme.electricBlue,
                                       ),
                                     ),
                                   ),
@@ -1389,7 +1389,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                   ),
                   RadioListTile(
                     dense: true,
-                    activeColor: Theme.of(context).primaryColor,
+                    activeColor: AppTheme.electricBlue,
                     value: 0,
                     groupValue: tempRadioOption,
                     onChanged: (value) {
@@ -1420,7 +1420,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor),
+                                    color: AppTheme.electricBlue),
                               ),
                               SizedBox(width: 5),
                               Image.asset(
@@ -1466,7 +1466,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor),
+                                    color: AppTheme.electricBlue),
                               ),
                               SizedBox(width: 5),
                               Image.asset(
@@ -1522,7 +1522,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor),
+                                    color: AppTheme.electricBlue),
                               ),
                               SizedBox(width: 5),
                               Image.asset(
@@ -1545,7 +1545,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                         style: ElevatedButton.styleFrom(
                           primary: isLoad == true
                               ? AppTheme.brownishGrey
-                              : Theme.of(context).primaryColor,
+                              : AppTheme.electricBlue,
                           padding: EdgeInsets.all(15),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
@@ -2044,7 +2044,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                         ? Icons.done_all_outlined
                         : Icons.done,
                     size: 18,
-                    // color: Theme.of(context).primaryColor,
+                    // color: AppTheme.electricBlue,
                     color: message.unreadByMe == true
                         ? AppTheme.electricBlue
                         : AppTheme.brownishGrey,
@@ -2175,7 +2175,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                         ? Icons.done_all_outlined
                         : Icons.done,
                     size: 18,
-                    // color: Theme.of(context).primaryColor,
+                    // color: AppTheme.electricBlue,
                     color: message.unreadByMe == true
                         ? AppTheme.electricBlue
                         : AppTheme.brownishGrey,
@@ -2368,7 +2368,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                   child: Icon(
                                     Icons.arrow_forward_ios,
                                     size: 12,
-                                    color: Theme.of(context).primaryColor,
+                                    color: AppTheme.electricBlue,
                                   ),
                                 ),
                             ],
@@ -2419,7 +2419,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
         //                 // child: Icon(
         //                 //   Icons.card_giftcard_outlined,
         //                 //   size: 12,
-        //                 //   color: Theme.of(context).primaryColor,
+        //                 //   color: AppTheme.electricBlue,
         //                 // ),
         //                 child: Image.asset(
         //                   'assets/icons/Gift-01.png',
@@ -2456,7 +2456,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                         ? Icons.done_all_outlined
                         : Icons.done,
                     size: 18,
-                    // color: Theme.of(context).primaryColor,
+                    // color: AppTheme.electricBlue,
                     color: message.unreadByMe == true
                         ? AppTheme.electricBlue
                         : AppTheme.brownishGrey,
@@ -2643,7 +2643,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                   child: Icon(
                                     Icons.arrow_forward_ios,
                                     size: 12,
-                                    color: Theme.of(context).primaryColor,
+                                    color: AppTheme.electricBlue,
                                   ),
                                 ),
                             ],
@@ -2698,7 +2698,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                         ? Icons.done_all_outlined
                         : Icons.done,
                     size: 18,
-                    // color: Theme.of(context).primaryColor,
+                    // color: AppTheme.electricBlue,
                     color: message.unreadByMe == true
                         ? AppTheme.electricBlue
                         : AppTheme.brownishGrey,
@@ -2968,7 +2968,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                             //   alignment: Alignment.bottomRight,
                             //   child: Icon(Icons.arrow_forward_ios,
                             //       size: 12,
-                            //       color: Theme.of(context).primaryColor),
+                            //       color: AppTheme.electricBlue),
                             // ),
                           ],
                         ),
@@ -3170,7 +3170,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                         ? Icons.done_all_outlined
                         : Icons.done,
                     size: 18,
-                    // color: Theme.of(context).primaryColor,
+                    // color: AppTheme.electricBlue,
                     color: message.unreadByMe == true
                         ? AppTheme.electricBlue
                         : AppTheme.brownishGrey,
@@ -3788,7 +3788,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
   //                       ? Icons.done_all_outlined
   //                       : Icons.done,
   //                   size: 18,
-  //                   // color: Theme.of(context).primaryColor,
+  //                   // color: AppTheme.electricBlue,
   //                   color: message.unreadByMe == true
   //                       ? AppTheme.electricBlue
   //                       : AppTheme.brownishGrey,
@@ -3994,7 +3994,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                         ? Icons.done_all_outlined
                         : Icons.done,
                     size: 18,
-                    // color: Theme.of(context).primaryColor,
+                    // color: AppTheme.electricBlue,
                     color: message.unreadByMe == true
                         ? AppTheme.electricBlue
                         : AppTheme.brownishGrey,
@@ -4181,7 +4181,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                     child: Icon(
                                       Icons.arrow_forward_ios,
                                       size: 12,
-                                      color: Theme.of(context).primaryColor,
+                                      color: AppTheme.electricBlue,
                                     ),
                                   ),
                                 ),
@@ -4676,7 +4676,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                               ? Icons.done_all_outlined
                               : Icons.done,
                           size: 18,
-                          // color: Theme.of(context).primaryColor,
+                          // color: AppTheme.electricBlue,
                           color: message.unreadByMe == true
                               ? AppTheme.electricBlue
                               : AppTheme.brownishGrey,
@@ -5552,7 +5552,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                 child: Icon(
                   Icons.done,
                   size: 18,
-                  // color: Theme.of(context).primaryColor,
+                  // color: AppTheme.electricBlue,
                   color: AppTheme.brownishGrey,
                 ),
               ),
@@ -5671,7 +5671,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                               ? Icons.done_all_outlined
                               : Icons.done,
                           size: 18,
-                          // color: Theme.of(context).primaryColor,
+                          // color: AppTheme.electricBlue,
                           color: message.unreadByMe == true
                               ? AppTheme.electricBlue
                               : AppTheme.brownishGrey,
@@ -5885,7 +5885,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                               ? Icons.done_all_outlined
                               : Icons.done,
                           size: 18,
-                          // color: Theme.of(context).primaryColor,
+                          // color: AppTheme.electricBlue,
                           color: message.unreadByMe == true
                               ? AppTheme.electricBlue
                               : AppTheme.brownishGrey,
@@ -6123,7 +6123,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                 child: Icon(
                   Icons.done,
                   size: 18,
-                  // color: Theme.of(context).primaryColor,
+                  // color: AppTheme.electricBlue,
                   color: AppTheme.brownishGrey,
                 ),
               ),
@@ -6316,7 +6316,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                               ? Icons.done_all_outlined
                               : Icons.done,
                           size: 18,
-                          // color: Theme.of(context).primaryColor,
+                          // color: AppTheme.electricBlue,
                           color: message.unreadByMe == true
                               ? AppTheme.electricBlue
                               : AppTheme.brownishGrey,
@@ -6552,7 +6552,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                 child: Icon(
                   Icons.done,
                   size: 18,
-                  // color: Theme.of(context).primaryColor,
+                  // color: AppTheme.electricBlue,
                   color: AppTheme.brownishGrey,
                 ),
               ),

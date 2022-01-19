@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 import '../../screens/login/login_controller.dart';
 import '../../widgets/my_button.dart';
@@ -62,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 60,
                           ),
                           TextField(
-                            cursorColor: Theme.of(context).primaryColor,
+                            cursorColor: AppTheme.electricBlue,
                             controller: _loginController.usernameController,
                             decoration:
                                 InputDecoration(labelText: 'Nome de usuario'),
@@ -71,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 15,
                           ),
                           TextField(
-                            cursorColor: Theme.of(context).primaryColor,
+                            cursorColor: AppTheme.electricBlue,
                             controller: _loginController.passwordController,
                             decoration: InputDecoration(labelText: 'Senha'),
                             onSubmitted: (_) {

@@ -358,7 +358,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                                                             : Image.asset(
                                                                 'assets/icons/Contact-List-01.png',
                                                                 height: 80,
-                                                                // color: Theme.of(context).primaryColor,
+                                                                // color: AppTheme.electricBlue,
                                                               ),
                                                         SizedBox(
                                                           height: 5,
@@ -688,7 +688,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                                         //                     : Image.asset(
                                         //                         'assets/icons/Contact-List-01.png',
                                         //                         height: 80,
-                                        //                         // color: Theme.of(context).primaryColor,
+                                        //                         // color: AppTheme.electricBlue,
                                         //                       ),
                                         //                 SizedBox(
                                         //                   height: 5,

@@ -19,9 +19,9 @@ class AppTheme {
   static const Color greyBackground = Color.fromRGBO(231, 231, 231, 1);
   static const Color brownishGrey = Color.fromRGBO(102, 102, 102, 1);
   static const Color warmGrey = Color.fromRGBO(112, 112, 112, 1);
-  static const Color electricBlue = Color.fromRGBO(16, 88, 255, 1);
+  static const Color electricBlue = Color.fromRGBO(124,77,255, 1);
   static const Color greyish = Color.fromRGBO(182, 182, 182, 1);
-  static const Color paleGrey = Color.fromRGBO(242, 241, 246, 1);
+  static const Color paleGrey = Color.fromRGBO(242,244,246, 1);
   static const Color circularAvatarTextColor = Color.fromRGBO(235, 235, 235, 1);
   static const Color carolinaBlue = Color.fromRGBO(137, 172, 255, 1);
   static const Color tomato = Color.fromRGBO(233, 66, 53, 1);

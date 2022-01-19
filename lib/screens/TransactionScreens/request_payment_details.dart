@@ -191,7 +191,7 @@ class _RequestPaymentDetailsState extends State<RequestPaymentDetails> {
                     borderRadius: BorderRadius.circular(10)),
                 padding:
                     EdgeInsets.only(bottom: 15, top: 15, left: 30, right: 30),
-                color: Theme.of(context).primaryColor,
+                color: AppTheme.electricBlue,
                 child: CustomText(
                   widget.message.from != widget.user?.id &&
                           widget.message.paymentCancel == true
@@ -419,7 +419,7 @@ class _RequestPaymentDetailsState extends State<RequestPaymentDetails> {
       Padding(
         padding: const EdgeInsets.all(4.0),
         child: DottedBorder(
-          color: Theme.of(context).primaryColor,
+          color: AppTheme.electricBlue,
           radius: Radius.circular(4),
           dashPattern: [5, 5, 5, 5],
           borderType: BorderType.RRect,

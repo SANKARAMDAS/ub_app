@@ -189,7 +189,7 @@ class LedgerList extends StatelessWidget {
                                         'Attachments  (${ledgerTransactionList[index].attachments.length})',
                                         bold: FontWeight.w600,
                                         size: 14,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.electricBlue,
                                       ),
                                     ],
                                   ),

@@ -354,7 +354,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                 ),
               )
             : RefreshIndicator(
-                    color: Theme.of(context).primaryColor,
+                    color: AppTheme.electricBlue,
                     onRefresh: () async {
                       final count = await checkContactPermUpdateData(true);
                       if (count > 0) {

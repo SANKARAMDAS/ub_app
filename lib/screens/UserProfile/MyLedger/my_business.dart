@@ -305,7 +305,7 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
                                                         .businessId ==
                                                     value.selectedBusiness
                                                         .businessId
-                                                ? Theme.of(context).primaryColor
+                                                ? AppTheme.electricBlue
                                                 : AppTheme.coolGrey),
                                         borderRadius: BorderRadius.circular(5)),
                                     child: Padding(

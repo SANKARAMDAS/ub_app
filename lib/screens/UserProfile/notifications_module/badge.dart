@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 class Badge extends StatelessWidget {
   const Badge({
@@ -28,7 +29,7 @@ class Badge extends StatelessWidget {
             // color: Theme.of(context).accentColor,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
-              color: color != null ? color : Theme.of(context).primaryColor,
+              color: color != null ? color : AppTheme.electricBlue,
             ),
             constraints: BoxConstraints(
               minWidth: 16,

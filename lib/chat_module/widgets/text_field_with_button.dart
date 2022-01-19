@@ -1015,7 +1015,7 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                                     style: TextStyle(fontSize: 18),
                                     keyboardType: TextInputType.multiline,
                                     textInputAction: TextInputAction.newline,
-                                    cursorColor: Theme.of(context).primaryColor,
+                                    cursorColor: AppTheme.electricBlue,
                                     controller: widget.textEditingController,
                                     onSubmitted: (_) {
                                       widget.onSubmit();

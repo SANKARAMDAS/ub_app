@@ -431,7 +431,7 @@ class _CashbookListState extends State<CashbookList> {
                           height: deviceHeight * 0.045,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              onPrimary: Theme.of(context).primaryColor,
+                              onPrimary: AppTheme.electricBlue,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
                             ),
@@ -462,7 +462,7 @@ class _CashbookListState extends State<CashbookList> {
                           height: deviceHeight * 0.045,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              onPrimary: Theme.of(context).primaryColor,
+                              onPrimary: AppTheme.electricBlue,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
                             ),
@@ -505,7 +505,7 @@ class _CashbookListState extends State<CashbookList> {
                           height: deviceHeight * 0.045,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              onPrimary: Theme.of(context).primaryColor,
+                              onPrimary: AppTheme.electricBlue,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
                             ),

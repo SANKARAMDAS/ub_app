@@ -595,7 +595,7 @@ class _EnterDetailsState extends State<EnterDetails> {
       Padding(
         padding: const EdgeInsets.all(4.0),
         child: DottedBorder(
-          color: Theme.of(context).primaryColor,
+          color: AppTheme.electricBlue,
           radius: Radius.circular(4),
           dashPattern: [5, 5, 5, 5],
           borderType: BorderType.RRect,

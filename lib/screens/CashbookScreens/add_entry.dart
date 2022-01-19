@@ -624,7 +624,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                             borderRadius: BorderRadius.circular(10)),
                         primary: calculationString.isEmpty
                             ? AppTheme.disabledBlue
-                            : Theme.of(context).primaryColor,
+                            : AppTheme.electricBlue,
                       ),
                       onPressed: calculatedAmount < 0.1
                           ? null
@@ -1076,7 +1076,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
             await showDeleteImageDialog(index);
           },
           child: DottedBorder(
-            color: Theme.of(context).primaryColor,
+            color: AppTheme.electricBlue,
             radius: Radius.circular(10),
             dashPattern: [5, 5, 5, 5],
             borderType: BorderType.RRect,

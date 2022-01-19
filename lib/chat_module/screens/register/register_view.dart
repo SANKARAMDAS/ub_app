@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 import '../../screens/register/register_controller.dart';
 import '../../widgets/my_button.dart';
@@ -69,7 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 60,
                           ),
                           TextField(
-                            cursorColor: Theme.of(context).primaryColor,
+                            cursorColor: AppTheme.electricBlue,
                             controller: _registerController.nameController,
                             decoration:
                                 InputDecoration(labelText: 'Nome completo'),
@@ -78,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 15,
                           ),
                           TextField(
-                            cursorColor: Theme.of(context).primaryColor,
+                            cursorColor: AppTheme.electricBlue,
                             controller: _registerController.usernameController,
                             decoration:
                                 InputDecoration(labelText: 'Nome de usuario'),
@@ -87,7 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 15,
                           ),
                           TextField(
-                            cursorColor: Theme.of(context).primaryColor,
+                            cursorColor: AppTheme.electricBlue,
                             controller: _registerController.passwordController,
                             decoration: InputDecoration(labelText: 'Senha'),
                             obscureText: true,

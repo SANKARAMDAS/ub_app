@@ -778,7 +778,7 @@ class Countdown extends AnimatedWidget {
       "$timerText",
       style: TextStyle(
         fontSize: 110,
-        color: Theme.of(context).primaryColor,
+        color: AppTheme.electricBlue,
       ),
     );*/
 

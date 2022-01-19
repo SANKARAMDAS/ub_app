@@ -306,7 +306,7 @@ class _RefSignUpState extends State<RefSignUp> {
                             vertical: 8.0, horizontal: 15),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Theme.of(context).primaryColor,
+                            primary: AppTheme.electricBlue,
                             padding: EdgeInsets.all(15),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
