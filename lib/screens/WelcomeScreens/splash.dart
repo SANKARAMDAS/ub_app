@@ -222,6 +222,9 @@ void onStart() async {
         Navigator.of(context).pushNamed(AppRoutes.urbanLedgerPremiumRoute);
         CustomLoadingDialog.showLoadingDialog(context);
         break;
+      case 'complete_email_verification_reminder':
+        Navigator.of(context).pushNamed(AppRoutes.edituserProfileRoute);
+        break;
       case 'chat':
         _customerModel
           ..customerId = message.data['customer_id']
