@@ -34,7 +34,8 @@ Future<http.Response> postRequest(
               {"message": 'Please check internet connectivity and try again.'}),
           400);
   });
-  if (request.statusCode == 401) {
+  List<String> skipList = ['auth/customer/verify1'];
+  if (request.statusCode == 401 && !skipList.contains(endpoint)) {
     logout();
     
   } 
