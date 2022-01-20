@@ -2704,18 +2704,18 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
 
                     merchantBankNotAddedModalSheet(
                         text:
-                            'We have requested your merchant to add bank account.');
+                            Constants.merchentKYCBANKPREMNotadd);
                   } else if (cid.customerInfo?.kycStatus == false) {
                     Navigator.of(context).pop(true);
                     merchantBankNotAddedModalSheet(
                         text:
-                            'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
+                            Constants.merchentKYCBANKPREMNotadd);
                   } else if (merchantSubscriptionPlan == false) {
                     Navigator.of(context).pop(true);
                     debugPrint('Checket');
                     merchantBankNotAddedModalSheet(
                         text:
-                            'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
+                            Constants.merchentKYCBANKPREMNotadd);
                   } else {
                     // Navigator.of(context).pop(true);
                     // showBankAccountDialog();

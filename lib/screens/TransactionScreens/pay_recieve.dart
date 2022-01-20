@@ -2033,12 +2033,12 @@ class _PayRequestScreenState extends State<PayRequestScreen>
 
                             merchantBankNotAddedModalSheet(
                                 text:
-                                    'We have requested your merchant to add bank account.');
+                                    Constants.merchentKYCBANKPREMNotadd);
                           } else if (cid.customerInfo?.kycStatus == false) {
                             Navigator.of(context).pop(true);
                             merchantBankNotAddedModalSheet(
                                 text:
-                                    'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
+                                    Constants.merchentKYCBANKPREMNotadd);
                           }
                           // else if (Repository()
                           //             .hiveQueries
@@ -2060,7 +2060,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                             debugPrint('Checket');
                             merchantBankNotAddedModalSheet(
                                 text:
-                                    'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
+                                    Constants.merchentKYCBANKPREMNotadd);
                           } else {
                             Map<String, dynamic> isTransaction =
                                 await repository.paymentThroughQRApi
@@ -3261,12 +3261,12 @@ class _ImportContactsListWidgetState extends State<ImportContactsListWidget> {
 
                             merchantBankNotAddedModalSheet(
                                 text:
-                                    'We have requested your merchant to add bank account.');
+                                    Constants.merchentKYCBANKPREMNotadd);
                           } else if (cid.customerInfo?.kycStatus == false) {
                             Navigator.of(context).pop(true);
                             merchantBankNotAddedModalSheet(
                                 text:
-                                    'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
+                                    Constants.merchentKYCBANKPREMNotadd);
                           }
                           // else if (Repository()
                           //             .hiveQueries
@@ -3287,8 +3287,7 @@ class _ImportContactsListWidgetState extends State<ImportContactsListWidget> {
                             Navigator.of(context).pop(true);
                             debugPrint('Checket');
                             merchantBankNotAddedModalSheet(
-                                text:
-                                    'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
+                                text: Constants.merchentKYCBANKPREMNotadd);
                           } else {
                             Map<String, dynamic> isTransaction =
                                 await repository.paymentThroughQRApi

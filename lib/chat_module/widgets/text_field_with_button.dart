@@ -1630,12 +1630,12 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
 
                                 merchantBankNotAddedModalSheet(
                                     text:
-                                        'We have requested your merchant to add bank account.');
+                                        Constants.merchentKYCBANKPREMNotadd);
                               } else if (Cid.customerInfo?.kycStatus == false) {
                                 Navigator.of(context).pop(true);
                                 merchantBankNotAddedModalSheet(
                                     text:
-                                        'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
+                                        Constants.merchentKYCBANKPREMNotadd);
                               }
                               // else if (Repository()
                               //             .hiveQueries
@@ -1657,7 +1657,7 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
 
                                 merchantBankNotAddedModalSheet(
                                     text:
-                                        'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
+                                        Constants.merchentKYCBANKPREMNotadd);
                               } else {
                                 // Navigator.of(context).pop(true);
                                 // showBankAccountDialog();
