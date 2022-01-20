@@ -178,7 +178,7 @@ class _UserNotificationsState extends State<UserNotifications> {
               fromEmail: message.data?.fromEmail,
               completed: message.data?.completed?.toIso8601String(),
               paymentMethod: message.data?.paymentMethod,
-              amount: message.data?.amount,
+              amount: message.data?.amount.toString(),
               cardImage:
               message.data?.cardImage?.toString().replaceAll(' ', ''),
               endingWith: message.data?.endingWith,
@@ -285,6 +285,9 @@ class _UserNotificationsState extends State<UserNotifications> {
         Navigator.of(context).pushNamed(AppRoutes.urbanLedgerPremiumRoute);
         CustomLoadingDialog.showLoadingDialog(context);
         break;
+      case 'complete_email_verification_reminder':
+        Navigator.of(context).pushNamed(AppRoutes.edituserProfileRoute);
+        break;
       case 'chat':
         _customerModel
           ..customerId = message.customerId
@@ -351,7 +354,7 @@ class _UserNotificationsState extends State<UserNotifications> {
             .showSnackBar(SnackBar(content: Text('Item cleared.')));*/
       },
       child: GestureDetector(
-        onLongPress: (){
+        onLongPress: selectedList.length<=1?(){
           /*setState(() {
             data.isSelected = !data.isSelected;
             data.isSelected?++itemSelectedCount:--itemSelectedCount;
@@ -368,8 +371,21 @@ class _UserNotificationsState extends State<UserNotifications> {
           });
 
 
+        }:(){
+
         },
-        onTap: (){
+        onTap: selectedList.length>0?(){
+          setState(() {
+            if(selectedList.contains(data)){
+              selectedList.remove(data);
+            }
+            else{
+              selectedList.add(data);
+            }
+
+          });
+
+        }:(){
           BlocProvider.of<NotificationListCubit>(context,listen:false).markAsRead(index);
           onNotificationTap(data);
         },
