@@ -34,8 +34,7 @@ class VerificationScreen extends StatefulWidget {
   _VerificationScreenState createState() => _VerificationScreenState();
 }
 
-class _VerificationScreenState extends State<VerificationScreen>
-    with SingleTickerProviderStateMixin {
+class _VerificationScreenState extends State<VerificationScreen> with SingleTickerProviderStateMixin {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Repository repository = Repository();
   String? _digit1, _digit2, _digit3, _digit4, _digit5, _digit6;
@@ -87,7 +86,13 @@ class _VerificationScreenState extends State<VerificationScreen>
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     Future.delayed(const Duration(seconds: 1), () {
-  _controller.forward();
+
+// Here you can write your code
+
+      if(mounted) {
+        _controller.forward();
+      }
+
     });
 
   }
@@ -130,13 +135,11 @@ class _VerificationScreenState extends State<VerificationScreen>
       child: Scaffold(
         backgroundColor: AppTheme.paleBlue,
         bottomNavigationBar: Padding(
-          padding: isPlatformiOS()
-              ? EdgeInsets.only(
-                  bottom: 25,
-                )
-              : EdgeInsets.only(
-                  bottom: 10,
-                ),
+          padding: isPlatformiOS()? EdgeInsets.only(
+            bottom: 25,
+          ): EdgeInsets.only(
+            bottom: 10,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -185,9 +188,9 @@ class _VerificationScreenState extends State<VerificationScreen>
                   ),
                   onPressed: validate() == true
                       ? () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            //TODO: To handle location permission when denied.
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      //TODO: To handle location permission when denied.
 
                             // await checkService();
                             // final _location = await location.getLocation();
@@ -327,17 +330,19 @@ class _VerificationScreenState extends State<VerificationScreen>
                                       arguments:
                                           widget.phoneNo.replaceAll(' ', ''));
                               }
-                            } else {
-                              Navigator.of(context)
-                                ..pop()
-                                ..pop()
-                                ..pushReplacementNamed(AppRoutes.signupRoute,
-                                    arguments:
-                                        widget.phoneNo.replaceAll(' ', ''));
-                            }
-                          }
-                        }
+                            
+                      } else {
+                        Navigator.of(context)
+                          ..pop()
+                          ..pop()
+                          ..pushReplacementNamed(AppRoutes.signupRoute,
+                              arguments:
+                              widget.phoneNo.replaceAll(' ', ''));
+                      }
+                    }
+                  }
                       : () {},
+
                 ),
               ),
               (screenWidth(context) * 0.035).widthBox,
@@ -503,35 +508,32 @@ class _VerificationScreenState extends State<VerificationScreen>
                                 : AppTheme.brownishGrey,
                             bold: FontWeight.w800,
                           ),
-                          onTap: isResendOtpClickable
-                              ? () {
-                                  clearTextControllers();
-                                  setState(() {
-                                    isResendOtpClickable = false;
-                                    _resendOtpCount = 30;
-                                  });
-                                  //startTimer();
+                          onTap:isResendOtpClickable? (){
+                            clearTextControllers();
+                            setState(() {
+                              isResendOtpClickable = false;
+                              _resendOtpCount = 30;
+                            });
+                            //startTimer();
 
-                                  Future.delayed(const Duration(seconds: 1), () {
-                                    _controller.forward();
-                                  });
-                                }
-                              : () {},
+                            if(mounted) {
+                              _controller.forward();
+                            }
+                          }:(){},
                         ),
-                        if (!isResendOtpClickable)
+                        if(!isResendOtpClickable)
                           Countdown(
                             animation: StepTween(
                               begin: 30,
                               end: 0,
-                            ).animate(_controller)
-                              ..addStatusListener((status) {
-                                if (status == AnimationStatus.completed) {
-                                  _controller.reset();
-                                  setState(() {
-                                    isResendOtpClickable = true;
-                                  });
-                                }
-                              }),
+                            ).animate(_controller)..addStatusListener((status) {
+                              if(status == AnimationStatus.completed){
+                                _controller.reset();
+                                setState(() {
+                                  isResendOtpClickable = true;
+                                });
+                              }
+                            }),
                           )
                       ],
                     ),
@@ -541,22 +543,23 @@ class _VerificationScreenState extends State<VerificationScreen>
             ),
           ),
         ),
+
       ),
     );
   }
 
   Widget otpTextField(
       {required FocusNode focusNode,
-      required void Function(String?) onSaved,
-      FocusNode? nextFocusNode,
-      FocusNode? previousFocusNode,
-      required TextEditingController controller}) {
+        required void Function(String?) onSaved,
+        FocusNode? nextFocusNode,
+        FocusNode? previousFocusNode,
+        required TextEditingController controller}) {
     return Container(
       height: 75,
       decoration: BoxDecoration(
-          // border: Border(
-          //   bottom: BorderSide(width: 3.0, color: AppTheme.coolGrey),
-          // ),
+        // border: Border(
+        //   bottom: BorderSide(width: 3.0, color: AppTheme.coolGrey),
+        // ),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.1),
@@ -590,15 +593,15 @@ class _VerificationScreenState extends State<VerificationScreen>
           onChanged: nextFocusNode == null
               ? null
               : (value) {
-                  if (value.length > 0 && value != "") {
-                    FocusScope.of(context).requestFocus(nextFocusNode);
-                  } else {
-                    FocusScope.of(context).requestFocus(previousFocusNode);
-                  }
-                  if (validate()) {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  }
-                },
+            if (value.length > 0 && value != "") {
+              FocusScope.of(context).requestFocus(nextFocusNode);
+            } else {
+              FocusScope.of(context).requestFocus(previousFocusNode);
+            }
+            if(validate()){
+              FocusScope.of(context).requestFocus(FocusNode());
+            }
+          },
           keyboardType: TextInputType.phone,
           // obscureText: true,
           maxLength: 1,
@@ -639,6 +642,7 @@ class _VerificationScreenState extends State<VerificationScreen>
     }
   }
 
+
   //********************************************************************************* */
   // BUSINESS LOGIC
   //********************************************************************************* */
@@ -655,7 +659,10 @@ class _VerificationScreenState extends State<VerificationScreen>
     sixController.clear();
   }
 
-  /* Future<void> _sendVerificationCode(String phone) async {
+
+
+
+/* Future<void> _sendVerificationCode(String phone) async {
     try {
       await _auth.verifyPhoneNumber(
           phoneNumber: phone,
@@ -754,7 +761,7 @@ class _VerificationScreenState extends State<VerificationScreen>
     }
   } */
 
-  /* Future<bool> checkUserAvailability() async {
+/* Future<bool> checkUserAvailability() async {
     final response = await Repository()
         .registerApi
         .checkUserAvailability(widget.phoneNo.replaceAll(' ', ''));
@@ -763,9 +770,9 @@ class _VerificationScreenState extends State<VerificationScreen>
 }
 
 class Countdown extends AnimatedWidget {
-  Countdown({Key? key, this.animation})
-      : super(key: key, listenable: animation!);
+  Countdown({Key? key, this.animation}) : super(key: key, listenable: animation!);
   Animation<int>? animation;
+
 
   @override
   build(BuildContext context) {

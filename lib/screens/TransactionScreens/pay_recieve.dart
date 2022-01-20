@@ -3337,6 +3337,34 @@ class _ImportContactsListWidgetState extends State<ImportContactsListWidget> {
                           // bool? merchantSubscriptionPlan =
                           //     cid.customerInfo?.merchantSubscriptionPlan ??
                           //         false;
+                          CustomLoadingDialog.showLoadingDialog(context, key);
+                          var cid = await repository.customerApi
+                              .getCustomerID(
+                              mobileNumber: widget.contacts[index].mobileNo
+                                  .toString())
+                              .timeout(Duration(seconds: 30),
+                              onTimeout: () async {
+                                Navigator.of(context).pop();
+                                return Future.value(null);
+                              }).catchError((e) {
+                            Navigator.of(context).pop();
+                            'Please check internet connectivity and try again.'
+                                .showSnackBar(context);
+                          });
+                          if (cid.customerInfo?.id == null) {
+                            Navigator.of(context).pop(true);
+                            MerchantBankNotAdded.showBankNotAddedDialog(
+                                context, 'userNotRegistered');
+                            return;
+                            // userNotRegisteredDialog();
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (BuildContext context) {
+                            //     return NonULDialog();
+                            //   },
+                            // );
+
+                          }
                           if (await allChecker(context)) {
                             CustomLoadingDialog.showLoadingDialog(context, key);
                             var cid = await repository.customerApi
