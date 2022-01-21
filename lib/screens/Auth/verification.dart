@@ -304,7 +304,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                                         ..pushReplacementNamed(
                                             AppRoutes.setPinRoute,
                                             arguments: SetPinRouteArgs(
-                                                '', false, false, false));
+                                                '', false, false, true));
                                     }
                                   } else {
                                     Navigator.of(context)
@@ -397,16 +397,16 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                     ),
                     
                   ])),
-                  Flexible(
-                    flex: 2,
-                    child: Stack(children: [
-                      Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width * 0.2),
-                          child: Image.asset(AppAssets.otpArtImage)),
-                    ]),
-                  ),
+                  // Flexible(
+                  //   flex: 2,
+                  //   child: Stack(children: [
+                  //     Container(
+                  //         margin: EdgeInsets.symmetric(
+                  //             horizontal:
+                  //                 MediaQuery.of(context).size.width * 0.2),
+                  //         child: Image.asset(AppAssets.otpArtImage)),
+                  //   ]),
+                  // ),
                   SizedBox(
                       height: MediaQuery.of(context).size.height * 0.02,
                     ),

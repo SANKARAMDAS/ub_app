@@ -22,7 +22,7 @@ class ContactsCubit extends Cubit<ContactsState> {
       customerList = await _repository.queries.getCustomers(businessId);
     }
     isCustomerAddedNotifier.value = !isCustomerAddedNotifier.value;
-    customerList.sort((a, b) => a.updatedDate!.compareTo(b.updatedDate!));
+    customerList.sort((a, b) => a.updatedAt!.compareTo(b.updatedAt!));
     emit(FetchedContacts(customerList.reversed.toList()));
   }
 

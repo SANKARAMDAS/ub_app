@@ -107,11 +107,12 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
         Repository().hiveQueries.userData.kycStatus.toString());
     debugPrint('dd : premiumStatus:  ' +
         Repository().hiveQueries.userData.premiumStatus.toString());
+    
+    startOrderSession();
     if (widget.amount != null) {
       currController.text = widget.amount!.replaceAll('-', '').toString();
       debugPrint('Check :' + isAmountFilled.toString());
     }
-    startOrderSession();
   }
 
   bool isEmiratesIdDone = false;
@@ -389,12 +390,9 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
         type: widget.type,
         requestId: widget.requestId != null ? widget.requestId : '',
       );
-      setState(() {
-        loading = false;
-      });
-      debugPrint('qwe:ss  ${OSession?.toJson().toString()}');
       if (mounted) {
         setState(() {
+          loading = false;
           if (OSession?.statuscode == 410) {
             isSessionExpire = true;
             '${OSession?.message}'.showSnackBar(context);

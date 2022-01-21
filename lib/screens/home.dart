@@ -2784,18 +2784,19 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => PayTransactionScreen(
-                      //         model: _customerModel,
-                      //         customerId:
-                      //             localCustId.isEmpty ? uniqueId : localCustId,
-                      //         type: 'DIRECT',
-                      //         suspense: false,
-                      //         through: 'DIRECT'),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PayTransactionScreen(
+                              model: _customerModel,
+                                customerId: localCustId.isEmpty
+                                    ? uniqueId
+                                    : localCustId,
+                              type: 'DIRECT',
+                              suspense: false,
+                              through: 'DIRECT'),
+                        ),
+                      );
                       Map<String, dynamic> isTransaction = await repository
                           .paymentThroughQRApi
                           .getTransactionLimit(context);
@@ -2833,22 +2834,24 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => PayTransactionScreen(
-                      //         model: _customerModel,
-                      //         customerId:
-                      //             localCustId.isEmpty ? uniqueId : localCustId,
-                      //         amount:
-                      //             (widget._customerList[index].transactionAmount)!
-                      //                 .getFormattedCurrency
-                      //                 .replaceAll('-', ''),
-                      //         type: 'DIRECT',
-                      //         suspense: false,
-                      //         through: 'DIRECT'),
-                      //   ),
-                      // );
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PayTransactionScreen(
+                              model: _customerModel,
+                                customerId: localCustId.isEmpty
+                                    ? uniqueId
+                                    : localCustId,
+                              amount:
+                                  (widget._customerList[index].transactionAmount)!
+                                      .getFormattedCurrency
+                                      .replaceAll('-', ''),
+                              type: 'DIRECT',
+                              suspense: false,
+                              through: 'DIRECT'),
+                        ),
+                      );
                       Map<String, dynamic> isTransaction = await repository
                           .paymentThroughQRApi
                           .getTransactionLimit(context)
@@ -3053,7 +3056,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                   size: 18,
                 ),
                 subtitle: CustomText(
-                  widget._customerList[index].updatedDate?.duration ?? "",
+                  widget._customerList[index].updatedAt?.duration ?? "",
                   size: 16,
                   color: AppTheme.greyish,
                 ),
