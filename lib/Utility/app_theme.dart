@@ -32,7 +32,7 @@ class AppTheme {
   static const Color coolGrey = Color.fromRGBO(162, 164, 176, 1);
   static const Color justWhite = Color.fromRGBO(242, 241, 246, 1);
   static const Color buttonSplashGrey = Color.fromRGBO(231, 231, 231, 1);
-  static const Color calculatorBlue = Color.fromRGBO(185, 206, 249, 1);
+  static const Color calculatorBlue = Color.fromRGBO(230, 220, 255, 1);
   static const Color disabledBlue = AppTheme.electricBlue;
   static const Color greencyan = Color.fromRGBO(78, 216, 167, 1);
   static const Color highlightColor = Color.fromRGBO(224, 224, 224, 1);

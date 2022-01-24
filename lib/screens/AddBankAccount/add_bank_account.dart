@@ -221,6 +221,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                                       children: [
                                         Image.asset(
                                           'assets/images/accountholder.png',
+                                          color: AppTheme.electricBlue,
                                         ),
                                         Container(
                                           padding:
@@ -346,6 +347,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                                         Image.asset(
                                           'assets/images/ibannumber.png',
                                           fit: BoxFit.fitWidth,
+                                          
                                           scale: 0.1,
                                         ),
                                         Container(

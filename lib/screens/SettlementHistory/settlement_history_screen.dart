@@ -663,10 +663,12 @@ class _SettlementHistoryScreenState extends State<_SettlementHistoryScreen> {
                                     },
                                     child: CustomText(
                                       'OK',
+                                      color: AppTheme.whiteColor,
                                       size: (18),
                                       bold: FontWeight.w500,
                                     ),
                                     style: ElevatedButton.styleFrom(
+                                      primary: AppTheme.electricBlue,
                                       padding: EdgeInsets.all(15),
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(10)),

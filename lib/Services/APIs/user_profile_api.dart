@@ -26,7 +26,7 @@ class UserProfileAPI {
     final response = await postRequest(
         endpoint: url, headers: apiAuthHeaderWithOnlyToken(), body: bodyMap);
     if (response.statusCode == 200) {
-      debugPrint(response.body);
+      debugPrint("hhhh"+response.body);
       final map = jsonDecode(response.body);
       LoginModel loginModel = LoginModel(
         userId: map['customerData']['_id'],

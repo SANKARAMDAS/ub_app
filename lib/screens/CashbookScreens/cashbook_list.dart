@@ -745,7 +745,8 @@ class _CashbookListState extends State<CashbookList> {
                             child: CustomText(
                               'OK',
                               size: (18),
-                              bold: FontWeight.w500,
+                              color: AppTheme.whiteColor,
+                              bold: FontWeight.bold,
                             ),
                             style: ElevatedButton.styleFrom(
                               primary: AppTheme.electricBlue,

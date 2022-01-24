@@ -173,6 +173,7 @@ class _UpgradeSubscriptionState extends State<UpgradeSubscription> {
                               text1: 'Pay using'.toUpperCase(),
                               textSize1: 16,
                               textColor1: Colors.white,
+                              backgroundColor: AppTheme.electricBlue,
                               text2:
                                   '${fprov.cardNumber != null ? fprov.cardNumber : cardNo.toString()}',
                               textSize2: 16,

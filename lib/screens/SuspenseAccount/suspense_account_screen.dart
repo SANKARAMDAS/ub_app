@@ -654,8 +654,8 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                   ),
                 ),
                 SizedBox(height: 0),
-                Padding(
-                    padding: const EdgeInsets.all(22.0),
+                Container(
+                    margin: const EdgeInsets.all(22.0),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -663,14 +663,14 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                             AppAssets.info_01,
                             height: 35,
                           ),
-                          15.0.heightBox,
+                          10.0.heightBox,
                           CustomText(
                             'Manage your Unrecognized Transactions',
                             size: 20,
                             color: AppTheme.brownishGrey,
                             bold: FontWeight.bold,
                           ),
-                          15.0.heightBox,
+                          10.0.heightBox,
                           CustomText(
                             'An Unrecognized transaction is a list of unknown payment transactions received from your customers through global payment link or QR code or direct payment. You can filter your transactions as well as sort them according to the payment type. Move single as well as multiple transactions to a particular ledger or business account to monitor and control a business\'s financial operations.',
                             size: 18,
@@ -678,7 +678,7 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                             color: AppTheme.brownishGrey,
                             bold: FontWeight.w400,
                           ),
-                          15.0.heightBox,
+                          10.0.heightBox,
                           CheckboxListTile(
                             title: Text("Do not show me this message again"),
                             value: checkedValue,
@@ -701,9 +701,11 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                                 child: CustomText(
                                   'OK',
                                   size: (18),
+                                  color: AppTheme.whiteColor,
                                   bold: FontWeight.w500,
                                 ),
                                 style: ElevatedButton.styleFrom(
+                                  primary: AppTheme.electricBlue,
                                   padding: EdgeInsets.all(15),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),

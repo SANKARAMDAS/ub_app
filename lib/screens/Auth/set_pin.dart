@@ -85,7 +85,10 @@ class _SetPinScreenState extends State<SetPinScreen> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
-            title: titleName(color: AppTheme.whiteColor),
+            title: Container(
+                // margin: EdgeInsets.symmetric(vertical: 500),
+                child: Image.asset(AppAssets.landscapeLogo, color: AppTheme.whiteColor,
+                    width: MediaQuery.of(context).size.width * 0.4)),
             centerTitle: true,
           ),
           // bottomSheet: Container(

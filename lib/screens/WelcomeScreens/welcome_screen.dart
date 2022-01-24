@@ -57,6 +57,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.02),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             // Image.asset(AppAssets.backgroundImage),
@@ -67,21 +68,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
           // // ),
           // RotationTransition(
           // turns: _animation,
-          FadeTransition(opacity: _fadeInFadeOut,
-            child: Container(
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.32, right: MediaQuery.of(context).size.width * 0.32, bottom: MediaQuery.of(context).size.width * 0.2),
-              child: Image.asset(AppAssets.portraitLogo),
-            ),
-          ),
-          (deviceHeight * 0.075).heightBox,
-          CustomText(
-            'Discover a whole new way to\nmanage your businesses.',
-            size: (23),
-            color: AppTheme.brownishGrey,
-            bold: FontWeight.w500,
-            centerAlign: true,
-          ),
+          
           (deviceHeight * 0.10).heightBox.flexible,
             Container(
               width: double.infinity,
@@ -136,29 +123,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
       body: Container(
         margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.2),
         child: Column(
-          children: [
-          // Image.asset(AppAssets.backgroundImage),
-          // SizedBox(height: 20),
-          // (deviceHeight * 0.10).heightBox,
-          // // ULLogoWidget(
-          // //   height: 80,
-          // // ),
-          // Container(
-          //   margin: EdgeInsets.symmetric(
-          //       horizontal: MediaQuery.of(context).size.width * 0.32),
-          //   child: Image.asset(AppAssets.portraitLogo),
-          // ),
-          // (deviceHeight * 0.075).heightBox,
-          // CustomText(
-          //   'Discover a whole new way to\nmanage your businesses.',
-          //   size: (23),
-          //   color: AppTheme.coolGrey,
-          //   bold: FontWeight.w500,
-          //   centerAlign: true,
-          // ),
-          // (deviceHeight * 0.15).heightBox.flexible,
-        ]),
-      ),
+          mainAxisAlignment: MainAxisAlignment.start,
+          children:[
+            FadeTransition(opacity: _fadeInFadeOut,
+            child: Container(
+              margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.32, right: MediaQuery.of(context).size.width * 0.32, bottom: MediaQuery.of(context).size.width * 0.2),
+              child: Image.asset(AppAssets.portraitLogo),
+            ),
+          ),
+          (deviceHeight * 0.1).heightBox,
+          CustomText(
+            'Discover a whole new way to\nmanage your businesses.',
+            size: (23),
+            color: AppTheme.brownishGrey,
+            bold: FontWeight.w500,
+            centerAlign: true,
+          ),
+          ]
+        )      ),
     );
   }
 }

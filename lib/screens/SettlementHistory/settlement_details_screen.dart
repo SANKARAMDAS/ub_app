@@ -892,7 +892,7 @@ class _SettlementDetailsState extends State<SettlementDetails> {
                           ),
                           15.0.heightBox,
                           CustomText(
-                            'Manage your Settlement',
+                            'Manage your Settlement LL',
                             size: 20,
                             color: AppTheme.brownishGrey,
                             bold: FontWeight.w500,
@@ -938,9 +938,11 @@ class _SettlementDetailsState extends State<SettlementDetails> {
                                 child: CustomText(
                                   'OK',
                                   size: (18),
+                                  color: AppTheme.whiteColor,
                                   bold: FontWeight.w500,
                                 ),
                                 style: ElevatedButton.styleFrom(
+                                  primary: AppTheme.electricBlue,
                                   padding: EdgeInsets.all(15),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),

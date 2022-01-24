@@ -222,6 +222,7 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
                             text1: 'Pay using'.toUpperCase(),
                             textSize1: 16,
                             textColor1: Colors.white,
+                            backgroundColor: AppTheme.electricBlue,
                             text2:
                                 '${Provider.of<FreemiumProvider>(context).cardNumber != null ? Provider.of<FreemiumProvider>(context).cardNumber : cardNo.toString()}',
                             textSize2: 16,

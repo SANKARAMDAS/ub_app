@@ -606,7 +606,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
           // obscureText: true,
           maxLength: 1,
           cursorColor: AppTheme.coolGrey,
-          cursorHeight: 50,
+          showCursor: false,
+          cursorWidth: 5,
+          cursorHeight: 5,
           style: TextStyle(
               color: AppTheme.blackColor,
               fontSize: 40,

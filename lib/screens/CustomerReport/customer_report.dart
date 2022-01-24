@@ -971,6 +971,7 @@ class _CustomerReportState extends State<CustomerReport> {
             padding: EdgeInsets.fromLTRB(20, 10, 20, isPlatformiOS() ? 20: 10),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
+                primary: AppTheme.electricBlue,
                 padding: EdgeInsets.all(15),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),

@@ -1007,6 +1007,7 @@ class _ReportState extends State<Report> {
             padding: EdgeInsets.fromLTRB(20, 10, 20, isPlatformiOS() ? 20:10),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
+                primary: AppTheme.electricBlue,
                 padding: EdgeInsets.all(15),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -1040,7 +1041,7 @@ class _ReportState extends State<Report> {
                       //     arguments: path);
                     },
               child: CustomText('Download'.toUpperCase(),
-                  color: Colors.white, size: 18, bold: FontWeight.w500),
+                  color: Colors.white, size: 18, bold: FontWeight.bold),
             ),
           );
         });
