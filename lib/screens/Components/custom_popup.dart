@@ -131,7 +131,7 @@ class MerchantBankNotAdded {
                       children: [
                         (type == 'merchantBankNotAdded')
                             ? Text(
-                                'We have requested your merchant to add bank account.',
+                                'This user hasn’t activated their Urban Ledger\naccount. Please contact the user for\nfurther clarification. ',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: AppTheme.brownishGrey,
@@ -170,7 +170,7 @@ class MerchantBankNotAdded {
                                       )
                                     : type == 'merchantKYCPending'
                                         ? Text(
-                                            'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.',
+                                            'This user hasn’t activated their Urban Ledger account. Please contact the user for further clarification. ',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 color: AppTheme.brownishGrey,
