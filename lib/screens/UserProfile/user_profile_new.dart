@@ -378,7 +378,7 @@ class _UserProfileNewState extends State<UserProfileNew> {
                                 'assets/icons/user_profile.png',
                                 'First Name',
                                 '',
-                                _fNameController, onChanged: (e) {
+                                _fNameController,true, onChanged: (e) {
                               final status = checkForError(1);
                               setState(() {
                                 showNameError = status;
@@ -401,7 +401,7 @@ class _UserProfileNewState extends State<UserProfileNew> {
                                 'assets/icons/user_profile.png',
                                 'Last Name',
                                 '',
-                                _lNameController, onChanged: (e) {
+                                _lNameController,true, onChanged: (e) {
                               final status = checkForError(2);
                               setState(() {
                                 showLnameError = status;
@@ -640,7 +640,7 @@ class _UserProfileNewState extends State<UserProfileNew> {
                                 'assets/icons/email_profile.png',
                                 'Business Email',
                                 '',
-                                _emailController, onChanged: (e) {
+                                _emailController,!isEmailVerified, onChanged: (e) {
                               final status = checkForError(3);
                               setState(() {
                                 showEmailError = status;
@@ -744,7 +744,7 @@ class _UserProfileNewState extends State<UserProfileNew> {
   }
 
   Widget buildTextFeild(String imageUrl, String title, String subTitle,
-      TextEditingController ctrl,
+      TextEditingController ctrl,bool isEnabled,
       {void Function(String)? onChanged}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
@@ -787,6 +787,7 @@ class _UserProfileNewState extends State<UserProfileNew> {
                   fontSize: 23),
               onChanged: onChanged,
               controller: ctrl,
+              enabled:isEnabled,
               textAlign: TextAlign.left,
               decoration: InputDecoration(
                 hintText: subTitle,

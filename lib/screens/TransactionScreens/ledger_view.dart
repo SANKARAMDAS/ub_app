@@ -808,12 +808,12 @@ class _LedgerViewState extends State<LedgerView> {
 
                             merchantBankNotAddedModalSheet(
                                 text:
-                                    'We have requested your merchant to add bank account.');
+                                    Constants.merchentKYCBANKPREMNotadd);
                           } else if (cid.customerInfo?.kycStatus == false) {
                             Navigator.of(context).pop(true);
                             merchantBankNotAddedModalSheet(
                                 text:
-                                    'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
+                                    Constants.merchentKYCBANKPREMNotadd);
                           }
                           //  else if (Repository()
                           //             .hiveQueries
@@ -831,7 +831,7 @@ class _LedgerViewState extends State<LedgerView> {
                             Navigator.of(context).pop();
                             merchantBankNotAddedModalSheet(
                                 text:
-                                    'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
+                                    Constants.merchentKYCBANKPREMNotadd);
                           } else {
                             Map<String, dynamic> isTransaction =
                                 await repository.paymentThroughQRApi

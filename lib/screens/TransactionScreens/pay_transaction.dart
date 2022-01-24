@@ -742,14 +742,14 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
 
                                         merchantBankNotAddedModalSheet(
                                             text:
-                                                'We have requested your merchant to add bank account.');
+                                                Constants.merchentKYCBANKPREMNotadd);
                                       } else if (cid.customerInfo?.kycStatus ==
                                           false) {
                                         debugPrint('dd : 5');
                                         Navigator.of(context).pop(true);
                                         merchantBankNotAddedModalSheet(
                                             text:
-                                                'Your merchant has not completed the KYC or KYC is expired. We have requested merchant to complete KYC.');
+                                                Constants.merchentKYCBANKPREMNotadd);
                                       } else if (cid.customerInfo
                                               ?.merchantSubscriptionPlan ==
                                           false) {
@@ -757,7 +757,7 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
                                         Navigator.of(context).pop(true);
                                         merchantBankNotAddedModalSheet(
                                             text:
-                                                'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
+                                                Constants.merchentKYCBANKPREMNotadd);
                                       } else {
                                         debugPrint('dd : 7');
                                         // String primaryBusiness =
@@ -1003,13 +1003,13 @@ class _PayTransactionScreenState extends State<PayTransactionScreen> {
                                             Navigator.of(context).pop(true);
                                             userNotRegisteredDialog(
                                                 text:
-                                                    'We have requested your merchant to add their\nbank account. Please try again in some time.');
+                                                    Constants.merchentKYCBANKPREMNotadd);
                                           } else if (value['statuscode'] ==
                                               204) {
                                             Navigator.of(context).pop(true);
                                             userNotRegisteredDialog(
                                                 text:
-                                                    'We have requested your merchant to complete their KYC. Please try again in some time.');
+                                                    Constants.merchentKYCBANKPREMNotadd);
                                           } else if (value['error'] !=
                                                   'Bad Track Data' &&
                                               value['error'] !=

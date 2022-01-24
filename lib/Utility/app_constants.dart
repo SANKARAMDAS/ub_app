@@ -82,4 +82,6 @@ class Constants {
   static const String emptyMessage = "Can't be Empty";
 
   static const String somethingWentWrong = "Something Went Wrong!";
+
+  static const String merchentKYCBANKPREMNotadd = "This user hasn’t activated their Urban Ledger account. Please contact the user for further clarification.";
 }

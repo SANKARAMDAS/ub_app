@@ -28,7 +28,7 @@ class RequestSentPopup extends StatelessWidget {
                     width: screenWidth(context) / 1.7),
                 SizedBox(height: 10),
                 Text(
-                  'We have requested your merchant to\nadd bank account. Please try again later.',
+                  'This user hasn’t activated their Urban Ledger\naccount. Please contact the user for\nfurther clarification. ',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 16,
