@@ -498,37 +498,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         margin: EdgeInsets.symmetric(
                             horizontal:
                                 MediaQuery.of(context).size.width * 0.05),
-                        child: SignUpTextField(
-                            formKey: _formKey,
-                            prefixIcon: AppAssets.userIcon1,
-                            onChanged: (value) {
-                              debugPrint('QQQ1');
-                              validate();
-                              debugPrint('QQQ2'+validate().toString());
-                              if (value.length == 0) {
-                                setState(() {
-                                  firstNameError = null;
-                                });
-                                return;
-                              }
-                              /*     var resultText = value;
-                            List<String> text = value.split(' ');
-                            for(int i = 0;i<text.length;i++){
-                            String innerText = text[i].characters.first.toUpperCase();
-                            resultText += '${innerText+(i!=text.length-1?' ':'')}';
+                        child: Focus(
+                          onFocusChange: (focused){
+                            if(!focused){
+                              var resultText = '';
+                              List<String> text = _firstNameController.text.split(' ');
+                              List<String> capitalizeList =   text.map((e){
+                                return e.capitalizeFirstCharacter();
+                              }).toList();
+                              resultText = capitalizeList.join(" ");
+                              print('lastname : '+resultText);
+
+                              _firstNameController.text = resultText;
                             }
 
-                            _firstNameController.text = resultText;*/
+                          },
+                          child: SignUpTextField(
+                              formKey: _formKey,
+                              prefixIcon: AppAssets.userIcon1,
+                              onChanged: (value) {
+                                debugPrint('QQQ1');
+                                validate();
+                                debugPrint('QQQ2'+validate().toString());
+                                if (value.length == 0) {
+                                  setState(() {
+                                    firstNameError = null;
+                                  });
+                                  return;
+                                }
 
-                              firstNameError = validateFirstName(value);
-                              setState(() {});
-                            },
-                            validator: (value) {
-                              return validateFirstName(value);
-                            },
-                            controller: _firstNameController,
-                            keyboardType: TextInputType.name,
-                            hintText: 'Enter your First Name'),
+
+                                firstNameError = validateFirstName(value);
+                                setState(() {});
+                              },
+                              validator: (value) {
+                                return validateFirstName(value);
+                              },
+                              controller: _firstNameController,
+                              keyboardType: TextInputType.name,
+                              hintText: 'Enter your First Name'),
+                        ),
                       ),
                       if (firstNameError != null)
                         Container(
@@ -559,27 +568,42 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         margin: EdgeInsets.symmetric(
                             horizontal:
                                 MediaQuery.of(context).size.width * 0.05),
-                        child: SignUpTextField(
-                            prefixIcon: AppAssets.userIcon1,
-                            formKey: _formKey,
-                            onChanged: (value) {
-                              validate();
-                              if (value.length == 0) {
-                                setState(() {
-                                  lastNameError = null;
-                                  
-                                });
-                                return;
-                              }
-                              lastNameError = validateLastName(value);
-                              setState(() {});
-                            },
-                            validator: (value) {
-                              return validateLastName(value);
-                            },
-                            controller: _lastNameController,
-                            keyboardType: TextInputType.name,
-                            hintText: 'Last Name'),
+                        child: Focus(
+                          onFocusChange: (focused){
+                            if(!focused){
+                              var resultText = '';
+                              List<String> text = _lastNameController.text.split(' ');
+                            List<String> capitalizeList =   text.map((e){
+                                return e.capitalizeFirstCharacter();
+                              }).toList();
+                              resultText = capitalizeList.join(" ");
+                              print('lastname : '+resultText);
+
+                              _lastNameController.text = resultText;
+                            }
+                          },
+                          child: SignUpTextField(
+                              prefixIcon: AppAssets.userIcon1,
+                              formKey: _formKey,
+                              onChanged: (value) {
+                                validate();
+                                if (value.length == 0) {
+                                  setState(() {
+                                    lastNameError = null;
+
+                                  });
+                                  return;
+                                }
+                                lastNameError = validateLastName(value);
+                                setState(() {});
+                              },
+                              validator: (value) {
+                                return validateLastName(value);
+                              },
+                              controller: _lastNameController,
+                              keyboardType: TextInputType.name,
+                              hintText: 'Last Name'),
+                        ),
                       ),
                       if (lastNameError != null)
                         Container(
