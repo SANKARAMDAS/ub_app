@@ -436,310 +436,106 @@ class PinLoginPageState extends State<PinLoginScreen> {
 
   @override
     Widget build(BuildContext context) {
-    final coverHeight = MediaQuery.of(context).size.height / 5;
-    final top = coverHeight - profileImage / 2;
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: gradientBackground(
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            title: titleName(color: AppTheme.whiteColor),
-            centerTitle: true,
-          ),
-          // bottomSheet: Container(
-          //   color: AppTheme.whiteColor,
-          //   child: Column(mainAxisSize: MainAxisSize.min, children: [
-          //     Center(
-          //       child: Text(
-          //         'By clicking the register button, you agree to our Terms and Conditions',
-          //         style: TextStyle(
-          //           color: AppTheme.greyish,
-          //           fontSize: 12.5,
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       ),
-          //     ),
-          //     Container(
-          //       width: double.infinity,
-          //       margin: EdgeInsets.symmetric(vertical: 15),
-          //       padding:
-          //           const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-          //       child: ElevatedButton(
-          //         style: ElevatedButton.styleFrom(
-          //           primary: validate()
-          //               ? AppTheme.purpleActive
-          //               : AppTheme.disabledColor,
-          //           padding: EdgeInsets.all(15),
-          //           shape: RoundedRectangleBorder(
-          //               borderRadius: BorderRadius.circular(10)),
-          //         ),
-          //         onPressed: isLoading
-          //             ? null
-          //             : () async {
-          //                 setState(() {
-          //                   firstNameError =
-          //                       validateFirstName(_firstNameController.text);
-          //                   lastNameError =
-          //                       validateLastName(_lastNameController.text);
-          //                   emailError = validateEmail(_emailController.text);
-          //                   debugPrint("statement");
-          //                 });
-          //                 Login() async {
-          //                   firstNameError =
-          //                       validateFirstName(_firstNameController.text);
-          //                   lastNameError =
-          //                       validateLastName(_lastNameController.text);
-          //                   emailError = validateEmail(_emailController.text);
-          //                   debugPrint("statement");
-          //                   if (firstNameError == null &&
-          //                       lastNameError == null &&
-          //                       emailError == null) {
-          //                     setState(() {
-          //                       isLoading = true;
-          //                     });
+    viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
+    if (!isHightSubtracted) {
+      height = height - MediaQuery.of(context).viewPadding.top;
+      isHightSubtracted = true;
+    }
+    Future.delayed(Duration(seconds: 1), () {
+      // debugPrint(isFingerPrintDisabledFromPhone.toString());
+      // debugPrint(isPinOn.toString());
 
-          //                     final response = await (Repository()
-          //                         .userProfileAPI
-          //                         .userProfileApi(
-          //                             SignUpModel(
-          //                               firstName: _firstNameController.text,
-          //                               lastName: _lastNameController.text,
-          //                               mobileNo:
-          //                                   widget.mobile.replaceAll('+', ''),
-          //                               email: _emailController.text,
-          //                               referral_code: repository
-          //                                   .hiveQueries.SignUpUserReferralCode,
-          //                               referral_link: repository
-          //                                   .hiveQueries.SignUpUserReferralLink,
-          //                               paymentLink: repository
-          //                                   .hiveQueries.SignUpPaymentLink
-          //                                   .toString(),
-          //                             ),
-          //                             context)
-          //                         .timeout(Duration(seconds: 30),
-          //                             onTimeout: () async {
-          //                       Navigator.of(context).pop();
-          //                       return Future.value(null);
-          //                     }).catchError((e) {
-          //                       setState(() {
-          //                         isLoading = false;
-          //                       });
-          //                       debugPrint(e.toString());
-          //                       // ScaffoldMessenger.of(context)
-          //                       //     .showSnackBar(SnackBar(
-          //                       //   content: CustomText(
-          //                       //       'Please check internet connectivity and try again.'),
-          //                       // ));
-          //                       'Please check internet connectivity and try again.'
-          //                           .showSnackBar(context);
-          //                       return false;
-          //                     }));
-
-          //                     if (response) {
-          //                       /*  final registerResponse =
-          //                             await RegisterRepository().register(
-          //                                 _firstNameController.text +
-          //                                     ' ' +
-          //                                     _lastNameController.text,
-          //                                 _emailController.text); */
-          //                       var anaylticsEvents = AnalyticsEvents(context);
-
-          //                       if (_referralController.text.isNotEmpty) {
-          //                         // final response = await (Repository()
-          //                         //     .userProfileAPI
-          //                         //     .sendDynamicReferralCode(
-          //                         //         _referralController.text
-          //                         //             .toString())
-          //                         //     .timeout(Duration(seconds: 30),
-          //                         //         onTimeout: () async {
-          //                         //   Navigator.of(context).pop();
-          //                         //   return false;
-          //                         // }).catchError((e) {
-          //                         //   setState(() {
-          //                         //     isLoading = false;
-          //                         //   });
-          //                         //   debugPrint(e.toString());
-          //                         //   ScaffoldMessenger.of(context)
-          //                         //       .showSnackBar(SnackBar(
-          //                         //     content: CustomText(
-          //                         //         'Please check internet connectivity and try again.'),
-          //                         //   ));
-          //                         //   return false;
-          //                         // }));
-          //                         await anaylticsEvents.signUpEvent(true);
-          //                         debugPrint('Checking Referral Hit: ' +
-          //                             response.toString());
-          //                       }
-          //                       await anaylticsEvents.signUpEvent(false);
-          //                       LoginRepository().login(widget.mobile, context);
-          //                       repository.hiveQueries
-          //                           .insertIsAuthenticated(true);
-          //                       repository.hiveQueries
-          //                           .insertUserData(SignUpModel(
-          //                         id: '',
-          //                         firstName: _firstNameController.text,
-          //                         lastName: _lastNameController.text,
-          //                         mobileNo: widget.mobile,
-          //                         email: _emailController.text,
-          //                         paymentLink: repository
-          //                             .hiveQueries.SignUpPaymentLink
-          //                             .toString(),
-          //                         referral_code: repository
-          //                             .hiveQueries.SignUpUserReferralCode,
-          //                         referral_link: repository
-          //                             .hiveQueries.SignUpUserReferralLink,
-          //                       ));
-          //                       final businesssModel = BusinessModel(
-          //                           businessId: Uuid().v1(),
-          //                           businessName: 'PERSONAL',
-          //                           isChanged: true,
-          //                           isDeleted: false,
-          //                           deleteAction: false);
-          //                       await repository.queries
-          //                           .insertBusiness(businesssModel);
-          //                       if (await checkConnectivity) {
-          //                         final apiResponse = await (repository
-          //                             .businessApi
-          //                             .saveBusiness(
-          //                                 businesssModel, context, false)
-          //                             .catchError((e) {
-          //                           setState(() {
-          //                             isLoading = false;
-          //                           });
-          //                           'Please check your internet connection or try again later.'
-          //                               .showSnackBar(context);
-          //                         }));
-          //                         if (apiResponse) {
-          //                           await repository.queries
-          //                               .updateBusinessIsChanged(
-          //                                   businesssModel, 0);
-          //                         }
-          //                       } else {
-          //                         Navigator.of(context).pop();
-          //                         'Please check your internet connection or try again later.'
-          //                             .showSnackBar(context);
-          //                       }
-          //                       setState(() {
-          //                         isLoading = false;
-          //                       });
-          //                       Future.delayed(Duration(seconds: 1))
-          //                           .then((value) {
-          //                         Navigator.of(context).pushReplacementNamed(
-          //                           AppRoutes.setPinRoute,
-          //                           arguments:
-          //                               SetPinRouteArgs('', false, false, true),
-          //                         );
-          //                       });
-
-          //                       // Navigator.of(context)
-          //                       //     .pushReplacementNamed(
-          //                       //         AppRoutes.welcomeuserRoute,
-          //                       //         arguments: _firstNameController
-          //                       //                 .text +
-          //                       //             ' ' +
-          //                       //             _lastNameController.text);
-          //                     }
-          //                   } else {
-          //                     setState(() {});
-          //                   }
-          //                 }
-
-          //                 if (_referralController.text.isNotEmpty &&
-          //                     _referralController.text.length < 8) {
-          //                   setState(() {
-          //                     isLoading = false;
-          //                   });
-          //                   'Invalid referral code. Please check the referral code and try again.'
-          //                       .showSnackBar(context);
-          //                 } else if (firstNameError == null &&
-          //                     lastNameError == null &&
-          //                     emailError == null &&
-          //                     _referralController.text.isNotEmpty &&
-          //                     _referralController.text.length == 8) {
-          //                   bool? response1 = await (Repository()
-          //                       .userProfileAPI
-          //                       .sendDynamicReferralCode(
-          //                           _referralController.text.toString()));
-          //                   if (response1 == true) {
-          //                     'Referral applied successfully'
-          //                         .showSnackBar(context);
-
-          //                     if (firstNameError == null &&
-          //                         lastNameError == null &&
-          //                         emailError == null) {
-          //                       debugPrint('Go for Login');
-          //                       await Login();
-          //                     } else {
-          //                       setState(() {
-          //                         isLoading = false;
-          //                       });
-          //                       // 'Please Check the input fields'
-          //                       //     .showSnackBar(context);
-          //                     }
-          //                     setState(() {
-          //                       isLoading = false;
-          //                     });
-          //                   } else {
-          //                     setState(() {
-          //                       isLoading = false;
-          //                     });
-          //                     'Invalid referral code. Please check the referral code and try again.'
-          //                         .showSnackBar(context);
-          //                   }
-          //                 } else {
-          //                   setState(() {});
-          //                   debugPrint('Go for Login');
-          //                   if (firstNameError == null &&
-          //                       lastNameError == null &&
-          //                       _referralController.text.isEmpty &&
-          //                       emailError == null) {
-          //                     await Login();
-          //                   }
-          //                   // else{
-          //                   //     'Invalid referral code. Please check the referral code and try again.'
-          //                   //     .showSnackBar(context);
-          //                   // }
-
-          //                 }
-          //               },
-          //         child: isLoading
-          //             ? CircularProgressIndicator()
-          //             : CustomText(
-          //                 'Register',
-          //                 color: validate()
-          //                     ? AppTheme.whiteColor
-          //                     : AppTheme.coolGrey,
-          //                 size: (18),
-          //                 bold: FontWeight.bold,
-          //               ),
-          //       ),
-          //     ),
-          //   ]),
-          // ),
-          body: Container(
-            child: Stack(alignment: Alignment.topCenter, children: [
-              Positioned(
-                  top: MediaQuery.of(context).size.height * 0.04,
-                  child: topContainer),
-              Container(
-                  margin: EdgeInsets.only(top: coverHeight),
-                  padding: EdgeInsets.only(top: 100),
-                  // height:
-                  //     MediaQuery.of(context).size.height - coverHeight - 84,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25),
-                    ),
-                  ),
-                  child: Stack(
-                    fit: StackFit.expand,
+      if (isFingerPrintDisabledFromPhone && !isPinOn)
+        // WidgetsBinding.instance?.addPostFrameCallback((_) {
+        showWarningDialog();
+      // });
+    });
+    return Scaffold(
+      backgroundColor: AppTheme.paleGrey,
+      appBar: AppBar(
+        toolbarHeight: 0,
+      ),
+      extendBodyBehindAppBar: true,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Container(
+              clipBehavior: Clip.none,
+              height:
+                  (!isPinOn && isFingerPrintOn) ? height * 0.2 : height * 0.35,
+              width: double.infinity,
+              alignment: Alignment.topCenter,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: AssetImage(AppAssets.backgroundImage2),
+                      alignment: Alignment.topCenter)),
+            ),
+            (!isPinOn && isFingerPrintOn)
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      15.0.heightBox,
+                      Center(child: commonLogoWithTagline(height)),
+                      (height * 0.1).heightBox,
+                      Image.asset(
+                        AppAssets.fingerPrintClipArtImage,
+                        height: height * 0.4,
+                      ),
+                      (height * 0.1).heightBox,
+                      CustomText(
+                        'Allow Touch ID',
+                        size: 18,
+                        bold: FontWeight.w700,
+                        color: AppTheme.brownishGrey,
+                      ),
+                      10.0.heightBox,
+                      CustomText(
+                        'Use Touch ID for Faster and Secure\naccess to your Account',
+                        centerAlign: true,
+                        size: 16,
+                        bold: FontWeight.w500,
+                        color: AppTheme.brownishGrey,
+                      ),
+                      20.0.heightBox,
+                      GestureDetector(
+                        onTap: () {
+                          _authenticate();
+                        },
+                        child: Image.asset(
+                          AppAssets.fingerprintIcon,
+                          height: height * 0.1,
+                        ),
+                      ),
+                    ],
+                  )
+                : Column(
+                    children: <Widget>[
+                      // 15.0.heightBox,
+                      commonLogoWithTagline(height),
+                      Text(
+                        'Enter Urban Ledger PIN',
+                        style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w300),
+                      ),
+                      SizedBox(
+                        height: height * 0.02,
+                      ),
+                      ValueListenableBuilder<String>(
+                          valueListenable: pinNotifier,
+                          builder: (context, value, _) {
+                            return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  pinBox(value.length > 0),
+                                  pinBox(value.length > 1),
+                                  pinBox(value.length > 2),
+                                  pinBox(value.length > 3),
+                                ]);
+                          }),
+                      (height * 0.07).heightBox,
                       incorrectPinCount > 0
                           ? Column(
                               children: [
@@ -793,82 +589,33 @@ class PinLoginPageState extends State<PinLoginScreen> {
                                       'FORGOT PIN?',
                                       size: 16,
                                       bold: FontWeight.w600,
-                                      color: AppTheme.electricBlue,
+                                      color: Theme.of(context).primaryColor,
                                     ))
                               ],
                             )
-                          : 
-                      Container(
-                        alignment: Alignment.topCenter,
-                        margin: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.25),
-                        child: Image.asset(AppAssets.pinArtImage),
-                      ),
+                          : Image.asset(
+                              AppAssets.pinClipartImage,
+                              height: height * 0.3,
+                            ),
+                      Spacer(),
+                      if (incorrectPinCount < 4)
+                        ResponsiveWrapper(
+                          child: Container(
+                            // height: height * 0.30,
+                            child: keyBoard(),
+                          ),
+                          maxWidth: 1200,
+                          minWidth: 480,
+                          shrinkWrap: true,
+                          defaultScale: true,
+                        )
                     ],
-                  )),
-              Positioned(
-                  top: top,
-                  // left: MediaQuery.of(context).size.width * 0.38,
-                  // right: MediaQuery.of(context).size.width * 0.38,
-                  child: topProfile),
-              if (incorrectPinCount < 4)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                    // margin: EdgeInsets.only(
-                    //   top: MediaQuery.of(context).size.height * .6,
-                    // ),
-                    height: MediaQuery.of(context).size.height * .3,
-                    color: AppTheme.whiteColor,
-                    alignment: Alignment.bottomCenter,
-                    child: keyBoard()),
-              ),
-            ]),
-          ),
-          // body: Column(
-          //   mainAxisSize: MainAxisSize.min,
-          //   children: [
-          //     Flexible(
-          //       flex: 1,
-          //       child: Stack(
-          //         alignment: Alignment.topCenter,
-          //         children: [
-          //           // Container(
-          //           //   child: RichText(text: TextSpan(
-          //           //     children: [
-          //           //       TextSpan(
-          //           //         text: 'Sign Up',
-          //           //         style: TextStyle(
-          //           //           fontSize: 30,
-          //           //           color: AppTheme.whiteColor
-          //           //         ),
-          //           //       ),
-
-          //           //     ]
-          //           //   )),
-          //           // ),
-          //         Positioned(
-          //           top: top,
-          //           child: buildProfileImage()),
-          //         ],
-          //       ),
-          //     ),
-          //     Flexible(
-          //       flex: 3,
-          //       child: Container(
-          //         // height: 250,
-          //         color: AppTheme.whiteColor,
-          //       ),
-          //     ),
-          //   ],
-
-          // ),
+                  ),
+          ],
         ),
       ),
     );
   }
-
     Widget get topProfile =>             (!isPinOn && isFingerPrintOn)
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -1042,7 +789,7 @@ class PinLoginPageState extends State<PinLoginScreen> {
   }
 
   Widget keyBoardButton(String number) => MaterialButton(
-    color: AppTheme.whiteColor,
+    // color: AppTheme.whiteColor,
         shape: CircleBorder(),
         splashColor: AppTheme.buttonSplashGrey,
         onPressed: () {

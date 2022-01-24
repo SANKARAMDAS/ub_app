@@ -42,7 +42,7 @@ class _CustomTextState extends State<CustomText> {
           fontSize: widget.size,
           color: widget.color ?? AppTheme.electricBlue,
           fontWeight: widget.bold == null ? FontWeight.normal : widget.bold,
-          fontFamily: widget.fontFamily ?? 'Hind',
+          fontFamily: widget.fontFamily,
           fontStyle:
               widget.italic == null ? FontStyle.normal : FontStyle.italic,
           decoration: widget.underline == null
