@@ -13,6 +13,8 @@ import 'package:urbanledger/Models/customer_model.dart';
 import 'package:urbanledger/Utility/app_constants.dart';
 import 'package:urbanledger/Utility/app_routes.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
+import 'package:urbanledger/Utility/dol_durma_clipper.dart';
+import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 
 import 'package:whatsapp_share/whatsapp_share.dart';
 
@@ -78,7 +80,10 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
   }
 
   onTap() {
-    Navigator.of(context)..pop()..pop()..pop();
+    Navigator.of(context)
+      ..pop()
+      ..pop()
+      ..pop();
   }
 
   @override
@@ -209,93 +214,99 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
   }
 
   Widget bodyWidget() {
-    return Stack(
-      // alignment: Alignment.topCenter,
-      children: [
-        Container(
-          height: deviceHeight * 0.21,
-          width: double.maxFinite,
-          alignment: Alignment.topCenter,
-          decoration: BoxDecoration(
-            color: Color(0xfff2f1f6),
-            image: DecorationImage(
-              fit: BoxFit.fill,
-              image: AssetImage('assets/images/back2.png'),
-              alignment: Alignment.topCenter,
+    return Container(
+      height: 500,
+      width: 500,
+      child: Stack(
+        // alignment: Alignment.topCenter,
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: deviceHeight * 0.21,
+            width: double.maxFinite,
+            alignment: Alignment.topCenter,
+            decoration: BoxDecoration(
+              color: Color(0xfff2f1f6),
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage('assets/images/back2.png'),
+                alignment: Alignment.topCenter,
+              ),
             ),
           ),
-        ),
-        Align(
-          alignment: Alignment.topCenter,
-          child: Stack(
-            children: [
-              Positioned(
-                  bottom: 0,
-                  top:
-                      (deviceHeight * 0.5) - (deviceHeight > 800.0 ? 580 : 500),
-                  left: 0,
-                  right: 0,
-                  // width: 400,
-                  // height: 400,
-                  child: Screenshot(
-                    controller: _ssController,
+          Positioned(
+            top: 150,
+            left: 0,
+            right: 0,
+            // alignment: Alignment.topCenter,
+            child: Container(
+                child: Screenshot(
+              controller: _ssController,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                // decoration: BoxDecoration(
+                //     image: DecorationImage(
+                //         fit: BoxFit.fill,
+                //         image:
+                //             AssetImage("assets/images/paysuccess.png"))),
+                child: ClipPath(
+                  clipper: DolDurmaClipper(holeRadius: 40, bottom: 250),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
+                      color: Colors.white,
+                    ),
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.all(36),
                     child: Container(
-                      margin: EdgeInsets.only(
-                          left: 20,
-                          right: 20,
-                          top: deviceHeight * 0.25,
-                          bottom: deviceHeight * 0.15),
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image:
-                                  AssetImage("assets/images/paysuccess.png"))),
-                      child: Column(
-                        children: [
-                          Expanded(
-                              child: Container(
-                                  // color: Colors.green,
-                                  )),
-                          Expanded(
-                              child: Container(
-                                  // color: Colors.yellow,
-                                  )),
-                          Expanded(
-                              child: Container(
-                            // color: Colors.blue,
-                            child: Column(children: [
+                      alignment: Alignment.center,
+                      child: Container(
+                        // color: Colors.blue,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image(
+                                fit: BoxFit.fill,
+                                image:
+                                    AssetImage("assets/images/paysucc_new.png"),
+                                height: 200,
+                                width: 200,
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              CustomText('Payment Successful!',
+                                  size: 24,
+                                  color: Colors.greenAccent,
+                                  bold: FontWeight.w600),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              // CustomText(
+                              //   'Please check your card details, security code, and connection',
+                              //   size: 20,
+                              //   color: AppTheme.brownishGrey,
+                              //   bold: FontWeight.w600,
+                              //   centerAlign: true,
+                              // ),
+                              SizedBox(
+                                height: 20,
+                              ),
+
                               //   Spacer(),
                               paymentDetails(),
                             ]),
-                          ))
-                        ],
                       ),
                     ),
-                  )
-
-                  // Padding(
-                  //   padding: EdgeInsets.only(
-                  //     top: deviceHeight * 0.1,
-                  //   ),
-                  //   child: Container(
-                  //     // color: Colors.amber,
-                  //     // height: deviceHeight * 0.65,
-                  //     margin: EdgeInsets.symmetric(
-                  //         horizontal:
-                  //             MediaQuery.of(context).size.width * 0.02),
-                  //     child: Image.asset(
-                  //       'assets/images/paysuccess.png',
-                  //       // fit: BoxFit.fill,
-                  //       // width: MediaQuery.of(context).size.width,
-                  //       height: deviceHeight * 0.7,
-                  //     ),
-                  //   ),
-                  // ),
-                  )
-            ],
+                  ),
+                ),
+              ),
+            )),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
