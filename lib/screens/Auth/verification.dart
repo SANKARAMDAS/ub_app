@@ -501,7 +501,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                           child: CustomText(
                             isResendOtpClickable
                                 ? 'RESEND OTP'
-                                : 'RESEND CODE IN ',
+                                : 'RESEND OTP IN ',
                             size: (18),
                             color: isResendOtpClickable
                                 ? AppTheme.redColor
@@ -516,9 +516,11 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                             });
                             //startTimer();
 
-                            if(mounted) {
-                              _controller.forward();
-                            }
+                            Future.delayed(const Duration(seconds: 1), () {
+                              if(mounted) {
+                                _controller.forward();
+                              }
+                            });
                           }:(){},
                         ),
                         if(!isResendOtpClickable)

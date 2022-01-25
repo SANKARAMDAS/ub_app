@@ -121,7 +121,7 @@ class Data {
   String? transactionId;
   String? paymentMethod;
   DateTime? completed;
-  int? amount;
+  dynamic? amount;
   String? cardType;
   String? cardImage;
   String? endingWith;

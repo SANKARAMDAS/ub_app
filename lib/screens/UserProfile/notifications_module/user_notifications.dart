@@ -282,8 +282,13 @@ class _UserNotificationsState extends State<UserNotifications> {
         Navigator.of(context).pushNamed(AppRoutes.mainRoute);
         break;
       case 'premium_reminder':
-        Navigator.of(context).pushNamed(AppRoutes.urbanLedgerPremiumRoute);
-        CustomLoadingDialog.showLoadingDialog(context);
+        redirectToPremiumPurchase();
+        break;
+      case 'buy_premium_reminder_kcy':
+        redirectToPremiumPurchase();
+        break;
+      case 'buy_premium_reminder_all':
+        redirectToPremiumPurchase();
         break;
       case 'complete_email_verification_reminder':
         Navigator.of(context).pushNamed(AppRoutes.edituserProfileRoute);
@@ -305,6 +310,25 @@ class _UserNotificationsState extends State<UserNotifications> {
         break;
       default:
         Navigator.of(context).pushNamed(AppRoutes.mainRoute);
+    }
+  }
+
+  redirectToPremiumPurchase()async{
+    if (await kycChecker(context)) {
+    await calculatePremiumDate();
+
+    if (Repository().hiveQueries.userData.premiumStatus ==
+    0) {
+    Navigator.of(context)
+        .pushNamed(AppRoutes.urbanLedgerPremiumRoute);
+
+    // CustomLoadingDialog.showLoadingDialog(context, key);
+    } else {
+    Navigator.of(context)
+        .pushNamed(AppRoutes.upgrdUnsubsRoute);
+
+    // CustomLoadingDialog.showLoadingDialog(context, key);
+    }
     }
   }
 
