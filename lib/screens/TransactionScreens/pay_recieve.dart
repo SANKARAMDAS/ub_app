@@ -3365,7 +3365,7 @@ class _ImportContactsListWidgetState extends State<ImportContactsListWidget> {
 
                           }
                           if (await allChecker(context)) {
-                            CustomLoadingDialog.showLoadingDialog(context, key);
+                            // CustomLoadingDialog.showLoadingDialog(context, key);
                             var cid = await repository.customerApi
                                 .getCustomerID(
                                     mobileNumber: widget
