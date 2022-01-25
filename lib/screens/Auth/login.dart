@@ -358,7 +358,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   border: Border(
                                 bottom: BorderSide(
                                   color: AppTheme.purpleActive,
-                                  width: 1.0,
+                                  width: 1.5,
                                 ),
                               )),
                             ),
@@ -373,7 +373,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   border: Border(
                                 bottom: BorderSide(
                                   color: AppTheme.purpleActive,
-                                  width: 1.0,
+                                  width: 1.5,
                                 ),
                               )),
                             ),
