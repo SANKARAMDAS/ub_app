@@ -62,6 +62,7 @@ void equalPressed() {
     ContextModel cm = ContextModel();
     double eval = exp.evaluate(EvaluationType.REAL, cm);
     if (finaluserinput.length > 16) {
+      ///
       return;
     }
     calculatedAmountNotifier.value = eval.isNaN || eval.isInfinite ? 0 : eval;
@@ -79,8 +80,8 @@ bool documentLifecycle(String document) {
 }
 
 Widget titleName({required Color color}) {
-  return RichText(text: TextSpan(
-    children: [
+  return RichText(
+    text: TextSpan(children: [
       TextSpan(
         text: 'urban ',
         style: TextStyle(
@@ -91,28 +92,24 @@ Widget titleName({required Color color}) {
       ),
       TextSpan(
         text: 'ledger',
-        style: TextStyle(
-          fontSize: 30,
-          color: color,
-          fontWeight: FontWeight.bold
-        ),
+        style:
+            TextStyle(fontSize: 30, color: color, fontWeight: FontWeight.bold),
       ),
-    ]
-  ),);
+    ]),
+  );
 }
 
 Widget gradientBackground({required Widget child}) {
   return Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [
-                  AppTheme.purpleStartColor,
-                  AppTheme.purpleEndColor,
-                ],
-                ),
-          ),
-          child: child
-        );
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppTheme.purpleStartColor,
+            AppTheme.purpleEndColor,
+          ],
+        ),
+      ),
+      child: child);
 }
 
 Future<bool> allChecker(BuildContext context) async {
