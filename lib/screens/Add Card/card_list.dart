@@ -26,7 +26,8 @@ class CardList extends StatefulWidget {
 class _CardListState extends State<CardList> with TickerProviderStateMixin {
   ScrollController controller = ScrollController();
 
-  final GlobalKey<AnimatedListState> _animatedkey = GlobalKey<AnimatedListState>();
+  final GlobalKey<AnimatedListState> _animatedkey =
+      GlobalKey<AnimatedListState>();
   List<CardUi> cardListStatic = [];
   String _title = '';
   int? _index;
@@ -55,25 +56,27 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     // var widgetsBinding;
-    
+
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _fetchCards = getCardsForCARDUI();
       _fetchCards.then((value) async {
         _fetchCompleted = true;
-        await Future.delayed(Duration(seconds: 12)).then((value) {
-          _controller1.stop(canceled: true);
-          _controller1.reset();
-        });
+        // await Future.delayed(Duration(seconds: 12)).then((value) {
+        //   _controller1.stop(canceled: true);
+        //   _controller1.reset();
+        // });
       });
     });
-    controller.addListener(() {
-      double value = controller.offset / 65;
+    controller.addListener(
+      () {
+        double value = controller.offset / 65;
 
-      setState(() {
-        topContainer = value;
-        closeTopContainer = controller.offset > 50;
-      });
-    });
+        setState(() {
+          topContainer = value;
+          closeTopContainer = controller.offset > 50;
+        });
+      },
+    );
 
     // getCardsForCARDUI().then((value) async {
     //   await Future.delayed(Duration(seconds: 12)).then((value) {
@@ -132,35 +135,9 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
       Navigator.of(context).pop();
     }).catchError((e) {
       Navigator.of(context).pop();
-      'Please check your internet connection or try again later.'.showSnackBar(context);
+      'Please check your internet connection or try again later.'
+          .showSnackBar(context);
     });
-
-    // Future ft = Future(() {});
-    // Provider.of<AddCardsProvider>(context, listen: false)
-    //     .card!
-    //     .forEach((element) {
-    //   Random random = new Random();
-    //   Color randomGenerator() {
-    //     return circleColors[random.nextInt(2)];
-    //   }
-
-    // ft = ft.then((_) {
-    //   return Future.delayed(const Duration(milliseconds: 100), () {
-    //   cardListStatic.add(CardUi(
-    //       cardNumber: element.endNumber.toString(),
-    //       bankName: element.bankName.toString(),
-    //       isDefualt: element.isdefault,
-    //       id: element.id.toString(),
-    //       cardHolderName: element.hashedName.toString(),
-    //       validCard: element.expdate.toString(),
-    //       cardImage: element.cardImage,
-    //       cardHeight: 260,
-    //       backgroundColor: randomGenerator()));
-    //   key.currentState!.insertItem(cardListStatic.length - 1);
-    // });
-    //   });
-    // });
-    // setState(() {});
     return true;
   }
 
@@ -174,46 +151,41 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
   }
 
   Tween<Offset> _offset = Tween(begin: Offset(1, 0), end: Offset(0, 0));
-
-  // Provider.of<AddCardsProvider>(context).addListener(() {
-  //   getCardsForCARDUI();
-  // });
   @override
   Widget build(BuildContext context) {
     Provider.of<AddCardsProvider>(context).addListener(() {
       // if (_fetchCompleted) {
-        final _list = List.of(
-           Provider.of<AddCardsProvider>(context, listen: false)
-            .card ?? <CardDetailsModel> []
-        );
-        cardListStatic.clear();
-        debugPrint("abc");
-       
-           _list.forEach((element) {
-          debugPrint("XYZ");
-      
-          Random random = new Random();
-          Color randomGenerator() {
-            return circleColors[random.nextInt(2)];
-          }
+      final _list = List.of(
+          Provider.of<AddCardsProvider>(context, listen: false).card ??
+              <CardDetailsModel>[]);
+      cardListStatic.clear();
+      debugPrint("abc");
 
-          cardListStatic.add(CardUi(
-              key: ValueKey(element.id),
-              cardNumber: element.endNumber.toString(),
-              bankName: element.bankName.toString(),
-              isDefualt: element.isdefault,
-              id: element.id.toString(),
-              cardHolderName: element.hashedName.toString(),
-              validCard: element.expdate.toString(),
-              cardImage: element.cardImage,
-              cardHeight: 260,
-            
-              backgroundColor:randomGenerator()));
-          _animatedkey.currentState?.insertItem(cardListStatic.length - 1);
-          debugPrint("key is not null: ${_animatedkey.currentState!= null}");
-        });
+      _list.forEach((element) {
+        debugPrint("XYZ");
+
+        Random random = new Random();
+        Color randomGenerator() {
+          return circleColors[random.nextInt(2)];
+        }
+
+        cardListStatic.add(CardUi(
+            key: ValueKey(element.id),
+            cardNumber: element.endNumber.toString(),
+            bankName: element.bankName.toString(),
+            isDefualt: element.isdefault,
+            id: element.id.toString(),
+            cardHolderName: element.hashedName.toString(),
+            validCard: element.expdate.toString(),
+            cardImage: element.cardImage,
+            cardHeight: 260,
+            backgroundColor: randomGenerator()));
+        _animatedkey.currentState?.insertItem(cardListStatic.length - 1);
+        debugPrint("key is not null: ${_animatedkey.currentState != null}");
+      });
       // }
     });
+
     final Size size = MediaQuery.of(context).size;
     final double categoryHeight =
         MediaQuery.of(context).size.height * 0.32; // size.height / 3.1;
@@ -243,12 +215,6 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
               /*Navigator.push(context,
                   MaterialPageRoute(builder: (context) => AddCardScreen()));*/
               Navigator.of(context).pushNamed(AppRoutes.addCardRoute);
-              // showDialog(
-              //     context: context,
-              //     builder: (_) => BankAccountPopUps(
-              //           image: 'assets/images/400.png',
-              //           title: '400 Authentication failed',
-              //         ));
             },
           ),
         ),
@@ -288,37 +254,6 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
                         child: cardListStatic[_index!],
                         secondaryActions: <Widget>[
                           Column(children: [
-                            // Expanded(
-                            //   child: GestureDetector(
-                            //     onTap: () {
-                            //       cardListStatic[_index!]
-                            //                   .isDefualt
-                            //                   .toString() ==
-                            //               '0'
-                            //           ? showModalBottomSheet(
-                            //               backgroundColor: Colors.transparent,
-                            //               context: context,
-                            //               builder: (_) =>
-                            //                   _deleteCardPopUp(_index))
-                            //           : () {};
-                            //     },
-                            //     child: ClipRRect(
-                            //       borderRadius: BorderRadius.horizontal(
-                            //           left: Radius.circular(10)),
-                            //       child: Container(
-                            //           color: cardListStatic[_index!]
-                            //                       .isDefualt
-                            //                       .toString() ==
-                            //                   '0'
-                            //               ? Color.fromRGBO(255, 41, 87, 1)
-                            //               : AppTheme.coolGrey,
-                            //           child: Center(
-                            //               child: Icon(
-                            //                   Icons.delete_outline_outlined,
-                            //                   color: Colors.white))),
-                            //     ),
-                            //   ),
-                            // ),
                             Expanded(
                                 child: ClipRRect(
                               borderRadius: BorderRadius.horizontal(
@@ -396,8 +331,7 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
                                                               value.toString());
                                                         });*/
                                               CustomLoadingDialog
-                                                  .showLoadingDialog(
-                                                      context);
+                                                  .showLoadingDialog(context);
                                               await Provider.of<
                                                           AddCardsProvider>(
                                                       context,
@@ -437,9 +371,9 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
                       ),
                     ),
                   Expanded(
-                      // Container(
-                      // height: screenHeight(context),
-                      
+                    // Container(
+                    // height: screenHeight(context),
+
                     child: AnimatedList(
                         key: _animatedkey,
                         controller: controller,
@@ -604,70 +538,3 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
 
   List itemData = [];
 }
-
-// List<CardUi> cardListStatic = [
-//   CardUi(
-//     backgroundColor: Colors.purple,
-//     cardHeight: 250,
-//     bankName: 'SBI',
-//     cardNumber: '4123456789012345',
-//     cardHolderName: 'Mohit Joshi',
-//     validCard: '22/1',
-//   ),
-//   CardUi(
-//     backgroundColor: Colors.red,
-//     cardHeight: 250,
-//     bankName: 'ICICI',
-//     cardNumber: '4123456789012345',
-//     cardHolderName: 'Mohit Joshi',
-//     validCard: '22/1',
-//   ),
-//   CardUi(
-//     backgroundColor: Colors.black,
-//     cardHeight: 250,
-//     bankName: 'AXIS',
-//     cardNumber: '4123456789012345',
-//     cardHolderName: 'Mohit Joshi',
-//     validCard: '22/1',
-//   ),
-//   CardUi(
-//     backgroundColor: Colors.yellow,
-//     cardHeight: 250,
-//     bankName: 'IDBI',
-//     cardNumber: '4123456789012345',
-//     cardHolderName: 'Mohit Joshi',
-//     validCard: '22/1',
-//   ),
-//   CardUi(
-//     backgroundColor: Colors.green,
-//     cardHeight: 250,
-//     bankName: 'HDFC',
-//     cardNumber: '4123456789012345',
-//     cardHolderName: 'Mohit Joshi',
-//     validCard: '22/1',
-//   ),
-//   CardUi(
-//     backgroundColor: Colors.cyan,
-//     cardHeight: 250,
-//     bankName: 'KOTAK',
-//     cardNumber: '4123456789012345',
-//     cardHolderName: 'Mohit Joshi',
-//     validCard: '22/1',
-//   ),
-//   CardUi(
-//     backgroundColor: Colors.orange,
-//     cardHeight: 250,
-//     bankName: 'BOI',
-//     cardNumber: '4123456789012345',
-//     cardHolderName: 'Mohit Joshi',
-//     validCard: '22/1',
-//   ),
-//   CardUi(
-//     backgroundColor: Colors.pink,
-//     cardHeight: 250,
-//     bankName: 'PNB',
-//     cardNumber: '4123456789012345',
-//     cardHolderName: 'Mohit Joshi',
-//     validCard: '22/1',
-//   ),
-// ];
