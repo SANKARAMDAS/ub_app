@@ -50,11 +50,12 @@ class _UpgrdUnsubsState extends State<UpgrdUnsubs> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getPremiumPlansabc().timeout(Duration(seconds: 30), onTimeout: () async {
+   /* getPremiumPlansabc().timeout(Duration(seconds: 30), onTimeout: () async {
       debugPrint("abc");
       Navigator.of(context).pop();
       return Future.value(null);
-    });
+    });*/
+    getPremiumPlansabc();
     Provider.of<FreemiumProvider>(context, listen: false).cardNumber =
         Provider.of<AddCardsProvider>(context, listen: false)
             .selectedCard
