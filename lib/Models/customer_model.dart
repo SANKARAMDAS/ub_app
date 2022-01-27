@@ -58,8 +58,9 @@ class CustomerModel {
         columnChatId: chatId,
         columnAvatar: avatar,
         columnTransactionAmount: removeDecimalif0(transactionAmount ?? 0),
-        columnUpdatedAt:
-            updatedAt?.toIso8601String(),
+        columnUpdatedDate: updatedAt?.toIso8601String() != null ? updatedAt?.toIso8601String() : DateTime.now().toIso8601String(),
+        columnUpdatedAt: 
+            updatedAt?.toIso8601String() != null ? updatedAt?.toIso8601String() : DateTime.now().toIso8601String(),
         columnCreatedDate:
             createdDate?.toIso8601String() ?? DateTime.now().toIso8601String(),
         columnTransactionType: transactionType == null
@@ -93,6 +94,9 @@ class CustomerModel {
     customerModel.updatedAt =
         DateTime.tryParse(element[CustomerModel.columnUpdatedAt]) ??
             DateTime.now();
+    customerModel.updatedDate =
+        DateTime.tryParse(element[CustomerModel.columnUpdatedAt]) ??
+            DateTime.now();
     customerModel.createdDate =
         DateTime.tryParse(element[CustomerModel.columnCreatedDate]) ??
             DateTime.now();
@@ -119,7 +123,7 @@ class CustomerModel {
         "chat_id": chatId,
         'transactionAmount': transactionAmount ?? 0,
         'updatedAt':
-            updatedAt?.toIso8601String() ?? DateTime.now().toIso8601String(),
+            updatedAt?.toIso8601String() != null ? updatedAt?.toIso8601String() : DateTime.now().toIso8601String(),
         'transactionType': transactionType == null
             ? null
             : transactionType == TransactionType.Pay

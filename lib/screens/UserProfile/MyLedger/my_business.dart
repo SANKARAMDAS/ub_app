@@ -97,6 +97,7 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
                             textColor: Colors.white,
                             text: 'Upgrade Now',
                             textSize: 14,
+                            backgroundColor: AppTheme.electricBlue,
                           )
                         : (isEmiratesIdDone == false &&
                                 isTradeLicenseDone == false &&

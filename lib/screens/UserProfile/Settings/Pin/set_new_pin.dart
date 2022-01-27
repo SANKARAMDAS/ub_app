@@ -507,9 +507,11 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                         child: CustomText(
                           'NO',
                           size: (18),
+                          color: AppTheme.whiteColor,
                           bold: FontWeight.w500,
                         ),
                         style: ElevatedButton.styleFrom(
+                          primary: AppTheme.electricBlue,
                             padding: EdgeInsets.all(15),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
