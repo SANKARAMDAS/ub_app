@@ -151,7 +151,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.75,
                     child: PageView(
-                      // physics: NeverScrollableScrollPhysics(),
+                      physics: NeverScrollableScrollPhysics(),
                       controller: _pageController,
                       // reverse: true,
                       onPageChanged: (int page) {
