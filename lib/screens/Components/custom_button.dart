@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 class CustomButton extends StatefulWidget {
   final String label;
@@ -33,7 +34,7 @@ class _CustomButtonState extends State<CustomButton> {
       onTap: widget.onTap as void Function()?,
       child: Container(
         decoration: BoxDecoration(
-            color: widget.color ?? Theme.of(context).primaryColor,
+            color: widget.color ?? AppTheme.electricBlue,
             borderRadius: BorderRadius.circular(widget.radius ?? 0)),
         width: widget.width,
         height: widget.height,

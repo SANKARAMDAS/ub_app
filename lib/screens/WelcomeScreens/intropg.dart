@@ -73,7 +73,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
       height: 4.0,
       width: isActive ? 22.0 : 5.0,
       decoration: BoxDecoration(
-        color: isActive ? Color(0xff1058FF) : Colors.grey[350],
+        color: isActive ? AppTheme.electricBlue : Colors.grey[350],
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );
@@ -151,7 +151,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.75,
                     child: PageView(
-                      // physics: NeverScrollableScrollPhysics(),
+                      physics: NeverScrollableScrollPhysics(),
                       controller: _pageController,
                       // reverse: true,
                       onPageChanged: (int page) {

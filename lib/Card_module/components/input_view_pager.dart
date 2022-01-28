@@ -10,6 +10,7 @@ import 'package:urbanledger/Card_module/provider/card_number_provider.dart';
 import 'package:urbanledger/Card_module/provider/card_valid_provider.dart';
 import 'package:urbanledger/Card_module/provider/state_provider.dart';
 import 'package:urbanledger/Card_module/util/util.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 class InputViewPager extends StatefulWidget {
   final PageController pageController;
@@ -391,7 +392,7 @@ class _InputFormState extends State<InputForm> {
                           fontSize: 8),
                       labelText: widget.title,
                       labelStyle: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                          color: AppTheme.electricBlue,
                           fontSize: 14,
                           fontFamily: ''),
                       hintText: ((widget.index == InputState.NUMBER.index)
@@ -608,7 +609,7 @@ class _InputFormState extends State<InputForm> {
                           borderSide: BorderSide(width: 1, color: Colors.black38),
                           borderRadius: BorderRadius.circular(5)),
                       focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Color(0xff1058FF)),
+                          borderSide: BorderSide(width: 1, color: AppTheme.electricBlue),
                           borderRadius: BorderRadius.circular(5)),
                     ),
                   ),

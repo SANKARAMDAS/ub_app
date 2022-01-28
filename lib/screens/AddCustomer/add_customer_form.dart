@@ -332,7 +332,7 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(15),
-                  primary: !isLoading ? Theme.of(context).primaryColor : AppTheme.coolGrey,
+                  primary: !isLoading ? AppTheme.electricBlue : AppTheme.coolGrey,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),

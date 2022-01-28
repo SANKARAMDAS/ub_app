@@ -74,380 +74,204 @@ class _SetPinScreenState extends State<SetPinScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final coverHeight = MediaQuery.of(context).size.height / 5;
-    final top = coverHeight - profileImage / 2;
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: gradientBackground(
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            title: titleName(color: AppTheme.whiteColor),
-            centerTitle: true,
-          ),
-          // bottomSheet: Container(
-          //   color: AppTheme.whiteColor,
-          //   child: Column(mainAxisSize: MainAxisSize.min, children: [
-          //     Center(
-          //       child: Text(
-          //         'By clicking the register button, you agree to our Terms and Conditions',
-          //         style: TextStyle(
-          //           color: AppTheme.greyish,
-          //           fontSize: 12.5,
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       ),
-          //     ),
-          //     Container(
-          //       width: double.infinity,
-          //       margin: EdgeInsets.symmetric(vertical: 15),
-          //       padding:
-          //           const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-          //       child: ElevatedButton(
-          //         style: ElevatedButton.styleFrom(
-          //           primary: validate()
-          //               ? AppTheme.purpleActive
-          //               : AppTheme.disabledColor,
-          //           padding: EdgeInsets.all(15),
-          //           shape: RoundedRectangleBorder(
-          //               borderRadius: BorderRadius.circular(10)),
-          //         ),
-          //         onPressed: isLoading
-          //             ? null
-          //             : () async {
-          //                 setState(() {
-          //                   firstNameError =
-          //                       validateFirstName(_firstNameController.text);
-          //                   lastNameError =
-          //                       validateLastName(_lastNameController.text);
-          //                   emailError = validateEmail(_emailController.text);
-          //                   debugPrint("statement");
-          //                 });
-          //                 Login() async {
-          //                   firstNameError =
-          //                       validateFirstName(_firstNameController.text);
-          //                   lastNameError =
-          //                       validateLastName(_lastNameController.text);
-          //                   emailError = validateEmail(_emailController.text);
-          //                   debugPrint("statement");
-          //                   if (firstNameError == null &&
-          //                       lastNameError == null &&
-          //                       emailError == null) {
-          //                     setState(() {
-          //                       isLoading = true;
-          //                     });
-
-          //                     final response = await (Repository()
-          //                         .userProfileAPI
-          //                         .userProfileApi(
-          //                             SignUpModel(
-          //                               firstName: _firstNameController.text,
-          //                               lastName: _lastNameController.text,
-          //                               mobileNo:
-          //                                   widget.mobile.replaceAll('+', ''),
-          //                               email: _emailController.text,
-          //                               referral_code: repository
-          //                                   .hiveQueries.SignUpUserReferralCode,
-          //                               referral_link: repository
-          //                                   .hiveQueries.SignUpUserReferralLink,
-          //                               paymentLink: repository
-          //                                   .hiveQueries.SignUpPaymentLink
-          //                                   .toString(),
-          //                             ),
-          //                             context)
-          //                         .timeout(Duration(seconds: 30),
-          //                             onTimeout: () async {
-          //                       Navigator.of(context).pop();
-          //                       return Future.value(null);
-          //                     }).catchError((e) {
-          //                       setState(() {
-          //                         isLoading = false;
-          //                       });
-          //                       debugPrint(e.toString());
-          //                       // ScaffoldMessenger.of(context)
-          //                       //     .showSnackBar(SnackBar(
-          //                       //   content: CustomText(
-          //                       //       'Please check internet connectivity and try again.'),
-          //                       // ));
-          //                       'Please check internet connectivity and try again.'
-          //                           .showSnackBar(context);
-          //                       return false;
-          //                     }));
-
-          //                     if (response) {
-          //                       /*  final registerResponse =
-          //                             await RegisterRepository().register(
-          //                                 _firstNameController.text +
-          //                                     ' ' +
-          //                                     _lastNameController.text,
-          //                                 _emailController.text); */
-          //                       var anaylticsEvents = AnalyticsEvents(context);
-
-          //                       if (_referralController.text.isNotEmpty) {
-          //                         // final response = await (Repository()
-          //                         //     .userProfileAPI
-          //                         //     .sendDynamicReferralCode(
-          //                         //         _referralController.text
-          //                         //             .toString())
-          //                         //     .timeout(Duration(seconds: 30),
-          //                         //         onTimeout: () async {
-          //                         //   Navigator.of(context).pop();
-          //                         //   return false;
-          //                         // }).catchError((e) {
-          //                         //   setState(() {
-          //                         //     isLoading = false;
-          //                         //   });
-          //                         //   debugPrint(e.toString());
-          //                         //   ScaffoldMessenger.of(context)
-          //                         //       .showSnackBar(SnackBar(
-          //                         //     content: CustomText(
-          //                         //         'Please check internet connectivity and try again.'),
-          //                         //   ));
-          //                         //   return false;
-          //                         // }));
-          //                         await anaylticsEvents.signUpEvent(true);
-          //                         debugPrint('Checking Referral Hit: ' +
-          //                             response.toString());
-          //                       }
-          //                       await anaylticsEvents.signUpEvent(false);
-          //                       LoginRepository().login(widget.mobile, context);
-          //                       repository.hiveQueries
-          //                           .insertIsAuthenticated(true);
-          //                       repository.hiveQueries
-          //                           .insertUserData(SignUpModel(
-          //                         id: '',
-          //                         firstName: _firstNameController.text,
-          //                         lastName: _lastNameController.text,
-          //                         mobileNo: widget.mobile,
-          //                         email: _emailController.text,
-          //                         paymentLink: repository
-          //                             .hiveQueries.SignUpPaymentLink
-          //                             .toString(),
-          //                         referral_code: repository
-          //                             .hiveQueries.SignUpUserReferralCode,
-          //                         referral_link: repository
-          //                             .hiveQueries.SignUpUserReferralLink,
-          //                       ));
-          //                       final businesssModel = BusinessModel(
-          //                           businessId: Uuid().v1(),
-          //                           businessName: 'PERSONAL',
-          //                           isChanged: true,
-          //                           isDeleted: false,
-          //                           deleteAction: false);
-          //                       await repository.queries
-          //                           .insertBusiness(businesssModel);
-          //                       if (await checkConnectivity) {
-          //                         final apiResponse = await (repository
-          //                             .businessApi
-          //                             .saveBusiness(
-          //                                 businesssModel, context, false)
-          //                             .catchError((e) {
-          //                           setState(() {
-          //                             isLoading = false;
-          //                           });
-          //                           'Please check your internet connection or try again later.'
-          //                               .showSnackBar(context);
-          //                         }));
-          //                         if (apiResponse) {
-          //                           await repository.queries
-          //                               .updateBusinessIsChanged(
-          //                                   businesssModel, 0);
-          //                         }
-          //                       } else {
-          //                         Navigator.of(context).pop();
-          //                         'Please check your internet connection or try again later.'
-          //                             .showSnackBar(context);
-          //                       }
-          //                       setState(() {
-          //                         isLoading = false;
-          //                       });
-          //                       Future.delayed(Duration(seconds: 1))
-          //                           .then((value) {
-          //                         Navigator.of(context).pushReplacementNamed(
-          //                           AppRoutes.setPinRoute,
-          //                           arguments:
-          //                               SetPinRouteArgs('', false, false, true),
-          //                         );
-          //                       });
-
-          //                       // Navigator.of(context)
-          //                       //     .pushReplacementNamed(
-          //                       //         AppRoutes.welcomeuserRoute,
-          //                       //         arguments: _firstNameController
-          //                       //                 .text +
-          //                       //             ' ' +
-          //                       //             _lastNameController.text);
-          //                     }
-          //                   } else {
-          //                     setState(() {});
-          //                   }
-          //                 }
-
-          //                 if (_referralController.text.isNotEmpty &&
-          //                     _referralController.text.length < 8) {
-          //                   setState(() {
-          //                     isLoading = false;
-          //                   });
-          //                   'Invalid referral code. Please check the referral code and try again.'
-          //                       .showSnackBar(context);
-          //                 } else if (firstNameError == null &&
-          //                     lastNameError == null &&
-          //                     emailError == null &&
-          //                     _referralController.text.isNotEmpty &&
-          //                     _referralController.text.length == 8) {
-          //                   bool? response1 = await (Repository()
-          //                       .userProfileAPI
-          //                       .sendDynamicReferralCode(
-          //                           _referralController.text.toString()));
-          //                   if (response1 == true) {
-          //                     'Referral applied successfully'
-          //                         .showSnackBar(context);
-
-          //                     if (firstNameError == null &&
-          //                         lastNameError == null &&
-          //                         emailError == null) {
-          //                       debugPrint('Go for Login');
-          //                       await Login();
-          //                     } else {
-          //                       setState(() {
-          //                         isLoading = false;
-          //                       });
-          //                       // 'Please Check the input fields'
-          //                       //     .showSnackBar(context);
-          //                     }
-          //                     setState(() {
-          //                       isLoading = false;
-          //                     });
-          //                   } else {
-          //                     setState(() {
-          //                       isLoading = false;
-          //                     });
-          //                     'Invalid referral code. Please check the referral code and try again.'
-          //                         .showSnackBar(context);
-          //                   }
-          //                 } else {
-          //                   setState(() {});
-          //                   debugPrint('Go for Login');
-          //                   if (firstNameError == null &&
-          //                       lastNameError == null &&
-          //                       _referralController.text.isEmpty &&
-          //                       emailError == null) {
-          //                     await Login();
-          //                   }
-          //                   // else{
-          //                   //     'Invalid referral code. Please check the referral code and try again.'
-          //                   //     .showSnackBar(context);
-          //                   // }
-
-          //                 }
-          //               },
-          //         child: isLoading
-          //             ? CircularProgressIndicator()
-          //             : CustomText(
-          //                 'Register',
-          //                 color: validate()
-          //                     ? AppTheme.whiteColor
-          //                     : AppTheme.coolGrey,
-          //                 size: (18),
-          //                 bold: FontWeight.bold,
-          //               ),
-          //       ),
-          //     ),
-          //   ]),
-          // ),
-          body: Container(
-            child: Stack(alignment: Alignment.topCenter, children: [
-              Positioned(
-                  top: MediaQuery.of(context).size.height * 0.04,
-                  child: topContainer),
-              Container(
-                  margin: EdgeInsets.only(top: coverHeight),
-                  padding: EdgeInsets.only(top: 100),
-                  // height:
-                  //     MediaQuery.of(context).size.height - coverHeight - 84,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25),
-                    ),
+    return Scaffold(
+      backgroundColor: AppTheme.paleGrey,
+      body: Container(
+        height: deviceHeight,
+        alignment: Alignment.topCenter,
+        decoration: BoxDecoration(
+            color: Color(0xfff2f1f6),
+            image: DecorationImage(
+                fit: BoxFit.fitWidth,
+                image: AssetImage('assets/images/back2.png'),
+                alignment: Alignment.topCenter)),
+        child: Stack(
+          children: [
+            Column(
+              children: <Widget>[
+                (MediaQuery.of(context).padding.top + 15).heightBox,
+                // Image.asset(
+                //   'assets/images/logo.png',
+                //   color: Colors.white,
+                //   width: MediaQuery.of(context).size.width * 0.33,
+                // ),
+                Image.asset(AppAssets.landscapeLogo, color: AppTheme.whiteColor,
+                    width: MediaQuery.of(context).size.width * 0.5,),
+                // CustomText(
+                //   'Track. Remind. Pay.',
+                //   size: 18,
+                //   bold: FontWeight.w500,
+                //   color: Colors.white,
+                // ),
+                (deviceHeight * 0.05).heightBox,
+                if (!widget.showConfirmPinState)
+                  ValueListenableBuilder<String>(
+                      valueListenable: setPinNotifier,
+                      builder: (context, value, _) {
+                        return Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              // SizedBox(
+                              //   height: 7,
+                              // ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(AppAssets.lock1Icon),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(
+                                    'Set PIN',
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // pinBox(value.length > 0),
+                                  PinField(
+                                      showError: showError,
+                                      isFilled: value.length > 0,
+                                      isSetField: true),
+                                  PinField(
+                                      showError: showError,
+                                      isFilled: value.length > 1,
+                                      isSetField: true),
+                                  PinField(
+                                      showError: showError,
+                                      isFilled: value.length > 2,
+                                      isSetField: true),
+                                  PinField(
+                                      showError: showError,
+                                      isFilled: value.length > 3,
+                                      isSetField: true),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 12,
+                              ),
+                            ]);
+                      }),
+                if (!widget.showConfirmPinState)
+                  SizedBox(
+                    height: 6,
                   ),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Container(
-                        alignment: Alignment.topCenter,
-                        margin: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.25),
-                        child: Image.asset(AppAssets.pinArtImage),
+                // (deviceHeight * 0.02).heightBox,
+                if (widget.showConfirmPinState)
+                  ValueListenableBuilder<String>(
+                      valueListenable: confirmPinNotifier,
+                      builder: (context, value, _) {
+                        return Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              // SizedBox(
+                              //   height: 12,
+                              // ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(AppAssets.lock1Icon),
+                                  // SizedBox(
+                                  //   width: 8,
+                                  // ),
+                                  Text(
+                                    'Confirm PIN',
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // pinBox(value.length > 0),
+                                  PinField(
+                                      showError: showError,
+                                      isFilled: value.length > 0,
+                                      isSetField: false),
+                                  PinField(
+                                      showError: showError,
+                                      isFilled: value.length > 1,
+                                      isSetField: false),
+                                  PinField(
+                                      showError: showError,
+                                      isFilled: value.length > 2,
+                                      isSetField: false),
+                                  PinField(
+                                      showError: showError,
+                                      isFilled: value.length > 3,
+                                      isSetField: false),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 12,
+                              ),
+                            ]);
+                      }),
+                (deviceHeight * 0.07).heightBox,
+                showError && widget.showConfirmPinState
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(vertical: 4),
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: CustomText(
+                            'Incorrect PIN. Enter again',
+                            size: 16,
+                            color: AppTheme.brownishGrey,
+                            bold: FontWeight.w600,
+                          ),
+                        ),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.symmetric(vertical: 4),
+                        child: Container(
+                          alignment: Alignment.centerRight,
+                          child: CustomText(
+                            '',
+                            size: 16,
+                            color: AppTheme.brownishGrey,
+                            bold: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                    ],
-                  )),
-              Positioned(
-                  top: top,
-                  // left: MediaQuery.of(context).size.width * 0.38,
-                  // right: MediaQuery.of(context).size.width * 0.38,
-                  child: topProfile),
-              Align(
+                Image.asset(
+                  widget.showConfirmPinState
+                      ? AppAssets.confirmpinImage
+                      : AppAssets.setpinImage,
+                  height: deviceHeight * 0.3,
+                ),
+                Spacer(),
+                // keyBoard()
+              ],
+            ),
+            Container(
+                margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * .7,
+                ),
+                height: MediaQuery.of(context).size.height * .3,
+                color: AppTheme.paleGrey,
                 alignment: Alignment.bottomCenter,
-                child: Container(
-                    // margin: EdgeInsets.only(
-                    //   top: MediaQuery.of(context).size.height * .6,
-                    // ),
-                    height: MediaQuery.of(context).size.height * .3,
-                    color: AppTheme.whiteColor,
-                    alignment: Alignment.bottomCenter,
-                    child: keyBoard()),
-              ),
-            ]),
-          ),
-          // body: Column(
-          //   mainAxisSize: MainAxisSize.min,
-          //   children: [
-          //     Flexible(
-          //       flex: 1,
-          //       child: Stack(
-          //         alignment: Alignment.topCenter,
-          //         children: [
-          //           // Container(
-          //           //   child: RichText(text: TextSpan(
-          //           //     children: [
-          //           //       TextSpan(
-          //           //         text: 'Sign Up',
-          //           //         style: TextStyle(
-          //           //           fontSize: 30,
-          //           //           color: AppTheme.whiteColor
-          //           //         ),
-          //           //       ),
-
-          //           //     ]
-          //           //   )),
-          //           // ),
-          //         Positioned(
-          //           top: top,
-          //           child: buildProfileImage()),
-          //         ],
-          //       ),
-          //     ),
-          //     Flexible(
-          //       flex: 3,
-          //       child: Container(
-          //         // height: 250,
-          //         color: AppTheme.whiteColor,
-          //       ),
-          //     ),
-          //   ],
-
-          // ),
+                child: keyBoard()),
+          ],
         ),
       ),
     );
   }
-
   Widget get topProfile => Column(
         children: [
           !widget.showConfirmPinState
@@ -668,7 +492,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
   }
 
   Widget keyBoardButton(String number) => MaterialButton(
-        color: AppTheme.whiteColor,
+        // color: AppTheme.whiteColor,
         shape: CircleBorder(),
         splashColor: AppTheme.buttonSplashGrey,
         onPressed: () {
@@ -854,9 +678,11 @@ class _SetPinScreenState extends State<SetPinScreen> {
                                   child: CustomText(
                                     'NO',
                                     size: (18),
+                                    color: AppTheme.whiteColor,
                                     bold: FontWeight.w500,
                                   ),
                                   style: ElevatedButton.styleFrom(
+                                      primary: AppTheme.electricBlue,
                                       padding: EdgeInsets.all(15),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:

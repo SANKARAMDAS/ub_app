@@ -73,8 +73,8 @@ class CustomerAPI {
             : e['ledger']['type'] == 'Debit'
                 ? TransactionType.Pay
                 : null
-        ..updatedDate =
-            DateTime.tryParse(e['ledger']['updatedDate']) ?? DateTime.now()
+        ..updatedAt =
+            DateTime.tryParse(e['updatedAt']) ?? DateTime.now()
         ..createdDate = e['createdDate'] != null
             ? DateTime.tryParse(e['createdDate']) ?? DateTime.now()
             : DateTime.now()

@@ -57,13 +57,13 @@ class _NFCCardState extends State<NFCCard> {
                   Text(
                     'AED ',
                     style: TextStyle(
-                        fontSize: 36, color: Theme.of(context).primaryColor),
+                        fontSize: 36, color: AppTheme.electricBlue),
                   ),
                   Text(
                     '500',
                     style: TextStyle(
                         fontSize: 36,
-                        color: Theme.of(context).primaryColor,
+                        color: AppTheme.electricBlue,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -133,7 +133,7 @@ class _NFCCardState extends State<NFCCard> {
       child: Align(
           alignment: Alignment.topLeft,
           child: IconButton(
-            icon: Icon(Icons.close, color: Theme.of(context).primaryColor),
+            icon: Icon(Icons.close, color: AppTheme.electricBlue),
             onPressed: null,
           )));
 }

@@ -334,7 +334,7 @@ class _CustomerProfileState extends State<CustomerProfile>
                     //       borderRadius: BorderRadius.circular(
                     //         15.0,
                     //       ),
-                    //       color: Color(0xff1058ff),
+                    //       color: AppTheme.electricBlue,
                     //     ),
                     //     labelColor: Colors.white,
                     //     labelStyle: TextStyle(fontSize: 18),

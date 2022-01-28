@@ -200,7 +200,7 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
                                 'FORGOT PIN?',
                                 size: 16,
                                 bold: FontWeight.w600,
-                                color: Theme.of(context).primaryColor,
+                                color: AppTheme.electricBlue,
                               ))
                         ],
                       )

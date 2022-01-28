@@ -86,7 +86,7 @@ class _IndividualReportState extends State<IndividualReport> {
                       20.0.heightBox,
                       Container(
                         decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
+                            color: AppTheme.electricBlue,
                             borderRadius: BorderRadius.circular(15)),
                         padding: EdgeInsets.only(
                             left: 15, right: 15, top: 5, bottom: 5),
@@ -761,7 +761,7 @@ class _BusinessTileState extends State<BusinessTile> {
                                     !showChildren
                                         ? Icons.chevron_right_rounded
                                         : Icons.expand_more,
-                                    color: Theme.of(context).primaryColor,
+                                    color: AppTheme.electricBlue,
                                   )
                                 ],
                               ),

@@ -244,7 +244,7 @@ class _SuspenseAccountCustomerScreenState
                                                 backgroundColor:
                                                     MaterialStateProperty.all<
                                                             Color>(
-                                                        Color(0xff1058ff)),
+                                                        AppTheme.electricBlue),
                                                 shape: MaterialStateProperty
                                                     .all<OutlinedBorder>(
                                                         RoundedRectangleBorder(
@@ -1019,6 +1019,7 @@ class _SuspenseAccountCustomerScreenState
                                         bold: FontWeight.w500,
                                       ),
                                       style: ElevatedButton.styleFrom(
+                                        primary: AppTheme.electricBlue,
                                         padding: EdgeInsets.all(15),
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(10)),
@@ -1167,7 +1168,7 @@ class _SuspenseAccountCustomerScreenState
                                       .selectedBusinessForUnrecognized
                                       .businessName,
                                   bold: FontWeight.w600,
-                                  color: Theme.of(context).primaryColor,
+                                  color: AppTheme.electricBlue,
                                   size: 18,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -1354,7 +1355,7 @@ class _SuspenseAccountCustomerScreenState
                                             .businesses[index]
                                             .businessName,
                                         bold: FontWeight.w600,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.electricBlue,
                                         size: 18,
                                         overflow: TextOverflow.ellipsis,
                                       ),

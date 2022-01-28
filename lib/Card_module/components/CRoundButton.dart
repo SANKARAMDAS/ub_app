@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 class CButton extends StatelessWidget {
   final Function? onPress;
@@ -15,7 +16,7 @@ class CButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.all(15),
-          onPrimary: Theme.of(context).primaryColor,
+          primary: AppTheme.electricBlue,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),

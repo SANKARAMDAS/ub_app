@@ -222,6 +222,7 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
                             text1: 'Pay using'.toUpperCase(),
                             textSize1: 16,
                             textColor1: Colors.white,
+                            backgroundColor: AppTheme.electricBlue,
                             text2:
                                 '${Provider.of<FreemiumProvider>(context).cardNumber != null ? Provider.of<FreemiumProvider>(context).cardNumber : cardNo.toString()}',
                             textSize2: 16,
@@ -574,7 +575,7 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
                                     Text(
                                       '${widget.planModel[i].name} Subscription',
                                       style: TextStyle(
-                                          color: Color(0xff1058ff),
+                                          color: AppTheme.electricBlue,
                                           fontWeight:
                                               FontWeight.w700, //FontWeight.w500
                                           fontSize: 18),
@@ -700,7 +701,7 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
                       //               Text(
                       //                 '${widget.planModel[1].name} Subscription',
                       //                 style: TextStyle(
-                      //                     color: Color(0xff1058ff),
+                      //                     color: AppTheme.electricBlue,
                       //                     fontFamily: 'SFProDisplay',
                       //                     fontWeight: FontWeight
                       //                         .w500, //FontWeight.w500

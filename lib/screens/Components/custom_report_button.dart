@@ -19,7 +19,7 @@ class CustomReportButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            onPrimary: Colors.white,
+            primary: Colors.white,
           ),
           onPressed: onPressed,
           child: Row(

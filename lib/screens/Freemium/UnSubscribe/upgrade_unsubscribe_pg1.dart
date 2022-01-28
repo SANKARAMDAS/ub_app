@@ -1719,6 +1719,7 @@ class _UpgrdUnsubsState extends State<UpgrdUnsubs> {
                                                                         //             planModel:
                                                                         //                 premiumPlans));
                                                                       },
+                                                                      backgroundColor: AppTheme.electricBlue,
                                                                       text: 'UPGRADE NOW',
                                                                       textSize: 20,
                                                                       textColor: Colors.white),

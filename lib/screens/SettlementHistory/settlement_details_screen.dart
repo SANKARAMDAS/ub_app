@@ -505,7 +505,7 @@ class _SettlementDetailsState extends State<SettlementDetails> {
                                       data.totalSettlementAmount!.getFormattedCurrency,
                                       // text: '46151830',
                                       style: TextStyle(
-                                          color: Color(0xff1058ff),
+                                          color: AppTheme.electricBlue,
                                           fontSize: 32,
                                           fontWeight: FontWeight.bold)),
                                 ]),
@@ -580,7 +580,7 @@ class _SettlementDetailsState extends State<SettlementDetails> {
                                               TextSpan(
                                                 text: 'App',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -677,7 +677,7 @@ class _SettlementDetailsState extends State<SettlementDetails> {
                                               TextSpan(
                                                 text: 'Links',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -773,7 +773,7 @@ class _SettlementDetailsState extends State<SettlementDetails> {
                                               TextSpan(
                                                 text: 'QR code',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -892,7 +892,7 @@ class _SettlementDetailsState extends State<SettlementDetails> {
                           ),
                           15.0.heightBox,
                           CustomText(
-                            'Manage your Settlement',
+                            'Manage your Settlement LL',
                             size: 20,
                             color: AppTheme.brownishGrey,
                             bold: FontWeight.w500,
@@ -938,9 +938,11 @@ class _SettlementDetailsState extends State<SettlementDetails> {
                                 child: CustomText(
                                   'OK',
                                   size: (18),
+                                  color: AppTheme.whiteColor,
                                   bold: FontWeight.w500,
                                 ),
                                 style: ElevatedButton.styleFrom(
+                                  primary: AppTheme.electricBlue,
                                   padding: EdgeInsets.all(15),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),

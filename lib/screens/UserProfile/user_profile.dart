@@ -368,7 +368,7 @@ class _UserProfileState extends State<UserProfile> {
                                     // ),
                                     // trailing: Icon(
                                     //   Icons.chevron_right_rounded,
-                                    //   color: Color(0xff1058ff),
+                                    //   color: AppTheme.electricBlue,
                                     //   size: 35,
                                     // ),
                                   ),
@@ -465,7 +465,7 @@ class _UserProfileState extends State<UserProfile> {
           // ),
           // trailing: Icon(
           //   Icons.chevron_right_rounded,
-          //   color: Color(0xff1058ff),
+          //   color: AppTheme.electricBlue,
           //   size: 35,
           // ),
         ),

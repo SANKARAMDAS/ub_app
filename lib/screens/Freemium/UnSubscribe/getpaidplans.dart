@@ -1367,8 +1367,9 @@ class _UpgrdUnsubsState extends State<UpgrdUnsubs> {
                                                       },
                                                 child: CustomText(
                                                   'upgrade now'.toUpperCase(),
+                                                  color: AppTheme.whiteColor,
                                                   size: (18),
-                                                  bold: FontWeight.w500,
+                                                  bold: FontWeight.bold,
                                                 ),
                                                 style: ElevatedButton.styleFrom(
                                                     padding: EdgeInsets.all(15),
