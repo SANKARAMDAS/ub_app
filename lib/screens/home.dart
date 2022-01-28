@@ -861,7 +861,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                   backgroundColor:
                                                       MaterialStateProperty.all<
                                                               Color>(
-                                                          Color(0xff1058ff)),
+                                                          AppTheme.electricBlue),
                                                   shape: MaterialStateProperty
                                                       .all<OutlinedBorder>(
                                                           RoundedRectangleBorder(
@@ -987,7 +987,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       //     style: ButtonStyle(
                                       //         backgroundColor:
                                       //             MaterialStateProperty.all<
-                                      //                 Color>(Color(0xff1058ff)),
+                                      //                 Color>(AppTheme.electricBlue),
                                       //         shape: MaterialStateProperty.all<
                                       //                 OutlinedBorder>(
                                       //             RoundedRectangleBorder(
@@ -1092,7 +1092,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(Color(0xff1058ff)),
+                          MaterialStateProperty.all<Color>(AppTheme.electricBlue),
                       shape: MaterialStateProperty.all<OutlinedBorder>(
                           RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
@@ -1680,7 +1680,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       .selectedBusiness
                                       .businessName,
                                   bold: FontWeight.w600,
-                                  color: Theme.of(context).primaryColor,
+                                  color: AppTheme.electricBlue,
                                   size: 18,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -1866,7 +1866,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                             .businesses[index]
                                             .businessName,
                                         bold: FontWeight.w600,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.electricBlue,
                                         size: 18,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -2007,6 +2007,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   width: double.infinity,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        primary: AppTheme.electricBlue,
                         padding: EdgeInsets.all(15),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
@@ -2784,18 +2785,19 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => PayTransactionScreen(
-                      //         model: _customerModel,
-                      //         customerId:
-                      //             localCustId.isEmpty ? uniqueId : localCustId,
-                      //         type: 'DIRECT',
-                      //         suspense: false,
-                      //         through: 'DIRECT'),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PayTransactionScreen(
+                              model: _customerModel,
+                                customerId: localCustId.isEmpty
+                                    ? uniqueId
+                                    : localCustId,
+                              type: 'DIRECT',
+                              suspense: false,
+                              through: 'DIRECT'),
+                        ),
+                      );
                       Map<String, dynamic> isTransaction = await repository
                           .paymentThroughQRApi
                           .getTransactionLimit(context);
@@ -2833,22 +2835,24 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => PayTransactionScreen(
-                      //         model: _customerModel,
-                      //         customerId:
-                      //             localCustId.isEmpty ? uniqueId : localCustId,
-                      //         amount:
-                      //             (widget._customerList[index].transactionAmount)!
-                      //                 .getFormattedCurrency
-                      //                 .replaceAll('-', ''),
-                      //         type: 'DIRECT',
-                      //         suspense: false,
-                      //         through: 'DIRECT'),
-                      //   ),
-                      // );
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PayTransactionScreen(
+                              model: _customerModel,
+                                customerId: localCustId.isEmpty
+                                    ? uniqueId
+                                    : localCustId,
+                              amount:
+                                  (widget._customerList[index].transactionAmount)!
+                                      .getFormattedCurrency
+                                      .replaceAll('-', ''),
+                              type: 'DIRECT',
+                              suspense: false,
+                              through: 'DIRECT'),
+                        ),
+                      );
                       Map<String, dynamic> isTransaction = await repository
                           .paymentThroughQRApi
                           .getTransactionLimit(context)
@@ -3049,11 +3053,11 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                 title: CustomText(
                   getName(widget._customerList[index].name,
                       widget._customerList[index].mobileNo),
-                  bold: FontWeight.w500,
+                  bold: FontWeight.bold,
                   size: 18,
                 ),
                 subtitle: CustomText(
-                  widget._customerList[index].updatedDate?.duration ?? "",
+                  widget._customerList[index].updatedAt?.duration ?? "",
                   size: 16,
                   color: AppTheme.greyish,
                 ),

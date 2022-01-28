@@ -138,7 +138,7 @@ class GlobalSummaryPdfGenerator {
             children: [
               pw.Text('Global Report',
                   style: pw.TextStyle(
-                    color: PdfColor.fromHex('#1058ff'),
+                    color: PdfColor.fromHex('#7C4DFF'),
                     fontSize: 20,
                     fontWeight: pw.FontWeight.bold,
                   )),
@@ -185,7 +185,7 @@ class GlobalSummaryPdfGenerator {
                       children: [
                     pw.Container(
                       decoration: pw.BoxDecoration(
-                          color: PdfColor.fromHex('#1058ff'),
+                          color: PdfColor.fromHex('#7C4DFF'),
                           borderRadius: pw.BorderRadius.circular(15)),
                       padding: pw.EdgeInsets.only(
                           left: 15, right: 15, top: 5, bottom: 5),
@@ -229,7 +229,7 @@ class GlobalSummaryPdfGenerator {
               pw.VerticalDivider(
                 indent: 20,
                 endIndent: 20,
-                color: PdfColor.fromHex('#1058ff'),
+                color: PdfColor.fromHex('#7C4DFF'),
               ),
               pw.Expanded(
                 child: pw.Column(
@@ -307,7 +307,7 @@ class GlobalSummaryPdfGenerator {
               pw.VerticalDivider(
                 indent: 20,
                 endIndent: 20,
-                color: PdfColor.fromHex('#1058ff'),
+                color: PdfColor.fromHex('#7C4DFF'),
               ),
               pw.Expanded(
                 child: pw.Column(
@@ -329,7 +329,7 @@ class GlobalSummaryPdfGenerator {
               pw.VerticalDivider(
                 indent: 20,
                 endIndent: 20,
-                color: PdfColor.fromHex('#1058ff'),
+                color: PdfColor.fromHex('#7C4DFF'),
               ),
               pw.Expanded(
                 child: pw.Column(

@@ -1274,7 +1274,7 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
           right: MediaQuery.of(context).size.width * 0.040),
       child: RaisedButton(
         padding: EdgeInsets.all(15),
-        color: Theme.of(context).primaryColor,
+        color: AppTheme.electricBlue,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         onPressed: () {},
         child: Text(
@@ -1447,7 +1447,7 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
             await showDeleteImageDialog(index);
           },
           child: DottedBorder(
-            color: Theme.of(context).primaryColor,
+            color: AppTheme.electricBlue,
             radius: Radius.circular(10),
             dashPattern: [5, 5, 5, 5],
             borderType: BorderType.RRect,
@@ -1505,7 +1505,7 @@ class _ReceiveTransactionScreenState extends State<ReceiveTransactionScreen> {
                     child: OutlineButton(
                       padding: EdgeInsets.all(8),
                       borderSide:
-                          BorderSide(color: Color(0xff1058ff), width: 2),
+                          BorderSide(color: AppTheme.electricBlue, width: 2),
                       color: Colors.white,
                       onPressed: () {
                         _pickedFiles.removeAt(index);

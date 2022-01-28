@@ -158,7 +158,7 @@ class CustomerReportPdfGenerator {
             children: [
               pw.Text('Customer List Report',
                   style: pw.TextStyle(
-                    color: PdfColor.fromHex('#1058ff'),
+                    color: PdfColor.fromHex('#7C4DFF'),
                     fontSize: 20,
                     fontWeight: pw.FontWeight.bold,
                   )),
@@ -202,7 +202,7 @@ class CustomerReportPdfGenerator {
               pw.VerticalDivider(
                 indent: 20,
                 endIndent: 20,
-                color: PdfColor.fromHex('#1058ff'),
+                color: PdfColor.fromHex('#7C4DFF'),
               ),
               pw.Column(
                   mainAxisAlignment: pw.MainAxisAlignment.center,
@@ -219,7 +219,7 @@ class CustomerReportPdfGenerator {
               pw.VerticalDivider(
                 indent: 20,
                 endIndent: 20,
-                color: PdfColor.fromHex('#1058ff'),
+                color: PdfColor.fromHex('#7C4DFF'),
               ),
               pw.Column(
                   mainAxisAlignment: pw.MainAxisAlignment.center,

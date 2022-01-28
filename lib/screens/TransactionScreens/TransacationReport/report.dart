@@ -377,7 +377,7 @@ class _ReportState extends State<Report> {
                           CustomText(
                             getSelectedFilterName(_selectedFilter),
                             size: 16,
-                            color: Theme.of(context).primaryColor,
+                            color: AppTheme.electricBlue,
                             bold: FontWeight.w500,
                           ),
                           Icon(
@@ -544,7 +544,7 @@ class _ReportState extends State<Report> {
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(
-              color: Theme.of(context).primaryColor,
+              color: AppTheme.electricBlue,
               width: 0.5,
             ),
             borderRadius: BorderRadius.only(
@@ -564,7 +564,7 @@ class _ReportState extends State<Report> {
                   Text(
                     'Net Balance',
                     style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                        color: AppTheme.electricBlue,
                         fontSize: 18,
                         fontWeight: FontWeight.w500),
                   ),
@@ -586,7 +586,7 @@ class _ReportState extends State<Report> {
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w700,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.electricBlue,
                                       ),
                                     ),
                                     TextSpan(
@@ -597,7 +597,7 @@ class _ReportState extends State<Report> {
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.electricBlue,
                                       ),
                                     )
                                   ],
@@ -612,7 +612,7 @@ class _ReportState extends State<Report> {
               thickness: 1,
               indent: 0,
               endIndent: 0,
-              color: Theme.of(context).primaryColor,
+              color: AppTheme.electricBlue,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15.0, right: 15),
@@ -648,7 +648,7 @@ class _ReportState extends State<Report> {
                               .format(startDate!)
                               .toUpperCase(),
                       style: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                          color: AppTheme.electricBlue,
                           fontSize: 18,
                           fontWeight: FontWeight.w500),
                     ),
@@ -656,7 +656,7 @@ class _ReportState extends State<Report> {
                   RichText(
                     text: TextSpan(
                       style: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                          color: AppTheme.electricBlue,
                           fontSize: 18,
                           fontWeight: FontWeight.w500),
                       children: [
@@ -693,7 +693,7 @@ class _ReportState extends State<Report> {
                             },
                           style: TextStyle(
                               fontSize: 18,
-                              color: Theme.of(context).primaryColor,
+                              color: AppTheme.electricBlue,
                               fontWeight: FontWeight.w500),
                         ),
                         WidgetSpan(
@@ -702,7 +702,7 @@ class _ReportState extends State<Report> {
                             child: Image.asset(
                               AppAssets.dateIcon,
                               height: 18,
-                              color: Theme.of(context).primaryColor,
+                              color: AppTheme.electricBlue,
                             ),
                           ),
                         ),
@@ -779,7 +779,7 @@ class _ReportState extends State<Report> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 0,
                   groupValue: tempRadioOption,
                   onChanged: (value) {
@@ -799,7 +799,7 @@ class _ReportState extends State<Report> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 1,
                   groupValue: tempRadioOption,
                   onChanged: (value) {
@@ -819,7 +819,7 @@ class _ReportState extends State<Report> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 2,
                   groupValue: tempRadioOption,
                   onChanged: (value) {
@@ -883,7 +883,7 @@ class _ReportState extends State<Report> {
                         horizontal: 30.0, vertical: 10),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColor,
+                        primary: AppTheme.electricBlue,
                         padding: EdgeInsets.all(15),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
@@ -1007,6 +1007,7 @@ class _ReportState extends State<Report> {
             padding: EdgeInsets.fromLTRB(20, 10, 20, isPlatformiOS() ? 20:10),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
+                primary: AppTheme.electricBlue,
                 padding: EdgeInsets.all(15),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -1040,7 +1041,7 @@ class _ReportState extends State<Report> {
                       //     arguments: path);
                     },
               child: CustomText('Download'.toUpperCase(),
-                  color: Colors.white, size: 18, bold: FontWeight.w500),
+                  color: Colors.white, size: 18, bold: FontWeight.bold),
             ),
           );
         });

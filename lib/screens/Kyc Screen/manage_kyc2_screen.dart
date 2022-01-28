@@ -30,7 +30,7 @@
 //                     // child: Text(
 //                     //   'Skip',
 //                     //   style: TextStyle(
-//                     //       color: Color(0xff1058FF),
+//                     //       color: AppTheme.electricBlue,
 //                     //       fontFamily: 'SFProDisplay',
 //                     //       fontWeight: FontWeight.w500,
 //                     //       fontSize: 21),

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:urbanledger/Card_module/credit_card_input_form.dart';
 import 'package:urbanledger/Card_module/model/card_info.dart';
 import 'package:urbanledger/Utility/app_constants.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
 import 'package:urbanledger/screens/Components/extensions.dart';
 import 'package:urbanledger/screens/Components/new_custom_button.dart';
@@ -285,7 +286,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
     gradient: LinearGradient(
         colors: [
           const Color(0xFF0000),
-          const Color(0xFF1058FF),
+          AppTheme.electricBlue,
         ],
         begin: const FractionalOffset(0.0, 0.0),
         end: const FractionalOffset(1.0, 0.0),

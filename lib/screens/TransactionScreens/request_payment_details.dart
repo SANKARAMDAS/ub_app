@@ -141,7 +141,7 @@ class _RequestPaymentDetailsState extends State<RequestPaymentDetails> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(15),
-                    onPrimary: AppTheme.electricBlue,
+                    primary: AppTheme.electricBlue,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),
@@ -191,7 +191,7 @@ class _RequestPaymentDetailsState extends State<RequestPaymentDetails> {
                     borderRadius: BorderRadius.circular(10)),
                 padding:
                     EdgeInsets.only(bottom: 15, top: 15, left: 30, right: 30),
-                color: Theme.of(context).primaryColor,
+                color: AppTheme.electricBlue,
                 child: CustomText(
                   widget.message.from != widget.user?.id &&
                           widget.message.paymentCancel == true
@@ -271,7 +271,7 @@ class _RequestPaymentDetailsState extends State<RequestPaymentDetails> {
                                         '${widget.firstName ?? 'USER'} ${widget.lastName ?? ''}',
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          color: Color(0xff1058ff),
+                                          color: AppTheme.electricBlue,
                                           fontSize: 23,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -419,7 +419,7 @@ class _RequestPaymentDetailsState extends State<RequestPaymentDetails> {
       Padding(
         padding: const EdgeInsets.all(4.0),
         child: DottedBorder(
-          color: Theme.of(context).primaryColor,
+          color: AppTheme.electricBlue,
           radius: Radius.circular(4),
           dashPattern: [5, 5, 5, 5],
           borderType: BorderType.RRect,

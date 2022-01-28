@@ -97,6 +97,7 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
                             textColor: Colors.white,
                             text: 'Upgrade Now',
                             textSize: 14,
+                            backgroundColor: AppTheme.electricBlue,
                           )
                         : (isEmiratesIdDone == false &&
                                 isTradeLicenseDone == false &&
@@ -205,6 +206,7 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
             bold: FontWeight.w500,
           ),
           style: ElevatedButton.styleFrom(
+            primary: AppTheme.electricBlue,
             padding: EdgeInsets.all(15),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -305,7 +307,7 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
                                                         .businessId ==
                                                     value.selectedBusiness
                                                         .businessId
-                                                ? Theme.of(context).primaryColor
+                                                ? AppTheme.electricBlue
                                                 : AppTheme.coolGrey),
                                         borderRadius: BorderRadius.circular(5)),
                                     child: Padding(

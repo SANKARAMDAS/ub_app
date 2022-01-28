@@ -184,7 +184,7 @@ class _ChatScreenPageState extends State<ChatScreenPage>
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(
-              color: Theme.of(context).primaryColor,
+              color: AppTheme.electricBlue,
               width: 0.5,
             ),
             borderRadius: BorderRadius.only(
@@ -202,7 +202,7 @@ class _ChatScreenPageState extends State<ChatScreenPage>
               /*  decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
-                        color: Theme.of(context).primaryColor,
+                        color: AppTheme.electricBlue,
                         width: 0.5,
                       ),
                     ), */
@@ -227,7 +227,7 @@ class _ChatScreenPageState extends State<ChatScreenPage>
                       //     :
                       'You will Get',
                       style: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                          color: AppTheme.electricBlue,
                           fontSize: 18,
                           fontWeight: FontWeight.w500),
                     ),
@@ -242,7 +242,7 @@ class _ChatScreenPageState extends State<ChatScreenPage>
                       //     :
                       AppAssets.inIcon,
                       scale: 1.2,
-                      color: Theme.of(context).primaryColor,
+                      color: AppTheme.electricBlue,
                       height: 20,
                     ),
                   ],
@@ -256,7 +256,7 @@ class _ChatScreenPageState extends State<ChatScreenPage>
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor,
+                          color: AppTheme.electricBlue,
                         ),
                       ),
                       TextSpan(
@@ -272,7 +272,7 @@ class _ChatScreenPageState extends State<ChatScreenPage>
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor,
+                          color: AppTheme.electricBlue,
                         ),
                       ),
                     ],
@@ -312,7 +312,7 @@ class _ChatScreenPageState extends State<ChatScreenPage>
                 //         Text(
                 //           'Collection',
                 //           style: TextStyle(
-                //               color: Theme.of(context).primaryColor,
+                //               color: AppTheme.electricBlue,
                 //               fontSize: 18,
                 //               fontWeight: FontWeight.w500),
                 //         ),
@@ -335,7 +335,7 @@ class _ChatScreenPageState extends State<ChatScreenPage>
                 //               },
                 //             style: TextStyle(
                 //                 fontSize: 16,
-                //                 color: Theme.of(context).primaryColor,
+                //                 color: AppTheme.electricBlue,
                 //                 fontWeight: FontWeight.w500),
                 //           ),
                 //           WidgetSpan(
@@ -344,7 +344,7 @@ class _ChatScreenPageState extends State<ChatScreenPage>
                 //               child: Image.asset(
                 //                 'assets/icons/calendar.png',
                 //                 height: 18,
-                //                 color: Theme.of(context).primaryColor,
+                //                 color: AppTheme.electricBlue,
                 //               ),
                 //             ),
                 //           ),

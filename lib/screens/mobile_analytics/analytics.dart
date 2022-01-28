@@ -89,10 +89,12 @@ class _MobileAnalyticsState extends State<MobileAnalytics> {
                   String _endDate =
                       await (CustomSharedPreferences.get('_endDate'));
                   Map<String, dynamic> data = {
-                    "startDate": _startDate,
-                    "endDate": _endDate
+                    "startDate": "$_startDate",
+                    "endDate": "$_endDate"
                   };
+                  debugPrint('RRRR: '+data.toString());
                   Map response = await repository.analyticsAPI.exportPDF(data);
+                  debugPrint('RRRR: '+response.toString());
                   if (response['status']) {
                     String fileName = await repository.ledgerApi
                         .networkImageToFile2(

@@ -333,7 +333,7 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
                                   //         outsideLabelStyleSpec:
                                   //             charts.TextStyleSpec(
                                   //                 color: charts.Color.fromHex(
-                                  //                     code: '#1058FF'))),
+                                  //                     code: '#7C4DFF'))),
                                   // domainAxis: new charts.OrdinalAxisSpec(),
                                   behaviors: [
                                     new charts.SlidingViewport(),
@@ -587,7 +587,7 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
     return [
       new charts.Series<CustomerVisualModel, String>(
           id: 'Customer Visualization Data',
-          colorFn: (_, __) => charts.Color.fromHex(code: '#1058FF'),
+          colorFn: (_, __) => charts.Color.fromHex(code: '#7C4DFF'),
           domainFn: (CustomerVisualModel c, _) => c.xDomain,
           measureFn: (CustomerVisualModel c, _) => c.customerCount,
           data: data,

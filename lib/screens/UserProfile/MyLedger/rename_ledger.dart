@@ -63,6 +63,7 @@ class _RenameLedgerState extends State<RenameLedger> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
+                primary: AppTheme.electricBlue,
                 padding: EdgeInsets.all(15),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -215,7 +216,7 @@ class CustomTextField extends StatelessWidget {
           labelText: label,
           prefixIcon: prefixIcon,
           border: OutlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+              borderSide: BorderSide(color: AppTheme.electricBlue),
               borderRadius: BorderRadius.circular(10))),
     );
   }

@@ -663,10 +663,12 @@ class _SettlementHistoryScreenState extends State<_SettlementHistoryScreen> {
                                     },
                                     child: CustomText(
                                       'OK',
+                                      color: AppTheme.whiteColor,
                                       size: (18),
                                       bold: FontWeight.w500,
                                     ),
                                     style: ElevatedButton.styleFrom(
+                                      primary: AppTheme.electricBlue,
                                       padding: EdgeInsets.all(15),
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(10)),
@@ -769,7 +771,7 @@ class _SettlementHistoryScreenState extends State<_SettlementHistoryScreen> {
                                           .getFormattedCurrency,
                                       // text: '46151830',
                                       style: TextStyle(
-                                          color: Color(0xff1058ff),
+                                          color: AppTheme.electricBlue,
                                           fontSize: 32,
                                           fontWeight: FontWeight.bold)),
                                 ]),
@@ -844,7 +846,7 @@ class _SettlementHistoryScreenState extends State<_SettlementHistoryScreen> {
                                               TextSpan(
                                                 text: 'App',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -941,7 +943,7 @@ class _SettlementHistoryScreenState extends State<_SettlementHistoryScreen> {
                                               TextSpan(
                                                 text: 'Links',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -1037,7 +1039,7 @@ class _SettlementHistoryScreenState extends State<_SettlementHistoryScreen> {
                                               TextSpan(
                                                 text: 'QR code',
                                                 style: TextStyle(
-                                                  color: Color(0xff1058ff),
+                                                  color: AppTheme.electricBlue,
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
                                                 ),
@@ -1597,7 +1599,7 @@ class _SettlementHistoryScreenState extends State<_SettlementHistoryScreen> {
                                   .businesses[index]
                                   .businessName,
                               bold: FontWeight.w600,
-                              color: Theme.of(context).primaryColor,
+                              color: AppTheme.electricBlue,
                               size: 18,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -1900,7 +1902,7 @@ class _SettlementHistoryScreenState extends State<_SettlementHistoryScreen> {
                             //   child: Text(
                             //     'Attachment (5)',
                             //     style: TextStyle(
-                            //         color: Color(0xff1058ff),
+                            //         color: AppTheme.electricBlue,
                             //         fontWeight: FontWeight.bold,
                             //         fontSize: 14),
                             //   ),
@@ -2150,7 +2152,7 @@ Color getColor(Set<MaterialState> states) {
     MaterialState.focused,
   };
   if (states.any(interactiveStates.contains)) {
-    return Color(0xff1058ff);
+    return AppTheme.electricBlue;
   }
-  return Color(0xff1058ff);
+  return AppTheme.electricBlue;
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:urbanledger/Utility/app_assets.dart';
 import 'package:urbanledger/Utility/app_constants.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 import 'Components/extensions.dart';
 
@@ -41,7 +42,7 @@ class RequestMoneyOptions extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 7.5),
                 child: OutlineButton.icon(
                     borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
+                        BorderSide(color: AppTheme.electricBlue),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18)),
                     onPressed: () {},
@@ -49,7 +50,7 @@ class RequestMoneyOptions extends StatelessWidget {
                     label: Text(
                       'SMS',
                       style: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                          color: AppTheme.electricBlue,
                           fontSize: 16,
                           fontWeight: FontWeight.bold),
                     )),
@@ -60,7 +61,7 @@ class RequestMoneyOptions extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 7.5),
                 child: OutlineButton.icon(
                     borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
+                        BorderSide(color: AppTheme.electricBlue),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18)),
                     onPressed: () {},
@@ -68,7 +69,7 @@ class RequestMoneyOptions extends StatelessWidget {
                     label: Text(
                       'Whatsapp',
                       style: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                          color: AppTheme.electricBlue,
                           fontSize: 16,
                           fontWeight: FontWeight.bold),
                     )),
@@ -186,7 +187,7 @@ class RequestMoneyOptions extends StatelessWidget {
           ),
           Theme(
             data: Theme.of(context).copyWith(
-                unselectedWidgetColor: Theme.of(context).primaryColor),
+                unselectedWidgetColor: AppTheme.electricBlue),
             child: Flexible(
               child: ListView(
                 padding: EdgeInsets.zero,
@@ -201,8 +202,8 @@ class RequestMoneyOptions extends StatelessWidget {
                             value: false,
                             groupValue: true,
                             onChanged: (dynamic value) {},
-                            activeColor: Theme.of(context).primaryColor,
-                            focusColor: Theme.of(context).primaryColor,
+                            activeColor: AppTheme.electricBlue,
+                            focusColor: AppTheme.electricBlue,
                           ),
                           title: Text('UPI Payments'),
                         ),
@@ -219,8 +220,8 @@ class RequestMoneyOptions extends StatelessWidget {
                             value: false,
                             groupValue: true,
                             onChanged: (dynamic value) {},
-                            activeColor: Theme.of(context).primaryColor,
-                            focusColor: Theme.of(context).primaryColor,
+                            activeColor: AppTheme.electricBlue,
+                            focusColor: AppTheme.electricBlue,
                           ),
                           title: Text('Credit/ Debit Card'),
                         ),
@@ -237,8 +238,8 @@ class RequestMoneyOptions extends StatelessWidget {
                             value: false,
                             groupValue: true,
                             onChanged: (dynamic value) {},
-                            activeColor: Theme.of(context).primaryColor,
-                            focusColor: Theme.of(context).primaryColor,
+                            activeColor: AppTheme.electricBlue,
+                            focusColor: AppTheme.electricBlue,
                           ),
                           title: Text('Wallet'),
                         ),

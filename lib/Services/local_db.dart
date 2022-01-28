@@ -55,6 +55,7 @@ class LocalDb {
             ${CustomerModel.columnTransactionAmount} TEXT,
             ${CustomerModel.columnTransactionType} TEXT,
             ${CustomerModel.columnUpdatedDate} TEXT,
+            ${CustomerModel.columnUpdatedAt} TEXT,
             ${CustomerModel.columnCreatedDate} TEXT,
             ${CustomerModel.columnCollectionDate} TEXT,
             ${CustomerModel.columnIsChanged} INTEGER NOT NULL,
@@ -226,8 +227,8 @@ class LocalDb {
       ${LoginModel.column_id} integer primary key autoincrement,
       ${LoginModel.column_user_id} text unique,
       ${LoginModel.column_user_name} text not null,
-      ${LoginModel.column_mobile_no} integer not null,
-      ${LoginModel.column_pin} integer,
+      ${LoginModel.column_mobile_no} text not null,
+      ${LoginModel.column_pin} text,
       ${LoginModel.column_status} integer default 1
     )''');
 

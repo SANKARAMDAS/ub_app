@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 import '../data/models/chat.dart';
 import '../data/providers/chats_provider.dart';
@@ -114,7 +115,7 @@ class ChatCard extends StatelessWidget {
                                           chat.messages[0].sendAt),
                                       style: TextStyle(
                                         color: _numberOfUnreadMessagesByMe() > 0
-                                            ? Theme.of(context).primaryColor
+                                            ? AppTheme.electricBlue
                                             : Colors.grey,
                                         fontSize: 12,
                                       ),

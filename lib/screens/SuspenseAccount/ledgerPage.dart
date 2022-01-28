@@ -478,7 +478,7 @@ class _LedgerPageState extends State<LedgerPage> {
                                   .businesses[index]
                                   .businessName,
                               bold: FontWeight.w600,
-                              color: Theme.of(context).primaryColor,
+                              color: AppTheme.electricBlue,
                               size: 18,
                               overflow: TextOverflow.ellipsis,
                             ),

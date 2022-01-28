@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 import '../../../chat_module/screens/settings/settings_view.dart';
 import '../../../chat_module/widgets/chat_card.dart';
@@ -57,7 +58,7 @@ class _HomeScreen_newState extends State<HomeScreen_new> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: _homeController.openAddChatScreen,
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: AppTheme.electricBlue,
             child: Icon(
               Icons.message,
               color: Colors.white,
