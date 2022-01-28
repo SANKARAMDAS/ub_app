@@ -701,6 +701,16 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       appBar,
                       // userDetails,
                       const SizedBox(height: 30),
+                      CustomList(
+                        icon: theImage,
+                        text: 'Test Screen',
+                        onSubmit: () {
+                          //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.accountLockedRoute);
+                        },
+                      ),
+                      divider,
 
                       CustomList(
                         icon: theImage,

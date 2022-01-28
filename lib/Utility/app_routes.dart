@@ -85,6 +85,7 @@ class AppRoutes {
   static const individualReportRoute = 'individualReport';
   static const mobileAnalyticsRoute = 'mobileAnalytics';
   static const rewardsRoute = 'rewards';
+  static const accountLockedRoute = 'account_locked';
 
   static const premiumtranactionlistRoute = 'premiumtranactionlist';
 }
