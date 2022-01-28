@@ -134,6 +134,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return null;
   }
 
+  String cleanUpExtraWhiteSpace(String input){
+    final _whitespaceRE = RegExp(r"(?! )\s+| \s+");
+   return input.split(_whitespaceRE).join(" ");
+
+  }
+
   bool validate() {
     Pattern pattern = r'^[a-zA-Z\. ]+$';
     RegExp regex = new RegExp(pattern as String);
@@ -502,7 +508,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onFocusChange: (focused){
                             if(!focused){
                               var resultText = '';
-                              List<String> text = _firstNameController.text.split(' ');
+                              String trimmedText = cleanUpExtraWhiteSpace(_firstNameController.text.trim());
+                              List<String> text = trimmedText.split(' ');
                               List<String> capitalizeList =   text.map((e){
                                 return e.capitalizeFirstCharacter();
                               }).toList();
@@ -572,7 +579,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onFocusChange: (focused){
                             if(!focused){
                               var resultText = '';
-                              List<String> text = _lastNameController.text.split(' ');
+                              String trimmedText = cleanUpExtraWhiteSpace(_lastNameController.text.trim());
+                              List<String> text = trimmedText.split(' ');
                             List<String> capitalizeList =   text.map((e){
                                 return e.capitalizeFirstCharacter();
                               }).toList();
