@@ -1,8 +1,10 @@
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:urbanledger/Utility/app_assets.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
+import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 
 class AccountLocked extends StatefulWidget {
   const AccountLocked({Key? key}) : super(key: key);
@@ -15,13 +17,13 @@ class _AccountLockedState extends State<AccountLocked> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.paleGrey,
-      appBar: appBar(context),
+      backgroundColor: AppTheme.whiteColor,
+     // appBar: appBar(context),
       body: Stack(
         clipBehavior: Clip.none,
         children: [
           Positioned.fill(
-            top: -60,
+            top: -50,
             left: 0,
             child: Container(
                 alignment: Alignment.topCenter,
@@ -32,21 +34,59 @@ class _AccountLockedState extends State<AccountLocked> {
                         alignment: Alignment.topCenter))),
           ),
           Positioned.fill(
-              top: 0,
+              top: 160,
               left: 0,
               child: Column(
                 // mainAxisSize: MainAxisSize.max,
                 children: [
-                  // (MediaQuery.of(context).padding.top).heightBox,
+                  Image.asset(AppAssets.landscapeLogo, width: MediaQuery.of(context).size.width*0.6),
+                  SizedBox(height: 60,),
+                  Image.asset(AppAssets.error_account_locked_logo, width: MediaQuery.of(context).size.width*0.15),
+                  SizedBox(height: 20,),
+                  CustomText('Account Locked!', color:AppTheme.redColor,size: 20,bold: FontWeight.w500,),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: CustomText('A suspicious login attempt was made on your Urban Ledger Account.Please wait for 24 hours or contact the customer care team.', color:AppTheme.redColor,size: 20,bold: FontWeight.w500,centerAlign: true,),
+                  ),
+                  SizedBox(height: 20,),
+                  Expanded(child: Image.asset(AppAssets.account_locked_icon, width: MediaQuery.of(context).size.width*0.5)),
+
 
                 ],
               ))
         ],
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+        child: Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.only(
+                        bottom: 15, top: 15, left: 30, right: 30),
+                    primary: AppTheme.purpleActive,
+                  elevation: 0
+                ),
+                child: CustomText(
+                  'CONTACT US',
+                  size: (18),
+                  bold: FontWeight.w500,
+                  color: Colors.white,
+                ),
+                onPressed:  () {},
+
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  AppBar appBar(BuildContext context) => AppBar(
+  /*AppBar appBar(BuildContext context) => AppBar(
     elevation: 0,
     title: Text('Settlement History'),
     leading: Padding(
@@ -76,5 +116,5 @@ class _AccountLockedState extends State<AccountLocked> {
       ),
     ],
 
-  );
+  );*/
 }
