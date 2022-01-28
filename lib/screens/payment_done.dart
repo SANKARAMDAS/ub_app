@@ -333,7 +333,7 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
 
   Widget paymentDetails() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 32),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
           Row(
@@ -349,15 +349,18 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
                 ),
               ),
               Expanded(
-                child: Container(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                      "${widget.model['amount'].toString().toUpperCase()}",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: AppTheme.coolGrey,
-                          fontWeight: FontWeight.bold)),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                  child: Container(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                        "${widget.model['amount'].toString().toUpperCase()}",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: AppTheme.coolGrey,
+                            fontWeight: FontWeight.bold)),
+                  ),
                 ),
               ),
             ],
@@ -437,15 +440,18 @@ class _PaymentDoneScreenState extends State<PaymentDoneScreen> {
                 ),
               ),
               Expanded(
-                child: Container(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                      "${widget.model['paymentMethod'].toString().toUpperCase()}",
-                      // overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: AppTheme.coolGrey,
-                          fontWeight: FontWeight.bold)),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 2, 0),
+                  child: Container(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                        "${widget.model['paymentMethod'].toString().toUpperCase()}",
+                        // overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: AppTheme.coolGrey,
+                            fontWeight: FontWeight.bold)),
+                  ),
                 ),
               ),
             ],

@@ -399,7 +399,7 @@ class _GeneratedPayLinkState extends State<GeneratedPayLink> {
                                   child: charts.BarChart(
                                   _createChartData(),
                                   animationDuration:
-                                      Duration(milliseconds: 500),
+                                      Duration(milliseconds: 500),  //500
                                   animate: true,
                                   // barRendererDecorator:
                                   //     new charts.BarLabelDecorator<String>(
