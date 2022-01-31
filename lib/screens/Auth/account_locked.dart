@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:urbanledger/Utility/app_assets.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AccountLocked extends StatefulWidget {
   const AccountLocked({Key? key}) : super(key: key);
@@ -76,7 +77,9 @@ class _AccountLockedState extends State<AccountLocked> {
                   bold: FontWeight.w500,
                   color: Colors.white,
                 ),
-                onPressed:  () {},
+                onPressed:  () {
+                  _launchURL('https://urbanledger.app/contact');
+                },
 
               ),
             ),
@@ -84,7 +87,12 @@ class _AccountLockedState extends State<AccountLocked> {
         ),
       ),
     );
+
+
   }
+
+  void _launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 
   /*AppBar appBar(BuildContext context) => AppBar(
     elevation: 0,

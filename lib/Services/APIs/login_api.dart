@@ -163,7 +163,8 @@ class LoginAPI {
         }
 
       }
-      return Future.error(jsonDecode(response.body)['message']);
+      print(jsonDecode(response.body)['message']);
+      return Future.error(jsonDecode(response.body));
     } catch (e) {
       return Future.error('Please check your internet connection or try again later.');
     }
