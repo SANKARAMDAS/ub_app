@@ -56,9 +56,14 @@ class _UrbanLedgerPremiumState extends State<UrbanLedgerPremium> {
   void initState() {
     super.initState();
 
+  try{
     getPremiumPlans();
     // getKyc();
     calculatePremiumDate();
+  }
+  catch(e){
+    print(e);
+  }
   }
 
   Future<void> getPremiumPlans() async {
