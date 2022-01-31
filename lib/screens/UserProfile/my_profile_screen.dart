@@ -672,22 +672,49 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             );
                           }
 
-                          return Container();
+                        return Badge(
+                          child: InkWell(
+                            child: Image.asset(
+                              AppAssets.notification_bell,
+                              height: 50,
+                              width:50,
+                            ),
+                            onTap: () async {
+                              await showNotificationListDialog(context,[]);
+
+                              setState(() {
+
+                              });
+                            },
+                          )
+
+                          ,
+                          value: '0',
+                          color: Colors.grey,
+                          countColor: Colors.white,
+                        );
 
                           // return widget here based on BlocA's state
                         },
                       ),
 
-                      /*BlocBuilder<NotificationListCubit,
+                        // return widget here based on BlocA's state
+                    ],
+
+
+
+
+
+                    ),
+
+                    /*BlocBuilder<NotificationListCubit,
                   NotificationListState>(
                   builder: (context, state) {
 
                   })*/
                     ],
                   )
-                ],
-              ),
-            ),
+                ),
             body: loading == true
                 ? Center(
                     child: CircularProgressIndicator(),
