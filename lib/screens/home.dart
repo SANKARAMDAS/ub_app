@@ -2718,111 +2718,9 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         text:
                             Constants.merchentKYCBANKPREMNotadd);
                   } else {
-                    // Navigator.of(context).pop(true);
-                    // showBankAccountDialog();
                     if (widget._customerList[index].transactionType == null ||
-                        widget._customerList[index].transactionAmount == 0) {
-                      var anaylticsEvents = AnalyticsEvents(context);
-                      await anaylticsEvents.initCurrentUser().catchError((e) {
-                        Navigator.of(context).pop();
-                        'Please check your internet connection or try again later.'
-                            .showSnackBar(context);
-                      });
-                      await anaylticsEvents
-                          .customerDetailsPayEvent()
-                          .catchError((e) {
-                        Navigator.of(context).pop();
-                        'Please check your internet connection or try again later.'
-                            .showSnackBar(context);
-                      });
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => PayTransactionScreen(
-                      //         model: _customerModel,
-                      //         customerId:
-                      //             localCustId.isEmpty ? uniqueId : localCustId,
-                      //         type: 'DIRECT',
-                      //         suspense: false,
-                      //         through: 'DIRECT'),
-                      //   ),
-                      // );
-                      Map<String, dynamic> isTransaction = await repository
-                          .paymentThroughQRApi
-                          .getTransactionLimit(context);
-                      if (!(isTransaction)['isError']) {
-                        Navigator.of(context).pop(true);
-                        // showBankAccountDialog();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PayTransactionScreen(
-                                model: _customerModel,
-                                customerId: localCustId.isEmpty
-                                    ? uniqueId
-                                    : localCustId,
-                                type: 'DIRECT',
-                                suspense: false,
-                                through: 'DIRECT'),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).pop(true);
-                        '${(isTransaction)['message']}'.showSnackBar(context);
-                      }
-                    } else if (widget._customerList[index].transactionType ==
-                        TransactionType.Pay) {
-                      var anaylticsEvents = AnalyticsEvents(context);
-                      await anaylticsEvents.initCurrentUser().catchError((e) {
-                        Navigator.of(context).pop();
-                        'Please check your internet connection or try again later.'
-                            .showSnackBar(context);
-                      });
-                      await anaylticsEvents
-                          .customerDetailsPayEvent()
-                          .catchError((e) {
-                        Navigator.of(context).pop();
-                        'Please check your internet connection or try again later.'
-                            .showSnackBar(context);
-                      });
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PayTransactionScreen(
-                              model: _customerModel,
-                                customerId: localCustId.isEmpty
-                                    ? uniqueId
-                                    : localCustId,
-                              type: 'DIRECT',
-                              suspense: false,
-                              through: 'DIRECT'),
-                        ),
-                      );
-                      Map<String, dynamic> isTransaction = await repository
-                          .paymentThroughQRApi
-                          .getTransactionLimit(context);
-                      if (!(isTransaction)['isError']) {
-                        Navigator.of(context).pop(true);
-                        // showBankAccountDialog();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PayTransactionScreen(
-                                model: _customerModel,
-                                customerId: localCustId.isEmpty
-                                    ? uniqueId
-                                    : localCustId,
-                                type: 'DIRECT',
-                                suspense: true,
-                                through: 'DIRECT'),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).pop(true);
-                        '${(isTransaction)['message']}'.showSnackBar(context);
-                      }
-                    } else {
-                      var anaylticsEvents = AnalyticsEvents(context);
+                      widget._customerList[index].transactionAmount == 0) {
+                        var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
                         Navigator.of(context).pop();
                         'Please check your internet connection or try again later.'
@@ -2836,52 +2734,244 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                             .showSnackBar(context);
                       });
                       Navigator.of(context).pop();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PayTransactionScreen(
-                              model: _customerModel,
-                                customerId: localCustId.isEmpty
-                                    ? uniqueId
-                                    : localCustId,
-                              amount:
-                                  (widget._customerList[index].transactionAmount)!
-                                      .getFormattedCurrency
-                                      .replaceAll('-', ''),
-                              type: 'DIRECT',
-                              suspense: false,
-                              through: 'DIRECT'),
-                        ),
-                      );
-                      Map<String, dynamic> isTransaction = await repository
-                          .paymentThroughQRApi
-                          .getTransactionLimit(context)
-                          .catchError((e) {
-                        Navigator.of(context).pop();
-                        'Please check your internet connection or try again later.'
-                            .showSnackBar(context);
-                      });
-                      if (!(isTransaction)['isError']) {
-                        Navigator.of(context).pop(true);
-                        // showBankAccountDialog();
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PayTransactionScreen(
-                                model: _customerModel,
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PayTransactionScreen(
+                          model: _customerModel,
                                 customerId: localCustId.isEmpty
                                     ? uniqueId
                                     : localCustId,
                                 type: 'DIRECT',
                                 suspense: false,
+                                through: 'DIRECT'
+                        ),
+                      ),
+                    );
+                  } else if (widget._customerList[index].transactionType ==
+                      TransactionType.Pay) {
+                        var anaylticsEvents = AnalyticsEvents(context);
+                      await anaylticsEvents.initCurrentUser().catchError((e) {
+                        Navigator.of(context).pop();
+                        'Please check your internet connection or try again later.'
+                            .showSnackBar(context);
+                      });
+                      await anaylticsEvents
+                          .customerDetailsPayEvent()
+                          .catchError((e) {
+                        Navigator.of(context).pop();
+                        'Please check your internet connection or try again later.'
+                            .showSnackBar(context);
+                      });
+                      Navigator.of(context).pop();
+                        Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PayTransactionScreen(
+                          model: _customerModel,
+                          customerId:
+                              localCustId.isEmpty ? uniqueId : localCustId,
+                              type: 'DIRECT',
+                                suspense: false,
+                                through: 'DIRECT'
+                        ),
+                      ),
+                    );
+                  } else {
+                    var anaylticsEvents = AnalyticsEvents(context);
+                      await anaylticsEvents.initCurrentUser().catchError((e) {
+                        Navigator.of(context).pop();
+                        'Please check your internet connection or try again later.'
+                            .showSnackBar(context);
+                      });
+                      await anaylticsEvents
+                          .customerDetailsPayEvent()
+                          .catchError((e) {
+                        Navigator.of(context).pop();
+                        'Please check your internet connection or try again later.'
+                            .showSnackBar(context);
+                      });
+                      Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PayTransactionScreen(
+                            model: _customerModel,
+                            customerId:
+                                localCustId.isEmpty ? uniqueId : localCustId,
+                            amount:
+                                (widget._customerList[index].transactionAmount)!
+                                    .getFormattedCurrency
+                                    .replaceAll('-', ''),
+                                    type: 'DIRECT',
+                                suspense: false,
                                 through: 'DIRECT'),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).pop(true);
-                        '${(isTransaction)['message']}'.showSnackBar(context);
-                      }
-                    }
+                      ),
+                    );
+                  }
+
+                    // if (widget._customerList[index].transactionType == null ||
+                    //     widget._customerList[index].transactionAmount == 0) {
+                    //   var anaylticsEvents = AnalyticsEvents(context);
+                    //   await anaylticsEvents.initCurrentUser().catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   await anaylticsEvents
+                    //       .customerDetailsPayEvent()
+                    //       .catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   // Navigator.push(
+                    //   //   context,
+                    //   //   MaterialPageRoute(
+                    //   //     builder: (context) => PayTransactionScreen(
+                    //   //         model: _customerModel,
+                    //   //         customerId:
+                    //   //             localCustId.isEmpty ? uniqueId : localCustId,
+                    //   //         type: 'DIRECT',
+                    //   //         suspense: false,
+                    //   //         through: 'DIRECT'),
+                    //   //   ),
+                    //   // );
+                    //   Map<String, dynamic> isTransaction = await repository
+                    //       .paymentThroughQRApi
+                    //       .getTransactionLimit(context);
+                    //   if (!(isTransaction)['isError']) {
+                    //     Navigator.of(context).pop(true);
+                    //     // showBankAccountDialog();
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => PayTransactionScreen(
+                    //             model: _customerModel,
+                    //             customerId: localCustId.isEmpty
+                    //                 ? uniqueId
+                    //                 : localCustId,
+                    //             type: 'DIRECT',
+                    //             suspense: false,
+                    //             through: 'DIRECT'),
+                    //       ),
+                    //     );
+                    //   } else {
+                    //     Navigator.of(context).pop(true);
+                    //     '${(isTransaction)['message']}'.showSnackBar(context);
+                    //   }
+                    // } else if (widget._customerList[index].transactionType ==
+                    //     TransactionType.Pay) {
+                    //   var anaylticsEvents = AnalyticsEvents(context);
+                    //   await anaylticsEvents.initCurrentUser().catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   await anaylticsEvents
+                    //       .customerDetailsPayEvent()
+                    //       .catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => PayTransactionScreen(
+                    //           model: _customerModel,
+                    //             customerId: localCustId.isEmpty
+                    //                 ? uniqueId
+                    //                 : localCustId,
+                    //           type: 'DIRECT',
+                    //           suspense: false,
+                    //           through: 'DIRECT'),
+                    //     ),
+                    //   );
+                    //   Map<String, dynamic> isTransaction = await repository
+                    //       .paymentThroughQRApi
+                    //       .getTransactionLimit(context);
+                    //   if (!(isTransaction)['isError']) {
+                    //     Navigator.of(context).pop(true);
+                    //     // showBankAccountDialog();
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => PayTransactionScreen(
+                    //             model: _customerModel,
+                    //             customerId: localCustId.isEmpty
+                    //                 ? uniqueId
+                    //                 : localCustId,
+                    //             type: 'DIRECT',
+                    //             suspense: true,
+                    //             through: 'DIRECT'),
+                    //       ),
+                    //     );
+                    //   } else {
+                    //     Navigator.of(context).pop(true);
+                    //     '${(isTransaction)['message']}'.showSnackBar(context);
+                    //   }
+                    // } else {
+                    //   var anaylticsEvents = AnalyticsEvents(context);
+                    //   await anaylticsEvents.initCurrentUser().catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   await anaylticsEvents
+                    //       .customerDetailsPayEvent()
+                    //       .catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   Navigator.of(context).pop();
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => PayTransactionScreen(
+                    //           model: _customerModel,
+                    //             customerId: localCustId.isEmpty
+                    //                 ? uniqueId
+                    //                 : localCustId,
+                    //           amount:
+                    //               (widget._customerList[index].transactionAmount)!
+                    //                   .getFormattedCurrency
+                    //                   .replaceAll('-', ''),
+                    //           type: 'DIRECT',
+                    //           suspense: false,
+                    //           through: 'DIRECT'),
+                    //     ),
+                    //   );
+                    //   Map<String, dynamic> isTransaction = await repository
+                    //       .paymentThroughQRApi
+                    //       .getTransactionLimit(context)
+                    //       .catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   if (!(isTransaction)['isError']) {
+                    //     Navigator.of(context).pop(true);
+                    //     // showBankAccountDialog();
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => PayTransactionScreen(
+                    //             model: _customerModel,
+                    //             customerId: localCustId.isEmpty
+                    //                 ? uniqueId
+                    //                 : localCustId,
+                    //             type: 'DIRECT',
+                    //             suspense: false,
+                    //             through: 'DIRECT'),
+                    //       ),
+                    //     );
+                    //   } else {
+                    //     Navigator.of(context).pop(true);
+                    //     '${(isTransaction)['message']}'.showSnackBar(context);
+                    //   }
+                    // }
                   }
                 } else {
                   Navigator.of(context).pop();

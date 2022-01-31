@@ -788,7 +788,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               ),
                               trailing: Icon(Icons.chevron_right_rounded),
                               onTap: () async {
-                                if (await allChecker(context)) {
+                                if (await kycAndPremium(context)) {
                                   // setState(() {
                                   //   loading = true;
                                   // });
@@ -830,7 +830,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         icon: theImage9,
                         text: 'Account Insights',
                         onSubmit: () async {
-                          if (await allChecker(context)) {
+                          if (await kycAndPremium(context)) {
                             Navigator.pushNamed(
                                 context, AppRoutes.mobileAnalyticsRoute);
                           }

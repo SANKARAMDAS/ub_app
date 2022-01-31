@@ -85,7 +85,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                   .pushReplacementNamed(AppRoutes.loginRoute, arguments: true);
             },
             child: CustomText(
-              'Sign up',
+              'Sign up with phone number',
               size: (18),
               color: Colors.white, 
               bold: FontWeight.w500,
