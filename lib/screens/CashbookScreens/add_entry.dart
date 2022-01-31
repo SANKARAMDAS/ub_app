@@ -435,6 +435,7 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                                           },
                                           textCapitalization:
                                               TextCapitalization.sentences,
+                                          maxLength: 120,
                                           decoration: InputDecoration(
                                               hintText:
                                                   'Enter Details (Item Name, Bill No, Quantity...)',
