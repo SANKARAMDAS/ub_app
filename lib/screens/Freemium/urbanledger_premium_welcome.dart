@@ -268,6 +268,7 @@ class _UrbanLedgerPremiumWelcomeState extends State<UrbanLedgerPremiumWelcome> {
                                               AppRoutes.mainRoute);
                                     },
                                     style: ElevatedButton.styleFrom(
+                                      primary: AppTheme.electricBlue,
                                       padding: EdgeInsets.all(18),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
