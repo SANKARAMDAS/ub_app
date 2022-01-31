@@ -64,7 +64,7 @@ class PincodeStrenth{
 
   bool repetativePattern(String pinCode){
     var pinArr = pinCode.split('');
-    bool result = pinArr[0]==pinArr[2] && pinArr[1] == pinArr[3];
+    bool result = pinArr[0]==pinArr[2] && pinArr[1] == pinArr[3] || pinArr[0]==pinArr[1] && pinArr[2] == pinArr[3];
     return result;
   }
 
