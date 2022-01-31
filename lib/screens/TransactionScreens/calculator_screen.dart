@@ -183,12 +183,12 @@ class _CalculatorState extends State<CalculatorScreen> {
                 children: [
                   Container(
                     clipBehavior: Clip.none,
-                    height: height * 0.245,
+                    // height: height * 0.245,
                     width: double.infinity,
                     alignment: Alignment.topCenter,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            fit: BoxFit.fill,
+                            fit: BoxFit.fitWidth,
                             image: AssetImage(AppAssets.backgroundImage),
                             alignment: Alignment.topCenter)),
                   ),
@@ -404,10 +404,15 @@ class _CalculatorState extends State<CalculatorScreen> {
                                             MainAxisAlignment.end,
                                         children: [
                                           ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                              primary: AppTheme.electricBlue,
+                                            ),
                                             icon: Icon(Icons.today_rounded),
                                             label: CustomText(
                                                 DateFormat('EEE, dd MMM yyyy')
-                                                    .format(_selectedDate!)),
+                                                    .format(_selectedDate!),
+                                                    color: AppTheme.whiteColor,
+                                                    ),
                                             onPressed: () async {
                                               final selectedDate =
                                                   (await showCustomDatePicker(
@@ -617,7 +622,7 @@ class _CalculatorState extends State<CalculatorScreen> {
                             borderRadius: BorderRadius.circular(10)),
                         primary: calculationString.isEmpty
                             ? AppTheme.disabledBlue
-                            : Theme.of(context).primaryColor,
+                            : AppTheme.electricBlue,
                       ),
                       onPressed: calculatedAmount < 0.1
                           ? null
@@ -1305,7 +1310,7 @@ class _CalculatorState extends State<CalculatorScreen> {
             await showDeleteImageDialog(index);
           },
           child: DottedBorder(
-            color: Theme.of(context).primaryColor,
+            color: AppTheme.electricBlue,
             radius: Radius.circular(10),
             dashPattern: [5, 5, 5, 5],
             borderType: BorderType.RRect,

@@ -44,7 +44,7 @@ class _ManageKycScreenState extends State<ManageKycScreen> {
       height: 12.0,
       width: isActive ? 12.0 : 12.0,
       decoration: BoxDecoration(
-        color: isActive ? Color(0xff1058FF) : Colors.grey[350],
+        color: isActive ? AppTheme.electricBlue : Colors.grey[350],
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );
@@ -106,7 +106,7 @@ class _ManageKycScreenState extends State<ManageKycScreen> {
                           child: Text(
                             'Skip',
                             style: TextStyle(
-                                color: Color(0xff1058FF),
+                                color: AppTheme.electricBlue,
                                 fontFamily: 'SFProDisplay',
                                 fontWeight: FontWeight.w500,
                                 fontSize: 21),
@@ -152,7 +152,7 @@ class _ManageKycScreenState extends State<ManageKycScreen> {
                                 'Get ID document ready',
                                 style: TextStyle(
                                     decoration: TextDecoration.none,
-                                    color: Color(0xff1058FF),
+                                    color: AppTheme.electricBlue,
                                     fontFamily: 'SFProDisplay',
                                     fontWeight: FontWeight.w700,
                                     fontSize: 24),
@@ -167,7 +167,7 @@ class _ManageKycScreenState extends State<ManageKycScreen> {
                                   padding: const EdgeInsets.all(20.0),
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: Color(0xff1058FF),
+                                        color: AppTheme.electricBlue,
                                       ),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(20))),
@@ -249,7 +249,7 @@ class _ManageKycScreenState extends State<ManageKycScreen> {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     decoration: TextDecoration.none,
-                                    color: Color(0xff1058FF),
+                                    color: AppTheme.electricBlue,
                                     fontFamily: 'SFProDisplay',
                                     fontWeight: FontWeight.w700,
                                     fontSize: 24),
@@ -273,7 +273,7 @@ class _ManageKycScreenState extends State<ManageKycScreen> {
                                 //         Border.all(color: AppTheme.electricBlue)),
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: Color(0xff1058FF),
+                                      color: AppTheme.electricBlue,
                                     ),
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20))),
@@ -470,7 +470,7 @@ class _ManageKycScreenState extends State<ManageKycScreen> {
                                 Text(
                                   'Next',
                                   style: TextStyle(
-                                      color: Color(0xff1058FF),
+                                      color: AppTheme.electricBlue,
                                       fontFamily: 'SFProDisplay',
                                       fontWeight: FontWeight.w500,
                                       fontSize: 21),
@@ -485,6 +485,7 @@ class _ManageKycScreenState extends State<ManageKycScreen> {
                         padding: const EdgeInsets.only(
                             top: 50.0, right: 8.0, left: 8.0),
                         child: NewCustomButton(
+                          backgroundColor: AppTheme.electricBlue,
                           text: 'CONTINUE',
                           textSize: 14,
                           textColor: Colors.white,

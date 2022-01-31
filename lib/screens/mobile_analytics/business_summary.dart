@@ -758,7 +758,7 @@ class _BusinessSummaryState extends State<BusinessSummary> {
     // return [
     //   new charts.Series<LinkGenModel, String>(
     //       id: 'QR generated',
-    //       colorFn: (_, __) => charts.Color.fromHex(code: '#1058FF'),
+    //       colorFn: (_, __) => charts.Color.fromHex(code: '#7C4DFF'),
     //       domainFn: (LinkGenModel c, _) => c.xDomain,
     //       measureFn: (LinkGenModel c, _) => c.linkCount,
     //       data: data,

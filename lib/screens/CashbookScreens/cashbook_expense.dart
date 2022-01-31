@@ -471,7 +471,7 @@ class _CashbookExpenseState extends State<CashbookExpense> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 0,
                   groupValue: tempRadioOption,
                   onChanged: (value) {
@@ -490,7 +490,7 @@ class _CashbookExpenseState extends State<CashbookExpense> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 1,
                   groupValue: tempRadioOption,
                   onChanged: (value) {
@@ -509,7 +509,7 @@ class _CashbookExpenseState extends State<CashbookExpense> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 2,
                   groupValue: tempRadioOption,
                   onChanged: (value) {
@@ -528,7 +528,7 @@ class _CashbookExpenseState extends State<CashbookExpense> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 3,
                   groupValue: tempRadioOption,
                   onChanged: (value) {
@@ -547,7 +547,7 @@ class _CashbookExpenseState extends State<CashbookExpense> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 4,
                   groupValue: tempRadioOption,
                   onChanged: (value) async {
@@ -713,7 +713,7 @@ class _CashbookExpenseState extends State<CashbookExpense> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 0,
                   groupValue: tempRadioOption,
                   onChanged: (value) {
@@ -731,7 +731,7 @@ class _CashbookExpenseState extends State<CashbookExpense> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 1,
                   groupValue: tempRadioOption,
                   onChanged: (value) {

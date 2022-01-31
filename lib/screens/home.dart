@@ -861,7 +861,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                                   backgroundColor:
                                                       MaterialStateProperty.all<
                                                               Color>(
-                                                          Color(0xff1058ff)),
+                                                          AppTheme.electricBlue),
                                                   shape: MaterialStateProperty
                                                       .all<OutlinedBorder>(
                                                           RoundedRectangleBorder(
@@ -987,7 +987,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       //     style: ButtonStyle(
                                       //         backgroundColor:
                                       //             MaterialStateProperty.all<
-                                      //                 Color>(Color(0xff1058ff)),
+                                      //                 Color>(AppTheme.electricBlue),
                                       //         shape: MaterialStateProperty.all<
                                       //                 OutlinedBorder>(
                                       //             RoundedRectangleBorder(
@@ -1092,7 +1092,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(Color(0xff1058ff)),
+                          MaterialStateProperty.all<Color>(AppTheme.electricBlue),
                       shape: MaterialStateProperty.all<OutlinedBorder>(
                           RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
@@ -1680,7 +1680,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       .selectedBusiness
                                       .businessName,
                                   bold: FontWeight.w600,
-                                  color: Theme.of(context).primaryColor,
+                                  color: AppTheme.electricBlue,
                                   size: 18,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -1866,7 +1866,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                             .businesses[index]
                                             .businessName,
                                         bold: FontWeight.w600,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.electricBlue,
                                         size: 18,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -2007,6 +2007,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   width: double.infinity,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        primary: AppTheme.electricBlue,
                         padding: EdgeInsets.all(15),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
@@ -2717,11 +2718,9 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         text:
                             Constants.merchentKYCBANKPREMNotadd);
                   } else {
-                    // Navigator.of(context).pop(true);
-                    // showBankAccountDialog();
                     if (widget._customerList[index].transactionType == null ||
-                        widget._customerList[index].transactionAmount == 0) {
-                      var anaylticsEvents = AnalyticsEvents(context);
+                      widget._customerList[index].transactionAmount == 0) {
+                        var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
                         Navigator.of(context).pop();
                         'Please check your internet connection or try again later.'
@@ -2734,44 +2733,24 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => PayTransactionScreen(
-                      //         model: _customerModel,
-                      //         customerId:
-                      //             localCustId.isEmpty ? uniqueId : localCustId,
-                      //         type: 'DIRECT',
-                      //         suspense: false,
-                      //         through: 'DIRECT'),
-                      //   ),
-                      // );
-                      Map<String, dynamic> isTransaction = await repository
-                          .paymentThroughQRApi
-                          .getTransactionLimit(context);
-                      if (!(isTransaction)['isError']) {
-                        Navigator.of(context).pop(true);
-                        // showBankAccountDialog();
+                      Navigator.of(context).pop();
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PayTransactionScreen(
-                                model: _customerModel,
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PayTransactionScreen(
+                          model: _customerModel,
                                 customerId: localCustId.isEmpty
                                     ? uniqueId
                                     : localCustId,
                                 type: 'DIRECT',
                                 suspense: false,
-                                through: 'DIRECT'),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).pop(true);
-                        '${(isTransaction)['message']}'.showSnackBar(context);
-                      }
-                    } else if (widget._customerList[index].transactionType ==
-                        TransactionType.Pay) {
-                      var anaylticsEvents = AnalyticsEvents(context);
+                                through: 'DIRECT'
+                        ),
+                      ),
+                    );
+                  } else if (widget._customerList[index].transactionType ==
+                      TransactionType.Pay) {
+                        var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
                         Navigator.of(context).pop();
                         'Please check your internet connection or try again later.'
@@ -2784,43 +2763,22 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => PayTransactionScreen(
-                      //         model: _customerModel,
-                      //         customerId:
-                      //             localCustId.isEmpty ? uniqueId : localCustId,
-                      //         type: 'DIRECT',
-                      //         suspense: false,
-                      //         through: 'DIRECT'),
-                      //   ),
-                      // );
-                      Map<String, dynamic> isTransaction = await repository
-                          .paymentThroughQRApi
-                          .getTransactionLimit(context);
-                      if (!(isTransaction)['isError']) {
-                        Navigator.of(context).pop(true);
-                        // showBankAccountDialog();
+                      Navigator.of(context).pop();
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PayTransactionScreen(
-                                model: _customerModel,
-                                customerId: localCustId.isEmpty
-                                    ? uniqueId
-                                    : localCustId,
-                                type: 'DIRECT',
-                                suspense: true,
-                                through: 'DIRECT'),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).pop(true);
-                        '${(isTransaction)['message']}'.showSnackBar(context);
-                      }
-                    } else {
-                      var anaylticsEvents = AnalyticsEvents(context);
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PayTransactionScreen(
+                          model: _customerModel,
+                          customerId:
+                              localCustId.isEmpty ? uniqueId : localCustId,
+                              type: 'DIRECT',
+                                suspense: false,
+                                through: 'DIRECT'
+                        ),
+                      ),
+                    );
+                  } else {
+                    var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
                         Navigator.of(context).pop();
                         'Please check your internet connection or try again later.'
@@ -2833,51 +2791,187 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                         'Please check your internet connection or try again later.'
                             .showSnackBar(context);
                       });
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => PayTransactionScreen(
-                      //         model: _customerModel,
-                      //         customerId:
-                      //             localCustId.isEmpty ? uniqueId : localCustId,
-                      //         amount:
-                      //             (widget._customerList[index].transactionAmount)!
-                      //                 .getFormattedCurrency
-                      //                 .replaceAll('-', ''),
-                      //         type: 'DIRECT',
-                      //         suspense: false,
-                      //         through: 'DIRECT'),
-                      //   ),
-                      // );
-                      Map<String, dynamic> isTransaction = await repository
-                          .paymentThroughQRApi
-                          .getTransactionLimit(context)
-                          .catchError((e) {
-                        Navigator.of(context).pop();
-                        'Please check your internet connection or try again later.'
-                            .showSnackBar(context);
-                      });
-                      if (!(isTransaction)['isError']) {
-                        Navigator.of(context).pop(true);
-                        // showBankAccountDialog();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PayTransactionScreen(
-                                model: _customerModel,
-                                customerId: localCustId.isEmpty
-                                    ? uniqueId
-                                    : localCustId,
-                                type: 'DIRECT',
+                      Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PayTransactionScreen(
+                            model: _customerModel,
+                            customerId:
+                                localCustId.isEmpty ? uniqueId : localCustId,
+                            amount:
+                                (widget._customerList[index].transactionAmount)!
+                                    .getFormattedCurrency
+                                    .replaceAll('-', ''),
+                                    type: 'DIRECT',
                                 suspense: false,
                                 through: 'DIRECT'),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).pop(true);
-                        '${(isTransaction)['message']}'.showSnackBar(context);
-                      }
-                    }
+                      ),
+                    );
+                  }
+
+                    // if (widget._customerList[index].transactionType == null ||
+                    //     widget._customerList[index].transactionAmount == 0) {
+                    //   var anaylticsEvents = AnalyticsEvents(context);
+                    //   await anaylticsEvents.initCurrentUser().catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   await anaylticsEvents
+                    //       .customerDetailsPayEvent()
+                    //       .catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   // Navigator.push(
+                    //   //   context,
+                    //   //   MaterialPageRoute(
+                    //   //     builder: (context) => PayTransactionScreen(
+                    //   //         model: _customerModel,
+                    //   //         customerId:
+                    //   //             localCustId.isEmpty ? uniqueId : localCustId,
+                    //   //         type: 'DIRECT',
+                    //   //         suspense: false,
+                    //   //         through: 'DIRECT'),
+                    //   //   ),
+                    //   // );
+                    //   Map<String, dynamic> isTransaction = await repository
+                    //       .paymentThroughQRApi
+                    //       .getTransactionLimit(context);
+                    //   if (!(isTransaction)['isError']) {
+                    //     Navigator.of(context).pop(true);
+                    //     // showBankAccountDialog();
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => PayTransactionScreen(
+                    //             model: _customerModel,
+                    //             customerId: localCustId.isEmpty
+                    //                 ? uniqueId
+                    //                 : localCustId,
+                    //             type: 'DIRECT',
+                    //             suspense: false,
+                    //             through: 'DIRECT'),
+                    //       ),
+                    //     );
+                    //   } else {
+                    //     Navigator.of(context).pop(true);
+                    //     '${(isTransaction)['message']}'.showSnackBar(context);
+                    //   }
+                    // } else if (widget._customerList[index].transactionType ==
+                    //     TransactionType.Pay) {
+                    //   var anaylticsEvents = AnalyticsEvents(context);
+                    //   await anaylticsEvents.initCurrentUser().catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   await anaylticsEvents
+                    //       .customerDetailsPayEvent()
+                    //       .catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => PayTransactionScreen(
+                    //           model: _customerModel,
+                    //             customerId: localCustId.isEmpty
+                    //                 ? uniqueId
+                    //                 : localCustId,
+                    //           type: 'DIRECT',
+                    //           suspense: false,
+                    //           through: 'DIRECT'),
+                    //     ),
+                    //   );
+                    //   Map<String, dynamic> isTransaction = await repository
+                    //       .paymentThroughQRApi
+                    //       .getTransactionLimit(context);
+                    //   if (!(isTransaction)['isError']) {
+                    //     Navigator.of(context).pop(true);
+                    //     // showBankAccountDialog();
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => PayTransactionScreen(
+                    //             model: _customerModel,
+                    //             customerId: localCustId.isEmpty
+                    //                 ? uniqueId
+                    //                 : localCustId,
+                    //             type: 'DIRECT',
+                    //             suspense: true,
+                    //             through: 'DIRECT'),
+                    //       ),
+                    //     );
+                    //   } else {
+                    //     Navigator.of(context).pop(true);
+                    //     '${(isTransaction)['message']}'.showSnackBar(context);
+                    //   }
+                    // } else {
+                    //   var anaylticsEvents = AnalyticsEvents(context);
+                    //   await anaylticsEvents.initCurrentUser().catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   await anaylticsEvents
+                    //       .customerDetailsPayEvent()
+                    //       .catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   Navigator.of(context).pop();
+                    //   Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => PayTransactionScreen(
+                    //           model: _customerModel,
+                    //             customerId: localCustId.isEmpty
+                    //                 ? uniqueId
+                    //                 : localCustId,
+                    //           amount:
+                    //               (widget._customerList[index].transactionAmount)!
+                    //                   .getFormattedCurrency
+                    //                   .replaceAll('-', ''),
+                    //           type: 'DIRECT',
+                    //           suspense: false,
+                    //           through: 'DIRECT'),
+                    //     ),
+                    //   );
+                    //   Map<String, dynamic> isTransaction = await repository
+                    //       .paymentThroughQRApi
+                    //       .getTransactionLimit(context)
+                    //       .catchError((e) {
+                    //     Navigator.of(context).pop();
+                    //     'Please check your internet connection or try again later.'
+                    //         .showSnackBar(context);
+                    //   });
+                    //   if (!(isTransaction)['isError']) {
+                    //     Navigator.of(context).pop(true);
+                    //     // showBankAccountDialog();
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => PayTransactionScreen(
+                    //             model: _customerModel,
+                    //             customerId: localCustId.isEmpty
+                    //                 ? uniqueId
+                    //                 : localCustId,
+                    //             type: 'DIRECT',
+                    //             suspense: false,
+                    //             through: 'DIRECT'),
+                    //       ),
+                    //     );
+                    //   } else {
+                    //     Navigator.of(context).pop(true);
+                    //     '${(isTransaction)['message']}'.showSnackBar(context);
+                    //   }
+                    // }
                   }
                 } else {
                   Navigator.of(context).pop();
@@ -3049,11 +3143,11 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                 title: CustomText(
                   getName(widget._customerList[index].name,
                       widget._customerList[index].mobileNo),
-                  bold: FontWeight.w500,
+                  bold: FontWeight.bold,
                   size: 18,
                 ),
                 subtitle: CustomText(
-                  widget._customerList[index].updatedDate?.duration ?? "",
+                  widget._customerList[index].updatedAt?.duration ?? "",
                   size: 16,
                   color: AppTheme.greyish,
                 ),

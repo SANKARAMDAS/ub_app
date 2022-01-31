@@ -192,7 +192,7 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
                       ),
                       Spacer(),
                       CupertinoSwitch(
-                        activeColor: Theme.of(context).primaryColor,
+                        activeColor: AppTheme.electricBlue,
                         value: pinStatus,
                         onChanged: (value) {
                           if (!fingerprintStatus) {
@@ -263,7 +263,7 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
                       ),
                       Spacer(),
                       CupertinoSwitch(
-                        activeColor: Theme.of(context).primaryColor,
+                        activeColor: AppTheme.electricBlue,
                         value: fingerprintStatus,
                         onChanged: (value) async {
                           if (!pinStatus) {

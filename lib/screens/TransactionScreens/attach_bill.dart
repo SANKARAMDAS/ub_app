@@ -258,7 +258,7 @@ class _AttachBillScreenState extends State<AttachBillScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: DottedBorder(
-                          color: Theme.of(context).primaryColor,
+                          color: AppTheme.electricBlue,
                           radius: Radius.circular(4),
                           dashPattern: [5, 5, 5, 5],
                           borderType: BorderType.RRect,
@@ -355,7 +355,7 @@ class _AttachBillScreenState extends State<AttachBillScreen> {
                                                           EdgeInsets.all(8),
                                                       borderSide: BorderSide(
                                                           color:
-                                                              Color(0xff1058ff),
+                                                              AppTheme.electricBlue,
                                                           width: 2),
                                                       color: Colors.white,
                                                       onPressed: () {
@@ -481,7 +481,7 @@ class _AttachBillScreenState extends State<AttachBillScreen> {
               ));
             }
           },
-          color: Theme.of(context).primaryColor,
+          color: AppTheme.electricBlue,
           child: Text(
             'SAVE',
             style: TextStyle(

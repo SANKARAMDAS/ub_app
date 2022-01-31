@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 class NewCustomButton extends StatelessWidget {
   final void Function()? onSubmit;
@@ -46,7 +47,7 @@ class NewCustomButton extends StatelessWidget {
         child: ElevatedButton(
           // style: ElevatedButton.styleFrom(
           //   primary: AppTheme.electricBlue,
-          //   onPrimary: Colors.white,
+          //   primary: Colors.white,
           //   shadowColor: Colors.black12,
           //   elevation: 2,
           //   shape: OutlinedBorder(
@@ -58,7 +59,7 @@ class NewCustomButton extends StatelessWidget {
           // ),
           style: ButtonStyle(
               backgroundColor:
-                  MaterialStateProperty.all<Color?>(backgroundColor),
+                  MaterialStateProperty.all<Color?>(backgroundColor??AppTheme.electricBlue),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),

@@ -101,7 +101,7 @@
 //                         ? Icons.done_all_outlined
 //                         : Icons.done,
 //                     size: 18,
-//                     // color: Theme.of(context).primaryColor,
+//                     // color: AppTheme.electricBlue,
 //                     color: widget.controllerData.unreadByMe == true
 //                         ? AppTheme.electricBlue
 //                         : AppTheme.brownishGrey,

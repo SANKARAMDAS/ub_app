@@ -306,7 +306,7 @@ class _RefSignUpState extends State<RefSignUp> {
                             vertical: 8.0, horizontal: 15),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Theme.of(context).primaryColor,
+                            primary: AppTheme.electricBlue,
                             padding: EdgeInsets.all(15),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
@@ -549,11 +549,11 @@ class SignUpTextField extends StatelessWidget {
           contentPadding: EdgeInsets.only(left: 15, bottom: 5, top: 20),
           enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-            color: Color(0xff1058ff),
+            color: AppTheme.electricBlue,
           )),
           focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-            color: Color(0xff1058ff),
+            color: AppTheme.electricBlue,
           )),
           suffixIconConstraints: BoxConstraints.tight(Size(25, 25)),
           suffixIcon: GestureDetector(

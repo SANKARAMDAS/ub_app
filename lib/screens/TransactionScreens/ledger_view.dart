@@ -637,7 +637,7 @@ class _LedgerViewState extends State<LedgerView> {
                 ),
                 // ElevatedButton(
                 //   style: ElevatedButton.styleFrom(
-                //     onPrimary: Theme.of(context).primaryColor,
+                //     primary: AppTheme.electricBlue,
                 //     shape: RoundedRectangleBorder(
                 //         borderRadius: BorderRadius.circular(15)),
                 //   ),
@@ -1214,7 +1214,7 @@ class _LedgerViewState extends State<LedgerView> {
 //               children: [
 //                 Expanded(
 //                   child: RaisedButton(
-//                     color: Theme.of(context).primaryColor,
+//                     color: AppTheme.electricBlue,
 //                     shape: RoundedRectangleBorder(
 //                         borderRadius: BorderRadius.circular(12)),
 //                     onPressed: () {
@@ -1249,7 +1249,7 @@ class _LedgerViewState extends State<LedgerView> {
 //                 ),
 //                 Expanded(
 //                   child: RaisedButton(
-//                     color: Theme.of(context).primaryColor,
+//                     color: AppTheme.electricBlue,
 //                     shape: RoundedRectangleBorder(
 //                         borderRadius: BorderRadius.circular(12)),
 //                     onPressed: () {

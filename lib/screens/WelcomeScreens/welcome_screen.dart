@@ -51,114 +51,72 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    precacheImage(AssetImage(AppAssets.portraitLogo), context);
     return Scaffold(
-      backgroundColor: AppTheme.paleBlue,
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.02),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            // Image.asset(AppAssets.backgroundImage),
-          // SizedBox(height: 20),
-          // (deviceHeight * 0.10).heightBox,
-          // // ULLogoWidget(
-          // //   height: 80,
-          // // ),
-          // RotationTransition(
-          // turns: _animation,
-          FadeTransition(opacity: _fadeInFadeOut,
-            child: Container(
-              margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.32, right: MediaQuery.of(context).size.width * 0.32, bottom: MediaQuery.of(context).size.width * 0.2),
-              child: Image.asset(AppAssets.portraitLogo),
-            ),
-          ),
-          (deviceHeight * 0.075).heightBox,
-          CustomText(
-            'Discover a whole new way to\nmanage your businesses.',
-            size: (23),
-            color: AppTheme.brownishGrey,
-            bold: FontWeight.w500,
-            centerAlign: true,
-          ),
-          (deviceHeight * 0.10).heightBox.flexible,
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: AppTheme.purpleActive,
-                  padding: EdgeInsets.all(15),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-                onPressed: () async {
-                  Navigator.of(context).pushReplacementNamed(AppRoutes.loginRoute,
-                      arguments: true);
-                },
-                child: CustomText(
-                  'Sign up with phone number',
-                  size: (18),
-                  color: Colors.white,
-                  bold: FontWeight.bold,
-                ),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              // margin: EdgeInsets.symmetric(vertical: 20),
-              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.all(15),
-                  side: BorderSide(color: AppTheme.purpleActive, width: 2),
-                  primary: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-                onPressed: () async {
-                  Navigator.of(context).pushReplacementNamed(AppRoutes.loginRoute,
-                      arguments: false);
-                  // Navigator.of(context).pushNamed(AppRoutes.myProfileScreenRoute);
-                },
-                child: CustomText(
-                  'Login',
-                  color: AppTheme.purpleActive,
-                  size: (18),
-                  bold: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
+      backgroundColor: Colors.white,
+      body: Column(children: [
+        Image.asset(AppAssets.backgroundImage),
+        // SizedBox(height: 20),
+        (deviceHeight * 0.10).heightBox,
+        // ULLogoWidget(
+        //   height: 80,
+        // ),
+        Image.asset(AppAssets.portraitLogo, width: MediaQuery.of(context).size.width*0.4),
+        (deviceHeight * 0.05).heightBox,
+        CustomText(
+          'Change the way you\nmanage your Business',
+          size: (23),
+          color: AppTheme.coolGrey,
+          bold: FontWeight.w500,
+          centerAlign: true,
         ),
-      ),
-      body: Container(
-        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.2),
-        child: Column(
-          children: [
-          // Image.asset(AppAssets.backgroundImage),
-          // SizedBox(height: 20),
-          // (deviceHeight * 0.10).heightBox,
-          // // ULLogoWidget(
-          // //   height: 80,
-          // // ),
-          // Container(
-          //   margin: EdgeInsets.symmetric(
-          //       horizontal: MediaQuery.of(context).size.width * 0.32),
-          //   child: Image.asset(AppAssets.portraitLogo),
-          // ),
-          // (deviceHeight * 0.075).heightBox,
-          // CustomText(
-          //   'Discover a whole new way to\nmanage your businesses.',
-          //   size: (23),
-          //   color: AppTheme.coolGrey,
-          //   bold: FontWeight.w500,
-          //   centerAlign: true,
-          // ),
-          // (deviceHeight * 0.15).heightBox.flexible,
-        ]),
-      ),
+        (deviceHeight * 0.20).heightBox.flexible,
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: AppTheme.electricBlue,
+              padding: EdgeInsets.all(15),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+            ),
+            onPressed: () async {
+              Navigator.of(context)
+                  .pushReplacementNamed(AppRoutes.loginRoute, arguments: true);
+            },
+            child: CustomText(
+              'Sign up with phone number',
+              size: (18),
+              color: Colors.white, 
+              bold: FontWeight.w500,
+            ),
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          // margin: EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
+          child: OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              padding: EdgeInsets.all(15),
+              side: BorderSide(color: AppTheme.electricBlue, width: 2),
+              primary: AppTheme.whiteColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+            ),
+            onPressed: () async {
+              Navigator.of(context)
+                  .pushReplacementNamed(AppRoutes.loginRoute, arguments: false);
+              // Navigator.of(context).pushNamed(AppRoutes.myProfileScreenRoute);
+            },
+            child: CustomText(
+              'Login',
+              color: AppTheme.electricBlue,
+              size: (18),
+              bold: FontWeight.w500,
+            ),
+          ),
+        ),
+      ]),
     );
-  }
-}
+  }}

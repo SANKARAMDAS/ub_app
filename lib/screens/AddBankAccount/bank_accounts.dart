@@ -528,9 +528,9 @@ class _ProfileBankAccountState extends State<ProfileBankAccount> {
                     },
                     text: 'Add Bank Account'.toUpperCase(),
                     textSize: 17,
-                    fontWeight: FontWeight.normal,
-                    textColor: Colors.white,
-                    backgroundColor: AppTheme.coolGrey,
+                    fontWeight: FontWeight.bold,
+                    textColor: AppTheme.coolGrey,
+                    backgroundColor: AppTheme.disabledColor,
                   );
           }),
         ),

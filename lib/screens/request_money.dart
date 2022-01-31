@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:urbanledger/Utility/app_assets.dart';
 import 'package:urbanledger/Utility/app_constants.dart';
 import 'package:urbanledger/Utility/app_routes.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 import 'Components/extensions.dart';
 
@@ -77,7 +78,7 @@ class RequestMoney extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
+                                color: AppTheme.electricBlue,
                                 fontSize: 16)),
                       ),
                     ),

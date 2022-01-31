@@ -516,7 +516,7 @@ class _UserProfileNewState extends State<UserProfileNew> {
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(20.0),
                                                     side: BorderSide(
-                                                      color:  Color(0xFF1058FF),
+                                                      color:  AppTheme.electricBlue,
                                                       width: 0.5,
                                                     ),
                                                   ),
@@ -609,7 +609,7 @@ class _UserProfileNewState extends State<UserProfileNew> {
                                               shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.circular(20.0),
                                                 side: BorderSide(
-                                                  color:  Color(0xFF1058FF),
+                                                  color:  AppTheme.electricBlue,
                                                   width: 0.5,
                                                 ),
                                               ),
@@ -814,7 +814,7 @@ class _UserProfileNewState extends State<UserProfileNew> {
           // ),
           // trailing: Icon(
           //   Icons.chevron_right_rounded,
-          //   color: Color(0xff1058ff),
+          //   color: AppTheme.electricBlue,
           //   size: 35,
           // ),
         ),

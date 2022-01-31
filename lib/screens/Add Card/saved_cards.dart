@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:urbanledger/Utility/app_routes.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 import 'package:urbanledger/screens/Add%20Card/card_ui.dart';
 import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
 import 'package:urbanledger/screens/Components/new_custom_button.dart';
@@ -52,9 +53,9 @@ class _SavedCardsState extends State<SavedCards> {
               Navigator.of(context).pop();
             },
             child: Icon(Icons.chevron_left,
-                color: Color.fromRGBO(16, 88, 255, 1), size: 35)),
+                color: AppTheme.electricBlue, size: 35)),
         title: Text('My Default Card',
-            style: TextStyle(color: Color.fromRGBO(16, 88, 255, 1))),
+            style: TextStyle(color: AppTheme.electricBlue)),
       ),
       bottomSheet: Container(
         color: Colors.white,
