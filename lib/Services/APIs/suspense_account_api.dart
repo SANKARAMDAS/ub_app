@@ -57,6 +57,7 @@ class SuspenseAccountApi {
     const url = "suspense/remove";
     debugPrint('$baseUrl$url');
     print('Ht3' + {"transactionIds": TransctionIDS}.toString());
+    print(jsonEncode({"transactionIds": TransctionIDS}));
 
     try {
       final response = await http.post(
