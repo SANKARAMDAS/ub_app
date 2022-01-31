@@ -136,6 +136,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return null;
   }
 
+  String cleanUpExtraWhiteSpace(String input){
+    final _whitespaceRE = RegExp(r"(?! )\s+| \s+");
+   return input.split(_whitespaceRE).join(" ");
+
+  }
+
   bool validate() {
     Pattern pattern = r'^[a-zA-Z\. ]+$';
     RegExp regex = new RegExp(pattern as String);

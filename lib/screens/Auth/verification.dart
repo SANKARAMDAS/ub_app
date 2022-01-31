@@ -439,7 +439,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                       children: [
                         InkWell(
                           child: CustomText(
-                            isResendOtpClickable?'RESEND OTP':'RESEND OTP IN ',
+                            isResendOtpClickable
+                                ? 'RESEND OTP'
+                                : 'RESEND OTP IN ',
                             size: (18),
                             color: isResendOtpClickable?AppTheme.electricBlue:Colors.grey,
                             bold: FontWeight.w800,
@@ -452,7 +454,11 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                             });
                             //startTimer();
 
-                            _controller.forward();
+                            Future.delayed(const Duration(seconds: 1), () {
+                              if(mounted) {
+                                _controller.forward();
+                              }
+                            });
                           }:(){},
                         ),
                         if(!isResendOtpClickable)

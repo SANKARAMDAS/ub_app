@@ -57,7 +57,7 @@ class MyPlans {
   String? customerId;
   bool? planStatus;
   bool? status;
-  int? amount;
+  dynamic? amount;
   String? currency;
   String? urbanledgerId;
   String? transactionId;
