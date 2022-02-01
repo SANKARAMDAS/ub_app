@@ -697,7 +697,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       appBar,
                       // userDetails,
                       const SizedBox(height: 30),
-                      CustomList(
+                    /*  CustomList(
                         icon: theImage,
                         text: 'Test Screen',
                         onSubmit: () {
@@ -706,7 +706,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               context, AppRoutes.accountLockedRoute);
                         },
                       ),
-                      divider,
+                      divider,*/
 
                       CustomList(
                         icon: theImage,

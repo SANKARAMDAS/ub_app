@@ -437,7 +437,11 @@ class _UserNotificationsState extends State<UserNotifications> {
   }
 
   Widget customListItem(NotificationData data){
-    return Row(
+  DateTime currentDateTime =  new DateTime.now();
+ // DateTime time=  currentDateTime.subtract(new Duration(days:currentDateTime.difference(data.createdAt!).inDays,hours: currentDateTime.difference(data.createdAt!).inHours,minutes:currentDateTime.difference(data.createdAt!).inMinutes,seconds: currentDateTime.difference(data.createdAt!).inSeconds));
+    DateTime time = data.createdAt!;
+
+  return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Expanded(
@@ -486,7 +490,8 @@ class _UserNotificationsState extends State<UserNotifications> {
           padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
           child: CustomText(
             // "${DateFormat('dd MMM yyyy | hh:mm aa').format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))}"
-            timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))
+            //timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))
+            timeago.format(time)
             ,
             size: 12,
             color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
