@@ -70,6 +70,8 @@ class _CustomerReportState extends State<CustomerReport> {
           backgroundColor: AppTheme.paleGrey,
           bottomNavigationBar: bottomDownloadButton(context),
           appBar: AppBar(
+            backgroundColor: AppTheme.electricBlue,
+            elevation: 0,
             title: const Text('View Report'),
             leading: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4.0),

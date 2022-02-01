@@ -260,10 +260,12 @@ class _ChangePinVerificationState extends State<ChangePinVerification>
                     ),
                   ),
                   (deviceHeight * 0.09).heightBox,
-                  ULLogoWidget(
-                    height: 80,
-                  ),
+                  Image.asset(AppAssets.portraitLogo, width: MediaQuery.of(context).size.width*0.4),
                   (deviceHeight * 0.09).heightBox,
+                  // ULLogoWidget(
+                  //   height: 80,
+                  // ),
+                  // (deviceHeight * 0.09).heightBox,
                   Center(
                     child: RichText(
                       textAlign: TextAlign.center,
