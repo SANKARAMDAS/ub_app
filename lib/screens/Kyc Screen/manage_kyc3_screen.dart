@@ -45,6 +45,7 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
       setState(() {
         isLoading = false;
       });
+      debugPrint('qwerttyyy :');
       'Please check your internet connection or try again later.'.showSnackBar(context);
     }).then((value) {
       setState(() {
