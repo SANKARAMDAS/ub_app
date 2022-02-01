@@ -228,13 +228,7 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                                         isRejectedCheker() == true) {
                                       Navigator.pushReplacementNamed(
                                           context, AppRoutes.scanEmiratesID);
-                                    } else if (repository.hiveQueries.userData
-                                                .isTradeLicenseDone ==
-                                            true &&
-                                        isRejectedCheker() == true) {
-                                      Navigator.pushReplacementNamed(
-                                          context, AppRoutes.scanTradeLicense);
-                                    }
+                                    } 
                                   }
                                 : () {
                                     if (repository.hiveQueries.userData
@@ -242,9 +236,6 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                                         false) {
                                       Navigator.pushReplacementNamed(
                                           context, AppRoutes.scanEmiratesID);
-                                    } else {
-                                      Navigator.pushReplacementNamed(
-                                          context, AppRoutes.scanTradeLicense);
                                     }
                                   },
                         child: Container(
