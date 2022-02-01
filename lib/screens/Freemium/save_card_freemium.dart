@@ -277,10 +277,8 @@ class _SaveCardFreemiumState extends State<SaveCardFreemium> {
                                           .hiveQueries
                                           .userData
                                           .copyWith(
-                                              premiumStatus: isPremium == true
-                                                  ? int.parse(
-                                                      value['planDuration'])
-                                                  : 0,
+                                              premiumStatus: int.parse(
+                                                      value['planDuration'].toString()),
                                               premiumExpDate: DateTime.parse(
                                                   value['expDate'].toString())),
                                     );

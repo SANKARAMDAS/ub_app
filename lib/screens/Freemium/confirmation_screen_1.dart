@@ -340,11 +340,8 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
                                                 .hiveQueries
                                                 .userData
                                                 .copyWith(
-                                              premiumStatus: isPremium ==
-                                                  true
-                                                  ? int.parse(value[
-                                              'planDuration'])
-                                                  : 0,
+                                              premiumStatus: int.parse(value[
+                                              'planDuration'].toString()),
                                               premiumExpDate:
                                               DateTime.parse(
                                                   value['expDate']
