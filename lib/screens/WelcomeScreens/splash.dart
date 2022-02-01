@@ -325,7 +325,7 @@ void onStart() async {
       if (repository.hiveQueries.isAuthenticated!) {
         // debugPrint('qqqqqqqqqqqqqqqqqqqqqqqqqq: '+repository.hiveQueries.userData.toString());
         LoginModel loginModel = LoginModel(
-                                    mobileNo: repository.hiveQueries.userData.mobileNo);
+                                    mobileNo: repository.hiveQueries.userData.mobileNo.trim().replaceAll('+', ''));
                                 bool isLogin = await Repository()
                                     .queries
                                     .isLoginUser(loginModel);
