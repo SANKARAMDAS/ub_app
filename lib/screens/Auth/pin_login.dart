@@ -1018,17 +1018,17 @@ class PinLoginPageState extends State<PinLoginScreen> {
         Padding(
           padding: const EdgeInsets.only(top: 0.0),
           child: Image(
-            image: AssetImage('assets/images/logo.png'),
+            image: AssetImage(AppAssets.landscapeLogo),
             color: Colors.white,
-            width: MediaQuery.of(context).size.width * 0.33,
+            width: MediaQuery.of(context).size.width * 0.4,
           ),
         ),
-        CustomText(
-          'Track. Remind. Pay.',
-          size: 18,
-          bold: FontWeight.w500,
-          color: Colors.white,
-        ),
+        // CustomText(
+        //   'Track. Remind. Pay.',
+        //   size: 18,
+        //   bold: FontWeight.w500,
+        //   color: Colors.white,
+        // ),
         SizedBox(
           height: height * 0.04,
         ),

@@ -195,7 +195,7 @@ class AppAssets {
   static const String playAudioIcon = 'assets/icons/Play-01.png';
   static const String stopAudioIcon = 'assets/icons/Stop-01.png';
   static const String downloadAudioIcon = 'assets/icons/Download-02.png';
-  static const String appIcon = 'assets/icons/appicon.png';
+  static const String appIcon = 'assets/icons/appiconn.png';
   static const String thumbsIcon = 'assets/icons/myprofile/thumbs.png';
   static const String fingerprintIcon = 'assets/icons/fingerprinticon.png';
   static const String greyBackupIcon = 'assets/icons/greybackup.png';
