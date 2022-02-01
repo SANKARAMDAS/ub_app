@@ -115,7 +115,7 @@ Widget gradientBackground({required Widget child}) {
         );
 }
 
-Future<bool> allChecker(BuildContext context) async {
+Future<bool> allChecker(BuildContext context,{bool? showLoader}) async {
   calculatePremiumDate();
   if (Repository().hiveQueries.userData.bankStatus == false) {
     MerchantBankNotAdded.showBankNotAddedDialog(context, 'userBankNotAdded');
@@ -136,8 +136,10 @@ Future<bool> allChecker(BuildContext context) async {
     MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCPending');
     return false;
   } else if (Repository().hiveQueries.userData.kycStatus == 2) {
+    if(showLoader != false)
     CustomLoadingDialog.showLoadingDialog(context);
     await KycAPI.kycApiProvider.kycCheker().then((value) {
+      if(showLoader != false)
       Navigator.of(context).pop();
       MerchantBankNotAdded.showBankNotAddedDialog(
           context, 'userKYCVerificationPending');
