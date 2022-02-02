@@ -95,15 +95,18 @@ class _SetPinScreenState extends State<SetPinScreen> {
                 //   color: Colors.white,
                 //   width: MediaQuery.of(context).size.width * 0.33,
                 // ),
-                Image.asset(AppAssets.landscapeLogo, color: AppTheme.whiteColor,
-                    width: MediaQuery.of(context).size.width * 0.5,),
+                Image.asset(
+                  AppAssets.landscapeLogo,
+                  color: AppTheme.whiteColor,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                ),
                 // CustomText(
                 //   'Track. Remind. Pay.',
                 //   size: 18,
                 //   bold: FontWeight.w500,
                 //   color: Colors.white,
                 // ),
-                (deviceHeight * 0.05).heightBox,
+                (deviceHeight * 0.045).heightBox,
                 if (!widget.showConfirmPinState)
                   ValueListenableBuilder<String>(
                       valueListenable: setPinNotifier,
@@ -272,6 +275,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
       ),
     );
   }
+
   Widget get topProfile => Column(
         children: [
           !widget.showConfirmPinState
@@ -400,7 +404,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
             textAlign: TextAlign.center,
             text: TextSpan(children: [
               TextSpan(
-                text: widget.showConfirmPinState ? 'Confirm Pin': 'Set Pin',
+                text: widget.showConfirmPinState ? 'Confirm Pin' : 'Set Pin',
                 style: TextStyle(
                     color: AppTheme.whiteColor,
                     fontSize: 36,
@@ -539,7 +543,9 @@ class _SetPinScreenState extends State<SetPinScreen> {
               debugPrint('CCCCCCCCCC : ' +
                   _repository.hiveQueries.userData.toString());
               LoginModel loginModel = LoginModel(
-                mobileNo: _repository.hiveQueries.userData.mobileNo.trim().replaceAll('+', ''),
+                mobileNo: _repository.hiveQueries.userData.mobileNo
+                    .trim()
+                    .replaceAll('+', ''),
                 pin: confirmPinNotifier.value,
                 status: true,
               );
@@ -550,7 +556,9 @@ class _SetPinScreenState extends State<SetPinScreen> {
             debugPrint(
                 'CCCCCCCCCC : ' + _repository.hiveQueries.userData.toString());
             LoginModel loginModel = LoginModel(
-              mobileNo: _repository.hiveQueries.userData.mobileNo.trim().replaceAll('+', ''),
+              mobileNo: _repository.hiveQueries.userData.mobileNo
+                  .trim()
+                  .replaceAll('+', ''),
               pin: confirmPinNotifier.value,
               status: true,
             );
@@ -765,7 +773,7 @@ class PinField extends StatelessWidget {
         // padding: const EdgeInsets.only(left: 15.0, right: 15),
         padding: EdgeInsets.all(10),
         child: new Container(
-          height: 80,
+          height: 70,
           width: 50,
           alignment: Alignment.center,
           decoration: new BoxDecoration(
