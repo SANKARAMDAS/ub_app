@@ -65,15 +65,15 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
     setState(() {});
   }
 
-  whatsappShare(String? phone, String filePath) async {
-    print(phone);
-    await WhatsappShare.shareFile(
-      package: Package.whatsapp,
-      text: '',
-      phone: phone ?? '',
-      filePath: [filePath],
-    );
-  }
+  // whatsappShare(String? phone, String filePath) async {
+  //   print(phone);
+  //   await WhatsappShare.shareFile(
+  //     package: Package.whatsapp,
+  //     text: '',
+  //     phone: phone ?? '',
+  //     filePath: [filePath],
+  //   );
+  // }
 
   @override
   void initState() {
@@ -132,24 +132,29 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                   //Share.shareFiles([file.path]);
                   final RenderBox box = context.findRenderObject() as RenderBox;
 
-                  if (Platform.isAndroid) {
-                    final val = await WhatsappShare.isInstalled(
-                        package: Package.whatsapp);
-                    if (val) {
-                      try {
-                        await whatsappShare(
-                          widget.customermodel?.mobileNo ?? '911234567890',
-                          file.path,
-                        );
-                      } catch (e) {
-                        print(e.toString());
-                      }
-                      // await WhatsappShare.shareFile(
-                      //     filePath: [file.path],
-                      //     package: Package.whatsapp,
-                      //     phone: widget.customermodel?.mobileNo);
-                    }
-                  } else {
+                  if (Platform.isAndroid) 
+                    // final RenderBox box =
+                    //     context.findRenderObject() as RenderBox;
+                    // Share.shareFiles([file.path],
+                    //     sharePositionOrigin:
+                    //         box.localToGlobal(Offset.zero) & box.size);
+                    // final val = await WhatsappShare.isInstalled(
+                    //     package: Package.whatsapp);
+                    // if (val) {
+                    //   try {
+                    //     await whatsappShare(
+                    //       widget.customermodel?.mobileNo ?? '911234567890',
+                    //       file.path,
+                    //     );
+                    //   } catch (e) {
+                    //     print(e.toString());
+                    //   }
+                    //   // await WhatsappShare.shareFile(
+                    //   //     filePath: [file.path],
+                    //   //     package: Package.whatsapp,
+                    //   //     phone: widget.customermodel?.mobileNo);
+                    // }
+                   {
                     await Share.shareFiles([file.path],
                         text: '',
                         // subject: value1!.payLink.toString(),
@@ -259,7 +264,6 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                         ),
                       ),
                     ),
-                  
                   ),
                 ),
               ),
