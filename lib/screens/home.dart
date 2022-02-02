@@ -3145,6 +3145,7 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       widget._customerList[index].mobileNo),
                   bold: FontWeight.bold,
                   size: 18,
+                  color: AppTheme.blackColor,
                 ),
                 subtitle: CustomText(
                   widget._customerList[index].updatedAt?.duration ?? "",

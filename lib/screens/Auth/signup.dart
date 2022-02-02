@@ -808,7 +808,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     }
                                   },
                             child: isLoading
-                                ? CircularProgressIndicator()
+                                ? CircularProgressIndicator(color: AppTheme.electricBlue,)
                                 : CustomText(
                                     'REGISTER',
                                     color: Colors.white,

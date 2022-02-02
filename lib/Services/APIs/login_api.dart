@@ -101,7 +101,7 @@ class LoginAPI {
               userName: map['customerDetails']['first_name'] +
                   ' ' +
                   map['customerDetails']['last_name'],
-              mobileNo: map['customerDetails']['mobile_no'],
+              mobileNo: map['customerDetails']['mobile_no'].toString().trim().replaceAll('+', ''),
               status: true,
             );
             repository.queries.checkLoginUser(loginModel);

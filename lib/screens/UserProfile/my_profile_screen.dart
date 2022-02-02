@@ -1730,16 +1730,21 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 5, bottom: 2),
-              child: SvgPicture.asset(
-                AppAssets.logo,
-                height: 40,
-                color: AppTheme.brownishGrey,
-              ),
+              // child: SvgPicture.asset(
+              //   AppAssets.logo,
+              //   height: 40,
+              //   color: AppTheme.brownishGrey,
+              // ),
+              child: Image(
+            image: AssetImage(AppAssets.landscapeLogo),
+            color: AppTheme.brownishGrey,
+            width: MediaQuery.of(context).size.width * 0.4,
+          ),
             ),
-            const Text(
-              'Track. Remind. Pay.',
-              style: TextStyle(color: AppTheme.brownishGrey, fontSize: 12),
-            ),
+            // const Text(
+            //   'Track. Remind. Pay.',
+            //   style: TextStyle(color: AppTheme.brownishGrey, fontSize: 12),
+            // ),
           ],
         ),
       );

@@ -539,7 +539,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
               debugPrint('CCCCCCCCCC : ' +
                   _repository.hiveQueries.userData.toString());
               LoginModel loginModel = LoginModel(
-                mobileNo: _repository.hiveQueries.userData.mobileNo,
+                mobileNo: _repository.hiveQueries.userData.mobileNo.trim().replaceAll('+', ''),
                 pin: confirmPinNotifier.value,
                 status: true,
               );
@@ -550,7 +550,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
             debugPrint(
                 'CCCCCCCCCC : ' + _repository.hiveQueries.userData.toString());
             LoginModel loginModel = LoginModel(
-              mobileNo: _repository.hiveQueries.userData.mobileNo,
+              mobileNo: _repository.hiveQueries.userData.mobileNo.trim().replaceAll('+', ''),
               pin: confirmPinNotifier.value,
               status: true,
             );
