@@ -397,7 +397,6 @@ class _UpgrdUnsubsState extends State<UpgrdUnsubs> {
 
                                                 MyPlans planDetail =
                                                     GetPlans.gpp!.data![i];
-
                                                 return Container(
                                                   height: deviceHeight > 800.0
                                                       ? deviceHeight >= 1000
@@ -677,7 +676,7 @@ class _UpgrdUnsubsState extends State<UpgrdUnsubs> {
                                                                             //     .format(DateTime.parse(planDetail.createdAt.toString()).add(Duration(
                                                                             //         days:
                                                                             //             planDetail.plan!.days!)))
-                                                                            DateFormat("dd MMM yyyy").format(GetPlans.endDate).toString(),
+                                                                            DateFormat("dd MMM yyyy").format(DateTime.parse(planDetail.expiryAt.toString())).toString(),
                                                                         style: TextStyle(
                                                                             color:
                                                                                 AppTheme.tomato),
