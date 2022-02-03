@@ -85,7 +85,7 @@ class PinLoginPageState extends State<PinLoginScreen> {
       }
     }
   }
-  
+
   static const iosStrings = const IOSAuthMessages(
       cancelButton: 'cancel',
       goToSettingsButton: 'settings',
@@ -435,7 +435,7 @@ class PinLoginPageState extends State<PinLoginScreen> {
       context: context);
 
   @override
-    Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     viewInsetsBottom = MediaQuery.of(context).viewInsets.bottom;
     if (!isHightSubtracted) {
       height = height - MediaQuery.of(context).viewPadding.top;
@@ -535,7 +535,7 @@ class PinLoginPageState extends State<PinLoginScreen> {
                                   pinBox(value.length > 3),
                                 ]);
                           }),
-                      (height * 0.07).heightBox,
+                      (height * 0.12).heightBox,
                       incorrectPinCount > 0
                           ? Column(
                               children: [
@@ -616,63 +616,61 @@ class PinLoginPageState extends State<PinLoginScreen> {
       ),
     );
   }
-    Widget get topProfile =>             (!isPinOn && isFingerPrintOn)
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      15.0.heightBox,
-                      Center(child: commonLogoWithTagline(height)),
-                      (height * 0.1).heightBox,
-                      Image.asset(
-                        AppAssets.fingerPrintClipArtImage,
-                        height: height * 0.4,
-                      ),
-                      (height * 0.1).heightBox,
-                      CustomText(
-                        'Allow Touch ID',
-                        size: 18,
-                        bold: FontWeight.w700,
-                        color: AppTheme.brownishGrey,
-                      ),
-                      10.0.heightBox,
-                      CustomText(
-                        'Use Touch ID for Faster and Secure\naccess to your Account',
-                        centerAlign: true,
-                        size: 16,
-                        bold: FontWeight.w500,
-                        color: AppTheme.brownishGrey,
-                      ),
-                      20.0.heightBox,
-                      GestureDetector(
-                        onTap: () {
-                          _authenticate();
-                        },
-                        child: Image.asset(
-                          AppAssets.fingerprintIcon,
-                          height: height * 0.1,
-                        ),
-                      ),
-                    ],
-                  )
-                : Column(
-                    children: <Widget>[
-                      
-                      ValueListenableBuilder<String>(
-                          valueListenable: pinNotifier,
-                          builder: (context, value, _) {
-                            return Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  pinBox(value.length > 0),
-                                  pinBox(value.length > 1),
-                                  pinBox(value.length > 2),
-                                  pinBox(value.length > 3),
-                                ]);
-                          }),
-                    ],
-                  );
 
-
+  Widget get topProfile => (!isPinOn && isFingerPrintOn)
+      ? Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            15.0.heightBox,
+            Center(child: commonLogoWithTagline(height)),
+            (height * 0.1).heightBox,
+            Image.asset(
+              AppAssets.fingerPrintClipArtImage,
+              height: height * 0.4,
+            ),
+            (height * 0.1).heightBox,
+            CustomText(
+              'Allow Touch ID',
+              size: 18,
+              bold: FontWeight.w700,
+              color: AppTheme.brownishGrey,
+            ),
+            10.0.heightBox,
+            CustomText(
+              'Use Touch ID for Faster and Secure\naccess to your Account',
+              centerAlign: true,
+              size: 16,
+              bold: FontWeight.w500,
+              color: AppTheme.brownishGrey,
+            ),
+            20.0.heightBox,
+            GestureDetector(
+              onTap: () {
+                _authenticate();
+              },
+              child: Image.asset(
+                AppAssets.fingerprintIcon,
+                height: height * 0.1,
+              ),
+            ),
+          ],
+        )
+      : Column(
+          children: <Widget>[
+            ValueListenableBuilder<String>(
+                valueListenable: pinNotifier,
+                builder: (context, value, _) {
+                  return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        pinBox(value.length > 0),
+                        pinBox(value.length > 1),
+                        pinBox(value.length > 2),
+                        pinBox(value.length > 3),
+                      ]);
+                }),
+          ],
+        );
 
   Widget get topContainer => Container(
         // margin: EdgeInsets.only(top: 30),
@@ -789,7 +787,7 @@ class PinLoginPageState extends State<PinLoginScreen> {
   }
 
   Widget keyBoardButton(String number) => MaterialButton(
-    // color: AppTheme.whiteColor,
+        // color: AppTheme.whiteColor,
         shape: CircleBorder(),
         splashColor: AppTheme.buttonSplashGrey,
         onPressed: () {
@@ -809,20 +807,20 @@ class PinLoginPageState extends State<PinLoginScreen> {
   Widget pinBox(bool value) => Padding(
         padding: EdgeInsets.all(10),
         child: new Container(
-            height: 80,
+            height: 70,
             width: 50,
             alignment: Alignment.center,
             decoration: new BoxDecoration(
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Colors.black54.withOpacity(0.1),
-                    blurRadius: 7.0,
-                    spreadRadius: 5.0,
-                    offset: Offset(0, 0))
-              ],
-              color: Colors.white,
-              border: new Border.all(width: 2.0, color: Colors.white),
-              borderRadius: new BorderRadius.circular(7)),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      color: Colors.black54.withOpacity(0.1),
+                      blurRadius: 7.0,
+                      spreadRadius: 5.0,
+                      offset: Offset(0, 0))
+                ],
+                color: Colors.white,
+                border: new Border.all(width: 2.0, color: Colors.white),
+                borderRadius: new BorderRadius.circular(7)),
             child: Container(
               height: 18,
               width: 18,
@@ -838,7 +836,12 @@ class PinLoginPageState extends State<PinLoginScreen> {
     }
     if (pinNotifier.value.length == 4) {
       LoginModel loginModel = LoginModel(
-          mobileNo: Repository().hiveQueries.userData.mobileNo,
+          mobileNo: Repository()
+              .hiveQueries
+              .userData
+              .mobileNo
+              .trim()
+              .replaceAll('+', ''),
           pin: pinNotifier.value);
       bool isLogin = await Repository().queries.fetchLoginUser(loginModel);
       if (isLogin) {
@@ -1018,17 +1021,17 @@ class PinLoginPageState extends State<PinLoginScreen> {
         Padding(
           padding: const EdgeInsets.only(top: 0.0),
           child: Image(
-            image: AssetImage('assets/images/logo.png'),
+            image: AssetImage(AppAssets.landscapeLogo),
             color: Colors.white,
-            width: MediaQuery.of(context).size.width * 0.33,
+            width: MediaQuery.of(context).size.width * 0.4,
           ),
         ),
-        CustomText(
-          'Track. Remind. Pay.',
-          size: 18,
-          bold: FontWeight.w500,
-          color: Colors.white,
-        ),
+        // CustomText(
+        //   'Track. Remind. Pay.',
+        //   size: 18,
+        //   bold: FontWeight.w500,
+        //   color: Colors.white,
+        // ),
         SizedBox(
           height: height * 0.04,
         ),

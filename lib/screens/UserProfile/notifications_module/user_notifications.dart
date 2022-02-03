@@ -49,27 +49,61 @@ class _UserNotificationsState extends State<UserNotifications> {
           Container(
               padding: EdgeInsets.symmetric(horizontal: 12,vertical: 16),
               color: AppTheme.electricBlue,
-              child:  Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        child: Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),onTap: (){
-                        Navigator.of(context).pop();
-                      },),
-                      SizedBox(width: 8,),
-                      Text('Notification (${widget.dataList?.length})',style: TextStyle(color: Colors.white,fontSize: 20)),
-                    ],
-                  ),
+              child: BlocConsumer<NotificationListCubit, NotificationListState>(
+                  listener: (context, state) {
+                    // do stuff here based on BlocA's state
+                  },
+                  buildWhen: (previous, current) {
+                    return current is FetchedNotificationListState;
+                    // return true/false to determine whether or not
+                    // to rebuild the widget with state
+                  },
+                  builder: (context, state) {
+                    if(state is FetchedNotificationListState){
+                      return  state.notificationList.length > 0? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                child: Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),onTap: (){
+                                Navigator.of(context).pop();
+                              },),
+                              SizedBox(width: 8,),
+                              Text('Notification (${widget.dataList?.length})',style: TextStyle(color: Colors.white,fontSize: 20)),
+                            ],
+                          ),
 
-                  selectedList.length >0?Text(selectedList.length>1?'${selectedList.length} items selected':'${selectedList.length} item selected',style: TextStyle(color: Colors.white,fontSize: 16),):InkWell(child: Text('Mark all as Read',style: TextStyle(color: Colors.white,fontSize: 16),),onTap: (){
-                    BlocProvider.of<NotificationListCubit>(context,listen:false).markAllAsRead();
+                          selectedList.length >0?Text(selectedList.length>1?'${selectedList.length} items selected':'${selectedList.length} item selected',style: TextStyle(color: Colors.white,fontSize: 16),):InkWell(child: Text('Mark all as Read',style: TextStyle(color: Colors.white,fontSize: 16),),onTap: (){
+                            BlocProvider.of<NotificationListCubit>(context,listen:false).markAllAsRead();
 
-                  },),
+                          },),
 
-                ],)),
+                        ],):Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                child: Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),onTap: (){
+                                Navigator.of(context).pop();
+                              },),
+                              SizedBox(width: 8,),
+                              Text('Notification (0)',style: TextStyle(color: Colors.white,fontSize: 20)),
+                            ],
+                          ),
+
+                         Container()
+
+                        ],);
+
+                    }
+                    return Container(child:Center(child: CircularProgressIndicator()));
+                    // return widget here based on BlocA's state
+                  }
+              )),
           Expanded(child:BlocConsumer<NotificationListCubit, NotificationListState>(
               listener: (context, state) {
                 // do stuff here based on BlocA's state
@@ -81,44 +115,102 @@ class _UserNotificationsState extends State<UserNotifications> {
               },
               builder: (context, state) {
                 if(state is FetchedNotificationListState){
-                  return  state.notificationList.length > 0?ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemBuilder:(ctx,i)=>listItem(widget.dataList![i],i),itemCount: widget.dataList?.length):Container(child:Center(child: Text('No Data')));
+                  return  state.notificationList.length > 0?Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemBuilder:(ctx,i)=>listItem(widget.dataList![i],i),itemCount: widget.dataList?.length),
+                      ),
+                        Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.all(20),
+                          child:selectedList.length>0?InkWell(
+                            child: Image.asset(
+                              AppAssets.delete_notification_icon,
+                              height: 45,
+                              width: 45,
+                            ),onTap: () async {
+                            await BlocProvider.of<NotificationListCubit>(context,listen:false).deleteNotifications(selectedList);
+                            setState(() {
+                              selectedList = [];
+                            });
+                          },):InkWell(
+                            child: Container(
+                                child: CustomText(
+                                  'Clear all',
+                                  bold: FontWeight.w600,
+                                  size: 20,
+                                  color: AppTheme.brownishGrey,
+                                  centerAlign: true,
+                                )),onTap: () async {
+                            await BlocProvider.of<NotificationListCubit>(context,listen:false).clearAllNotification();
+                            setState(() {
+                              selectedList = [];
+                            });
+                          },))
+                    ],
+                  ):Container(child:Column(children: [
+                    Expanded(
+                      child: Stack(
+
+                        children: [
+                          Image.asset(
+                            AppAssets.notification_empty,
+                          ),
+                          Positioned(
+                            bottom:0,
+                            left:0,
+                            right:0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 40),
+                              child: Text('Currently you have no notifications',textAlign: TextAlign.center,style: TextStyle(fontSize: 24,fontWeight: FontWeight.w500,color:AppTheme.brownishGrey,),),
+                            ),
+                          ),
+                        ],
+                        clipBehavior: Clip.none,
+                      ),
+                      flex: 7,
+                    ),
+
+                    Expanded(
+                      flex:3,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+
+
+                            child: ElevatedButton(
+
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                               },
+                                child: CustomText(
+                                  'BACK',
+                                  size: (18),
+                                  bold: FontWeight.w500,
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(horizontal: 48,vertical:12),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                ),
+
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],));
 
                 }
-                return Container(child:Center(child: Text('No Data')));
+                return Container(child:Center(child: CircularProgressIndicator()));
               // return widget here based on BlocA's state
               }
           ))
           // AppBar(title: Text('Notifications(03)'),backgroundColor: AppTheme.electricBlue,)
         ],),),
-      bottomNavigationBar: Container(
-          color: Colors.white,
-          padding: EdgeInsets.all(20),
-          child:selectedList.length>0?InkWell(
-            child: Image.asset(
-             AppAssets.delete_notification_icon,
-              height: 45,
-              width: 45,
-            ),onTap: () async {
-           await BlocProvider.of<NotificationListCubit>(context,listen:false).deleteNotifications(selectedList);
-           setState(() {
-             selectedList = [];
-           });
-          },):InkWell(
-            child: Container(
-                child: CustomText(
-                  'Clear all',
-                  bold: FontWeight.w600,
-                  size: 20,
-                  color: AppTheme.brownishGrey,
-                  centerAlign: true,
-                )),onTap: () async {
-            await BlocProvider.of<NotificationListCubit>(context,listen:false).clearAllNotification();
-            setState(() {
-              selectedList = [];
-            });
-          },)),
     );
   }
 
@@ -282,8 +374,13 @@ class _UserNotificationsState extends State<UserNotifications> {
         Navigator.of(context).pushNamed(AppRoutes.mainRoute);
         break;
       case 'premium_reminder':
-        Navigator.of(context).pushNamed(AppRoutes.urbanLedgerPremiumRoute);
-        CustomLoadingDialog.showLoadingDialog(context);
+        redirectToPremiumPurchase();
+        break;
+      case 'buy_premium_reminder_kcy':
+        redirectToPremiumPurchase();
+        break;
+      case 'buy_premium_reminder_all':
+        redirectToPremiumPurchase();
         break;
       case 'complete_email_verification_reminder':
         Navigator.of(context).pushNamed(AppRoutes.edituserProfileRoute);
@@ -305,6 +402,25 @@ class _UserNotificationsState extends State<UserNotifications> {
         break;
       default:
         Navigator.of(context).pushNamed(AppRoutes.mainRoute);
+    }
+  }
+
+  redirectToPremiumPurchase()async{
+    if (await kycChecker(context)) {
+    await calculatePremiumDate();
+
+    if (Repository().hiveQueries.userData.premiumStatus ==
+    0) {
+    Navigator.of(context)
+        .pushNamed(AppRoutes.urbanLedgerPremiumRoute);
+
+    // CustomLoadingDialog.showLoadingDialog(context, key);
+    } else {
+    Navigator.of(context)
+        .pushNamed(AppRoutes.upgrdUnsubsRoute);
+
+    // CustomLoadingDialog.showLoadingDialog(context, key);
+    }
     }
   }
 

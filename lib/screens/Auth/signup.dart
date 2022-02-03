@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:urbanledger/Models/business_model.dart';
@@ -15,6 +16,7 @@ import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 import 'package:urbanledger/screens/Components/text_formatter.dart';
 import 'package:urbanledger/screens/UserProfile/inappbrowser.dart';
 import 'package:urbanledger/screens/mobile_analytics/analytics_events.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
 import '../Components/extensions.dart';
@@ -132,6 +134,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
 
     return null;
+  }
+
+  String cleanUpExtraWhiteSpace(String input){
+    final _whitespaceRE = RegExp(r"(?! )\s+| \s+");
+   return input.split(_whitespaceRE).join(" ");
+
   }
 
   bool validate() {
@@ -800,7 +808,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     }
                                   },
                             child: isLoading
-                                ? CircularProgressIndicator()
+                                ? CircularProgressIndicator(color: AppTheme.electricBlue,)
                                 : CustomText(
                                     'REGISTER',
                                     color: Colors.white,

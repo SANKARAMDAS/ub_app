@@ -105,6 +105,7 @@ class AppAssets {
   static const String check_unselected = 'assets/icons/check_unselected.png';
   static const String delete_notification_icon = 'assets/icons/delete_notification_icon.png';
 
+  static const String notification_empty = 'assets/images/notification_empty.png';
   static const String notification_selected = 'assets/icons/notification_selected.png';
   static const String notification_unselected = 'assets/icons/notification_unselected.png';
   static const String warning = 'assets/icons/Warning-01.png';
@@ -194,7 +195,7 @@ class AppAssets {
   static const String playAudioIcon = 'assets/icons/Play-01.png';
   static const String stopAudioIcon = 'assets/icons/Stop-01.png';
   static const String downloadAudioIcon = 'assets/icons/Download-02.png';
-  static const String appIcon = 'assets/icons/appicon.png';
+  static const String appIcon = 'assets/icons/appiconn.png';
   static const String thumbsIcon = 'assets/icons/myprofile/thumbs.png';
   static const String fingerprintIcon = 'assets/icons/fingerprinticon.png';
   static const String greyBackupIcon = 'assets/icons/greybackup.png';

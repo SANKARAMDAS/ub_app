@@ -92,9 +92,9 @@ class _MobileAnalyticsState extends State<MobileAnalytics> {
                     "startDate": "$_startDate",
                     "endDate": "$_endDate"
                   };
-                  debugPrint('RRRR: '+data.toString());
+                  debugPrint('RRRR: ' + data.toString());
                   Map response = await repository.analyticsAPI.exportPDF(data);
-                  debugPrint('RRRR: '+response.toString());
+                  debugPrint('RRRR: ' + response.toString());
                   if (response['status']) {
                     String fileName = await repository.ledgerApi
                         .networkImageToFile2(
@@ -121,14 +121,16 @@ class _MobileAnalyticsState extends State<MobileAnalytics> {
             margin: EdgeInsets.only(top: deviceHeight * 0.08),
             child: SingleChildScrollView(
               child: Column(children: [
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.04),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.01),
+                        padding: EdgeInsets.only(left: 12.0),
                         child: GestureDetector(
                           onTap: () {
                             _current = 0;
@@ -179,7 +181,13 @@ class _MobileAnalyticsState extends State<MobileAnalytics> {
                           ),
                         ),
                       ),
-                      Expanded(
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.01),
+                        padding: EdgeInsets.only(right: 12.0),
                         child: GestureDetector(
                           onTap: () {
                             _current = 1;
@@ -230,17 +238,19 @@ class _MobileAnalyticsState extends State<MobileAnalytics> {
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.04),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.01),
+                        padding: EdgeInsets.only(left: 12.0),
                         child: GestureDetector(
                           onTap: () {
                             _current = 2;
@@ -291,7 +301,13 @@ class _MobileAnalyticsState extends State<MobileAnalytics> {
                           ),
                         ),
                       ),
-                      Expanded(
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.01),
+                        padding: EdgeInsets.only(right: 12.0),
                         child: GestureDetector(
                           onTap: () {
                             _current = 3;
@@ -342,17 +358,19 @@ class _MobileAnalyticsState extends State<MobileAnalytics> {
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: MediaQuery.of(context).size.width * 0.04),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.01),
+                        padding: EdgeInsets.only(left: 12.0),
                         child: GestureDetector(
                           onTap: () {
                             _current = 2;
@@ -403,7 +421,13 @@ class _MobileAnalyticsState extends State<MobileAnalytics> {
                           ),
                         ),
                       ),
-                      Expanded(
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal:
+                                MediaQuery.of(context).size.width * 0.01),
+                        padding: EdgeInsets.only(right: 12.0),
                         child: GestureDetector(
                           onTap: () {
                             _current = 3;
@@ -454,8 +478,8 @@ class _MobileAnalyticsState extends State<MobileAnalytics> {
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 if (_selected1 == true &&

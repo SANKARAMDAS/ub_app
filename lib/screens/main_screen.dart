@@ -16,6 +16,7 @@ import 'package:urbanledger/Models/login_model.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Models/transaction_model.dart';
 import 'package:urbanledger/Services/APIs/kyc_api.dart';
+import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/app_services.dart';
 import 'package:urbanledger/chat_module/data/models/message.dart';
 import 'package:urbanledger/chat_module/data/providers/chats_provider.dart';
@@ -345,8 +346,13 @@ class _MainScreenState extends State<MainScreen> {
         Navigator.of(context).pushNamed(AppRoutes.mainRoute);
         break;
       case 'premium_reminder':
-        Navigator.of(context).pushNamed(AppRoutes.urbanLedgerPremiumRoute);
-        CustomLoadingDialog.showLoadingDialog(context, key);
+        redirectToPremiumPurchase();
+        break;
+      case 'buy_premium_reminder_kcy':
+        redirectToPremiumPurchase();
+        break;
+      case 'buy_premium_reminder_all':
+        redirectToPremiumPurchase();
         break;
       case 'complete_email_verification_reminder':
         Navigator.of(context).pushNamed(AppRoutes.edituserProfileRoute);
@@ -375,7 +381,28 @@ class _MainScreenState extends State<MainScreen> {
         Navigator.of(context).pushNamed(AppRoutes.mainRoute);
     }
   }
+
+  redirectToPremiumPurchase()async{
+    if (await kycChecker(context)) {
+      await calculatePremiumDate();
+
+      if (Repository().hiveQueries.userData.premiumStatus ==
+          0) {
+        Navigator.of(context)
+            .pushNamed(AppRoutes.urbanLedgerPremiumRoute);
+
+        // CustomLoadingDialog.showLoadingDialog(context, key);
+      } else {
+        Navigator.of(context)
+            .pushNamed(AppRoutes.upgrdUnsubsRoute);
+
+        // CustomLoadingDialog.showLoadingDialog(context, key);
+      }
+    }
+  }
 }
+
+
 
 Future<void> uploadBusinessData(BuildContext context) async {
   debugPrint('Uploading Business Data');

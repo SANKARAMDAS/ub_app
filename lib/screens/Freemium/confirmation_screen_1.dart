@@ -44,7 +44,7 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
   bool status = false;
   bool checkedValue = true;
   bool isPremium = false;
-  bool isLoading = false;
+
 
   final GlobalKey<State> key = GlobalKey<State>();
 
@@ -53,17 +53,24 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
     // TODO: implement initState
     super.initState();
     getCar();
-    Osess();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // executes after build
+      Osess();
+    });
+
   }
 
+
+
   Osess() async {
-    setState(() {
-      isLoading = true;
-    });
+
+    CustomLoadingDialog.showLoadingDialog(
+        context,key);
     OSession = await FreemiumAPI.freemiumApi.startOrderSessionPremiumPLan();
     setState(() {
-      isLoading = false;
+
     });
+    Navigator.of(context).pop();
   }
 
   cancelOsession({PremiumStartOrderSession? OSession}) async {
@@ -148,8 +155,9 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
         return true;
       },
       child: Scaffold(
+        key: key,
         backgroundColor: AppTheme.paleGrey,
-        bottomNavigationBar: isLoading?Container():Container(
+        bottomNavigationBar: Container(
           margin: EdgeInsets.only(bottom: 20),
           child: Consumer<AddCardsProvider>(
             builder: (ctx, card, child) {
@@ -332,11 +340,8 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
                                                 .hiveQueries
                                                 .userData
                                                 .copyWith(
-                                              premiumStatus: isPremium ==
-                                                  true
-                                                  ? int.parse(value[
-                                              'planDuration'])
-                                                  : 0,
+                                              premiumStatus: int.parse(value[
+                                              'planDuration'].toString()),
                                               premiumExpDate:
                                               DateTime.parse(
                                                   value['expDate']
@@ -465,6 +470,7 @@ class _ConfirmationScreen1State extends State<ConfirmationScreen1> {
 
                               // }
                             }:(){
+                              print('ss');
 
                             },
                             text: 'pay $currencyAED $amount'.toUpperCase(),

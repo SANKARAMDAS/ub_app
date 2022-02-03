@@ -672,22 +672,49 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             );
                           }
 
-                          return Container();
+                        return Badge(
+                          child: InkWell(
+                            child: Image.asset(
+                              AppAssets.notification_bell,
+                              height: 50,
+                              width:50,
+                            ),
+                            onTap: () async {
+                              await showNotificationListDialog(context,[]);
+
+                              setState(() {
+
+                              });
+                            },
+                          )
+
+                          ,
+                          value: '0',
+                          color: Colors.grey,
+                          countColor: Colors.white,
+                        );
 
                           // return widget here based on BlocA's state
                         },
                       ),
 
-                      /*BlocBuilder<NotificationListCubit,
+                        // return widget here based on BlocA's state
+                    ],
+
+
+
+
+
+                    ),
+
+                    /*BlocBuilder<NotificationListCubit,
                   NotificationListState>(
                   builder: (context, state) {
 
                   })*/
                     ],
                   )
-                ],
-              ),
-            ),
+                ),
             body: loading == true
                 ? Center(
                     child: CircularProgressIndicator(),
@@ -1703,16 +1730,21 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 5, bottom: 2),
-              child: SvgPicture.asset(
-                AppAssets.logo,
-                height: 40,
-                color: AppTheme.brownishGrey,
-              ),
+              // child: SvgPicture.asset(
+              //   AppAssets.logo,
+              //   height: 40,
+              //   color: AppTheme.brownishGrey,
+              // ),
+              child: Image(
+            image: AssetImage(AppAssets.landscapeLogo),
+            color: AppTheme.brownishGrey,
+            width: MediaQuery.of(context).size.width * 0.4,
+          ),
             ),
-            const Text(
-              'Track. Remind. Pay.',
-              style: TextStyle(color: AppTheme.brownishGrey, fontSize: 12),
-            ),
+            // const Text(
+            //   'Track. Remind. Pay.',
+            //   style: TextStyle(color: AppTheme.brownishGrey, fontSize: 12),
+            // ),
           ],
         ),
       );

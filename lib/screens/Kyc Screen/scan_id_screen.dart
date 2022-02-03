@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:urbanledger/Models/routeArgs.dart';
 import 'package:urbanledger/Utility/app_services.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ScanIdScreen extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class _ScanIdScreenState extends State<ScanIdScreen>
   bool mode = false;
 
   bool _initializing= false;
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // App state changed before we got the chance to initialize.
@@ -44,8 +46,7 @@ class _ScanIdScreenState extends State<ScanIdScreen>
       // if (!cameraController.value.isInitialized) {
 
       cameraController = CameraController(
-        cameraController.description,
-        ResolutionPreset.ultraHigh,
+        cameraController.description, ResolutionPreset.ultraHigh,
         imageFormatGroup:
             Platform.isIOS ? ImageFormatGroup.bgra8888 : ImageFormatGroup.jpeg,
         enableAudio: false,
@@ -67,7 +68,7 @@ class _ScanIdScreenState extends State<ScanIdScreen>
     }
   }
 
-  initCamera(CameraDescription cameraDescription) {
+  initCamera(CameraDescription cameraDescription) async {
     cameraController = CameraController(
         cameraDescription, ResolutionPreset.ultraHigh,
         imageFormatGroup:
@@ -154,7 +155,7 @@ class _ScanIdScreenState extends State<ScanIdScreen>
   }
 
   void onCapture(context) async {
-    if (!cameraController.value.isInitialized) {
+    if (!cameraController.value.isInitialized) {  
      await cameraController.initialize();
      _initializing = false;
 
@@ -267,17 +268,17 @@ class _ScanIdScreenState extends State<ScanIdScreen>
               color: Colors.white,
             ),
           ),
-          leading: InkWell(
-            onTap: () {
-              Navigator.pushReplacementNamed(
-                  context, AppRoutes.manageKyc3Route);
-            },
-            child: Icon(
-              Icons.chevron_left,
-              color: Colors.white,
-              size: 32,
-            ),
-          ),
+          // leading: InkWell(
+          //   onTap: () {
+          //     Navigator.pushReplacementNamed(
+          //         context, AppRoutes.manageKyc3Route);
+          //   },
+          //   child: Icon(
+          //     Icons.chevron_left,
+          //     color: Colors.white,
+          //     size: 32,
+          //   ),
+          // ),
         ),
         backgroundColor: Color(0xff666666),
         bottomNavigationBar: Container(
@@ -316,6 +317,10 @@ class _ScanIdScreenState extends State<ScanIdScreen>
                   ),
                   InkWell(
                     onTap: () async {
+                      if(!(await Permission.storage.isGranted)){
+                        final status = await Permission.storage.request();
+                        if (status != PermissionStatus.granted) return;
+                      }
                       final picker = ImagePicker();
 
                       final PickedFile? pickedFile = await picker.getImage(
@@ -329,6 +334,7 @@ class _ScanIdScreenState extends State<ScanIdScreen>
                           EmiratesImage: pickedFile.path.toString(),
                         ),
                       );
+                      
                     },
                     child: Image.asset(
                       'assets/icons/myprofile/preview.png',
