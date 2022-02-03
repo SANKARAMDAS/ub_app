@@ -4,11 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:urbanledger/Models/add_card_model.dart';
 import 'package:urbanledger/Utility/app_assets.dart';
 import 'package:urbanledger/Utility/app_constants.dart';
 import 'package:urbanledger/Utility/app_methods.dart';
-import 'package:urbanledger/Utility/app_routes.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
 import 'package:urbanledger/screens/Add%20Card/add_card_screen.dart';
 import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
@@ -25,9 +23,7 @@ class CardList extends StatefulWidget {
 
 class _CardListState extends State<CardList> with TickerProviderStateMixin {
   ScrollController controller = ScrollController();
-
-  final GlobalKey<AnimatedListState> _animatedkey = GlobalKey<AnimatedListState>();
-  List<CardUi> cardListStatic = [];
+  final GlobalKey<State> key = GlobalKey<State>();
   String _title = '';
   int? _index;
   bool closeTopContainer = false;
@@ -49,23 +45,9 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
     });
   }
 
-  late Future<void> _fetchCards;
-  bool _fetchCompleted = false;
   @override
   void initState() {
     super.initState();
-    // var widgetsBinding;
-    
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _fetchCards = getCardsForCARDUI();
-      _fetchCards.then((value) async {
-        _fetchCompleted = true;
-        await Future.delayed(Duration(seconds: 12)).then((value) {
-          _controller1.stop(canceled: true);
-          _controller1.reset();
-        });
-      });
-    });
     controller.addListener(() {
       double value = controller.offset / 65;
 
@@ -74,13 +56,12 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
         closeTopContainer = controller.offset > 50;
       });
     });
-
-    // getCardsForCARDUI().then((value) async {
-    //   await Future.delayed(Duration(seconds: 12)).then((value) {
-    //     _controller1.stop(canceled: true);
-    //     _controller1.reset();
-    //   });
-    // });
+    getCardsForCARDUI().then((value) async {
+      await Future.delayed(Duration(seconds: 12)).then((value) {
+        _controller1.stop(canceled: true);
+        _controller1.reset();
+      });
+    });
   }
 
   late AnimationController _controller = AnimationController(
@@ -108,6 +89,7 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
     curve: Curves.elasticIn,
   ));
 
+  List<CardUi> cardListStatic = [];
   final List<Color> circleColors = [
     // Color.fromRGBO(218, 0, 6, 1),// red
     Color.fromRGBO(15, 149, 149, 1),
@@ -119,47 +101,38 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
   ];
   Random random = new Random();
   Color randomGenerator() {
-    return circleColors[random.nextInt(1)];
+    return circleColors[random.nextInt(3)];
   }
 
   Future getCardsForCARDUI() async {
     cardListStatic.clear();
-    await Provider.of<AddCardsProvider>(context, listen: false)
+    Provider.of<AddCardsProvider>(context, listen: false)
         .getCard()
         .then((value) {
-      debugPrint('qwerty :' + value.toString());
       _index = 0;
-      Navigator.of(context).pop();
-    }).catchError((e) {
-      Navigator.of(context).pop();
-      'Please check your internet connection or try again later.'.showSnackBar(context);
+      Navigator.of(context).pop(true);
     });
 
-    // Future ft = Future(() {});
-    // Provider.of<AddCardsProvider>(context, listen: false)
-    //     .card!
-    //     .forEach((element) {
-    //   Random random = new Random();
-    //   Color randomGenerator() {
-    //     return circleColors[random.nextInt(2)];
-    //   }
+    Provider.of<AddCardsProvider>(context, listen: false)
+        .card!
+        .forEach((element) {
+      Random random = new Random();
+      Color randomGenerator() {
+        return circleColors[random.nextInt(2)];
+      }
 
-    // ft = ft.then((_) {
-    //   return Future.delayed(const Duration(milliseconds: 100), () {
-    //   cardListStatic.add(CardUi(
-    //       cardNumber: element.endNumber.toString(),
-    //       bankName: element.bankName.toString(),
-    //       isDefualt: element.isdefault,
-    //       id: element.id.toString(),
-    //       cardHolderName: element.hashedName.toString(),
-    //       validCard: element.expdate.toString(),
-    //       cardImage: element.cardImage,
-    //       cardHeight: 260,
-    //       backgroundColor: randomGenerator()));
-    //   key.currentState!.insertItem(cardListStatic.length - 1);
-    // });
-    //   });
-    // });
+      cardListStatic.add(CardUi(
+          cardNumber: element.endNumber.toString(),
+          bankName: element.bankName.toString(),
+          isDefualt: element.isdefault,
+          id: element.id.toString(),
+          cardHolderName: element.hashedName.toString(),
+          validCard: element.expdate.toString(),
+          cardImage: element.cardImage,
+          cardHeight: 260,
+          backgroundColor: randomGenerator()));
+    });
+
     // setState(() {});
     return true;
   }
@@ -173,46 +146,32 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
     _controller1.dispose();
   }
 
-  Tween<Offset> _offset = Tween(begin: Offset(1, 0), end: Offset(0, 0));
-
   // Provider.of<AddCardsProvider>(context).addListener(() {
   //   getCardsForCARDUI();
   // });
   @override
   Widget build(BuildContext context) {
     Provider.of<AddCardsProvider>(context).addListener(() {
-      // if (_fetchCompleted) {
-        final _list = List.of(
-           Provider.of<AddCardsProvider>(context, listen: false)
-            .card ?? <CardDetailsModel> []
-        );
-        cardListStatic.clear();
-        debugPrint("abc");
-       
-           _list.forEach((element) {
-          debugPrint("XYZ");
-      
-          Random random = new Random();
-          Color randomGenerator() {
-            return circleColors[random.nextInt(2)];
-          }
+      cardListStatic.clear();
+      Provider.of<AddCardsProvider>(context, listen: false)
+          .card!
+          .forEach((element) {
+        Random random = new Random();
+        Color randomGenerator() {
+          return circleColors[random.nextInt(2)];
+        }
 
-          cardListStatic.add(CardUi(
-              key: ValueKey(element.id),
-              cardNumber: element.endNumber.toString(),
-              bankName: element.bankName.toString(),
-              isDefualt: element.isdefault,
-              id: element.id.toString(),
-              cardHolderName: element.hashedName.toString(),
-              validCard: element.expdate.toString(),
-              cardImage: element.cardImage,
-              cardHeight: 260,
-            
-              backgroundColor:randomGenerator()));
-          _animatedkey.currentState?.insertItem(cardListStatic.length - 1);
-          debugPrint("key is not null: ${_animatedkey.currentState!= null}");
-        });
-      // }
+        cardListStatic.add(CardUi(
+            cardNumber: element.endNumber.toString(),
+            bankName: element.bankName.toString(),
+            isDefualt: element.isdefault,
+            id: element.id.toString(),
+            cardHolderName: element.hashedName.toString(),
+            validCard: element.expdate.toString(),
+            cardImage: element.cardImage,
+            cardHeight: 260,
+            backgroundColor: randomGenerator()));
+      });
     });
     final Size size = MediaQuery.of(context).size;
     final double categoryHeight =
@@ -240,9 +199,8 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
             textColor: Colors.white,
             textSize: 18.0,
             onSubmit: () {
-              /*Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddCardScreen()));*/
-              Navigator.of(context).pushNamed(AppRoutes.addCardRoute);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddCardScreen()));
               // showDialog(
               //     context: context,
               //     builder: (_) => BankAccountPopUps(
@@ -275,190 +233,197 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
                 ],
               ),
             )
-          : Container(
-              child: Column(
-                children: <Widget>[
-                  if (_index != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Slidable(
-                        enabled: true,
-                        actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.25,
-                        child: cardListStatic[_index!],
-                        secondaryActions: <Widget>[
-                          Column(children: [
-                            // Expanded(
-                            //   child: GestureDetector(
-                            //     onTap: () {
-                            //       cardListStatic[_index!]
-                            //                   .isDefualt
-                            //                   .toString() ==
-                            //               '0'
-                            //           ? showModalBottomSheet(
-                            //               backgroundColor: Colors.transparent,
-                            //               context: context,
-                            //               builder: (_) =>
-                            //                   _deleteCardPopUp(_index))
-                            //           : () {};
-                            //     },
-                            //     child: ClipRRect(
-                            //       borderRadius: BorderRadius.horizontal(
-                            //           left: Radius.circular(10)),
-                            //       child: Container(
-                            //           color: cardListStatic[_index!]
-                            //                       .isDefualt
-                            //                       .toString() ==
-                            //                   '0'
-                            //               ? Color.fromRGBO(255, 41, 87, 1)
-                            //               : AppTheme.coolGrey,
-                            //           child: Center(
-                            //               child: Icon(
-                            //                   Icons.delete_outline_outlined,
-                            //                   color: Colors.white))),
-                            //     ),
-                            //   ),
-                            // ),
-                            Expanded(
-                                child: ClipRRect(
-                              borderRadius: BorderRadius.horizontal(
-                                  left: Radius.circular(10)),
-                              child: Container(
-                                width: double.infinity,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    if (cardListStatic[_index!]
-                                            .isDefualt
-                                            .toString() ==
-                                        '0') {
-                                      showModalBottomSheet(
-                                          backgroundColor: Colors.transparent,
-                                          context: context,
-                                          builder: (_) =>
-                                              _deleteCardPopUp(_index!));
-                                    } else {
-                                      'Default Card Cannot Be Deleted'
-                                          .showSnackBar(context);
-                                    }
-                                  },
-                                  child: Container(
-                                      color: AppTheme.coolGrey,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            'DELETE',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Image.asset(
-                                            AppAssets.deleteIcon,
-                                            width: 25,
-                                          ),
-                                        ],
-                                      )),
-                                ),
-                              ),
-                            )),
-                            Expanded(
-                                child: ClipRRect(
-                              borderRadius: BorderRadius.horizontal(
-                                  left: Radius.circular(10)),
-                              child: Container(
-                                  width: double.infinity,
-                                  color: Color.fromRGBO(46, 208, 109, 1),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'DEFAULT',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      // SizedBox(height: 5,),
-                                      Transform.scale(
-                                        scale: 0.8,
+          :  Container(
+                child: Column(
+                  children: <Widget>[
+                    if (_index != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child:Slidable(
+                          enabled: true,
+                          actionPane: SlidableDrawerActionPane(),
+                          actionExtentRatio: 0.25,
+                          child: cardListStatic[_index!],
+                          secondaryActions: <Widget>[
+                            Column(children: [
+                              // Expanded(
+                              //   child: GestureDetector(
+                              //     onTap: () {
+                              //       cardListStatic[_index!]
+                              //                   .isDefualt
+                              //                   .toString() ==
+                              //               '0'
+                              //           ? showModalBottomSheet(
+                              //               backgroundColor: Colors.transparent,
+                              //               context: context,
+                              //               builder: (_) =>
+                              //                   _deleteCardPopUp(_index))
+                              //           : () {};
+                              //     },
+                              //     child: ClipRRect(
+                              //       borderRadius: BorderRadius.horizontal(
+                              //           left: Radius.circular(10)),
+                              //       child: Container(
+                              //           color: cardListStatic[_index!]
+                              //                       .isDefualt
+                              //                       .toString() ==
+                              //                   '0'
+                              //               ? Color.fromRGBO(255, 41, 87, 1)
+                              //               : AppTheme.coolGrey,
+                              //           child: Center(
+                              //               child: Icon(
+                              //                   Icons.delete_outline_outlined,
+                              //                   color: Colors.white))),
+                              //     ),
+                              //   ),
+                              // ),
+                              Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.horizontal(
+                                        left: Radius.circular(10)),
+                                    child: Container(
+                                      width: double.infinity,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (cardListStatic[_index!]
+                                              .isDefualt
+                                              .toString() ==
+                                              '0') {
+                                            showModalBottomSheet(
+                                                backgroundColor:
+                                                Colors.transparent,
+                                                context: context,
+                                                builder: (_) =>
+                                                    _deleteCardPopUp(
+                                                        _index!));
+                                          } else {
+                                            'Default Card Cannot Be Deleted'
+                                                .showSnackBar(context);
+                                          }
+                                        },
                                         child: Container(
-                                          child: Switch(
-                                            value: cardListStatic[_index!]
-                                                        .isDefualt
-                                                        .toString() ==
-                                                    '0'
-                                                ? false
-                                                : true,
-                                            onChanged: (value) async {
-                                              /* setState(() {
+                                            color: AppTheme.coolGrey,
+                                            child: Column(
+                                              mainAxisSize:
+                                              MainAxisSize.max,
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  'DELETE',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Image.asset(
+                                                  AppAssets.deleteIcon,
+                                                  width: 25,
+                                                ),
+                                              ],
+                                            )),
+                                      ),
+                                    ),
+                                  )),
+                              Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.horizontal(
+                                        left: Radius.circular(10)),
+                                    child: Container(
+                                        width: double.infinity,
+                                        color:
+                                        Color.fromRGBO(46, 208, 109, 1),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'DEFAULT',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            // SizedBox(height: 5,),
+                                            Transform.scale(
+                                              scale: 0.8,
+                                              child: Container(
+                                                child: Switch(
+                                                  value: cardListStatic[
+                                                  _index!]
+                                                      .isDefualt
+                                                      .toString() ==
+                                                      '0'
+                                                      ? false
+                                                      : true,
+                                                  onChanged: (value) async {
+                                                    /* setState(() {
                                                           print('value' +
                                                               value.toString());
                                                         });*/
-                                              CustomLoadingDialog
-                                                  .showLoadingDialog(
-                                                      context);
-                                              await Provider.of<
-                                                          AddCardsProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .editCard(
-                                                      id: cardListStatic[
-                                                              _index!]
-                                                          .id
-                                                          .toString(),
-                                                      value: 1)
-                                                  .timeout(
-                                                      Duration(seconds: 30),
-                                                      onTimeout: () {
-                                                //  setState(() {});
-                                              });
-                                              _index = 0;
+                                                    CustomLoadingDialog
+                                                        .showLoadingDialog(
+                                                        context, key);
+                                                    await Provider.of<
+                                                        AddCardsProvider>(
+                                                        context,
+                                                        listen: false)
+                                                        .editCard(
+                                                        id: cardListStatic[
+                                                        _index!]
+                                                            .id
+                                                            .toString(),
+                                                        value: 1)
+                                                        .timeout(
+                                                        Duration(
+                                                            seconds:
+                                                            30),
+                                                        onTimeout: () {
+                                                          //  setState(() {});
+                                                        });
+                                                    _index = 0;
 
-                                              await getCardsForCARDUI();
+                                                    await getCardsForCARDUI();
 
-                                              /*Navigator.of(context)
+                                                    /*Navigator.of(context)
                                                             .pop();*/
 
-                                              /*Navigator.of(context)
+                                                    /*Navigator.of(context)
                                                             .pop(true);*/
-                                            },
-                                            activeTrackColor:
-                                                AppTheme.electricBlue,
-                                            activeColor: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                                  },
+                                                  activeTrackColor:
+                                                  AppTheme.electricBlue,
+                                                  activeColor: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )),
                                   )),
-                            )),
-                          ]),
-                        ],
+                            ]),
+                          ],
+                        ),
                       ),
-                    ),
-                  Expanded(
-                      // Container(
-                      // height: screenHeight(context),
-                      
-                    child: AnimatedList(
-                        key: _animatedkey,
-                        controller: controller,
-                        initialItemCount: cardListStatic.length,
-                        padding: EdgeInsets.symmetric(vertical: 20),
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (context, index, animation) {
-                          double scale = 1.0;
-                          if (topContainer > 0.5) {
-                            scale = index + 0.5 - topContainer;
-                            if (scale < 0) {
-                              scale = 0;
-                            } else if (scale > 1) {
-                              scale = 1;
+                    Expanded(
+                        // Container(
+                        // height: screenHeight(context),
+                        child: Consumer<AddCardsProvider>(
+                            builder: (context, cards, _) {
+                      return ListView.builder(
+                          controller: controller,
+                          itemCount: cardListStatic.length,
+                          padding: EdgeInsets.symmetric(vertical: 20),
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            double scale = 1.0;
+                            if (topContainer > 0.5) {
+                              scale = index + 0.5 - topContainer;
+                              if (scale < 0) {
+                                scale = 0;
+                              } else if (scale > 1) {
+                                scale = 1;
+                              }
                             }
-                          }
-                          return SlideTransition(
-                            position: animation.drive(_offset),
-                            child: Transform(
+                            return Transform(
                               // ScaleTransition(
                               transform: Matrix4.identity()
                                 ..scale(scale, scale),
@@ -468,30 +433,29 @@ class _CardListState extends State<CardList> with TickerProviderStateMixin {
                                   heightFactor: 0.25,
                                   alignment: Alignment.topCenter,
                                   child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _index = index;
-                                      });
-                                      // _controller.forward();
-                                      controller.animateTo(
-                                        controller.position.minScrollExtent,
-                                        duration: Duration(seconds: 1),
-                                        curve: Curves.fastOutSlowIn,
-                                      );
-                                      print(_index.toString());
-                                    },
-                                    child: cardListStatic[index],
-
-                                    // _customCard(context, index.toString())
-                                    // CardUi(title: index.toString())
-                                  )),
-                            ),
-                          );
-                        }),
-                  ),
-                ],
+                                      onTap: () {
+                                        setState(() {
+                                          _index = index;
+                                        });
+                                        // _controller.forward();
+                                        controller.animateTo(
+                                          controller.position.minScrollExtent,
+                                          duration: Duration(seconds: 1),
+                                          curve: Curves.fastOutSlowIn,
+                                        );
+                                        print(_index.toString());
+                                      },
+                                      child: cardListStatic[index]
+                                      // _customCard(context, index.toString())
+                                      // CardUi(title: index.toString())
+                                      )),
+                            );
+                          });
+                    })),
+                  ],
+                ),
               ),
-            ),
+            
     );
   }
 
