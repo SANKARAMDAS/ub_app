@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:urbanledger/Utility/app_assets.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
+import 'package:urbanledger/screens/arguments/account_locked_argument.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AccountLocked extends StatefulWidget {
@@ -17,6 +18,10 @@ class AccountLocked extends StatefulWidget {
 class _AccountLockedState extends State<AccountLocked> {
   @override
   Widget build(BuildContext context) {
+
+    final args =
+    ModalRoute.of(context)!.settings.arguments as AccountLockedArgument;
+
     return Scaffold(
       backgroundColor: AppTheme.whiteColor,
      // appBar: appBar(context),
@@ -47,7 +52,7 @@ class _AccountLockedState extends State<AccountLocked> {
                   CustomText('Account Locked!', color:AppTheme.redColor,size: 20,bold: FontWeight.w500,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: CustomText('A suspicious login attempt was made on your Urban Ledger Account.Please wait for 24 hours or contact the customer care team.', color:AppTheme.redColor,size: 20,bold: FontWeight.w500,centerAlign: true,),
+                    child: CustomText('${args.message}', color:AppTheme.redColor,size: 20,bold: FontWeight.w500,centerAlign: true,),
                   ),
                   SizedBox(height: 20,),
                   Expanded(child: Image.asset(AppAssets.account_locked_icon, width: MediaQuery.of(context).size.width*0.5)),

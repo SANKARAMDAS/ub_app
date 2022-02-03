@@ -1,5 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:urbanledger/Utility/app_theme.dart';
 import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 import 'package:urbanledger/screens/Components/ul_logo_widget.dart';
+import 'package:urbanledger/screens/arguments/account_locked_argument.dart';
 import 'package:urbanledger/screens/mobile_analytics/analytics_events.dart';
 import '../../chat_module/data/repositories/login_repository.dart';
 
@@ -232,9 +234,10 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                                             0,
                                             0))
                                     .catchError((e) {
+                                      print('otp response '+jsonEncode(e));
                                     if(e['count']==3){
                                       Navigator.pushNamedAndRemoveUntil(
-                                          context, AppRoutes.accountLockedRoute,(Route<dynamic> route) => false);
+                                          context, AppRoutes.accountLockedRoute ,(Route<dynamic> route) => false,arguments: AccountLockedArgument(e['message']));
 
                                     }
                                     else{
