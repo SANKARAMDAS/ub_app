@@ -183,7 +183,7 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
                   Row(
                     children: [
                       Image.asset(
-                        AppAssets.appIcon,
+                        AppAssets.appIcon1,
                         width: 40,
                         height: 40,
                       ),
@@ -259,7 +259,7 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
                   Row(
                     children: [
                       Image.asset(
-                        AppAssets.appIcon,
+                        AppAssets.appIcon1,
                         width: 40,
                         height: 40,
                       ),
