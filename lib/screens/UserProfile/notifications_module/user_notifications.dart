@@ -437,6 +437,7 @@ class _UserNotificationsState extends State<UserNotifications> {
   }
 
   Widget customListItem(NotificationData data){
+    DateTime time = data.createdAt!.toLocal();
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -486,7 +487,7 @@ class _UserNotificationsState extends State<UserNotifications> {
           padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
           child: CustomText(
             // "${DateFormat('dd MMM yyyy | hh:mm aa').format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))}"
-            timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))
+            timeago.format(time)
             ,
             size: 12,
             color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
