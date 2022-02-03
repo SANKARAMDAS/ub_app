@@ -49,6 +49,7 @@ class MyPlans {
     this.paymentMethod,
     this.createdAt,
     this.updatedAt,
+    this.expiryAt,
     this.v,
   });
 
@@ -57,13 +58,14 @@ class MyPlans {
   String? customerId;
   bool? planStatus;
   bool? status;
-  int? amount;
+  dynamic? amount;
   String? currency;
   String? urbanledgerId;
   String? transactionId;
   String? paymentMethod;
   DateTime? createdAt;
   DateTime? updatedAt;
+  DateTime? expiryAt;
   int? v;
 
   factory MyPlans.fromJson(Map<String, dynamic> json) => MyPlans(
@@ -86,6 +88,9 @@ class MyPlans {
     updatedAt: json["updatedAt"] == null
         ? null
         : DateTime.parse(json["updatedAt"]),
+    expiryAt: json["expiry_at"] == null
+        ? null
+        : DateTime.parse(json["expiry_at"]),
     v: json["__v"] == null ? null : json["__v"],
   );
 
@@ -102,6 +107,7 @@ class MyPlans {
     "paymentMethod": paymentMethod == null ? null : paymentMethod,
     "createdAt": createdAt == null ? null : createdAt!.toIso8601String(),
     "updatedAt": updatedAt == null ? null : updatedAt!.toIso8601String(),
+    "expiry_at": expiryAt == null ? null : expiryAt!.toIso8601String(),
     "__v": v == null ? null : v,
   };
 }

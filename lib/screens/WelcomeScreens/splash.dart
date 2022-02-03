@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:location/location.dart';
@@ -43,6 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     requestPermission();
+   // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       debugPrint(message.data['type']);
       debugPrint(message.data.toString());
@@ -50,6 +52,14 @@ class _SplashScreenState extends State<SplashScreen> {
     });
     onStart();
 }
+
+ /* Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    // If you're going to use other Firebase services in the background, such as Firestore,
+    // make sure you call `initializeApp` before using other Firebase services.
+    await Firebase.initializeApp();
+    onMessageTap(message);
+    print('Handling a background message ${message.messageId}');
+  }*/
 
 void onStart() async {
   await LocalDb.db.init(); //push to next screen
@@ -215,12 +225,17 @@ void onStart() async {
         await CustomSharedPreferences.setBool('isKYC', true);
         Navigator.of(context).pushNamed(AppRoutes.manageKyc1Route);
         break;
+      case 'premium_reminder':
+        redirectToPremiumPurchase();
+        break;
+      case 'buy_premium_reminder_kcy':
+        redirectToPremiumPurchase();
+        break;
+      case 'buy_premium_reminder_all':
+        redirectToPremiumPurchase();
+        break;
       case 'ledger_addentry':
         Navigator.of(context).pushNamed(AppRoutes.mainRoute);
-        break;
-      case 'premium_reminder':
-        Navigator.of(context).pushNamed(AppRoutes.urbanLedgerPremiumRoute);
-        CustomLoadingDialog.showLoadingDialog(context);
         break;
       case 'complete_email_verification_reminder':
         Navigator.of(context).pushNamed(AppRoutes.edituserProfileRoute);
@@ -247,6 +262,25 @@ void onStart() async {
 
       default:
         Navigator.of(context).pushNamed(AppRoutes.mainRoute);
+    }
+  }
+
+  redirectToPremiumPurchase()async{
+    if (await kycChecker(context)) {
+      await calculatePremiumDate();
+
+      if (Repository().hiveQueries.userData.premiumStatus ==
+          0) {
+        Navigator.of(context)
+            .pushNamed(AppRoutes.urbanLedgerPremiumRoute);
+
+        // CustomLoadingDialog.showLoadingDialog(context, key);
+      } else {
+        Navigator.of(context)
+            .pushNamed(AppRoutes.upgrdUnsubsRoute);
+
+        // CustomLoadingDialog.showLoadingDialog(context, key);
+      }
     }
   }
 
@@ -291,7 +325,7 @@ void onStart() async {
       if (repository.hiveQueries.isAuthenticated!) {
         // debugPrint('qqqqqqqqqqqqqqqqqqqqqqqqqq: '+repository.hiveQueries.userData.toString());
         LoginModel loginModel = LoginModel(
-                                    mobileNo: repository.hiveQueries.userData.mobileNo);
+                                    mobileNo: repository.hiveQueries.userData.mobileNo.trim().replaceAll('+', ''));
                                 bool isLogin = await Repository()
                                     .queries
                                     .isLoginUser(loginModel);

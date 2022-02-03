@@ -33,7 +33,7 @@ class UserProfileAPI {
         userName: map['customerData']['first_name'] +
             ' ' +
             map['customerData']['last_name'],
-        mobileNo: map['customerData']['mobile_no'],
+        mobileNo: map['customerData']['mobile_no'].toString().trim().replaceAll('+', ''),
         status: true,
       );
       debugPrint('dddd:' + loginModel.toJson().toString());
@@ -60,7 +60,7 @@ class UserProfileAPI {
         userName: map['customerData']['first_name'] +
             ' ' +
             map['customerData']['last_name'],
-        mobileNo: map['customerData']['mobile_no'],
+        mobileNo: map['customerData']['mobile_no'].toString().trim().replaceAll('+', ''),
         status: true,
       );
       debugPrint('dddd:' + loginModel.toJson().toString());

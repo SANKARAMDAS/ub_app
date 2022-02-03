@@ -386,7 +386,7 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
               await Future.delayed(Duration(seconds: 1));
             } */
             LoginModel loginModel = LoginModel(
-              mobileNo: repository.hiveQueries.userData.mobileNo,
+              mobileNo: repository.hiveQueries.userData.mobileNo.trim().replaceAll('+', ''),
               pin: confirmPinNotifier.value,
               status: true,
             );
