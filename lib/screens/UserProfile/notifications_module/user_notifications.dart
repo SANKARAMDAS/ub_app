@@ -437,7 +437,7 @@ class _UserNotificationsState extends State<UserNotifications> {
   }
 
   Widget customListItem(NotificationData data){
-    DateTime time = data.createdAt!.toLocal();
+    DateTime time = data.createdAt!;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

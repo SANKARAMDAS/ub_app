@@ -71,8 +71,8 @@ class NotificationData {
     body: json["body"],
     data: Data.fromJson(json["data"]),
     customerId: json["customer_id"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    createdAt: DateTime.parse(json["createdAt"]).toLocal(),
+    updatedAt: DateTime.parse(json["updatedAt"]).toLocal(),
     v: json["__v"],
   );
 
