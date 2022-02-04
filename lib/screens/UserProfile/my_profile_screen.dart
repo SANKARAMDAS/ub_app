@@ -1757,9 +1757,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             child: SizedBox.expand(
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(12.0),
-                    child: UserNotifications(
-                      dataList: dataList,
-                    ))),
+                    child: UserNotifications())),
             margin: EdgeInsets.only(bottom: 12, left: 16, right: 16),
             decoration: BoxDecoration(
               color: Colors.white,
