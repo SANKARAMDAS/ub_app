@@ -488,28 +488,36 @@ class _MobileAnalyticsState extends State<MobileAnalytics> {
                     _selected4 == false &&
                     _selected6 == false &&
                     _selected5 == false)
-                  CustomPieChart(),
+                  CustomPieChart(
+                    isSelected: false,
+                  ),
                 if (_selected1 == false &&
                     _selected2 == true &&
                     _selected3 == false &&
                     _selected4 == false &&
                     _selected6 == false &&
                     _selected5 == false)
-                  CustomerVisualization(),
+                  CustomerVisualization(
+                    isSelected: false,
+                  ),
                 if (_selected1 == false &&
                     _selected2 == false &&
                     _selected3 == true &&
                     _selected4 == false &&
                     _selected6 == false &&
                     _selected5 == false)
-                  GeneratedPayLink(),
+                  GeneratedPayLink(
+                    isSelected: false,
+                  ),
                 if (_selected1 == false &&
                     _selected2 == false &&
                     _selected3 == false &&
                     _selected6 == false &&
                     _selected5 == false &&
                     _selected4 == true)
-                  GeneratedPayQR(),
+                  GeneratedPayQR(
+                    isSelected: false,
+                  ),
                 if (_selected1 == false &&
                     _selected2 == false &&
                     _selected3 == false &&

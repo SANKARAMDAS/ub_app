@@ -106,6 +106,7 @@ class AppAssets {
   static const String delete_notification_icon = 'assets/icons/delete_notification_icon.png';
 
   static const String notification_empty = 'assets/images/notification_empty.png';
+  static const String notification_empty_new = 'assets/images/notification_emptyNew.png';
   static const String notification_selected = 'assets/icons/notification_selected.png';
   static const String notification_unselected = 'assets/icons/notification_unselected.png';
   static const String warning = 'assets/icons/Warning-01.png';
