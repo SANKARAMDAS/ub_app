@@ -87,7 +87,7 @@ class _CashbookEntryDetailsState extends State<CashbookEntryDetails> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(
-          bottom: 25,
+          bottom: 40,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
