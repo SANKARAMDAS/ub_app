@@ -80,7 +80,7 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
           children: [
             Container(
               clipBehavior: Clip.none,
-              height: height * 0.3,
+              height: height * 0.23,
               width: double.infinity,
               alignment: Alignment.topCenter,
               decoration: BoxDecoration(
@@ -91,7 +91,7 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
             ),
             Column(
               children: <Widget>[
-                (height * 0.07).heightBox,
+                (height * 0.047).heightBox,
                 ValueListenableBuilder<String>(
                     valueListenable: pinNotifier,
                     builder: (context, value, _) {
@@ -210,13 +210,13 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
                       )
                     : Image.asset(
                         AppAssets.pinClipartImage,
-                        height: height * 0.3,
+                        height: height * 0.32,
                       ),
                 Spacer(),
                 if (incorrectPinCount < 4)
                   Container(
                     child: keyBoard(),
-                    height: height * 0.32,
+                    height: height * 0.25,
                   )
               ],
             ),
@@ -391,7 +391,7 @@ class PinField extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
         padding: EdgeInsets.all(10),
         child: new Container(
-            height: 75,
+            height: 70,
             width: 50,
             alignment: Alignment.center,
             decoration: new BoxDecoration(

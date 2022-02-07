@@ -68,7 +68,7 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
           children: [
             Container(
               clipBehavior: Clip.none,
-              height: height * 0.3,
+              height: height * 0.23,
               width: double.infinity,
               alignment: Alignment.topCenter,
               decoration: BoxDecoration(
@@ -79,7 +79,7 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
             ),
             Column(
               children: <Widget>[
-                (height * 0.07).heightBox,
+                (height * 0.047).heightBox,
                 if (!widget.showConfirmPinState)
                   ValueListenableBuilder<String>(
                       valueListenable: setPinNotifier,
@@ -243,12 +243,12 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                   widget.showConfirmPinState
                       ? AppAssets.confirmpinImage
                       : AppAssets.setpinImage,
-                  height: height * 0.3,
+                  height: height * 0.34,
                 ),
                 Spacer(),
                 Container(
                   child: keyBoard(),
-                  height: height * 0.30,
+                  height: height * 0.25,
                 )
               ],
             ),
@@ -595,7 +595,7 @@ class PinField extends StatelessWidget {
         // padding: const EdgeInsets.only(left: 15.0, right: 15),
         padding: EdgeInsets.all(10),
         child: new Container(
-          height: 75,
+          height: 70,
           width: 50,
           alignment: Alignment.center,
           decoration: new BoxDecoration(

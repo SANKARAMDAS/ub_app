@@ -437,7 +437,7 @@ class _GeneratedPayLinkState extends State<GeneratedPayLink> {
                                       showAxisLine: true),
                                 ),
 
-                                ),                              )
+                                ),  )
                             : Image.asset(AppAssets.barChartIcon),
                       ),
                     ),
