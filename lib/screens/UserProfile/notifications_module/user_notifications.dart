@@ -155,7 +155,7 @@ class _UserNotificationsState extends State<UserNotifications> {
                           },))
                     ],
                   ):Container(child:Column(children: [
-                    Expanded(
+                    Flexible(
                       child: Stack(
 
                         children: [
@@ -602,7 +602,7 @@ class _UserNotificationsState extends State<UserNotifications> {
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
           child: CustomText(
             // "${DateFormat('dd MMM yyyy | hh:mm aa').format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))}"
             timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))
