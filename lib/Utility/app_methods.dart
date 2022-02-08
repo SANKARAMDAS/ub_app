@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 // import 'package:connectivity/connectivity.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -406,3 +407,13 @@ List<T?> map<T>(List list, Function handler) {
   }
   return result;
 }
+
+Future<String?> getFileSize(String message) async {
+    int fileSize = File(message).lengthSync();
+    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    var i = (log(fileSize) / log(1024)).floor();
+    String fileSizewith =
+        (((fileSize / pow(1024, i)).toStringAsFixed(0)) + ' ' + suffixes[i]);
+    debugPrint(fileSizewith);
+    return fileSizewith;
+  }

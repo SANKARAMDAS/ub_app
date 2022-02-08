@@ -111,6 +111,9 @@ class DBProvider {
         tb_message.transaction_id,
         tb_message.urbanledger_id,
         tb_message.type,
+        tb_message.file_name,
+        tb_message.file_size,
+        tb_message.duration,
         tb_message.through,
         tb_message.suspense,
         tb_message.payment_status,
@@ -159,6 +162,9 @@ class DBProvider {
               tb_message.transaction_id,
               tb_message.urbanledger_id,
               tb_message.type,
+              tb_message.file_name,
+              tb_message.file_size,
+              tb_message.duration,
               tb_message.through,
               tb_message.suspense,
               tb_message.payment_status,
@@ -196,6 +202,15 @@ class DBProvider {
     ''');
   }
 
+  Future<void> updateAudioFileName(String fileName, String _id) async {
+    final db = (await database)!;
+    await db.rawQuery('''
+      UPDATE tb_message
+      SET file_name = '$fileName'
+      WHERE _id = '$_id'
+    ''');
+  }
+
   Future<void> pay(String? request) async {
     final db = (await database)!;
     await db.rawQuery('''
@@ -227,6 +242,9 @@ class DBProvider {
             tb_message.transaction_id,
             tb_message.urbanledger_id,
             tb_message.type,
+            tb_message.file_name,
+            tb_message.file_size,
+            tb_message.duration,
             tb_message.through,
             tb_message.suspense,
             tb_message.payment_status,
@@ -263,6 +281,9 @@ class DBProvider {
           "transaction_id": map['transaction_id'],
           "urbanledger_id": map['urbanledger_id'],
           "type": map['type'],
+          "file_name": map['file_name'],
+          "file_size": map['file_size'],
+          "duration": map['duration'],
           "through": map['through'],
           "suspense": map['suspense'],
           "payment_status": map['payment_status'],

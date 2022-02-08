@@ -41,6 +41,9 @@ class Message {
   int? get messageType => message!.messageType;
   String? get msg => message!.messages;
   String? get details => message!.details;
+  String? get fileName => message!.fileName;
+  String? get fileSize => message!.fileSize;
+  String? get duration => message!.duration;
   double? get amount => message!.amount;
   String? get contactName => message!.contactName;
   String? get contactNo => message!.contactNo;
@@ -123,7 +126,10 @@ class Messages {
       this.paymentStatus,
       this.suspense,
       this.through,
-      this.type
+      this.type,
+      this.fileName,
+      this.fileSize,
+      this.duration
       // this.avatar,
       });
 
@@ -140,6 +146,9 @@ class Messages {
   int? attachmentCount;
   int? paymentStatus;
   String? type;
+  String? fileName;
+  String? fileSize;
+  String? duration;
   String? through;
   int? suspense;
   // Uint8List avatar;
@@ -163,6 +172,9 @@ class Messages {
         // avatar: json["avatar"]==null?null:json["avatar"],
         messageType: json["messageType"] == null ? null : json["messageType"],
         type: json["type"] == null ? null : json["type"],
+        fileName: json["file_name"] == null ? null : json["file_name"],
+        fileSize: json["file_size"] == null ? null : json["file_size"],
+        duration: json["duration"] == null ? null : json["duration"],
         through: json["through"] == null ? null : json["through"],
         suspense: json["suspense"] == null ? null : json["suspense"],
       );
@@ -180,6 +192,9 @@ class Messages {
         "urbanledger_id": urbanledgerId == null ? null : urbanledgerId,
         "payment_status": paymentStatus == null ? null : paymentStatus,
         "type": type == null ? null : type,
+        "file_name": fileName == null ? null : fileName,
+        "file_size": fileSize == null ? null : fileSize,
+        "duration": duration == null ? null : duration,
         "through": through == null ? null : through,
         "suspense": suspense == null ? null : suspense,
         // "avatar": avatar==null?null:avatar,
@@ -205,6 +220,9 @@ class Messages {
         // avatar: json["avatar"]==null?null:json["avatar"],
         messageType: json["messageType"] == null ? null : json["messageType"],
         type: json["type"] == null ? null : json["type"],
+        fileName: json["file_name"] == null ? null : json["file_name"],
+        fileSize: json["file_size"] == null ? null : json["file_size"],
+        duration: json["duration"] == null ? null : json["duration"],
         through: json["through"] == null ? null : json["through"],
         suspense: json["suspense"] == null ? null : json["suspense"],
       );
@@ -224,6 +242,9 @@ class Messages {
         // "avatar": avatar==null?null:avatar,
         "messageType": messageType == null ? null : messageType,
         "type": type == null ? null : type,
+        "file_name": fileName == null ? null : fileName,
+        "file_size": fileSize == null ? null : fileSize,
+        "duration": duration == null ? null : duration,
         "through": through == null ? null : through,
         "suspense": suspense == null ? null : suspense,
       };
