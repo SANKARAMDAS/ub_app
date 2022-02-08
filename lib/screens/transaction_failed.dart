@@ -136,13 +136,12 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                     final val = await WhatsappShare.isInstalled(
                         package: Package.whatsapp);
                     if (val) {
-                      try{
+                      try {
                         await whatsappShare(
-                          widget.customermodel?.mobileNo??'911234567890',
+                          widget.customermodel?.mobileNo ?? '911234567890',
                           file.path,
                         );
-                      }
-                      catch(e){
+                      } catch (e) {
                         print(e.toString());
                       }
                       // await WhatsappShare.shareFile(
@@ -199,18 +198,17 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
               ),
             ),
           ),
-
           Positioned(
-            top: 100,
-            left:0,
-            right:0,
+            top: 150,
+            left: 0,
+            right: 0,
             child: Container(
               child: Screenshot(
                 controller: _ssController,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: ClipPath(
-                    clipper: DolDurmaClipper( holeRadius: 40, bottom: 250),
+                    clipper: DolDurmaClipper(holeRadius: 40, bottom: 250),
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(
@@ -225,21 +223,25 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                         child: Container(
                           // color: Colors.blue,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-
-                            Image(
-                              fit: BoxFit.fill,
-                              image: AssetImage("assets/images/payfail_new.png"),
-                              height: 200,width: 200,),
-                                SizedBox(height: 20,),
-                                CustomText(
-                                  'Payment Failed!',
-                                  size: 24,
-                                  color: Colors.red,
-                                  bold: FontWeight.w600
+                                Image(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage(
+                                      "assets/images/payfail_new.png"),
+                                  height: 200,
+                                  width: 200,
                                 ),
-                                SizedBox(height: 20,),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                CustomText('Payment Failed!',
+                                    size: 24,
+                                    color: Colors.red,
+                                    bold: FontWeight.w600),
+                                SizedBox(
+                                  height: 20,
+                                ),
                                 CustomText(
                                   'Please check your card details, security code, and connection',
                                   size: 20,
@@ -247,16 +249,19 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                                   bold: FontWeight.w600,
                                   centerAlign: true,
                                 ),
-                                SizedBox(height: 20,),
+                                SizedBox(
+                                  height: 20,
+                                ),
 
-                            //   Spacer(),
-                            paymentDetails(),
-                          ]),
+                                //   Spacer(),
+                                paymentDetails(),
+                              ]),
                         ),
                       ),
                     ),
+                  
                   ),
-                ) ,
+                ),
               ),
             ),
           ),
@@ -327,7 +332,7 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                 )
               : Container(),
           widget.model!.containsKey('transactionData')
-          ? Row(
+              ? Row(
                   children: [
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.28,
@@ -357,8 +362,8 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                   ],
                 )
               : Container(),
-              widget.model!.containsKey('amount')
-                ? Row(
+          widget.model!.containsKey('amount')
+              ? Row(
                   children: [
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.28,
@@ -376,7 +381,7 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                         child: Container(
                           alignment: Alignment.bottomLeft,
                           child: Text(
-                              "${widget.model!['amount'].toString().toUpperCase()} ${widget.model!['currency'].toString().toUpperCase()}",
+                              "${widget.model!['amount'].toString().toUpperCase()}", //${widget.model!['currency'].toString().toUpperCase()}
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 16,
@@ -386,7 +391,8 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                       ),
                     ),
                   ],
-                ) : Container(),
+                )
+              : Container(),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.002,
           ),
@@ -451,7 +457,7 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                   ],
                 )
               : Container(),
-              SizedBox(
+          SizedBox(
             height: MediaQuery.of(context).size.height * 0.002,
           ),
           widget.model!.containsKey('transactionId')
@@ -483,11 +489,10 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                   ],
                 )
               : Container(),
-          
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.002,
           ),
-         widget.model!.containsKey('transactionData')
+          widget.model!.containsKey('transactionData')
               ? Row(
                   children: [
                     SizedBox(
@@ -636,7 +641,9 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                         child: Container(
                           alignment: Alignment.bottomLeft,
                           child: Text(
-                              DateFormat("E, d MMM y hh:mm a").format(DateTime.fromMillisecondsSinceEpoch(widget.model!['transactionData']['status_at'])),
+                              DateFormat("E, d MMM y hh:mm a").format(
+                                  DateTime.fromMillisecondsSinceEpoch(widget
+                                      .model!['transactionData']['status_at'])),
                               // overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 16,
@@ -648,7 +655,7 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                   ],
                 )
               : Container(),
-              widget.model!.containsKey('Date')
+          widget.model!.containsKey('Date')
               ? Row(
                   children: [
                     SizedBox(
@@ -667,7 +674,8 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                         child: Container(
                           alignment: Alignment.bottomLeft,
                           child: Text(
-                              DateFormat("E, d MMM y hh:mm a").format(DateTime.parse(widget.model!['Date'])),
+                              DateFormat("E, d MMM y hh:mm a").format(
+                                  DateTime.parse(widget.model!['Date'])),
                               // overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 16,
@@ -679,7 +687,7 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
                   ],
                 )
               : Container(),
-              widget.model!.containsKey('message')
+          widget.model!.containsKey('message')
               ? Row(
                   children: [
                     SizedBox(

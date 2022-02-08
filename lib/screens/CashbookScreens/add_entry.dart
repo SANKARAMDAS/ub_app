@@ -647,7 +647,8 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                                     isLoading = true;
                                   });
                                   if (widget.cashbookEntryModel != null) {
-                                    CashbookEntryModel cashbook =  _cashbookEntryModel.copyWith(
+                                    CashbookEntryModel cashbook =
+                                        _cashbookEntryModel.copyWith(
                                       amount: calculatedAmount,
                                       details: _detailsController.text,
                                       createdDate: DateTime(
@@ -665,13 +666,14 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                                       isDeleted: false,
                                     );
                                     final response = await repository.queries
-                                        .updateCashbookEntry(cashbook
-                                           );
+                                        .updateCashbookEntry(cashbook);
                                     if (response != null) {
                                       updateCashbookEntry();
-                                      var anaylticsEvents = AnalyticsEvents(context);
+                                      var anaylticsEvents =
+                                          AnalyticsEvents(context);
                                       await anaylticsEvents.initCurrentUser();
-                                      await anaylticsEvents.sendEditCashbookEvent(cashbook);
+                                      await anaylticsEvents
+                                          .sendEditCashbookEvent(cashbook);
                                       "Entry edited successfully."
                                           .showSnackBar(context);
                                       BlocProvider.of<CashbookCubit>(context)
@@ -685,7 +687,9 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                                       setState(() {
                                         isLoading = false;
                                       });
-                                      Navigator.of(context)..pop()..pop();
+                                      Navigator.of(context)
+                                        ..pop()
+                                        ..pop();
                                     }
                                   } else {
                                     final cashbook = CashbookEntryModel(
@@ -717,9 +721,11 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                                         .insertCashbookEntry(cashbook);
                                     if (response != null) {
                                       saveCashbookEntry(cashbook);
-                                      var anaylticsEvents = AnalyticsEvents(context);
+                                      var anaylticsEvents =
+                                          AnalyticsEvents(context);
                                       await anaylticsEvents.initCurrentUser();
-                                      await anaylticsEvents.sendAddCashbookEvent(cashbook);
+                                      await anaylticsEvents
+                                          .sendAddCashbookEvent(cashbook);
                                       "Entry added successfully"
                                           .showSnackBar(context);
                                       BlocProvider.of<CashbookCubit>(context)
@@ -771,8 +777,6 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
         });
   }
 
-
-
   Future<void> saveCashbookEntry(CashbookEntryModel cashbook) async {
     if (await checkConnectivity) {
       for (var image in cashbook.attachments) {
@@ -796,9 +800,9 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
         await repository.queries.updateCashbookEntryIsChanged(cashbook, 0);
       }
     } else {
-                          'Please check your internet connection or try again later.'
-                              .showSnackBar(context);
-                        }
+      'Please check your internet connection or try again later.'
+          .showSnackBar(context);
+    }
   }
 
   Future<void> updateCashbookEntry() async {
@@ -827,9 +831,9 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
             .updateCashbookEntryIsChanged(_cashbookEntryModel, 0);
       }
     } else {
-                          'Please check your internet connection or try again later.'
-                              .showSnackBar(context);
-                        }
+      'Please check your internet connection or try again later.'
+          .showSnackBar(context);
+    }
   }
 
   Future<bool> showExitWithoutSavingDialog() async => await showDialog(
@@ -1113,7 +1117,6 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
       );
 
   calculatorSheet(BuildContext c) {
-
     return showBottomSheet<void>(
       backgroundColor: AppTheme.paleGrey,
       shape: RoundedRectangleBorder(
@@ -1279,19 +1282,14 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
         );
       },
     );
-
-
   }
-  checkNumberLength(int length,BuildContext context){
-    if(length>16){
-      'Please enter a valid amount'
-          .showSnackBar(context);
+
+  checkNumberLength(int length, BuildContext context) {
+    if (length > 16) {
+      'Please enter a valid amount'.showSnackBar(context);
       return;
     }
-
   }
-
-
 
   showDeleteImageDialog(int index) async => await showDialog(
       builder: (context) => Dialog(
@@ -1305,14 +1303,14 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0, bottom: 5),
                   child: CustomText(
-                    'Delete this image?',
+                    'Are you sure you want to delete the attachment?',
                     color: AppTheme.tomato,
                     bold: FontWeight.w500,
                     size: 18,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(8, 6, 8, 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
