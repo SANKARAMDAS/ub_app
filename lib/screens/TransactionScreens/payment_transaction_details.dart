@@ -261,7 +261,7 @@ class PaymentDetails extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('To: $to'),
-                        Text('$toEmail'),
+                        // Text('$toEmail'),
                       ],
                     ),
                   ),
@@ -273,7 +273,7 @@ class PaymentDetails extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('From: $from'),
-                        Text('$fromEmail'),
+                        // Text('$fromEmail'),
                       ],
                     ),
                   ),
@@ -287,15 +287,17 @@ class PaymentDetails extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              paymentStatus == 0 ? 'Transaction Failed': 'Transaction Successful',
+                              paymentStatus == 0
+                                  ? 'Transaction Failed'
+                                  : 'Transaction Successful',
                             ),
                             SizedBox(width: 5),
                             Image.asset(
-                                paymentStatus == 0
-                                    ? AppAssets.transactionFailed
-                                    : AppAssets.transactionSuccess,
-                                height: 15,
-                              )
+                              paymentStatus == 0
+                                  ? AppAssets.transactionFailed
+                                  : AppAssets.transactionSuccess,
+                              height: 15,
+                            )
                           ],
                         ),
                         Text(DateFormat("E, d MMM y hh:mm a")
