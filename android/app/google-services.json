@@ -1,74 +1,41 @@
 {
   "project_info": {
-    "project_number": "663197900506",
-    "project_id": "urbanledger-458c0",
-    "storage_bucket": "urbanledger-458c0.appspot.com"
+    "project_number": "636162435765",
+    "project_id": "urbanledger-adff3",
+    "storage_bucket": "urbanledger-adff3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:663197900506:android:93498603e14c60ab170fe3",
+        "mobilesdk_app_id": "1:636162435765:android:08bff23168a39c77aaacfc",
         "android_client_info": {
           "package_name": "com.urbanledger.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "663197900506-h5iekna44sratqi135i2nbjrduthfq0p.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.urbanledger.app",
-            "certificate_hash": "7a913b8d8b32bb7ad7b289a48bb75f12a9c3e7b3"
-          }
-        },
-        {
-          "client_id": "663197900506-i18da5r5ni0k4vtf5h00qt4c7m7ob8rm.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.urbanledger.app",
-            "certificate_hash": "61efc74525d1833d39d70fec2d6c521a8708988c"
-          }
-        },
-        {
-          "client_id": "663197900506-jf7e1qukhi6n6b4ms0jdilmvlj8b16id.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.urbanledger.app",
-            "certificate_hash": "825872c983c8d8814fd2a7b893e10d3cda81f93f"
-          }
-        },
-        {
-          "client_id": "663197900506-jghmmbn7hbtnu3lqur227hhaf55pumqa.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.urbanledger.app",
-            "certificate_hash": "5e5adf5ec271da27182514c2068a7e558c6401e8"
-          }
-        },
-        {
-          "client_id": "663197900506-p50l1deokh2ruaqgc2eqbg9pglbgiskl.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.urbanledger.app",
-            "certificate_hash": "8c657d598863ca100d179c7e8dfe1870c4305022"
-          }
-        },
-        {
-          "client_id": "663197900506-smhhehg93au7vcfbu6s93p58mm9g6dg1.apps.googleusercontent.com",
+          "client_id": "636162435765-595cbun7fkpdu2hvooffehd2vq3g0nc7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCEJJV3qi6UWpru1FdRYtZQ3dSNZzC-zJg"
+          "current_key": "AIzaSyDZ_0ZqvHQr4BoU7n955gBn4wfNGkmTUw8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "663197900506-smhhehg93au7vcfbu6s93p58mm9g6dg1.apps.googleusercontent.com",
+              "client_id": "636162435765-595cbun7fkpdu2hvooffehd2vq3g0nc7.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "636162435765-snddp9jjr3k9ol5lr1aj21hiquvn1fdp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.urbanledger.app"
+              }
             }
           ]
         }
