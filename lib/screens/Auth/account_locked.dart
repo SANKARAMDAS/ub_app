@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:urbanledger/Utility/app_assets.dart';
 import 'package:urbanledger/Utility/app_theme.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
+import 'package:urbanledger/screens/UserProfile/inappbrowser.dart';
 import 'package:urbanledger/screens/arguments/account_locked_argument.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -83,7 +84,16 @@ class _AccountLockedState extends State<AccountLocked> {
                   color: Colors.white,
                 ),
                 onPressed:  () {
-                  _launchURL('https://urbanledger.app/contact');
+                 // _launchURL('https://urbanledger.app/contact');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UlAppBrowser(
+                        url: 'https://urbanledger.app/contact',
+                        title: 'Contact Us',
+                      ),
+                    ),
+                  );
                 },
 
               ),
