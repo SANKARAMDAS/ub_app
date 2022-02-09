@@ -12,6 +12,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf_render/pdf_render.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:urbanledger/Cubits/Contacts/contacts_cubit.dart';
 import 'package:urbanledger/Cubits/Ledger/ledger_cubit.dart';
@@ -46,6 +47,7 @@ class _EnterDetailsState extends State<EnterDetails> {
   List<PdfPageImage?> _pageImages = [];
   List<PlatformFile> _pickedFiles = [];
   GlobalKey _globalKey = GlobalKey();
+  final _ssController = ScreenshotController();
 
   @override
   void initState() {
@@ -146,8 +148,9 @@ class _EnterDetailsState extends State<EnterDetails> {
                         deleteLedger();
                         BlocProvider.of<LedgerCubit>(context)
                             .getLedgerData(widget.transactionModel.customerId!);
-                        final amt = await repository.queries.getPaidMinusReceived(
-                            widget.transactionModel.customerId!);
+                        final amt = await repository.queries
+                            .getPaidMinusReceived(
+                                widget.transactionModel.customerId!);
                         await repository.queries.updateCustomerDetails(
                             amt,
                             amt == 0.0
@@ -157,7 +160,8 @@ class _EnterDetailsState extends State<EnterDetails> {
                                     : TransactionType.Receive,
                             widget.transactionModel.customerId);
                         BlocProvider.of<ContactsCubit>(context).getContacts(
-                            Provider.of<BusinessProvider>(context, listen: false)
+                            Provider.of<BusinessProvider>(context,
+                                    listen: false)
                                 .selectedBusiness
                                 .businessId);
                         'Entry deleted successfully'.showSnackBar(context);
@@ -179,8 +183,8 @@ class _EnterDetailsState extends State<EnterDetails> {
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
-                    padding:
-                        EdgeInsets.only(bottom: 15, top: 15, left: 30, right: 30),
+                    padding: EdgeInsets.only(
+                        bottom: 15, top: 15, left: 30, right: 30),
                     primary: AppTheme.electricBlue,
                   ),
                   child: CustomText(
@@ -216,340 +220,372 @@ class _EnterDetailsState extends State<EnterDetails> {
       body: Stack(
         children: [
           Image.asset('assets/images/back3.png'),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Column(mainAxisSize: MainAxisSize.max, children: [
-              Material(
-                elevation: 2,
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RepaintBoundary(
-                        key: _globalKey,
+          Screenshot(
+            controller: _ssController,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Material(
+                color: AppTheme.paleGrey,
+                borderRadius: BorderRadius.circular(12.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Material(
+                      elevation: 2,
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 0, vertical: 15),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ListTile(
-                                contentPadding: EdgeInsets.all(8),
-                                leading: Container(
-                                  padding: EdgeInsets.all(0),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(99),
-                                    color: Colors.white,
-                                  ),
-                                  child: CustomProfileImage(
-                                    avatar: widget.customerModel!.avatar,
-                                    mobileNo: widget.customerModel!.mobileNo,
-                                    name: widget.customerModel!.name,
-                                  ),
-                                ),
-                                title: Row(
-                                  children: [
-                                    CustomText(
-                                      '${widget.customerModel!.name}',
-                                      color: AppTheme.electricBlue,
-                                      size: 23,
-                                      bold: FontWeight.w500,
-                                    ),
-                                    Icon(
-                                      Icons.keyboard_arrow_down,
-                                      color: Colors.white,
-                                      size: 20,
-                                    )
-                                  ],
-                                ),
-                                subtitle: CustomText(
-                                  DateFormat('dd MMM yyyy - hh:mm aa')
-                                      .format(widget.transactionModel.date!),
-                                  color: Color(0xff666666),
-                                  size: 14,
-                                ),
-                                trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RepaintBoundary(
+                              key: _globalKey,
+                              child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    CustomText(
-                                      widget.transactionModel.transactionType ==
-                                              TransactionType.Pay
-                                          ? 'You Gave'
-                                          : 'You Got',
-                                      color: AppTheme.brownishGrey,
-                                      bold: FontWeight.w400,
-                                      size: 16,
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    RichText(
-                                      overflow: TextOverflow.ellipsis,
-                                      text: TextSpan(
-                                          text: '$currencyAED ',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: widget.transactionModel
-                                                        .transactionType ==
-                                                    TransactionType.Pay
-                                                ? AppTheme.tomato
-                                                : Color(0xff2ed06d),
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          children: [
-                                            TextSpan(
-                                                text:
-                                                    '${removeDecimalif0(widget.transactionModel.amount)}',
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                          ]),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              if (widget.transactionModel.attachments.length >
-                                  0)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 15,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Attachments',
-                                        style: TextStyle(
-                                            color: Color(0xff666666),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15),
-                                      ),
-                                      Container(
-                                        width: screenWidth(context) * 0.45,
-                                        alignment: Alignment.centerRight,
-                                        child: Wrap(
-                                          children: [
-                                            ...getImageDocWidgets(_pickedFiles)
-                                          ],
+                                    ListTile(
+                                      contentPadding: EdgeInsets.all(8),
+                                      leading: Container(
+                                        padding: EdgeInsets.all(0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(99),
+                                          color: Colors.white,
+                                        ),
+                                        child: CustomProfileImage(
+                                          avatar: widget.customerModel!.avatar,
+                                          mobileNo:
+                                              widget.customerModel!.mobileNo,
+                                          name: widget.customerModel!.name,
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              if (widget.transactionModel.attachments.length >
-                                  0)
-                                Divider(
-                                  color: Color(0xffe5e5e5),
-                                  thickness: 1.5,
-                                ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 11, vertical: 18),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Running Balance',
-                                      style: TextStyle(
-                                          color: Color(0xff666666),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14),
-                                    ),
-                                    FutureBuilder<double>(
-                                        future: BlocProvider.of<LedgerCubit>(
-                                                context)
-                                            .getBalanceOnDate(
+                                      title: Row(
+                                        children: [
+                                          CustomText(
+                                            '${widget.customerModel!.name}',
+                                            color: AppTheme.electricBlue,
+                                            size: 23,
+                                            bold: FontWeight.w500,
+                                          ),
+                                          Icon(
+                                            Icons.keyboard_arrow_down,
+                                            color: Colors.white,
+                                            size: 20,
+                                          )
+                                        ],
+                                      ),
+                                      subtitle: CustomText(
+                                        DateFormat('dd MMM yyyy - hh:mm aa')
+                                            .format(
                                                 widget.transactionModel.date!),
-                                        builder: (context, snapshot) {
-                                          return RichText(
+                                        color: Color(0xff666666),
+                                        size: 14,
+                                      ),
+                                      trailing: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CustomText(
+                                            widget.transactionModel
+                                                        .transactionType ==
+                                                    TransactionType.Pay
+                                                ? 'You Gave'
+                                                : 'You Got',
+                                            color: AppTheme.brownishGrey,
+                                            bold: FontWeight.w400,
+                                            size: 16,
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          RichText(
                                             overflow: TextOverflow.ellipsis,
                                             text: TextSpan(
                                                 text: '$currencyAED ',
                                                 style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color(0xff2ed06d),
+                                                  fontSize: 16,
+                                                  color: widget.transactionModel
+                                                              .transactionType ==
+                                                          TransactionType.Pay
+                                                      ? AppTheme.tomato
+                                                      : Color(0xff2ed06d),
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                                 children: [
                                                   TextSpan(
-                                                      text: snapshot.data ==
-                                                              null
-                                                          ? '0'
-                                                          : snapshot.data!
-                                                                  .isNegative
-                                                              ? (snapshot.data)!
-                                                                  .getFormattedCurrency
-                                                                  .substring(1)
-                                                              : (snapshot.data)!
-                                                                  .getFormattedCurrency,
+                                                      text:
+                                                          '${removeDecimalif0(widget.transactionModel.amount)}',
                                                       style: TextStyle(
-                                                          fontSize: 16,
+                                                          fontSize: 18,
                                                           fontWeight:
                                                               FontWeight.bold)),
                                                 ]),
-                                          );
-                                        }),
-                                  ],
-                                ),
-                              ),
-                              if (widget.transactionModel.details.isNotEmpty)
-                                Divider(
-                                  thickness: 1,
-                                ),
-                              if (widget.transactionModel.details.isNotEmpty)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 18),
-                                  child: Column(
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Divider(
+                                      thickness: 1,
+                                    ),
+                                    if (widget.transactionModel.attachments
+                                            .length >
+                                        0)
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 15,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Attachments',
+                                              style: TextStyle(
+                                                  color: Color(0xff666666),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15),
+                                            ),
+                                            Container(
+                                              width:
+                                                  screenWidth(context) * 0.45,
+                                              alignment: Alignment.centerRight,
+                                              child: Wrap(
+                                                children: [
+                                                  ...getImageDocWidgets(
+                                                      _pickedFiles)
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    if (widget.transactionModel.attachments
+                                            .length >
+                                        0)
+                                      Divider(
+                                        color: Color(0xffe5e5e5),
+                                        thickness: 1.5,
+                                      ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 11, vertical: 18),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Running Balance',
+                                            style: TextStyle(
+                                                color: Color(0xff666666),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14),
+                                          ),
+                                          FutureBuilder<double>(
+                                              future:
+                                                  BlocProvider.of<LedgerCubit>(
+                                                          context)
+                                                      .getBalanceOnDate(widget
+                                                          .transactionModel
+                                                          .date!),
+                                              builder: (context, snapshot) {
+                                                return RichText(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  text: TextSpan(
+                                                      text: '$currencyAED ',
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color:
+                                                            Color(0xff2ed06d),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                      children: [
+                                                        TextSpan(
+                                                            text: snapshot
+                                                                        .data ==
+                                                                    null
+                                                                ? '0'
+                                                                : snapshot.data!
+                                                                        .isNegative
+                                                                    ? (snapshot
+                                                                            .data)!
+                                                                        .getFormattedCurrency
+                                                                        .substring(
+                                                                            1)
+                                                                    : (snapshot
+                                                                            .data)!
+                                                                        .getFormattedCurrency,
+                                                            style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                      ]),
+                                                );
+                                              }),
+                                        ],
+                                      ),
+                                    ),
+                                    if (widget
+                                        .transactionModel.details.isNotEmpty)
+                                      Divider(
+                                        thickness: 1,
+                                      ),
+                                    if (widget
+                                        .transactionModel.details.isNotEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 18),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Details',
+                                              style: TextStyle(
+                                                  color: Color(0xff666666),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 4.0),
+                                              child: CustomText(
+                                                widget.transactionModel.details,
+                                                color: AppTheme.brownishGrey,
+                                                bold: FontWeight.w400,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    Divider(
+                                      thickness: 1,
+                                      height: 1,
+                                    ),
+                                  ]),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: InkWell(
+                                onTap: () {
+                                  if (widget.transactionModel.isReadOnly) {
+                                    "This Entry Cannot be Edited"
+                                        .showSnackBar(context);
+                                    return;
+                                  }
+                                  Navigator.pushNamed(
+                                    context,
+                                    AppRoutes.calculatorRoute,
+                                    arguments: CalculatorRouteArgs(
+                                      toTheCustomer: widget.transactionModel
+                                                  .transactionType ==
+                                              TransactionType.Pay
+                                          ? true
+                                          : false,
+                                      paymentType: widget.transactionModel
+                                                  .transactionType ==
+                                              TransactionType.Pay
+                                          ? 11
+                                          : 12,
+                                      customerModel: widget.customerModel,
+                                      sendMessage: widget.sendMessage,
+                                      transactionModel: widget.transactionModel,
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                        CrossAxisAlignment.center,
                                     children: [
+                                      Image.asset(
+                                        'assets/icons/pen.png',
+                                        height: 20,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
                                       Text(
-                                        'Details',
+                                        'Edit Entry',
                                         style: TextStyle(
                                             color: Color(0xff666666),
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 14),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 4.0),
-                                        child: CustomText(
-                                          widget.transactionModel.details,
-                                          color: AppTheme.brownishGrey,
-                                          bold: FontWeight.w400,
-                                        ),
+                                            fontSize: 16),
                                       )
                                     ],
                                   ),
                                 ),
-                              Divider(
-                                thickness: 1,
-                                height: 1,
                               ),
-                            ]),
+                            )
+                          ],
+                        ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: InkWell(
-                          onTap: () {
-                            if (widget.transactionModel.isReadOnly) {
-                              "This Entry Cannot be Edited"
-                                  .showSnackBar(context);
-                              return;
-                            }
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.calculatorRoute,
-                              arguments: CalculatorRouteArgs(
-                                toTheCustomer:
-                                    widget.transactionModel.transactionType ==
-                                            TransactionType.Pay
-                                        ? true
-                                        : false,
-                                paymentType:
-                                    widget.transactionModel.transactionType ==
-                                            TransactionType.Pay
-                                        ? 11
-                                        : 12,
-                                customerModel: widget.customerModel,
-                                sendMessage: widget.sendMessage,
-                                transactionModel: widget.transactionModel,
-                              ),
-                            );
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Material(
+                      elevation: 2,
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 15),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
                               children: [
                                 Image.asset(
-                                  'assets/icons/pen.png',
-                                  height: 20,
+                                  AppAssets.messageIcon,
+                                  height: 35,
                                 ),
                                 SizedBox(
                                   width: 10,
                                 ),
                                 Text(
-                                  'Edit Entry',
+                                  'SMS disabled',
                                   style: TextStyle(
                                       color: Color(0xff666666),
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 16),
+                                      fontSize: 18),
                                 )
                               ],
                             ),
-                          ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              'You gave $currencyAED 10,465 to Cleanex Plastics (9664774391). You will give $currencyAED 9,000 in total.\n\nSee txn history: http://urbanledger.app/a2/yv0MXMF5IYA97g.',
+                              style: TextStyle(
+                                  color: Color(0xff666666), fontSize: 16),
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    BackupIndicatorWidget(
+                      isConnected: !widget.transactionModel.isChanged!,
+                    )
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 15,
-              ),
-              Material(
-                elevation: 2,
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Image.asset(
-                            AppAssets.messageIcon,
-                            height: 35,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'SMS disabled',
-                            style: TextStyle(
-                                color: Color(0xff666666),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
-                        'You gave $currencyAED 10,465 to Cleanex Plastics (9664774391). You will give $currencyAED 9,000 in total.\n\nSee txn history: http://urbanledger.app/a2/yv0MXMF5IYA97g.',
-                        style:
-                            TextStyle(color: Color(0xff666666), fontSize: 16),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              BackupIndicatorWidget(
-                isConnected: !widget.transactionModel.isChanged!,
-              )
-            ]),
+            ),
           )
         ],
       ),
@@ -574,9 +610,9 @@ class _EnterDetailsState extends State<EnterDetails> {
             .deleteLedgerTransaction(widget.transactionModel);
       }
     } else {
-                          'Please check your internet connection or try again later.'
-                              .showSnackBar(context);
-                        }
+      'Please check your internet connection or try again later.'
+          .showSnackBar(context);
+    }
   }
 
   List<Widget> getImageDocWidgets(List<PlatformFile> files) {

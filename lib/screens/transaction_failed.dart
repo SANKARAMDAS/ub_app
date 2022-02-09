@@ -90,95 +90,107 @@ class _TransactionFailedScreenState extends State<TransactionFailedScreen> {
     super.dispose();
   }
 
+   onTap() {
+    Navigator.of(context)
+      ..pop()
+      ..pop()
+      ..pop();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.paleGrey,
-      extendBody: true,
-      bottomNavigationBar: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(30, 8, 8, 8),
-              child: ElevatedButton(
-                onPressed: () {
-                  print('Done Button Pressed');
-                  Navigator.pop(context, true);
-                },
-                child: Text('RETRY PAYMENT',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w500)),
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8), // <-- Radius
-                    ),
-                    primary: AppTheme.electricBlue,
-                    padding: EdgeInsets.symmetric(vertical: 12)),
+    return WillPopScope(
+       onWillPop: () {
+        return onTap();
+      },
+      child: Scaffold(
+        backgroundColor: AppTheme.paleGrey,
+        extendBody: true,
+        bottomNavigationBar: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(30, 8, 8, 8),
+                child: ElevatedButton(
+                  onPressed: () {
+                    print('Done Button Pressed');
+                    Navigator.pop(context, true);
+                  },
+                  child: Text('RETRY PAYMENT',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500)),
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // <-- Radius
+                      ),
+                      primary: AppTheme.electricBlue,
+                      padding: EdgeInsets.symmetric(vertical: 12)),
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 30, 8),
-              child: ElevatedButton(
-                onPressed: () async {
-                  debugPrint('qwerty');
-                  debugPrint(widget.customermodel?.mobileNo);
-                  File file = await captureScreenShot();
-
-                  //Share.shareFiles([file.path]);
-                  final RenderBox box = context.findRenderObject() as RenderBox;
-
-                  if (Platform.isAndroid) 
-                    // final RenderBox box =
-                    //     context.findRenderObject() as RenderBox;
-                    // Share.shareFiles([file.path],
-                    //     sharePositionOrigin:
-                    //         box.localToGlobal(Offset.zero) & box.size);
-                    // final val = await WhatsappShare.isInstalled(
-                    //     package: Package.whatsapp);
-                    // if (val) {
-                    //   try {
-                    //     await whatsappShare(
-                    //       widget.customermodel?.mobileNo ?? '911234567890',
-                    //       file.path,
-                    //     );
-                    //   } catch (e) {
-                    //     print(e.toString());
-                    //   }
-                    //   // await WhatsappShare.shareFile(
-                    //   //     filePath: [file.path],
-                    //   //     package: Package.whatsapp,
-                    //   //     phone: widget.customermodel?.mobileNo);
-                    // }
-                   {
-                    await Share.shareFiles([file.path],
-                        text: '',
-                        // subject: value1!.payLink.toString(),
-                        sharePositionOrigin:
-                            box.localToGlobal(Offset.zero) & box.size);
-                  }
-                },
-                child: Text('SHARE',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w500)),
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8), // <-- Radius
-                    ),
-                    primary: AppTheme.electricBlue,
-                    padding: EdgeInsets.symmetric(vertical: 12)),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 30, 8),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    debugPrint('qwerty');
+                    debugPrint(widget.customermodel?.mobileNo);
+                    File file = await captureScreenShot();
+    
+                    //Share.shareFiles([file.path]);
+                    final RenderBox box = context.findRenderObject() as RenderBox;
+    
+                    if (Platform.isAndroid) 
+                      // final RenderBox box =
+                      //     context.findRenderObject() as RenderBox;
+                      // Share.shareFiles([file.path],
+                      //     sharePositionOrigin:
+                      //         box.localToGlobal(Offset.zero) & box.size);
+                      // final val = await WhatsappShare.isInstalled(
+                      //     package: Package.whatsapp);
+                      // if (val) {
+                      //   try {
+                      //     await whatsappShare(
+                      //       widget.customermodel?.mobileNo ?? '911234567890',
+                      //       file.path,
+                      //     );
+                      //   } catch (e) {
+                      //     print(e.toString());
+                      //   }
+                      //   // await WhatsappShare.shareFile(
+                      //   //     filePath: [file.path],
+                      //   //     package: Package.whatsapp,
+                      //   //     phone: widget.customermodel?.mobileNo);
+                      // }
+                     {
+                      await Share.shareFiles([file.path],
+                          text: '',
+                          // subject: value1!.payLink.toString(),
+                          sharePositionOrigin:
+                              box.localToGlobal(Offset.zero) & box.size);
+                    }
+                  },
+                  child: Text('SHARE',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500)),
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8), // <-- Radius
+                      ),
+                      primary: AppTheme.electricBlue,
+                      padding: EdgeInsets.symmetric(vertical: 12)),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+        body: bodyWidget(),
       ),
-      body: bodyWidget(),
     );
   }
 
