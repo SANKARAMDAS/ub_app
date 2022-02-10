@@ -5,6 +5,7 @@ import 'package:device_info/device_info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Models/business_model.dart';
 import 'package:urbanledger/Services/repository.dart';
 import 'package:urbanledger/Utility/apiCalls.dart';
 import 'package:urbanledger/chat_module/utils/custom_shared_preferences.dart';
@@ -56,27 +57,27 @@ class RegisterAPI {
   Future<bool> signUpOtpRequest(String mobileNo) async {
     try {
       _repository = _repository ?? Repository();
-    const url = "auth/customer/registeration/request";
-    final response =
-        await postRequest(endpoint: url, body: {"mobile_no": "$mobileNo"});
-    if (response.statusCode == 200) {
-      debugPrint(response.body);
-      final map = jsonDecode(response.body);
-      if (map['status']) {
-        if (map['token'] != null)
-          _repository!.hiveQueries.insertAuthToken(map['token']);
+      const url = "auth/customer/registeration/request";
+      final response =
+          await postRequest(endpoint: url, body: {"mobile_no": "$mobileNo"});
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        final map = jsonDecode(response.body);
+        if (map['status']) {
+          if (map['token'] != null)
+            _repository!.hiveQueries.insertAuthToken(map['token']);
 
-        print(map['token']);
+          print(map['token']);
 
-        // _sendUserRegisterEvent(context,user);
+          // _sendUserRegisterEvent(context,user);
+        }
+        return map['status'];
       }
-      return map['status'];
-    }
-    return Future.error(jsonDecode(response.body)['message']);
+      return Future.error(jsonDecode(response.body)['message']);
     } catch (e) {
-      return Future.error('Please check your internet connection or try again later.');
+      return Future.error(
+          'Please check your internet connection or try again later.');
     }
-    
   }
 
   Future<String> registerOtpVerification(
@@ -95,51 +96,60 @@ class RegisterAPI {
 //TODO: To update the request json when location and fcm is setup
     try {
       _repository = _repository ?? Repository();
-    const url = "auth/customer/registeration/verify";
-    Map bodyMap = {
-      "otp": "$otp",
-      "token": "${_repository!.hiveQueries.token}",
-      "device_name":
-      "${Platform.isAndroid ? (await deviceInfo.androidInfo).model : (await deviceInfo.iosInfo).model}",
-      "os": "${Platform.isAndroid ? 'Android' : 'IOS'}",
-      "fcm_token": await _firebaseMessaging.getToken(),
-      "latitude": (lat ?? 0).toString(),
-      "longitude": (long ?? 0).toString()
-    };
-    print(jsonEncode(bodyMap));
-    final response = await postRequest(
-      endpoint: url,
-      body: bodyMap,
-    );
-    if (response.statusCode == 200) {
-      debugPrint(response.body);
-      final map = jsonDecode(response.body);
-      if (map['referral_code'] != null) {
-        debugPrint('Check14' + map['payment_link'].toString());
-        debugPrint(
-            'Saving while onRegister:' + map['referral_code'].toString());
-        _repository!.hiveQueries
-            .insertSignUpUserReferralCode(map['referral_code'] ?? '');
-        _repository!.hiveQueries
-            .insertSignUpUserReferralLink(map['referral_link'] ?? '');
-        _repository!.hiveQueries
-            .insertSignUpPaymentLink(map['payment_link'] ?? '');
-        _repository!.hiveQueries.userData
-            .copyWith(paymentLink: map['payment_link'].toString());
+      const url = "auth/customer/registeration/verify";
+      Map bodyMap = {
+        "otp": "$otp",
+        "token": "${_repository!.hiveQueries.token}",
+        "device_name":
+            "${Platform.isAndroid ? (await deviceInfo.androidInfo).model : (await deviceInfo.iosInfo).model}",
+        "os": "${Platform.isAndroid ? 'Android' : 'IOS'}",
+        "fcm_token": await _firebaseMessaging.getToken(),
+        "latitude": (lat ?? 0).toString(),
+        "longitude": (long ?? 0).toString()
+      };
+      print(jsonEncode(bodyMap));
+      final response = await postRequest(
+        endpoint: url,
+        body: bodyMap,
+      );
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        final map = jsonDecode(response.body);
+        if (map['referral_code'] != null) {
+          debugPrint('Check14' + map['payment_link'].toString());
+          debugPrint(
+              'Saving while onRegister:' + map['referral_code'].toString());
+          _repository!.hiveQueries
+              .insertSignUpUserReferralCode(map['referral_code'] ?? '');
+          _repository!.hiveQueries
+              .insertSignUpUserReferralLink(map['referral_link'] ?? '');
+          _repository!.hiveQueries
+              .insertSignUpPaymentLink(map['payment_link'] ?? '');
+          _repository!.hiveQueries.userData
+              .copyWith(paymentLink: map['payment_link'].toString());
+        }
+        if (map['status']) {
+          final businesssModel = BusinessModel(
+              businessId: map['businessData']['uid'],
+              businessName: map['businessData']['name'],
+              isChanged: true,
+              isDeleted: false,
+              deleteAction: false);
+          await Repository().queries.insertBusiness(businesssModel);
+
+          if (map['token'] != null)
+            _repository!.hiveQueries.insertAuthToken(map['token']);
+          if (map['chatToken'] != null)
+            await CustomSharedPreferences.setString(
+                'chat_token', map['chatToken']);
+        }
+        return map['status'] ? "true" : '';
       }
-      if (map['status']) {
-        if (map['token'] != null)
-          _repository!.hiveQueries.insertAuthToken(map['token']);
-        if (map['chatToken'] != null)
-          await CustomSharedPreferences.setString(
-              'chat_token', map['chatToken']);
-      }
-      return map['status'] ? "true" : '';
-    }
-    print(jsonDecode(response.body)['message'].toString());
-    return Future.error(jsonDecode(response.body)['message'].toString());
+      print(jsonDecode(response.body)['message'].toString());
+      return Future.error(jsonDecode(response.body)['message'].toString());
     } catch (e) {
-      return Future.error('Please check your internet connection or try again later.');
+      return Future.error(
+          'Please check your internet connection or try again later.');
     }
   }
 
