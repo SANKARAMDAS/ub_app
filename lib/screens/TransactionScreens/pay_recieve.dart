@@ -250,7 +250,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                               padding: EdgeInsets.only(
                                   top:
                                       MediaQuery.of(context).size.height * 0.2),
-                              child: CircularProgressIndicator())
+                              child: CircularProgressIndicator(color: AppTheme.electricBlue,))
                           : Expanded(
                               child: TabBarView(
                                 controller: _tabController,
@@ -553,7 +553,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                                                   return SliverToBoxAdapter(
                                                     child: Center(
                                                       child:
-                                                          CircularProgressIndicator(),
+                                                          CircularProgressIndicator(color: AppTheme.electricBlue,),
                                                     ),
                                                   );
                                                 },
@@ -864,7 +864,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                                             return SliverToBoxAdapter(
                                               child: Center(
                                                   child:
-                                                      CircularProgressIndicator()),
+                                                      CircularProgressIndicator(color: AppTheme.electricBlue,)),
                                             );
                                           },
                                         ),
@@ -2976,7 +2976,7 @@ class _ImportContactsListWidgetState extends State<ImportContactsListWidget> {
     return isLoading == true
         ? SliverToBoxAdapter(
             child: Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: AppTheme.electricBlue,),
             ),
           )
         : /*ListView.builder(

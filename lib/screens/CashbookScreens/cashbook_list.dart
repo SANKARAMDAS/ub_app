@@ -131,7 +131,7 @@ class _CashbookListState extends State<CashbookList> {
                                 setState(() {});
                               }).flexible;
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                     );
                   }),
                 ],

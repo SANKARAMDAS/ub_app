@@ -407,7 +407,7 @@ Future getKyc() async {
               ),
               isLoading == true
                   ? Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                     )
                   : InkWell(
                       onTap: () async {

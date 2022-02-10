@@ -910,7 +910,7 @@ class _CustomerReportState extends State<CustomerReport> {
           ).flexible;
         }
         return Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(color: AppTheme.electricBlue,),
         );
       },
     );

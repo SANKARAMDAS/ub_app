@@ -1529,7 +1529,7 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
       context: context,
       builder: (BuildContext bc) {
         return isLoading == true
-            ? Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,))
             : Container(
                 height: MediaQuery.of(context).size.height * 0.12,
                 decoration: BoxDecoration(

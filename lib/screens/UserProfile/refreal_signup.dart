@@ -414,7 +414,7 @@ class _RefSignUpState extends State<RefSignUp> {
                           //   },
 
                           // child: isLoading
-                          //     ? CircularProgressIndicator()
+                          //     ? CircularProgressIndicator(color: AppTheme.electricBlue,)
                           child: CustomText(
                             'REGISTER',
                             color: Colors.white,

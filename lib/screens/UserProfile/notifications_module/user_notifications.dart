@@ -100,7 +100,7 @@ class _UserNotificationsState extends State<UserNotifications> {
                         ],);
 
                     }
-                    return Container(child:Center(child: CircularProgressIndicator()));
+                    return Container(child:Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,)));
                     // return widget here based on BlocA's state
                   }
               )),
@@ -205,7 +205,7 @@ class _UserNotificationsState extends State<UserNotifications> {
                   ],));
 
                 }
-                return Container(child:Center(child: CircularProgressIndicator()));
+                return Container(child:Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,)));
               // return widget here based on BlocA's state
               }
           ))

@@ -306,7 +306,7 @@ class _LedgerPageState extends State<LedgerPage> {
             ),
             loading
                 ? Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                   )
                 : Container(
                     margin: EdgeInsets.only(top: 20, left: 20, right: 20),
@@ -431,7 +431,7 @@ class _LedgerPageState extends State<LedgerPage> {
     String? Bid;
 
     loading == true
-        ? CircularProgressIndicator()
+        ? CircularProgressIndicator(color: AppTheme.electricBlue,)
         : showModalBottomSheet(
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(

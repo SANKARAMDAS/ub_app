@@ -5564,7 +5564,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                   children: [
                     Padding(
                       padding: EdgeInsets.all(4),
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                     ),
                     // Padding(
                     //   padding: EdgeInsets.all(4),
@@ -6171,7 +6171,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                 child: Container(
                                   padding: EdgeInsets.symmetric(vertical: 30),
                                   child: Center(
-                                    child: CircularProgressIndicator(),
+                                    child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                                   ),
                                 )),
                             Align(
@@ -6597,7 +6597,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                     padding: EdgeInsets.symmetric(
                                         vertical: 50, horizontal: 70),
                                     child: Center(
-                                        child: CircularProgressIndicator()))),
+                                        child: CircularProgressIndicator(color: AppTheme.electricBlue,)))),
                         Align(
                           alignment: Alignment.topCenter,
                           child: Container(

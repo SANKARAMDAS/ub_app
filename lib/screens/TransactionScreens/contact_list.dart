@@ -133,7 +133,7 @@ class _ContactListScreenState extends State<ContactListScreen> {
                         state.fetchedContacts, '', context);
                   }
                   return Expanded(
-                      child: Center(child: CircularProgressIndicator()));
+                      child: Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,)));
                 },
               ),
             ],

@@ -711,7 +711,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 )),
             body: loading == true
                 ? Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                   )
                 : ListView(
                     children: [
@@ -1601,7 +1601,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
                   // isLoading == true
                   //     ? Center(
-                  //         child: CircularProgressIndicator(),
+                  //         child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                   //       )
                   //     : GestureDetector(
                   //         onTap: () async {

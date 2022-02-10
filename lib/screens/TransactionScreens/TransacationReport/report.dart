@@ -401,7 +401,7 @@ class _ReportState extends State<Report> {
       builder: (context, state) {
         if (state is FetchingLedgerTransactions) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(color: AppTheme.electricBlue,),
           );
         }
         if (state is FetchedLedgerTransactions) {
