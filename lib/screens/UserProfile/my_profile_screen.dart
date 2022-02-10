@@ -514,197 +514,192 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
-              leadingWidth: 30,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: Container(
-                margin: const EdgeInsets.only(left: 10),
-                width: 0,
-                alignment: Alignment.center,
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Color(0xff666666),
-                    size: 22,
-                  ),
-                  // color: Colors.white,
-                  onPressed: () {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-                    Navigator.of(context)
-                        .pushReplacementNamed(AppRoutes.mainRoute);
-                  },
-                ),
-              ),
-              title: Row(
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
-                    decoration: BoxDecoration(
-                        // color: Colors.white,
-                        borderRadius: BorderRadius.circular(30)),
-                    // child: CircleAvatar(
-                    //   radius: 22,
-                    child: Image.asset(AppAssets.myAccountIcon,
-                        width: 30,),
-                    // ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      // Navigator.of(context).pushNamed(AppRoutes.customerProfileRoute,
-                      //     arguments: customerModel);
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => UserProfileNew()),
-                      ).then((value) {
-                        if (value != null) {
-                          if (value) setState(() {});
-                        }
-                      });
+                leadingWidth: 30,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                leading: Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  width: 0,
+                  alignment: Alignment.center,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Color(0xff666666),
+                      size: 22,
+                    ),
+                    // color: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                      Navigator.of(context)
+                          .pushReplacementNamed(AppRoutes.mainRoute);
                     },
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 15),
-                            child: const Text(
-                              // '${repository.hiveQueries.userData.firstName} ${repository.hiveQueries.userData.lastName}',
-                              'My Account',
-                              style: TextStyle(
-                                color: AppTheme.brownishGrey,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
+                  ),
+                ),
+                title: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 1, vertical: 1),
+                      decoration: BoxDecoration(
+                          // color: Colors.white,
+                          borderRadius: BorderRadius.circular(30)),
+                      // child: CircleAvatar(
+                      //   radius: 22,
+                      child: Image.asset(
+                        AppAssets.myAccountIcon,
+                        width: 30,
+                      ),
+                      // ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        // Navigator.of(context).pushNamed(AppRoutes.customerProfileRoute,
+                        //     arguments: customerModel);
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UserProfileNew()),
+                        ).then((value) {
+                          if (value != null) {
+                            if (value) setState(() {});
+                          }
+                        });
+                      },
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: const Text(
+                                // '${repository.hiveQueries.userData.firstName} ${repository.hiveQueries.userData.lastName}',
+                                'My Account',
+                                style: TextStyle(
+                                  color: AppTheme.brownishGrey,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
-                          ),
-                        ]),
-                  ),
-                  Spacer(),
-                  Row(
-                    children: [
-                      Repository().hiveQueries.userData.premiumStatus != 0
-                          ? Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 18),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              // width: 126,
-                              height: 27,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                  color: Color(0xffebebeb),
-                                  width: 1,
+                          ]),
+                    ),
+                    Spacer(),
+                    Row(
+                      children: [
+                        Repository().hiveQueries.userData.premiumStatus != 0
+                            ? Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 18),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
                                 ),
-                                color: AppTheme.electricBlue,
-                              ),
-                              child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      child: Container(
-                                        child: Image.asset(
-                                          'assets/images/crown.png',
-                                          height: 15,
-                                          width: 15,
+                                // width: 126,
+                                height: 27,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: Color(0xffebebeb),
+                                    width: 1,
+                                  ),
+                                  color: AppTheme.electricBlue,
+                                ),
+                                child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        child: Container(
+                                          child: Image.asset(
+                                            'assets/images/crown.png',
+                                            height: 15,
+                                            width: 15,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width: 3),
-                                    FittedBox(
-                                      child: Container(
-                                        child: Text(
-                                          'Premium',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: 'SFProDisplay',
-                                              fontWeight: FontWeight
-                                                  .w500, //FontWeight.w500
-                                              fontSize: 16),
+                                      SizedBox(width: 3),
+                                      FittedBox(
+                                        child: Container(
+                                          child: Text(
+                                            'Premium',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'SFProDisplay',
+                                                fontWeight: FontWeight
+                                                    .w500, //FontWeight.w500
+                                                fontSize: 16),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ]),
-                            )
-                          : Container(),
-                      BlocConsumer<NotificationListCubit,
-                          NotificationListState>(
-                        listener: (context, state) {
-                          // do stuff here based on BlocA's state
-                        },
-                        buildWhen: (previous, current) {
-                          return current != previous;
-                          // return true/false to determine whether or not
-                          // to rebuild the widget with state
-                        },
-                        builder: (context, state) {
-                          if (state is FetchedNotificationListState) {
-                            List<NotificationData> data =
-                                state.notificationList;
-                            int unreadNotifications = data
-                                .where((element) => element.read == false)
-                                .toList()
-                                .length;
+                                    ]),
+                              )
+                            : Container(),
+                        BlocConsumer<NotificationListCubit,
+                            NotificationListState>(
+                          listener: (context, state) {
+                            // do stuff here based on BlocA's state
+                          },
+                          buildWhen: (previous, current) {
+                            return current != previous;
+                            // return true/false to determine whether or not
+                            // to rebuild the widget with state
+                          },
+                          builder: (context, state) {
+                            if (state is FetchedNotificationListState) {
+                              List<NotificationData> data =
+                                  state.notificationList;
+                              int unreadNotifications = data
+                                  .where((element) => element.read == false)
+                                  .toList()
+                                  .length;
+                              return Badge(
+                                child: InkWell(
+                                  child: Image.asset(
+                                    AppAssets.notification_bell,
+                                    color: AppTheme.electricBlue,
+                                    height: 50,
+                                    width: 50,
+                                  ),
+                                  onTap: () async {
+                                    await showNotificationListDialog(
+                                        context, data);
+
+                                    setState(() {});
+                                  },
+                                ),
+                                value: unreadNotifications.toString() ?? '0',
+                                color: Colors.grey,
+                                countColor: Colors.white,
+                              );
+                            }
+
                             return Badge(
                               child: InkWell(
                                 child: Image.asset(
                                   AppAssets.notification_bell,
-                                  color: AppTheme.electricBlue,
                                   height: 50,
                                   width: 50,
                                 ),
                                 onTap: () async {
-                                  await showNotificationListDialog(
-                                      context, data);
+                                  await showNotificationListDialog(context, []);
 
                                   setState(() {});
                                 },
                               ),
-                              value: unreadNotifications.toString() ?? '0',
+                              value: '0',
                               color: Colors.grey,
                               countColor: Colors.white,
                             );
-                          }
 
-                        return Badge(
-                          child: InkWell(
-                            child: Image.asset(
-                              AppAssets.notification_bell,
-                              height: 50,
-                              width:50,
-                            ),
-                            onTap: () async {
-                              await showNotificationListDialog(context,[]);
-
-                              setState(() {
-
-                              });
-                            },
-                          )
-
-                          ,
-                          value: '0',
-                          color: Colors.grey,
-                          countColor: Colors.white,
-                        );
-
-                          // return widget here based on BlocA's state
-                        },
-                      ),
+                            // return widget here based on BlocA's state
+                          },
+                        ),
 
                         // return widget here based on BlocA's state
-                    ],
-
-
-
-
-
+                      ],
                     ),
 
                     /*BlocBuilder<NotificationListCubit,
@@ -712,9 +707,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   builder: (context, state) {
 
                   })*/
-                    ],
-                  )
-                ),
+                  ],
+                )),
             body: loading == true
                 ? Center(
                     child: CircularProgressIndicator(),
@@ -727,12 +721,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
                       CustomList(
                         icon: theImage,
-                        text: 'Complete Your KYC',
+                        text: repository.hiveQueries.userData.kycStatus2 == 'Initiated' || repository.hiveQueries.userData.kycStatus2 == ''  ? 'Complete Your KYC' : 'Update Your KYC',
                         onSubmit: () {
                           //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
                           Navigator.pushReplacementNamed(
                               context, AppRoutes.manageKyc1Route);
                         },
+                        status: repository.hiveQueries.userData.kycStatus2
+                            .toString(),
+                        isKyc: repository.hiveQueries.userData.kycStatus2 == ''  ? false:true,
                       ),
                       divider,
 
@@ -862,6 +859,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 context, AppRoutes.mobileAnalyticsRoute);
                           }
                         },
+                        isKyc: false,
                       ),
 
                       divider,
@@ -873,6 +871,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           Navigator.pushNamed(
                               context, AppRoutes.suspenseAccountRoute);
                         },
+                        isKyc: false,
                       ),
 
                       // Padding
@@ -890,6 +889,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               .pushNamed(AppRoutes.cardListRoute);
                           CustomLoadingDialog.showLoadingDialog(context, key);
                         },
+                        isKyc: false,
                       ),
                       divider,
 
@@ -907,6 +907,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               .pushNamed(AppRoutes.profileBankAccountRoute);
                           CustomLoadingDialog.showLoadingDialog(context, key);
                         },
+                        isKyc: false,
                       ),
                       divider,
 
@@ -1041,6 +1042,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           Navigator.pushNamed(
                               context, AppRoutes.settlementHistoryRoute);
                         },
+                        isKyc: false,
                       ),
 
                       divider,
@@ -1736,10 +1738,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               //   color: AppTheme.brownishGrey,
               // ),
               child: Image(
-            image: AssetImage(AppAssets.landscapeLogo),
-            color: AppTheme.brownishGrey,
-            width: MediaQuery.of(context).size.width * 0.4,
-          ),
+                image: AssetImage(AppAssets.landscapeLogo),
+                color: AppTheme.brownishGrey,
+                width: MediaQuery.of(context).size.width * 0.4,
+              ),
             ),
             // const Text(
             //   'Track. Remind. Pay.',
@@ -1794,12 +1796,15 @@ class CustomList extends StatelessWidget {
   final String text;
   final Widget icon;
   final Function? onSubmit;
+  final String? status;
+  final bool isKyc;
 
-  const CustomList({
-    required this.text,
-    required this.icon,
-    this.onSubmit,
-  });
+  const CustomList(
+      {required this.text,
+      required this.icon,
+      this.onSubmit,
+      this.status,
+      required this.isKyc});
 
   @override
   Widget build(BuildContext context) {
@@ -1825,12 +1830,72 @@ class CustomList extends StatelessWidget {
             // ),
           ],
         ),
-        title: Text(
-          text,
-          style: TextStyle(
-              color: AppTheme.brownishGrey,
-              fontSize: 16,
-              fontWeight: FontWeight.bold),
+        title: Row(
+          children: [
+            Text(
+              text,
+              style: TextStyle(
+                  color: AppTheme.brownishGrey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
+            Spacer(),
+            isKyc == true
+                ? Container(
+                    margin: EdgeInsets.only(left: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: status == 'Approved'
+                            ? AppTheme.activeGreenBG
+                            : status == 'Initiated'
+                            ? AppTheme.activePurpleBG
+                            : status == 'In progress'
+                                ? AppTheme.activeYellowBG
+                                : status == 'Expired'
+                                    ? AppTheme.activeRedBG
+                                    : AppTheme.activeRedBG),
+                    child: Text(
+                      '$status',
+                      style: TextStyle(
+                          color: status == 'Approved'
+                              ? AppTheme.activeGreen
+                              : status == 'Initiated'
+                              ? AppTheme.electricBlue
+                              : status == 'In progress'
+                                  ? AppTheme.activeYellow
+                                  : status == 'Expired'
+                                      ? AppTheme.activeRed
+                                      : AppTheme.activeRed,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  )
+                : Container(),
+            isKyc == true
+                ? Container(
+                    margin: EdgeInsets.only(left: 10),
+                    // padding: EdgeInsets.all(7),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: AppTheme.whiteColor),
+                    child: Container(
+                      margin: EdgeInsets.all(2),
+                      padding: EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: status == 'Approved'
+                              ? AppTheme.activeGreen
+                              : status == 'Initiated'
+                              ? AppTheme.electricBlue
+                              : status == 'In progress'
+                                  ? AppTheme.activeYellow
+                                  : status == 'Expired'
+                                      ? AppTheme.activeRed
+                                      : AppTheme.activeRed),
+                    ))
+                : Container(),
+                Spacer(),
+          ],
         ),
         trailing: const Icon(
           Icons.chevron_right_rounded,

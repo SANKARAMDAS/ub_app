@@ -29,6 +29,7 @@ class LoginAPI {
       const url = "auth/customer/verification/request";
       final response =
       await postRequest(endpoint: url, body: {"mobile_no": "$mobileNo"});
+      debugPrint(response.toString());
       if (response.statusCode == 200) {
         final map = jsonDecode(response.body);
         if (map['status']) {

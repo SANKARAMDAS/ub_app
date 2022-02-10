@@ -25,6 +25,13 @@ class AppTheme {
   static const Color circularAvatarTextColor = Color.fromRGBO(235, 235, 235, 1);
   static const Color carolinaBlue = Color.fromRGBO(137, 172, 255, 1);
   static const Color tomato = Color.fromRGBO(233, 66, 53, 1);
+  static const Color activeGreenBG = Color.fromRGBO(212, 234, 227, 1);
+  static const Color activePurpleBG = Color.fromRGBO(237, 228, 255 , 1);
+  static const Color activeGreen = Color.fromRGBO(46, 208, 109, 1);
+  static const Color activeYellowBG = Color.fromRGBO(255, 238, 198, 1);
+  static const Color activeYellow = Color.fromRGBO(247, 152, 29, 1);
+  static const Color activeRedBG = Color.fromRGBO(255, 227, 227, 1);
+  static const Color activeRed = Color.fromRGBO(233, 66, 53, 1);
 
   static const Color receiverColor = Color.fromRGBO(214, 226, 255, 1);
   static const Color senderColor = Color.fromRGBO(221, 221, 221, 1);
