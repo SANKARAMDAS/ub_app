@@ -541,6 +541,7 @@ class _ImportContactsListWidgetState extends State<ImportContactsListWidget> {
                         CustomText(
                           getName(widget.contacts[index].name.trim(),
                               widget.contacts[index].mobileNo.trim()),
+                              color: AppTheme.blackColor
                         ),
                         CustomText(
                           widget.contacts[index].mobileNo,
