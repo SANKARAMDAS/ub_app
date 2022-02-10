@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-// import 'package:urbanledger/Utility/apiCalls.dart';
+import 'package:urbanledger/Utility/apiCalls.dart';
 import 'package:urbanledger/Utility/app_constants.dart';
-// import 'package:urbanledger/Utility/app_methods.dart';
+import 'package:urbanledger/Utility/app_methods.dart';
 // import 'package:urbanledger/chat_module/data/local_database/db_provider.dart';
 
 import '../../data/models/chat.dart';
@@ -107,8 +107,12 @@ class ChatRepository {
   Future<Map<String, dynamic>?> getTransactionDetails(
       String? transactionId) async {
     try {
-      var response =
-          await http.post(Uri.parse('${baseUrl}transactions/$transactionId'));
+      var url = 'transactions/$transactionId';
+      var response = await postRequest(
+      endpoint: url,
+      headers: apiAuthHeaderWithOnlyToken(),
+    );
+      if(response.statusCode == 200){
       var map = jsonDecode(response.body);
       Map<String, dynamic> data = {
         "urbanledgerId": "${(map)['urbanledgerId']}",
@@ -125,6 +129,7 @@ class ChatRepository {
       };
       debugPrint(data.toString());
       return data;
+      }
     } catch (e) {
       CustomError.fromJson({'error': true, 'errorMessage': 'Error'});
     }
