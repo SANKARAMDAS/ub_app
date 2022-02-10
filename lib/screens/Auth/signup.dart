@@ -689,39 +689,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 .hiveQueries
                                                 .SignUpUserReferralLink,
                                           ));
-                                          final businesssModel = BusinessModel(
-                                              businessId: Uuid().v1(),
-                                              businessName: 'PERSONAL',
-                                              isChanged: true,
-                                              isDeleted: false,
-                                              deleteAction: false);
-                                          await repository.queries
-                                              .insertBusiness(businesssModel);
-                                          if (await checkConnectivity) {
-                                            final apiResponse =
-                                                await (repository.businessApi
-                                                    .saveBusiness(
-                                                        businesssModel,
-                                                        context,
-                                                        false)
-                                                    .catchError((e) {
+                                          // final businesssModel = BusinessModel(
+                                          //     businessId: Uuid().v1(),
+                                          //     businessName: 'PERSONAL',
+                                          //     isChanged: true,
+                                          //     isDeleted: false,
+                                          //     deleteAction: false);
+                                          // await repository.queries
+                                          //     .insertBusiness(businesssModel);
+                                          // if (await checkConnectivity) {
+                                          //   final apiResponse =
+                                          //       await (repository.businessApi
+                                          //           .saveBusiness(
+                                          //               businesssModel,
+                                          //               context,
+                                          //               false)
+                                          //           .catchError((e) {
                                            
-                                              setState(() {
-                                                isLoading = false;
-                                              });
-                                               'Please check your internet connection or try again later.'
-                                                .showSnackBar(context);
-                                            }));
-                                            if (apiResponse) {
-                                              await repository.queries
-                                                  .updateBusinessIsChanged(
-                                                      businesssModel, 0);
-                                            }
-                                          } else {
-                                            Navigator.of(context).pop();
-                                            'Please check your internet connection or try again later.'
-                                                .showSnackBar(context);
-                                          }
+                                          //     setState(() {
+                                          //       isLoading = false;
+                                          //     });
+                                          //      'Please check your internet connection or try again later.'
+                                          //       .showSnackBar(context);
+                                          //   }));
+                                          //   if (apiResponse) {
+                                          //     await repository.queries
+                                          //         .updateBusinessIsChanged(
+                                          //             businesssModel, 0);
+                                          //   }
+                                          // } else {
+                                          //   Navigator.of(context).pop();
+                                          //   'Please check your internet connection or try again later.'
+                                          //       .showSnackBar(context);
+                                          // }
                                           setState(() {
                                             isLoading = false;
                                           });
