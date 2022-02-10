@@ -43,11 +43,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
   //   curve: Curves.elasticOut,
   // );
 
-  // @override
-  // void dispose() {
-  //   _controller.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    animation.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
