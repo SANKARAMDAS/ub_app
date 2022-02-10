@@ -729,7 +729,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         },
                         status: repository.hiveQueries.userData.kycStatus2
                             .toString(),
-                        isKyc: repository.hiveQueries.userData.kycStatus2 == 'Initiated' || repository.hiveQueries.userData.kycStatus2 == ''  ? false:true,
+                        isKyc: repository.hiveQueries.userData.kycStatus2 == ''  ? false:true,
                       ),
                       divider,
 
@@ -1840,7 +1840,7 @@ class CustomList extends StatelessWidget {
                   fontWeight: FontWeight.bold),
             ),
             Spacer(),
-            isKyc == true && status != 'Initiated'
+            isKyc == true
                 ? Container(
                     margin: EdgeInsets.only(left: 10),
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
@@ -1848,6 +1848,8 @@ class CustomList extends StatelessWidget {
                         borderRadius: BorderRadius.circular(3),
                         color: status == 'Approved'
                             ? AppTheme.activeGreenBG
+                            : status == 'Initiated'
+                            ? AppTheme.activePurpleBG
                             : status == 'In progress'
                                 ? AppTheme.activeYellowBG
                                 : status == 'Expired'
@@ -1858,6 +1860,8 @@ class CustomList extends StatelessWidget {
                       style: TextStyle(
                           color: status == 'Approved'
                               ? AppTheme.activeGreen
+                              : status == 'Initiated'
+                              ? AppTheme.electricBlue
                               : status == 'In progress'
                                   ? AppTheme.activeYellow
                                   : status == 'Expired'
@@ -1867,7 +1871,7 @@ class CustomList extends StatelessWidget {
                     ),
                   )
                 : Container(),
-            isKyc == true && status != 'Initiated'
+            isKyc == true
                 ? Container(
                     margin: EdgeInsets.only(left: 10),
                     // padding: EdgeInsets.all(7),
@@ -1881,6 +1885,8 @@ class CustomList extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                           color: status == 'Approved'
                               ? AppTheme.activeGreen
+                              : status == 'Initiated'
+                              ? AppTheme.electricBlue
                               : status == 'In progress'
                                   ? AppTheme.activeYellow
                                   : status == 'Expired'
