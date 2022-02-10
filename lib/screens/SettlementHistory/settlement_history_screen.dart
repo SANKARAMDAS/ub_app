@@ -175,7 +175,7 @@ class _SettlementHistoryScreenState extends State<_SettlementHistoryScreen> {
                   left: 0,
                   child: loading == true
                       ? Center(
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                         )
                       : Column(
                           // mainAxisSize: MainAxisSize.max,
@@ -1552,7 +1552,7 @@ class _SettlementHistoryScreenState extends State<_SettlementHistoryScreen> {
     String? Bid;
 
     loading == true
-        ? CircularProgressIndicator()
+        ? CircularProgressIndicator(color: AppTheme.electricBlue,)
         : showModalBottomSheet(
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(

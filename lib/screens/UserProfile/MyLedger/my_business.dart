@@ -248,7 +248,7 @@ class _MyBusinessScreenState extends State<MyBusinessScreen> {
       body: SafeArea(
         child: isLoading == true
             ? Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(color: AppTheme.electricBlue,),
               )
             : Stack(children: [
                 Container(

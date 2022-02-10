@@ -411,7 +411,7 @@ class _GlobalReportState extends State<GlobalReport> {
                 isLoading
                     ? Expanded(
                         child: Center(
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                         ),
                       )
                     : ListView.builder(
@@ -1227,7 +1227,7 @@ class _GlobalReportState extends State<GlobalReport> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: isLoading
-                      ? Center(child: CircularProgressIndicator())
+                      ? Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,))
                       : NewCustomButton(
                           text: 'DOWNLOAD',
                           textSize: 18,

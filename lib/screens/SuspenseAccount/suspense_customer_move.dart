@@ -201,7 +201,7 @@ class _SuspenseAccountCustomerScreenState
                   alignment: Alignment.topCenter)),
           child: loading == true
               ? Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                 )
               : Column(
                   mainAxisSize: MainAxisSize.max,
@@ -374,7 +374,7 @@ class _SuspenseAccountCustomerScreenState
                           );
                         }
                         return const Center(
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                         );
                       },
                     ).flexible,
@@ -1061,7 +1061,7 @@ class _SuspenseAccountCustomerScreenState
     AlertDialog alert=AlertDialog(
       content: new Row(
         children: [
-          CircularProgressIndicator(),
+          CircularProgressIndicator(color: AppTheme.electricBlue,),
           Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
         ],),
     );

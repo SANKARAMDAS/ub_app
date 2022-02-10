@@ -273,9 +273,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                               state.fetchedContacts, '', context);
                         }
                         if (state is LoadingImportContacts)
-                          return Center(child: CircularProgressIndicator());
+                          return Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,));
 
-                        return Center(child: CircularProgressIndicator());
+                        return Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,));
                       },
                     ) /*.flexible*/,
                   ),

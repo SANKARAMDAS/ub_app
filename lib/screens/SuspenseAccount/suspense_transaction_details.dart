@@ -307,7 +307,7 @@ class _SuspenseDtState extends State<SuspenseDt> {
             ),
             loading
                 ? Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                   )
                 : Container(
                     margin: EdgeInsets.only(top: 20, left: 20, right: 20),
@@ -433,7 +433,7 @@ class _SuspenseDtState extends State<SuspenseDt> {
     bool isClickable = false;
 
     loading == true
-        ? CircularProgressIndicator()
+        ? CircularProgressIndicator(color: AppTheme.electricBlue,)
         : showModalBottomSheet(
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(

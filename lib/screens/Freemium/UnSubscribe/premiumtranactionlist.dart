@@ -115,7 +115,7 @@ class __PremiumtranactionlistState extends State<_Premiumtranactionlist> {
               ),
               loading == true
                   ? Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                     )
                   : Column(
                       // mainAxisSize: MainAxisSize.max,
@@ -127,7 +127,7 @@ class __PremiumtranactionlistState extends State<_Premiumtranactionlist> {
                               Trans.TransactionHistory.isEmpty) {
                             Trans.getTransactionHistory();
                             return const Center(
-                              child: CircularProgressIndicator(),
+                              child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                             );
                           }
 
@@ -231,7 +231,7 @@ class __PremiumtranactionlistState extends State<_Premiumtranactionlist> {
                           builder: (context, state) {
                             if (state is FetchingSuspenseTranasctions)
                               return const Center(
-                                child: CircularProgressIndicator(),
+                                child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                               );
 
                             if (state is FetchedTranasctionHistory) {
