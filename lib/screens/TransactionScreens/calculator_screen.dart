@@ -53,6 +53,7 @@ class _CalculatorState extends State<CalculatorScreen> {
   bool isLoading = false;
   bool isCalcSheetOpen = false;
   FocusNode newFocus = FocusNode();
+  Offset? _gesturePosition;
 
   @override
   void initState() {
@@ -117,29 +118,38 @@ class _CalculatorState extends State<CalculatorScreen> {
       isHightSubtracted = true;
     }
     hideCalculator = viewInsetsBottom != 0.0;
-    return WillPopScope(
-      onWillPop: () async {
-        if (isLoading) return false;
-        if (isCalcSheetOpen) {
-          isCalcSheetOpen = false;
-          Navigator.pop(context);
-          return false;
-        }
-        if (widget.transactionModel != null) {
-          final bool? response = await showExitWithoutSavingDialog();
-          return response!;
-        }
-        return true;
-      },
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
+    return 
+       GestureDetector(
+          onPanUpdate: (details) {
+      // Swiping in right direction.
+      if (details.delta.dx > 0) {
+        Navigator.of(context).pop();
+      }
 
-          if (isCalcSheetOpen) {
-            isCalcSheetOpen = false;
-            Navigator.pop(context);
-          }
-        },
+      // Swiping in left direction.
+      if (details.delta.dx < 0) {
+
+      }
+    },
+      //  onHorizontalDragStart: (details) {
+      //     if (isCalcSheetOpen && details.localPosition.dx < 50) {
+      //       _gesturePosition = details.localPosition;
+      //     }
+      //   },
+        // onHorizontalDragUpdate: (details) {
+        //   if (isCalcSheetOpen && details.delta.dx < 0) {
+        //     _gesturePosition = null;
+        //   }
+        // },
+        // onHorizontalDragCancel: () {
+        //   _gesturePosition = null;
+        // },
+        // onHorizontalDragEnd: (details) {
+        //   if (_gesturePosition != null) {
+        //     _gesturePosition = null;
+        //    //TODO handle back
+        //   }
+        // }, 
         child: Scaffold(
             backgroundColor: AppTheme.paleGrey,
             appBar: AppBar(
@@ -177,6 +187,7 @@ class _CalculatorState extends State<CalculatorScreen> {
                   }),
             ),
             body: Container(
+
               height: height,
               width: double.maxFinite,
               child: Stack(
@@ -588,7 +599,7 @@ class _CalculatorState extends State<CalculatorScreen> {
                 ],
               ),
             )),
-      ),
+      
     );
   }
 
