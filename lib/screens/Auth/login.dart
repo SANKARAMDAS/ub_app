@@ -1,4 +1,5 @@
 // import 'package:country_code_picker/country_code_picker.dart';
+import 'package:flutter/services.dart';
 import 'package:urbanledger/screens/Components/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:libphonenumber/libphonenumber.dart';
@@ -27,6 +28,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String? _country = 'AE';
   String? _countryCode = '+971';
+  int mobileMaxlengh = 9;
   // String _phoneNumber = '';
   final GlobalKey<State> key = GlobalKey<State>();
   FocusNode myFocusNode = FocusNode();
@@ -67,6 +69,17 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
     return GestureDetector(
+          onPanUpdate: (details) {
+      // Swiping in right direction.
+      if (details.delta.dx > 20) {
+        Navigator.of(context).pop();
+      }
+
+      // Swiping in left direction.
+      if (details.delta.dx < 0) {
+
+      }
+    },
       onTap: () {
         FocusScope.of(context).unfocus();
       },
@@ -104,7 +117,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   // ULLogoWidget(
                   //   height: 80,
                   // ),
-                  Flexible(child:Image.asset(AppAssets.portraitLogo, width: MediaQuery.of(context).size.width*0.4)),
+                  Flexible(
+                      child: Image.asset(AppAssets.portraitLogo,
+                          width: MediaQuery.of(context).size.width * 0.4)),
                   (deviceHeight * 0.07).heightBox,
                   Padding(
                     padding: const EdgeInsets.only(left: 15.0, right: 15.0),
@@ -137,38 +152,48 @@ class _LoginScreenState extends State<LoginScreen> {
                           Flexible(
                             flex: 3,
                             child: CountryCodePicker(
-                                  flagDecoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  showDropDownButton: false,
-                                  padding: EdgeInsets.only(top: 10),
-                                  dialogSize: Size(screenWidth(context) * 0.9,
-                                      screenHeight(context) * 0.8),
-                                  barrierColor: Colors.black45,
-                                  initialSelection: 'AE',
-                                  // initialSelection: 'IT',
-                                  favorite: ['AE', 'IN'],
-                                  // countryFilter: ['AE', 'IN'],
-                                  flagWidth: 30,
-                                  textStyle: TextStyle(
-                                      fontSize: (22),
-                                      color: AppTheme.brownishGrey,
-                                      // fontWeight: FontWeight.bold
-                                      ),
-                                  searchDecoration: InputDecoration(
-                                      hintText: "Search",
-                                      hintStyle:
-                                          TextStyle(color: AppTheme.greyish)),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _isMobileNoValid = null;
-                                    });
-                                    _country = value.code;
-                                    _countryCode = value.dialCode;
-                                    
-                                    debugPrint(_country);
-                                  },
-                                ),
+                              flagDecoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              showDropDownButton: false,
+                              padding: EdgeInsets.only(top: 10),
+                              dialogSize: Size(screenWidth(context) * 0.9,
+                                  screenHeight(context) * 0.8),
+                              barrierColor: Colors.black45,
+                              initialSelection: 'AE',
+                              // initialSelection: 'IT',
+                              favorite: ['AE', 'IN'],
+                              // countryFilter: ['AE', 'IN'],
+                              flagWidth: 30,
+                              textStyle: TextStyle(
+                                fontSize: (22),
+                                color: AppTheme.brownishGrey,
+                                // fontWeight: FontWeight.bold
+                              ),
+                              searchDecoration: InputDecoration(
+                                  hintText: "Search",
+                                  hintStyle:
+                                      TextStyle(color: AppTheme.greyish)),
+                              onChanged: (value) {
+                                setState(() {
+                                  _isMobileNoValid = null;
+                                });
+                                _country = value.code;
+                                _countryCode = value.dialCode;
+                                print("kjijiji");
+                              
+                                debugPrint(_country);
+                                if(_country == "AE" ){
+                                  mobileMaxlengh = 9;
+                                }else if(_country == "IN" ){
+                                  mobileMaxlengh = 10;
+                                }else{
+
+                                    mobileMaxlengh = 14;
+                                }
+                                  print(mobileMaxlengh);
+                              },
+                            ),
                           ),
                           Flexible(
                             flex: 7,
@@ -176,6 +201,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 15),
                               child: TextFormField(
+                                inputFormatters: [
+                                  new LengthLimitingTextInputFormatter(mobileMaxlengh),
+                                ],
                                 controller: _mobileController,
                                 keyboardType: TextInputType.phone,
                                 style: TextStyle(
@@ -185,8 +213,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 cursorColor: AppTheme.electricBlue,
                                 onChanged: (value) {
                                   if (validate()) {
-                                      onSubmit();
-                                    }
+                                    onSubmit();
+                                  }
                                   if (_isMobileNoValid == false) {
                                     setState(() {
                                       _isMobileNoValid = null;
@@ -266,86 +294,96 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(10)),
                       ),
                       onPressed: validate() == true
-                ? () async {
-                    _isMobileNoValid = await PhoneNumberUtil.isValidPhoneNumber(
-                        phoneNumber:
-                            _countryCode! + _mobileController.text.trim(),
-                        isoCode: _country!);
-                    if (_isMobileNoValid!) {
-                      debugPrint(_country);
-                      repository.hiveQueries.insertUserIsoCode(_country!);
-                      CustomLoadingDialog.showLoadingDialog(context, key);
-                      final status = widget.isRegister
-                          ? await (repository.registerApi
-                              .signUpOtpRequest(
-                                  (_countryCode! + _mobileController.text)
-                                      .trim()
-                                      .replaceAll('+', ''))
-                              .timeout(Duration(seconds: 30),
-                                  onTimeout: () async {
-                              Navigator.of(context).pop();
-                              return Future.value(null);
-                            }).catchError((e) {
-                              Navigator.of(context).pop();
-                              // ScaffoldMessenger.of(context)
-                              //     .showSnackBar(SnackBar(
-                              //   content: Text('This mobile is already registered with us, please Login with this number.'),
-                              // ));
-                              'This mobile is already registered with us, please Login with this number.'
-                                  .showSnackBar(context);
+                          ? () async {
+                              _isMobileNoValid =
+                                  await PhoneNumberUtil.isValidPhoneNumber(
+                                      phoneNumber: _countryCode! +
+                                          _mobileController.text.trim(),
+                                      isoCode: _country!);
+                              if (_isMobileNoValid!) {
+                                debugPrint(_country);
+                                repository.hiveQueries
+                                    .insertUserIsoCode(_country!);
+                                CustomLoadingDialog.showLoadingDialog(
+                                    context, key);
+                                final status = widget.isRegister
+                                    ? await (repository.registerApi
+                                        .signUpOtpRequest((_countryCode! +
+                                                _mobileController.text)
+                                            .trim()
+                                            .replaceAll('+', ''))
+                                        .timeout(Duration(seconds: 30),
+                                            onTimeout: () async {
+                                        Navigator.of(context).pop();
+                                        return Future.value(null);
+                                      }).catchError((e) {
+                                        Navigator.of(context).pop();
+                                        // ScaffoldMessenger.of(context)
+                                        //     .showSnackBar(SnackBar(
+                                        //   content: Text('This mobile is already registered with us, please Login with this number.'),
+                                        // ));
+                                        'This mobile is already registered with us, please Login with this number.'
+                                            .showSnackBar(context);
 
-                              if (e.toString().contains('registered'))
-                                Future.delayed(Duration(seconds: 2), () {
-                                  Navigator.of(context).pushReplacementNamed(
-                                      AppRoutes.welcomescreenRoute);
-                                });
-                              return false;
-                            }))
-                          : await (repository.loginApi
-                              .loginOtpRequest(
-                                  (_countryCode! + _mobileController.text)
-                                      .trim()
-                                      .replaceAll('+', ''))
-                              .timeout(Duration(seconds: 30),
-                                  onTimeout: () async {
-                              Navigator.of(context).pop();
-                              return Future.value(null);
-                            }).catchError((e) {
-                              Navigator.of(context).pop();
-                              debugPrint(e.toString());
-                              // ScaffoldMessenger.of(context)
-                              //     .showSnackBar(SnackBar(
-                              //   content: Text(e.toString()),
-                              // ));
-                              '${e.toString()}'.showSnackBar(context);
-                              if (e.toString().contains('register'))
-                                Future.delayed(Duration(seconds: 2), () {
-                                  Navigator.of(context).pushReplacementNamed(
-                                      AppRoutes.welcomescreenRoute);
-                                });
+                                        if (e.toString().contains('registered'))
+                                          Future.delayed(Duration(seconds: 2),
+                                              () {
+                                            Navigator.of(context)
+                                                .pushReplacementNamed(AppRoutes
+                                                    .welcomescreenRoute);
+                                          });
+                                        return false;
+                                      }))
+                                    : await (repository.loginApi
+                                        .loginOtpRequest((_countryCode! +
+                                                _mobileController.text)
+                                            .trim()
+                                            .replaceAll('+', ''))
+                                        .timeout(Duration(seconds: 30),
+                                            onTimeout: () async {
+                                        Navigator.of(context).pop();
+                                        return Future.value(null);
+                                      }).catchError((e) {
+                                        Navigator.of(context).pop();
+                                        debugPrint(e.toString());
+                                        // ScaffoldMessenger.of(context)
+                                        //     .showSnackBar(SnackBar(
+                                        //   content: Text(e.toString()),
+                                        // ));
+                                        '${e.toString()}'.showSnackBar(context);
+                                        if (e.toString().contains('register'))
+                                          Future.delayed(Duration(seconds: 2),
+                                              () {
+                                            Navigator.of(context)
+                                                .pushReplacementNamed(AppRoutes
+                                                    .welcomescreenRoute);
+                                          });
 
-                              return false;
-                            }));
-                      if (status) {
-                        await CustomSharedPreferences.setString(
-                            'ph_no_without_co', _mobileController.text);
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushNamed(
-                            AppRoutes.verificationRoute,
-                            arguments: VerificationScreenRouteArgs(
-                                _countryCode! + ' ' + _mobileController.text,
-                                widget.isRegister));
-                      }
-                      /* else {
+                                        return false;
+                                      }));
+                                if (status) {
+                                  await CustomSharedPreferences.setString(
+                                      'ph_no_without_co',
+                                      _mobileController.text);
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pushNamed(
+                                      AppRoutes.verificationRoute,
+                                      arguments: VerificationScreenRouteArgs(
+                                          _countryCode! +
+                                              ' ' +
+                                              _mobileController.text,
+                                          widget.isRegister));
+                                }
+                                /* else {
                             if (!widget.isRegister)
                               _scaffoldKey.currentState.showSnackBar(SnackBar(
                                 content: Text('User not registered'),
                               ));
                           } */
-                    } else
-                      setState(() {});
-                  }
-                : () {},
+                              } else
+                                setState(() {});
+                            }
+                          : () {},
                       child: CustomText(
                         'Get OTP',
                         size: (18),
@@ -366,7 +404,8 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }  
+  }
+
   bool validate() {
     if (_country == 'AE' && _mobileController.text.trim().length == 9) {
       return true;

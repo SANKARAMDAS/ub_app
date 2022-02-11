@@ -82,7 +82,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
             ),
             onPressed: () async {
               Navigator.of(context)
-                  .pushReplacementNamed(AppRoutes.loginRoute, arguments: true);
+                  .pushNamed(AppRoutes.loginRoute, arguments: true);
             },
             child: CustomText(
               'Sign up with phone number',
@@ -106,7 +106,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
             ),
             onPressed: () async {
               Navigator.of(context)
-                  .pushReplacementNamed(AppRoutes.loginRoute, arguments: false);
+                  .pushNamed(AppRoutes.loginRoute, arguments: false);
               // Navigator.of(context).pushNamed(AppRoutes.myProfileScreenRoute);
             },
             child: CustomText(
