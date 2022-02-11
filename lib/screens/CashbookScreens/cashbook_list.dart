@@ -46,7 +46,19 @@ class _CashbookListState extends State<CashbookList> {
         showCashbookBottomSheet(context);
       });
 
-    return Scaffold(
+    return GestureDetector(
+          onPanUpdate: (details) {
+      // Swiping in right direction.
+      if (details.delta.dx > 0) {
+        Navigator.of(context).pop();
+      }
+
+      // Swiping in left direction.
+      if (details.delta.dx < 0) {
+
+      }
+    },
+      child: Scaffold(
       backgroundColor: AppTheme.greyBackground,
       bottomNavigationBar: bottomButtons(context),
       appBar: AppBar(
@@ -140,6 +152,7 @@ class _CashbookListState extends State<CashbookList> {
           ],
         ),
       ),
+    ),
     );
   }
 
