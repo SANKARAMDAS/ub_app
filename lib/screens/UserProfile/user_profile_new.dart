@@ -36,7 +36,7 @@ class _UserProfileNewState extends State<UserProfileNew> {
   var fileName;
   final Repository repository = Repository();
   String _userId = '';
-  bool isEmailVerified= false;
+  bool isEmailVerified = false;
   bool isEmailSend = false;
   final GlobalKey<State> key = GlobalKey<State>();
 
@@ -130,32 +130,53 @@ class _UserProfileNewState extends State<UserProfileNew> {
         });
   }
 
+  setMobiuleNum(String countryNumber) {
+    String country = "";
+    print("country ======>");
+    print(repository.hiveQueries.isoCode);
+if(repository.hiveQueries.isoCode == "AE")
+{
+country =  countryNumber.substring(3);
+
+}else if (repository.hiveQueries.isoCode == "IN"){
+  country =  countryNumber.substring(2);
+}else{
+   country =  countryNumber.substring(2);
+}
+  return country;
+  }
+
   getProfile() {
     fileName = repository.hiveQueries.userData.profilePic;
     fileName = (fileName.split('/').last);
-
+    print("uegfiewugieg");
+    print(repository.hiveQueries.userData.mobileNo);
+    print(repository.hiveQueries.isoCode);
     // _companyNameController.text = ;
     _emailController.text = repository.hiveQueries.userData.email;
-    _mobileController.text = repository.hiveQueries.userData.mobileNo;
-    _fNameController.text = repository.hiveQueries.userData.firstName;
+    _mobileController.text = setMobiuleNum(repository.hiveQueries.userData.mobileNo);
+
+    setMobiuleNum(repository.hiveQueries.userData.mobileNo); 
+        // _mobileController.textreplaceAll('+', '').substring(2);
+        _fNameController.text = repository.hiveQueries.userData.firstName;
     _lNameController.text = repository.hiveQueries.userData.lastName;
     _image = File(repository.hiveQueries.userData.profilePic);
     _userId = repository.hiveQueries.userData.id;
     isEmailVerified = repository.hiveQueries.userData.email_status;
-    if(!isEmailVerified){
+    if (!isEmailVerified) {
       fetchProfileData();
     }
   }
 
   fetchProfileData() async {
-  await BlocProvider.of<UserProfileCubit>(context,listen:false).getUserProfileData();
-
+    await BlocProvider.of<UserProfileCubit>(context, listen: false)
+        .getUserProfileData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: key,
+        key: key,
         backgroundColor: AppTheme.paleGrey,
         bottomNavigationBar: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 22.0),
@@ -173,19 +194,21 @@ class _UserProfileNewState extends State<UserProfileNew> {
                   debugPrint('Check13' +
                       repository.hiveQueries.SignUpPaymentLink.toString());
                   await repository.userProfileAPI
-                      .userProfileApi(SignUpModel(
-                    firstName: "${_fNameController.text.trim()}",
-                    lastName: "${_lNameController.text.trim()}",
-                    mobileNo:
-                        "${_mobileController.text.trim().replaceAll('+', '')}",
-                    email: "${_emailController.text.trim()}",
-                    id: repository.hiveQueries.userData.id,
-                    referral_code:
-                        repository.hiveQueries.SignUpUserReferralCode,
-                    referral_link:
-                        repository.hiveQueries.SignUpUserReferralCode,
-                    profilePic: "$uploadApiResponse",
-                  ),context)
+                      .userProfileApi(
+                          SignUpModel(
+                            firstName: "${_fNameController.text.trim()}",
+                            lastName: "${_lNameController.text.trim()}",
+                            mobileNo:
+                                "${_mobileController.text.trim().replaceAll('+', '')}",
+                            email: "${_emailController.text.trim()}",
+                            id: repository.hiveQueries.userData.id,
+                            referral_code:
+                                repository.hiveQueries.SignUpUserReferralCode,
+                            referral_link:
+                                repository.hiveQueries.SignUpUserReferralCode,
+                            profilePic: "$uploadApiResponse",
+                          ),
+                          context)
                       .then((value) async {
                     if (value) {
                       var anaylticsEvents = AnalyticsEvents(context);
@@ -378,7 +401,8 @@ class _UserProfileNewState extends State<UserProfileNew> {
                                 'assets/icons/user_profile.png',
                                 'First Name',
                                 '',
-                                _fNameController,true, onChanged: (e) {
+                                _fNameController,
+                                true, onChanged: (e) {
                               final status = checkForError(1);
                               setState(() {
                                 showNameError = status;
@@ -401,7 +425,8 @@ class _UserProfileNewState extends State<UserProfileNew> {
                                 'assets/icons/user_profile.png',
                                 'Last Name',
                                 '',
-                                _lNameController,true, onChanged: (e) {
+                                _lNameController,
+                                true, onChanged: (e) {
                               final status = checkForError(2);
                               setState(() {
                                 showLnameError = status;
@@ -423,7 +448,8 @@ class _UserProfileNewState extends State<UserProfileNew> {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 15),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
                                     alignment: Alignment.centerLeft,
@@ -435,202 +461,305 @@ class _UserProfileNewState extends State<UserProfileNew> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-
                                   Flexible(
-                                    child: BlocConsumer<UserProfileCubit,UserProfileState>(listener:(ctx,state){
-
-                                    },builder: (ctx,state){
-                                      if(state is FetchingUserProfileState){
-
-                                        return Center(child:CircularProgressIndicator(color: AppTheme.electricBlue,));
-                                      }
-                                      if (state is FetchedUserProfileState) {
-                                        if(state.userProfile !=null){
-                                          isEmailVerified=state.userProfile.userProfile?.emailStatus??false;
-
-                                          repository.hiveQueries.insertUserData(
-                                              repository.hiveQueries.userData.copyWith(
-                                                  email_status: isEmailVerified
-                                              ));
-                                          return isEmailVerified?Container(
-                                            child: Card(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(20.0),
-                                                  side: BorderSide(
-                                                    color: Color(0xFF2ED06D),
-                                                    width: 0.5,
-                                                  ),
-                                                ),
-
-                                                color: Color(0xFFE9FFF3),
-                                                child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal: 8, vertical: 5),
-                                                  child: Row(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    children: [
-                                                      Image(
-                                                          height: 16,
-                                                          width: 16,
-                                                          image: new AssetImage(AppAssets.emailVerified)),
-                                                      /*ImageIcon(
-
-                                                  AssetImage(AppAssets.emailVerified),
-                                                  size: 20,
-                                                ),*/
-                                                      SizedBox(width: 4,),
-
-                                                      Flexible(child: Container(
-                                                          margin: EdgeInsets.only(right: 4),child: Text('Email verified')))
-                                                    ],),) ),
-                                          ):GestureDetector(
-                                            onTap:isEmailSend?(){
-                                              'You have already sent a verification email, Please try again later.'.showSnackBar(context);
-
-                                            }: () async {
-                                              CustomLoadingDialog.showLoadingDialog(context, key);
-                                              await repository.userProfileAPI
-                                                  .userEmailAuthentication(_userId, context).then((value){
-                                                Navigator.of(context).pop();
-                                                if(value.isNotEmpty){
-                                                  if(value['status'] == 200) {
-                                                    '${value['msg']}'
-                                                        .showSnackBar(context);
-
-                                                    setState(() {
-                                                      isEmailSend = true;
-                                                    });
-
-                                                  }
-                                                  else{
-                                                    'Verification Email not sent.'
-                                                        .showSnackBar(context);
-
-                                                  }
-                                                }
-
-                                              });
-                                            },
-                                            child: Container(
-                                              child: Card(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(20.0),
-                                                    side: BorderSide(
-                                                      color:  AppTheme.electricBlue,
-                                                      width: 0.5,
-                                                    ),
-                                                  ),
-                                                  color: Color(0xFFE0EAFF),
-                                                  child: Container(
-                                                    padding: EdgeInsets.symmetric(
-                                                        horizontal: 4, vertical: 4),
-                                                    child: Row(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        Image(
-                                                            height: 16,
-                                                            width: 16,
-                                                            image: new AssetImage(AppAssets.resendEmailVerification)),
-                                                        SizedBox(width: 4,),
-
-                                                        Flexible(child: Container(
-                                                            margin: EdgeInsets.only(right: 4),
-                                                            child: Text('Resend email verfication')))
-                                                      ],),) ),
-                                            ),
-                                          );
+                                    child: BlocConsumer<UserProfileCubit,
+                                        UserProfileState>(
+                                      listener: (ctx, state) {},
+                                      builder: (ctx, state) {
+                                        if (state is FetchingUserProfileState) {
+                                          return Center(
+                                              child: CircularProgressIndicator(
+                                            color: AppTheme.electricBlue,
+                                          ));
                                         }
+                                        if (state is FetchedUserProfileState) {
+                                          if (state.userProfile != null) {
+                                            isEmailVerified = state.userProfile
+                                                    .userProfile?.emailStatus ??
+                                                false;
 
-                                        return Container();
-
-
-
-                                      }
-                                      return isEmailVerified?Container(
-                                        child: Card(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(20.0),
-                                              side: BorderSide(
-                                                color: Color(0xFF2ED06D),
-                                                width: 0.5,
-                                              ),
-                                            ),
-
-                                            color: Color(0xFFE9FFF3),
-                                            child: Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 4, vertical: 4),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Image(
-                                                      height: 20,
-                                                      width: 20,
-                                                      image: new AssetImage(AppAssets.emailVerified)),
-                                                  /*ImageIcon(
+                                            repository.hiveQueries
+                                                .insertUserData(repository
+                                                    .hiveQueries.userData
+                                                    .copyWith(
+                                                        email_status:
+                                                            isEmailVerified));
+                                            return isEmailVerified
+                                                ? Container(
+                                                    child: Card(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      20.0),
+                                                          side: BorderSide(
+                                                            color: Color(
+                                                                0xFF2ED06D),
+                                                            width: 0.5,
+                                                          ),
+                                                        ),
+                                                        color:
+                                                            Color(0xFFE9FFF3),
+                                                        child: Container(
+                                                          margin: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal: 8,
+                                                                  vertical: 5),
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              Image(
+                                                                  height: 16,
+                                                                  width: 16,
+                                                                  image: new AssetImage(
+                                                                      AppAssets
+                                                                          .emailVerified)),
+                                                              /*ImageIcon(
 
                                                   AssetImage(AppAssets.emailVerified),
                                                   size: 20,
                                                 ),*/
-                                                  SizedBox(width: 4,),
+                                                              SizedBox(
+                                                                width: 4,
+                                                              ),
+                                                              Flexible(
+                                                                  child: Container(
+                                                                      margin: EdgeInsets.only(
+                                                                          right:
+                                                                              4),
+                                                                      child: Text(
+                                                                          'Email verified')))
+                                                            ],
+                                                          ),
+                                                        )),
+                                                  )
+                                                : GestureDetector(
+                                                    onTap: isEmailSend
+                                                        ? () {
+                                                            'You have already sent a verification email, Please try again later.'
+                                                                .showSnackBar(
+                                                                    context);
+                                                          }
+                                                        : () async {
+                                                            CustomLoadingDialog
+                                                                .showLoadingDialog(
+                                                                    context,
+                                                                    key);
+                                                            await repository
+                                                                .userProfileAPI
+                                                                .userEmailAuthentication(
+                                                                    _userId,
+                                                                    context)
+                                                                .then((value) {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              if (value
+                                                                  .isNotEmpty) {
+                                                                if (value[
+                                                                        'status'] ==
+                                                                    200) {
+                                                                  '${value['msg']}'
+                                                                      .showSnackBar(
+                                                                          context);
 
-                                                  Flexible(child: Text('Email verified'))
-                                                ],),) ),
-                                      ):GestureDetector(
-                                        onTap:isEmailSend?(){
-                                          'You have already sent a verification email, Please try again later.'.showSnackBar(context);
+                                                                  setState(() {
+                                                                    isEmailSend =
+                                                                        true;
+                                                                  });
+                                                                } else {
+                                                                  'Verification Email not sent.'
+                                                                      .showSnackBar(
+                                                                          context);
+                                                                }
+                                                              }
+                                                            });
+                                                          },
+                                                    child: Container(
+                                                      child: Card(
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20.0),
+                                                            side: BorderSide(
+                                                              color: AppTheme
+                                                                  .electricBlue,
+                                                              width: 0.5,
+                                                            ),
+                                                          ),
+                                                          color:
+                                                              Color(0xFFE0EAFF),
+                                                          child: Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        4,
+                                                                    vertical:
+                                                                        4),
+                                                            child: Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                Image(
+                                                                    height: 16,
+                                                                    width: 16,
+                                                                    image: new AssetImage(
+                                                                        AppAssets
+                                                                            .resendEmailVerification)),
+                                                                SizedBox(
+                                                                  width: 4,
+                                                                ),
+                                                                Flexible(
+                                                                    child: Container(
+                                                                        margin: EdgeInsets.only(
+                                                                            right:
+                                                                                4),
+                                                                        child: Text(
+                                                                            'Resend email verfication')))
+                                                              ],
+                                                            ),
+                                                          )),
+                                                    ),
+                                                  );
+                                          }
 
-                                        }: () async {
-                                          CustomLoadingDialog.showLoadingDialog(context, key);
-                                          await repository.userProfileAPI
-                                              .userEmailAuthentication(_userId, context).then((value){
-                                            if(value.isNotEmpty){
-                                              Navigator.of(context).pop();
-                                              if(value['status'] == 200) {
-                                                '${value['msg']}'
-                                                    .showSnackBar(context);
+                                          return Container();
+                                        }
+                                        return isEmailVerified
+                                            ? Container(
+                                                child: Card(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20.0),
+                                                      side: BorderSide(
+                                                        color:
+                                                            Color(0xFF2ED06D),
+                                                        width: 0.5,
+                                                      ),
+                                                    ),
+                                                    color: Color(0xFFE9FFF3),
+                                                    child: Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 4,
+                                                              vertical: 4),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          Image(
+                                                              height: 20,
+                                                              width: 20,
+                                                              image: new AssetImage(
+                                                                  AppAssets
+                                                                      .emailVerified)),
+                                                          /*ImageIcon(
 
-                                                setState(() {
-                                                  isEmailSend = true;
-                                                });
+                                                  AssetImage(AppAssets.emailVerified),
+                                                  size: 20,
+                                                ),*/
+                                                          SizedBox(
+                                                            width: 4,
+                                                          ),
+                                                          Flexible(
+                                                              child: Text(
+                                                                  'Email verified'))
+                                                        ],
+                                                      ),
+                                                    )),
+                                              )
+                                            : GestureDetector(
+                                                onTap: isEmailSend
+                                                    ? () {
+                                                        'You have already sent a verification email, Please try again later.'
+                                                            .showSnackBar(
+                                                                context);
+                                                      }
+                                                    : () async {
+                                                        CustomLoadingDialog
+                                                            .showLoadingDialog(
+                                                                context, key);
+                                                        await repository
+                                                            .userProfileAPI
+                                                            .userEmailAuthentication(
+                                                                _userId,
+                                                                context)
+                                                            .then((value) {
+                                                          if (value
+                                                              .isNotEmpty) {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            if (value[
+                                                                    'status'] ==
+                                                                200) {
+                                                              '${value['msg']}'
+                                                                  .showSnackBar(
+                                                                      context);
 
-                                              }
-                                              else{
-                                                'Verification Email not sent.'
-                                                    .showSnackBar(context);
-
-                                              }
-                                            }
-
-                                          });
-                                        },
-                                        child: Container(
-                                          child: Card(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(20.0),
-                                                side: BorderSide(
-                                                  color:  AppTheme.electricBlue,
-                                                  width: 0.5,
+                                                              setState(() {
+                                                                isEmailSend =
+                                                                    true;
+                                                              });
+                                                            } else {
+                                                              'Verification Email not sent.'
+                                                                  .showSnackBar(
+                                                                      context);
+                                                            }
+                                                          }
+                                                        });
+                                                      },
+                                                child: Container(
+                                                  child: Card(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20.0),
+                                                        side: BorderSide(
+                                                          color: AppTheme
+                                                              .electricBlue,
+                                                          width: 0.5,
+                                                        ),
+                                                      ),
+                                                      color: Color(0xFFE0EAFF),
+                                                      child: Container(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 4,
+                                                                vertical: 4),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            Image(
+                                                                height: 20,
+                                                                width: 20,
+                                                                image: new AssetImage(
+                                                                    AppAssets
+                                                                        .resendEmailVerification)),
+                                                            SizedBox(
+                                                              width: 4,
+                                                            ),
+                                                            Flexible(
+                                                                child: Text(
+                                                                    'Resend email verfication'))
+                                                          ],
+                                                        ),
+                                                      )),
                                                 ),
-                                              ),
-                                              color: Color(0xFFE0EAFF),
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 4, vertical: 4),
-                                                child: Row(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Image(
-                                                        height: 20,
-                                                        width: 20,
-                                                        image: new AssetImage(AppAssets.resendEmailVerification)),
-                                                    SizedBox(width: 4,),
-
-                                                    Flexible(child: Text('Resend email verfication'))
-                                                  ],),) ),
-                                        ),
-                                      );;
-                                    },),
+                                              );
+                                        ;
+                                      },
+                                    ),
                                   ),
                                 ],
                               ),
@@ -640,7 +769,8 @@ class _UserProfileNewState extends State<UserProfileNew> {
                                 'assets/icons/email_profile.png',
                                 'Business Email',
                                 '',
-                                _emailController,!isEmailVerified, onChanged: (e) {
+                                _emailController,
+                                !isEmailVerified, onChanged: (e) {
                               final status = checkForError(3);
                               setState(() {
                                 showEmailError = status;
@@ -721,9 +851,7 @@ class _UserProfileNewState extends State<UserProfileNew> {
                                         CustomText(
                                           _mobileController.text.isEmpty
                                               ? ''
-                                              : _mobileController.text
-                                                  .replaceAll('+', '')
-                                                  .substring(2),
+                                              : _mobileController.text,
                                           size: 21,
                                           color: Color.fromRGBO(
                                               212, 212, 212, 0.8),
@@ -744,7 +872,7 @@ class _UserProfileNewState extends State<UserProfileNew> {
   }
 
   Widget buildTextFeild(String imageUrl, String title, String subTitle,
-      TextEditingController ctrl,bool isEnabled,
+      TextEditingController ctrl, bool isEnabled,
       {void Function(String)? onChanged}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
@@ -787,7 +915,7 @@ class _UserProfileNewState extends State<UserProfileNew> {
                   fontSize: 23),
               onChanged: onChanged,
               controller: ctrl,
-              enabled:isEnabled,
+              enabled: isEnabled,
               textAlign: TextAlign.left,
               decoration: InputDecoration(
                 hintText: subTitle,
