@@ -363,7 +363,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             color: AppTheme.coolGrey,
-                            fontSize: (15),
+                            fontSize: (18),
                           ),
                           children: [
                             TextSpan(
@@ -497,7 +497,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                     child: CustomText(
                       'You have entered an invalid OTP.\nYou have $otpAttemptLeft more attempts',
                       centerAlign: true,
-                      size: (14),
+                      size: (16),
                       color: AppTheme.redColor,
                       bold: FontWeight.w500,
                     ),
@@ -509,7 +509,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                     child: CustomText(
                       'Sit tight and relax while we try to read the\nOTP from your device',
                       centerAlign: true,
-                      size: (14),
+                      size: (18),
                       color: AppTheme.coolGrey,
                       bold: FontWeight.w500,
                     ),
