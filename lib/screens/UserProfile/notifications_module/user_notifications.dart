@@ -62,15 +62,24 @@ class _UserNotificationsState extends State<UserNotifications> {
                     if(state is FetchedNotificationListState){
                       return  state.notificationList.length > 0? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               InkWell(
-                                child: Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),onTap: (){
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  color:AppTheme.electricBlue,
+                                  child:Icon(Icons.arrow_back_ios_rounded,color: Colors.white,)
+                                ),
+                                
+                                onTap: (){
                                 Navigator.of(context).pop();
                               },),
-                              SizedBox(width: 8,),
+                              SizedBox(width: 4,),
                               Text('Notification (${widget.dataList?.length})',style: TextStyle(color: Colors.white,fontSize: 20)),
                             ],
                           ),
