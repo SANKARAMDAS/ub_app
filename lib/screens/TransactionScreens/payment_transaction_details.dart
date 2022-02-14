@@ -198,7 +198,7 @@ class PaymentDetails extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'To $to',
+                        'To $customerName', 
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
