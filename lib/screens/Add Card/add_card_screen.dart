@@ -134,6 +134,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                               final status = await Permission.camera.request();
                               if (status == PermissionStatus.granted) {
                                 print('Permission Granted');
+                                 scanCard();
                               } else if (status == PermissionStatus.denied) {
                                 print('Permission denied');
                               } else if (status ==
