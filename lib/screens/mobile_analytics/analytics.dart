@@ -531,7 +531,9 @@ class _MobileAnalyticsState extends State<MobileAnalytics> {
                     _selected4 == false &&
                     _selected6 == true &&
                     _selected5 == false)
-                  CashbookAnalytics(),
+                  CashbookAnalytics(
+                    isSelected: false,
+                  ),
                 SizedBox(
                   height: deviceHeight * 0.05,
                 )
