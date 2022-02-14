@@ -60,7 +60,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
@@ -84,7 +84,8 @@ class _AddBankAccountState extends State<AddBankAccount> {
                           if (_formKey.currentState?.fields['name'] != null &&
                               _formKey.currentState?.fields['bank'] != null &&
                               _formKey.currentState?.fields['iban'] != null &&
-                              _formKey.currentState?.saveAndValidate() == true) {
+                              _formKey.currentState?.saveAndValidate() ==
+                                  true) {
                             CustomLoadingDialog.showLoadingDialog(context);
                             // print(_formKey.currentState!.value);
                             Map bank = {
@@ -107,10 +108,11 @@ class _AddBankAccountState extends State<AddBankAccount> {
                               });
                               Navigator.of(context).pop();
                             }).catchError((e) {
-                              'Something went wrong, Please try again later.'.showSnackBar(context);
+                              'Something went wrong, Please try again later.'
+                                  .showSnackBar(context);
                               Navigator.of(context).pop();
                             });
-    
+
                             Navigator.pop(context);
                             Navigator.push(
                                 context,
@@ -224,9 +226,10 @@ class _AddBankAccountState extends State<AddBankAccount> {
                                           color: AppTheme.electricBlue,
                                         ),
                                         Container(
-                                          padding:
-                                              EdgeInsets.only(top: 12, left: 10),
+                                          padding: EdgeInsets.only(
+                                              top: 12, left: 10),
                                           child: FormBuilderTextField(
+                                            cursorColor: AppTheme.electricBlue,
                                             autovalidateMode: AutovalidateMode
                                                 .onUserInteraction,
                                             style: TextStyle(
@@ -288,8 +291,8 @@ class _AddBankAccountState extends State<AddBankAccount> {
                                           'assets/images/selectbank.png',
                                         ),
                                         Container(
-                                          padding:
-                                              EdgeInsets.only(top: 13, left: 10),
+                                          padding: EdgeInsets.only(
+                                              top: 13, left: 10),
                                           child: FormBuilderTextField(
                                             style: TextStyle(
                                                 fontFamily: 'SFProDisplay',
@@ -307,7 +310,8 @@ class _AddBankAccountState extends State<AddBankAccount> {
                                                 size: 37,
                                                 color: AppTheme.electricBlue,
                                               ),
-                                              hintText: 'Please select your Bank',
+                                              hintText:
+                                                  'Please select your Bank',
                                               border: InputBorder.none,
                                               focusedBorder: InputBorder.none,
                                               enabledBorder: InputBorder.none,
@@ -347,12 +351,12 @@ class _AddBankAccountState extends State<AddBankAccount> {
                                         Image.asset(
                                           'assets/images/ibannumber.png',
                                           fit: BoxFit.fitWidth,
-                                          
                                           scale: 0.1,
                                         ),
                                         Container(
                                           padding: EdgeInsets.only(top: 12),
                                           child: FormBuilderTextField(
+                                            cursorColor: AppTheme.electricBlue,
                                             autovalidateMode: AutovalidateMode
                                                 .onUserInteraction,
                                             style: TextStyle(
@@ -371,11 +375,12 @@ class _AddBankAccountState extends State<AddBankAccount> {
                                                 ),
                                               ),
                                               prefixText: 'AE ',
-    
+
                                               prefixStyle: TextStyle(
                                                   fontSize: 20,
                                                   fontFamily: 'SFProDisplay',
                                                   color: AppTheme.brownishGrey),
+
                                               border: InputBorder.none,
                                               focusedBorder: InputBorder.none,
                                               enabledBorder: InputBorder.none,
@@ -386,6 +391,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                                               errorStyle:
                                                   TextStyle(color: Colors.red),
                                               hintText: '',
+
                                               hintStyle: TextStyle(
                                                   fontFamily: 'SFProDisplay',
                                                   fontSize: 20,
@@ -408,7 +414,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                                                 if (!isValid('AE' + val!)) {
                                                   return 'Please double check and enter a correct IBAN';
                                                 }
-    
+
                                                 // if (selectBank.text.isEmpty) {
                                                 //   return 'Please select a Bank to proceed';
                                                 // }
@@ -426,7 +432,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                                                   return 'Only the use of numbers from 0 to 9 and upper case English characters \nfrom A to Z is permitted';
                                                 }
                                               },
-    
+
                                               // FormBuilderValidators.maxLength(
                                               //     context, 23),
                                             ]),

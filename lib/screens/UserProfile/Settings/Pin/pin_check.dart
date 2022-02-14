@@ -61,22 +61,26 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
     return Scaffold(
       backgroundColor: AppTheme.paleGrey,
       appBar: AppBar(
-          title: CustomText('PIN Setup'),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              size: 22,
-            ),
-            onPressed: () async {
+        title: Text('PIN Setup'),
+        leading: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: IconButton(
+            onPressed: () {
               Navigator.of(context).pop();
             },
-          )),
+            icon: Icon(
+              Icons.arrow_back_ios_rounded,
+              size: 22,
+            ),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Stack(
           children: [
             Container(
               clipBehavior: Clip.none,
-              height: height * 0.3,
+              height: height * 0.23,
               width: double.infinity,
               alignment: Alignment.topCenter,
               decoration: BoxDecoration(
@@ -87,7 +91,7 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
             ),
             Column(
               children: <Widget>[
-                (height * 0.07).heightBox,
+                (height * 0.047).heightBox,
                 ValueListenableBuilder<String>(
                     valueListenable: pinNotifier,
                     builder: (context, value, _) {
@@ -120,7 +124,7 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
                                 ],
                               ),
                               SizedBox(
-                                height: 10,
+                                height: 5,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -206,13 +210,13 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
                       )
                     : Image.asset(
                         AppAssets.pinClipartImage,
-                        height: height * 0.3,
+                        height: height * 0.32,
                       ),
                 Spacer(),
                 if (incorrectPinCount < 4)
                   Container(
                     child: keyBoard(),
-                    height: height * 0.32,
+                    height: height * 0.25,
                   )
               ],
             ),
@@ -304,7 +308,7 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
   Widget pinBox(bool value) => Padding(
         padding: EdgeInsets.all(10),
         child: new Container(
-            height: 75,
+            height: 70,
             width: 50,
             alignment: Alignment.center,
             decoration: new BoxDecoration(
@@ -326,7 +330,12 @@ class _PinCheckScreenState extends State<PinCheckScreen> {
     }
     if (pinNotifier.value.length == 4) {
       LoginModel loginModel = LoginModel(
-          mobileNo: Repository().hiveQueries.userData.mobileNo.trim().replaceAll('+', ''),
+          mobileNo: Repository()
+              .hiveQueries
+              .userData
+              .mobileNo
+              .trim()
+              .replaceAll('+', ''),
           pin: pinNotifier.value);
       bool isLogin = await Repository().queries.fetchLoginUser(loginModel);
       if (isLogin) {
@@ -382,7 +391,7 @@ class PinField extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
         padding: EdgeInsets.all(10),
         child: new Container(
-            height: 75,
+            height: 70,
             width: 50,
             alignment: Alignment.center,
             decoration: new BoxDecoration(
