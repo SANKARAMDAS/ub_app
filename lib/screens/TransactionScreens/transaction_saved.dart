@@ -22,7 +22,8 @@ class _TransactionSavedState extends State<TransactionSaved> {
     timer = Timer(Duration(milliseconds: 2000), () {
       Navigator.of(context)..pop()..pop();
       timer.cancel();
-    });
+    }
+    );
     return Scaffold(
       backgroundColor: AppTheme.paleGrey,
       body: SafeArea(
@@ -36,13 +37,20 @@ class _TransactionSavedState extends State<TransactionSaved> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ULLogoWidget(height: 54,),
-                  CustomText(
-                    'Track. Remind. Pay.',
-                    size: 16,
-                    bold: FontWeight.w500,
-                    color: AppTheme.brownishGrey,
+                  Image.asset(
+                    'assets/images/newlogo.png',
+                    height: MediaQuery.of(context).size.height * 0.15,
+                    width: MediaQuery.of(context).size.width * 0.3,
                   ),
+                  // ULLogoWidget(
+                  //   height: 54,
+                  // ),
+                  // CustomText(
+                  //   'Track. Remind. Pay.',
+                  //   size: 16,
+                  //   bold: FontWeight.w500,
+                  //   color: AppTheme.brownishGrey,
+                  // ),
                 ],
               ),
             ),

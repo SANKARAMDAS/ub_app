@@ -196,6 +196,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                               fontWeight: FontWeight.w500),
                           focusedBorder: InputBorder.none,
                           enabledBorder: InputBorder.none),
+                      cursorColor: AppTheme.electricBlue,
                     ),
                     Suffix: Column(
                       children: [

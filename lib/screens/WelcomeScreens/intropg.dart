@@ -106,7 +106,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                           width: MediaQuery.of(context).size.height * 0.1,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage("assets/icons/appicon.png"),
+                              image: AssetImage("assets/icons/newappicon.png"),
                               // fit: BoxFit.cover,
                             ),
                             // shape: BoxShape.circle,
@@ -203,61 +203,10 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                                     left: MediaQuery.of(context).size.width *
                                         0.1),
                                 child: CustomText(
-                                  "Now you can add a ledger \nenter for each transaction from\nyour customer and suppliers",
-                                  color: AppTheme.coolGrey,
+                                  "Now you can add a ledger \nentry for each transaction from\nyour customer and suppliers",
+                                  color: AppTheme.warmGrey,
                                   size: 22,
-                                  bold: FontWeight.bold,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: 10.0,
-                              right: MediaQuery.of(context).size.width * 0.05),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              new Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.45,
-                                decoration: new BoxDecoration(
-                                  image: new DecorationImage(
-                                    image: new AssetImage(
-                                        'assets/images/Home Screen 2-2.jpg'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                alignment: Alignment.centerLeft,
-                              ),
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.040,
-                              ),
-                              Container(
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      left: MediaQuery.of(context).size.width *
-                                          0.1),
-                                  child: CustomText(
-                                    'Set\nreminders',
-                                    color: AppTheme.electricBlue,
-                                    size: 38,
-                                    bold: FontWeight.w800,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 15.0),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.1),
-                                child: CustomText(
-                                  "Keep track of your\nreceivables by setting up a\nreminder to collect money",
-                                  color: AppTheme.coolGrey,
-                                  size: 22,
-                                  bold: FontWeight.bold,
+                                  bold: FontWeight.w500,
                                 ),
                               )
                             ],
@@ -306,9 +255,9 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                                         0.1),
                                 child: CustomText(
                                   "Use your permanent QR code or\npayment links to collect payments or\ncreate a customized one on the go",
-                                  color: AppTheme.coolGrey,
+                                  color: AppTheme.warmGrey,
                                   size: 22,
-                                  bold: FontWeight.bold,
+                                  bold: FontWeight.w500,
                                 ),
                               )
                             ],
@@ -357,9 +306,60 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                                         0.1),
                                 child: CustomText(
                                   "Now collect orders and\npayments on the chat and\nkeep track of your interactions",
-                                  color: AppTheme.coolGrey,
+                                  color: AppTheme.warmGrey,
                                   size: 22,
-                                  bold: FontWeight.bold,
+                                  bold: FontWeight.w500,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: 10.0,
+                              right: MediaQuery.of(context).size.width * 0.05),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              new Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.45,
+                                decoration: new BoxDecoration(
+                                  image: new DecorationImage(
+                                    image: new AssetImage(
+                                        'assets/images/Home Screen 2-2.jpg'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                alignment: Alignment.centerLeft,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.040,
+                              ),
+                              Container(
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.width *
+                                          0.1),
+                                  child: CustomText(
+                                    'Set\nreminders',
+                                    color: AppTheme.electricBlue,
+                                    size: 38,
+                                    bold: FontWeight.w800,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 15.0),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.width *
+                                        0.1),
+                                child: CustomText(
+                                  "Keep track of your\nreceivables by setting up a\nreminder to collect money",
+                                  color: AppTheme.warmGrey,
+                                  size: 22,
+                                  bold: FontWeight.w500,
                                 ),
                               )
                             ],
@@ -408,9 +408,9 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                                         0.1),
                                 child: CustomText(
                                   "Get insights on your\nbusiness right from the app",
-                                  color: AppTheme.coolGrey,
+                                  color: AppTheme.warmGrey,
                                   size: 22,
-                                  bold: FontWeight.bold,
+                                  bold: FontWeight.w500,
                                 ),
                               )
                             ],

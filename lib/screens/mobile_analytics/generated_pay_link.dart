@@ -8,7 +8,8 @@ import 'package:urbanledger/chat_module/utils/custom_shared_preferences.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
 
 class GeneratedPayLink extends StatefulWidget {
-  const GeneratedPayLink({Key? key}) : super(key: key);
+  final isSelected;
+  const GeneratedPayLink({Key? key, this.isSelected,}) : super(key: key);
 
   @override
   _GeneratedPayLinkState createState() => _GeneratedPayLinkState();
@@ -37,8 +38,12 @@ class _GeneratedPayLinkState extends State<GeneratedPayLink> {
   bool _selectedLink = true;
   bool _selectedAmtCollected = false;
 
+  bool isCountfound = false;
+
   @override
   void initState() {
+    isCountfound = widget.isSelected;
+    print("getLink&Amount");
     getlinkAndAmountData();
     super.initState();
   }
@@ -46,12 +51,16 @@ class _GeneratedPayLinkState extends State<GeneratedPayLink> {
   Future<void> getlinkAndAmountData() async {
     if (selectedFilter == 'Week') {
       await thisWeek();
+      isCountfound = true;
     } else if (selectedFilter == 'Month') {
       await thisMonth();
+      isCountfound = true;
     } else if (selectedFilter == 'Year') {
       await thisYear();
+      isCountfound = true;
     } else {
       await custom();
+      isCountfound = true;
     }
   }
 
@@ -437,8 +446,8 @@ class _GeneratedPayLinkState extends State<GeneratedPayLink> {
                                       showAxisLine: true),
                                 ),
 
-                                ),                              )
-                            : Image.asset(AppAssets.barChartIcon),
+                                ),  )
+                            : isCountfound == true ? Image.asset(AppAssets.barChartIcon) : SizedBox(height: 0, width:0),
                       ),
                     ),
                     Row(

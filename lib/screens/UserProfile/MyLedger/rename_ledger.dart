@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:urbanledger/Models/business_model.dart';
@@ -19,6 +20,7 @@ class RenameLedger extends StatefulWidget {
 
 class _RenameLedgerState extends State<RenameLedger> {
   final repository = Repository();
+  final FocusNode focusNode= FocusNode();
 
   final TextEditingController controller = TextEditingController();
 
@@ -107,7 +109,7 @@ class _RenameLedgerState extends State<RenameLedger> {
 
                         if (await checkConnectivity) {
                           final apiResponse = await (repository.businessApi
-                              .saveBusiness(businessModel2,context,true)
+                              .saveBusiness(businessModel2, context, true)
                               .catchError((e) {
                             debugPrint(e);
                             recordError(e, StackTrace.current);
@@ -117,8 +119,8 @@ class _RenameLedgerState extends State<RenameLedger> {
                             await repository.queries
                                 .updateBusinessIsChanged(businessModel2, 0);
                           }
-                        }  else {
-                                        Navigator.of(context).pop();
+                        } else {
+                          Navigator.of(context).pop();
                           'Please check your internet connection or try again later.'
                               .showSnackBar(context);
                         }
@@ -151,6 +153,7 @@ class _RenameLedgerState extends State<RenameLedger> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextField(
+                        focusNode: focusNode,
                         controller: controller,
                         label: 'Ledger Name',
                         onChanged: (value) {
@@ -195,6 +198,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final bool? enabled;
   final void Function(String)? onChanged;
+  final FocusNode? focusNode;
 
   const CustomTextField({
     Key? key,
@@ -203,21 +207,39 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.enabled,
     this.onChanged,
+    this.focusNode,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      focusNode: focusNode,
+      cursorColor: AppTheme.electricBlue,
       controller: controller,
       enabled: enabled,
       onChanged: onChanged,
       textCapitalization: TextCapitalization.words,
       decoration: InputDecoration(
-          labelText: label,
-          prefixIcon: prefixIcon,
-          border: OutlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.electricBlue),
-              borderRadius: BorderRadius.circular(10))),
+        labelText: label,
+        labelStyle: TextStyle(
+            color: focusNode!.hasFocus
+                ? AppTheme.electricBlue
+                : AppTheme.coolGrey),
+        prefixIcon: prefixIcon,
+        //   border: OutlineInputBorder(
+        //     borderSide: BorderSide(color: AppTheme.electricBlue),
+        //     borderRadius: BorderRadius.circular(10),
+        //   ),
+        // ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppTheme.electricBlue),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: AppTheme.coolGrey,
+          ),
+        ),
+      ),
     );
   }
 }

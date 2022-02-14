@@ -13,7 +13,8 @@ import 'package:urbanledger/screens/Components/custom_widgets.dart';
 import 'package:urbanledger/screens/Components/animated_number_counter.dart';
 
 class CustomPieChart extends StatefulWidget {
-  const CustomPieChart({Key? key}) : super(key: key);
+  final isSelected;
+  const CustomPieChart({Key? key, this.isSelected,}) : super(key: key);
 
   @override
   CustomPieChartState createState() => CustomPieChartState();
@@ -48,8 +49,13 @@ class CustomPieChartState extends State<CustomPieChart> {
     "Static/Global QR code": 0,
     "UL App payment": 0,
   };
+
+  bool isCountfound = false;
+
   @override
   void initState() {
+    isCountfound = widget.isSelected;
+    print("abbaPiechart");
     getpieData();
     super.initState();
   }
@@ -57,12 +63,16 @@ class CustomPieChartState extends State<CustomPieChart> {
   Future<void> getpieData() async {
     if (selectedFilter == 'Week') {
       await thisWeek();
+      isCountfound = true;
     } else if (selectedFilter == 'Month') {
       await thisMonth();
+      isCountfound = true;
     } else if (selectedFilter == 'Year') {
       await thisYear();
+      isCountfound = true;
     } else {
       await custom();
+      isCountfound = true;
     }
   }
 
@@ -336,12 +346,7 @@ class CustomPieChartState extends State<CustomPieChart> {
                             ],
                           ),
                         )
-                      : Flexible(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 20),
-                            child: Image.asset(AppAssets.pieChartIcon),
-                          ),
-                        ),
+                      : isCountfound == true ? Image.asset(AppAssets.barChartIcon) : SizedBox(height: 0, width:0),
                   // Text('Customers')
                 ],
               )),

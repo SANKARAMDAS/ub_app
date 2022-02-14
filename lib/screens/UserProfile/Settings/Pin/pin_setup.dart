@@ -137,16 +137,29 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
     return Scaffold(
       backgroundColor: AppTheme.paleGrey,
       appBar: AppBar(
-          title: const CustomText('App Lock and Security'),
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              size: 22,
-            ),
-            onPressed: () async {
+        title: Text('App Lock and Security'),
+        leading: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: IconButton(
+            onPressed: () {
               Navigator.of(context).pop();
             },
-          )),
+            icon: Icon(
+              Icons.arrow_back_ios_rounded,
+              size: 22,
+            ),
+          ),
+        ),
+        // leading: IconButton(
+        //   icon: const Icon(
+        //     Icons.arrow_back_ios,
+        //     size: 22,
+        //   ),
+        //   onPressed: () async {
+        //     Navigator.of(context).pop();
+        //   },
+        // ),
+      ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -170,7 +183,7 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
                   Row(
                     children: [
                       Image.asset(
-                        AppAssets.appIcon,
+                        AppAssets.appIcon1,
                         width: 40,
                         height: 40,
                       ),
@@ -246,7 +259,7 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
                   Row(
                     children: [
                       Image.asset(
-                        AppAssets.appIcon,
+                        AppAssets.appIcon1,
                         width: 40,
                         height: 40,
                       ),
@@ -279,7 +292,8 @@ class _PinSetupScreenState extends State<PinSetupScreen> {
                               fingerprintStatus = value;
                               var anaylticsEvents = AnalyticsEvents(context);
                               await anaylticsEvents.initCurrentUser();
-                              await anaylticsEvents.fingerprintChangeEvent(fingerprintStatus);
+                              await anaylticsEvents
+                                  .fingerprintChangeEvent(fingerprintStatus);
                               setState(() {});
                             }
                           } else {

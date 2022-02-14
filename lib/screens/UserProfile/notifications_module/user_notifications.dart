@@ -669,7 +669,3 @@ class _NotificationDescription extends StatelessWidget {
     );
   }
 }
-
-
-
-
