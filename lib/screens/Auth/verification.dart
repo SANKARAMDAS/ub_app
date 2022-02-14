@@ -1,5 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:urbanledger/Utility/app_theme.dart';
 import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 import 'package:urbanledger/screens/Components/ul_logo_widget.dart';
+import 'package:urbanledger/screens/arguments/account_locked_argument.dart';
 import 'package:urbanledger/screens/mobile_analytics/analytics_events.dart';
 import '../../chat_module/data/repositories/login_repository.dart';
 
@@ -55,7 +57,8 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
   late bool _serviceEnabled;
   final location = Location();
   bool isResendOtpClickable = false;
-  int _resendOtpCount = 30;
+  bool isWrongOtpEntered = false;
+  int otpAttemptLeft = 3;
   // late Timer _timer;
 
   late AnimationController _controller;
@@ -133,7 +136,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: AppTheme.paleBlue,
+        backgroundColor: Colors.white,
         bottomNavigationBar: Padding(
           padding: isPlatformiOS()? EdgeInsets.only(
             bottom: 25,
@@ -144,11 +147,11 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               (screenWidth(context) * 0.035).widthBox,
-              /* Expanded(
+             /* Expanded(
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     padding: EdgeInsets.all(15),
-                    side: BorderSide(color: isResendOtpClickable?Color(0xff1058ff):Colors.grey, width: 2),
+                    side: BorderSide(color: isResendOtpClickable?AppTheme.electricBlue:Colors.grey, width: 2),
                     // color: Colors.white,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
@@ -175,16 +178,14 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                     padding: EdgeInsets.only(
                         bottom: 15, top: 15, left: 30, right: 30),
                     primary: validate() == true
-                        ? AppTheme.purpleActive
-                        : AppTheme.disabledColor,
+                        ? AppTheme.electricBlue
+                        : AppTheme.coolGrey,
                   ),
                   child: CustomText(
                     'VERIFY OTP',
                     size: (18),
-                    bold: FontWeight.bold,
-                    color: validate() == true
-                        ? AppTheme.whiteColor
-                        : AppTheme.coolGrey,
+                    bold: FontWeight.w500,
+                    color: Colors.white,
                   ),
                   onPressed: validate() == true
                       ? () async {
@@ -219,9 +220,8 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                                     sixController.text = ' ';
                                     setState(() {});
                                     e.toString().showSnackBar(context);
-                                    debugPrint('Incorrect12345');
-                                    // Navigator.of(context).pop();
-                                    // return 'Incorrect';
+                                    Navigator.of(context).pop();
+                                    return 'Incorrect';
                                   })
                                 : await (repository.loginApi
                                         .loginOtpVerification(
@@ -234,32 +234,33 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                                             0,
                                             0))
                                     .catchError((e) {
-                                    oneController.text = ' ';
-                                    twoController.text = ' ';
-                                    threeController.text = ' ';
-                                    fourController.text = ' ';
-                                    fiveController.text = ' ';
-                                    sixController.text = ' ';
-                                    debugPrint('KKKKKKKKKKKKK');
-                                    setState(() {});
-                                    e.toString().showSnackBar(context);
-                                    Navigator.of(context).pop();
-                                    return 'Incorrect';
+                                      print('otp response '+jsonEncode(e));
+                                    if(e['count']==3){
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, AppRoutes.accountLockedRoute ,(Route<dynamic> route) => false,arguments: AccountLockedArgument(e['message']));
+
+                                    }
+                                    else{
+                                      oneController.text = ' ';
+                                      twoController.text = ' ';
+                                      threeController.text = ' ';
+                                      fourController.text = ' ';
+                                      fiveController.text = ' ';
+                                      sixController.text = ' ';
+                                      debugPrint('KKKKKKKKKKKKK');
+                                      isWrongOtpEntered = true;
+                                      int otpCount = e['count'];
+                                      otpAttemptLeft = 3-otpCount;
+                                      setState(() {});
+                                      // e.toString().showSnackBar(context);
+                                      Navigator.of(context).pop();
+                                      return 'Incorrect';
+                                    }
                                   });
-                            debugPrint('abcdnfndfnsdf' + status.toString());
                             if (status.isNotEmpty) {
-                              if (status == 'isNotRegister') {
-                                Navigator.of(context)
-                                  ..pop()
-                                  ..pop()
-                                  ..pushReplacementNamed(AppRoutes.signupRoute,
-                                      arguments:
-                                          widget.phoneNo.replaceAll(' ', ''));
-                              }
                               if (status == 'Incorrect') return;
                               _formKey.currentState!.reset();
                               if (!widget.isRegister) {
-                                debugPrint("isREgister");
                                 // await analytics.logLogin();
                                 LoginRepository().login(
                                     widget.phoneNo.replaceAll(' ', ''),
@@ -285,27 +286,13 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                                             true));
                                 } else {
                                   if (repository.hiveQueries.userPin.isEmpty) {
-                                    if (repository.hiveQueries.userData
-                                        .firstName.isEmpty) {
-                                      Future.delayed(Duration(seconds: 1))
-                                          .then((value) {
-                                        Navigator.of(context)
-                                          ..pop()
-                                          ..pop()
-                                          ..pushReplacementNamed(
-                                              AppRoutes.signupRoute,
-                                              arguments: widget.phoneNo
-                                                  .replaceAll(' ', ''));
-                                      });
-                                    } else {
-                                      Navigator.of(context)
-                                        ..pop()
-                                        ..pop()
-                                        ..pushReplacementNamed(
-                                            AppRoutes.setPinRoute,
-                                            arguments: SetPinRouteArgs(
-                                                '', false, false, false));
-                                    }
+                                    Navigator.of(context)
+                                      ..pop()
+                                      ..pop()
+                                      ..pushReplacementNamed(
+                                          AppRoutes.setPinRoute,
+                                          arguments: SetPinRouteArgs(
+                                              '', false, false, false));
                                   } else {
                                     Navigator.of(context)
                                       ..pop()
@@ -323,14 +310,14 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                                 /*    var anaylticsEvents = await AnalyticsEvents(context);
                             anaylticsEvents.signUpEvent(withReferral);*/
 
-                                Navigator.of(context)
-                                  ..pop()
-                                  ..pop()
-                                  ..pushReplacementNamed(AppRoutes.signupRoute,
-                                      arguments:
-                                          widget.phoneNo.replaceAll(' ', ''));
-                              }
-                            
+                          Navigator.of(context)
+                            ..pop()
+                            ..pop()
+                            ..pushReplacementNamed(
+                                AppRoutes.signupRoute,
+                                arguments:
+                                widget.phoneNo.replaceAll(' ', ''));
+                        }
                       } else {
                         Navigator.of(context)
                           ..pop()
@@ -349,84 +336,51 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
             ],
           ),
         ),
-        appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            leading: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                    margin: EdgeInsets.only(left: 10),
-                    child: Image.asset(AppAssets.backButtonIcon,
-                        width: MediaQuery.of(context).size.width * 0.9))),
-            title: Container(
-                // margin: EdgeInsets.symmetric(vertical: 500),
-                child: Image.asset(AppAssets.landscapeLogo,
-                    width: MediaQuery.of(context).size.width * 0.4)),
-            centerTitle: true),
-        body: Center(
+        body: SingleChildScrollView(
           child: Container(
             child: Form(
               key: _formKey,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Flexible(
-                    flex:1,
-                      child: Column(children: [
-                   
-                    Text(
-                      'Verify Mobile Number',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                          color: AppTheme.purpleActive),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
-                    ),
-                    Text(
-                      'We have sent a 6-Digit OTP to\n${widget.phoneNo}',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: AppTheme.brownishGrey),
-                    ),
-                    
-                  ])),
-                  Flexible(
-                    flex: 2,
-                    child: Stack(children: [
-                      Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width * 0.2),
-                          child: Image.asset(AppAssets.otpArtImage)),
-                    ]),
-                  ),
                   SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
+                    width: double.infinity,
+                    child: Image.asset(
+                      AppAssets.backgroundImage,
+                      fit: BoxFit.fitWidth,
                     ),
-                  // (deviceHeight * 0.03).heightBox,
-                  Text(
-                    'Sit back and relax while we try to read\nthe OTP from your device.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: AppTheme.brownishGrey),
                   ),
+                  (deviceHeight * 0.09).heightBox,
+                  // ULLogoWidget(
+                  //   height: 80,
+                  // ),
+                  Image.asset(AppAssets.landscapeLogo, width: MediaQuery.of(context).size.width*0.6),
+                  (deviceHeight * 0.09).heightBox,
+                  Center(
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          text: 'We have sent a 6-digit OTP\nto ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: AppTheme.coolGrey,
+                            fontSize: (18),
+                          ),
+                          children: [
+                            TextSpan(
+                              text: widget.phoneNo,
+                            ),
+                          ]),
+                    ),
+                  ),
+                  (deviceHeight * 0.04).heightBox,
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 35.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 7.0, vertical: 15.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: oneController,
                             onSaved: (value) => _digit1 = value,
@@ -434,9 +388,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                             nextFocusNode: secondFocusNode,
                           ),
                         ).flexible,
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 7.0, vertical: 15.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: twoController,
                             onSaved: (value) => _digit2 = value,
@@ -445,9 +399,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                             previousFocusNode: firstFocusNode,
                           ),
                         ).flexible,
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 7.0, vertical: 15.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: threeController,
                             onSaved: (value) => _digit3 = value,
@@ -456,9 +410,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                             previousFocusNode: secondFocusNode,
                           ),
                         ).flexible,
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 7.0, vertical: 15.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: fourController,
                             onSaved: (value) => _digit4 = value,
@@ -467,9 +421,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                             previousFocusNode: thirdFocusNode,
                           ),
                         ).flexible,
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 7.0, vertical: 15.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                               controller: fiveController,
                               onSaved: (value) => _digit5 = value,
@@ -477,9 +431,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                               nextFocusNode: sixthFocusNode,
                               previousFocusNode: fourthFocusNode),
                         ).flexible,
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 7.0, vertical: 15.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 15.0),
                           child: otpTextField(
                             controller: sixController,
                             focusNode: sixthFocusNode,
@@ -503,16 +457,13 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                                 ? 'RESEND OTP'
                                 : 'RESEND OTP IN ',
                             size: (18),
-                            color: isResendOtpClickable
-                                ? AppTheme.redColor
-                                : AppTheme.brownishGrey,
+                            color: isResendOtpClickable?AppTheme.electricBlue:Colors.grey,
                             bold: FontWeight.w800,
                           ),
                           onTap:isResendOtpClickable? (){
                             clearTextControllers();
                             setState(() {
                               isResendOtpClickable = false;
-                              _resendOtpCount = 30;
                             });
                             //startTimer();
 
@@ -532,24 +483,47 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                               if(status == AnimationStatus.completed){
                                 _controller.reset();
                                 setState(() {
-                                  isResendOtpClickable = true;
-                                });
+                                isResendOtpClickable = true;
+                              });
                               }
                             }),
                           )
                       ],
                     ),
                   ),
+                  (deviceHeight * 0.02).heightBox,
+                  if(isWrongOtpEntered)
+                  Center(
+                    child: CustomText(
+                      'You have entered an invalid OTP.\nYou have $otpAttemptLeft more attempts',
+                      centerAlign: true,
+                      size: (16),
+                      color: AppTheme.redColor,
+                      bold: FontWeight.w500,
+                    ),
+                  ),
+
+
+                  (deviceHeight * 0.02).heightBox,
+                  Center(
+                    child: CustomText(
+                      'Sit tight and relax while we try to read the\nOTP from your device',
+                      centerAlign: true,
+                      size: (18),
+                      color: AppTheme.coolGrey,
+                      bold: FontWeight.w500,
+                    ),
+                  ),
+                  (deviceHeight * 0.04).heightBox,
                 ],
               ),
             ),
           ),
         ),
-
+      
       ),
     );
   }
-
   Widget otpTextField(
       {required FocusNode focusNode,
         required void Function(String?) onSaved,
@@ -564,7 +538,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
         // ),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withOpacity(0.4),
               spreadRadius: 2,
               blurRadius: 3,
               offset: Offset(0, 2), // changes position of shadow
@@ -608,7 +582,9 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
           // obscureText: true,
           maxLength: 1,
           cursorColor: AppTheme.coolGrey,
-          cursorHeight: 50,
+          showCursor: false,
+          cursorWidth: 5,
+          cursorHeight: 5,
           style: TextStyle(
               color: AppTheme.blackColor,
               fontSize: 40,
@@ -787,7 +763,7 @@ class Countdown extends AnimatedWidget {
       "$timerText",
       style: TextStyle(
         fontSize: 110,
-        color: Theme.of(context).primaryColor,
+        color: AppTheme.electricBlue,
       ),
     );*/
 

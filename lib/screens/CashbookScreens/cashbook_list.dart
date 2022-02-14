@@ -46,7 +46,19 @@ class _CashbookListState extends State<CashbookList> {
         showCashbookBottomSheet(context);
       });
 
-    return Scaffold(
+    return GestureDetector(
+          onPanUpdate: (details) {
+      // Swiping in right direction.
+      if (details.delta.dx > 0) {
+        Navigator.of(context).pop();
+      }
+
+      // Swiping in left direction.
+      if (details.delta.dx < 0) {
+
+      }
+    },
+      child: Scaffold(
       backgroundColor: AppTheme.greyBackground,
       bottomNavigationBar: bottomButtons(context),
       appBar: AppBar(
@@ -131,7 +143,7 @@ class _CashbookListState extends State<CashbookList> {
                                 setState(() {});
                               }).flexible;
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                     );
                   }),
                 ],
@@ -140,6 +152,7 @@ class _CashbookListState extends State<CashbookList> {
           ],
         ),
       ),
+    ),
     );
   }
 
@@ -431,7 +444,7 @@ class _CashbookListState extends State<CashbookList> {
                           height: deviceHeight * 0.045,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              onPrimary: Theme.of(context).primaryColor,
+                              primary: AppTheme.electricBlue,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
                             ),
@@ -462,7 +475,7 @@ class _CashbookListState extends State<CashbookList> {
                           height: deviceHeight * 0.045,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              onPrimary: Theme.of(context).primaryColor,
+                              primary: AppTheme.electricBlue,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
                             ),
@@ -505,7 +518,7 @@ class _CashbookListState extends State<CashbookList> {
                           height: deviceHeight * 0.045,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              onPrimary: Theme.of(context).primaryColor,
+                              primary: AppTheme.electricBlue,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12)),
                             ),
@@ -745,9 +758,11 @@ class _CashbookListState extends State<CashbookList> {
                             child: CustomText(
                               'OK',
                               size: (18),
-                              bold: FontWeight.w500,
+                              color: AppTheme.whiteColor,
+                              bold: FontWeight.bold,
                             ),
                             style: ElevatedButton.styleFrom(
+                              primary: AppTheme.electricBlue,
                               padding: EdgeInsets.all(15),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),

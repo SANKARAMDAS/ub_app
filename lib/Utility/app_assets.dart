@@ -106,6 +106,7 @@ class AppAssets {
   static const String delete_notification_icon = 'assets/icons/delete_notification_icon.png';
 
   static const String notification_empty = 'assets/images/notification_empty.png';
+  static const String notification_empty_new = 'assets/images/notification_emptyNew.png';
   static const String notification_selected = 'assets/icons/notification_selected.png';
   static const String notification_unselected = 'assets/icons/notification_unselected.png';
   static const String warning = 'assets/icons/Warning-01.png';
@@ -195,7 +196,8 @@ class AppAssets {
   static const String playAudioIcon = 'assets/icons/Play-01.png';
   static const String stopAudioIcon = 'assets/icons/Stop-01.png';
   static const String downloadAudioIcon = 'assets/icons/Download-02.png';
-  static const String appIcon = 'assets/icons/appicon.png';
+  static const String appIcon = 'assets/icons/appiconn.png';
+  static const String appIcon1 = 'assets/icons/newappicon.png';
   static const String thumbsIcon = 'assets/icons/myprofile/thumbs.png';
   static const String fingerprintIcon = 'assets/icons/fingerprinticon.png';
   static const String greyBackupIcon = 'assets/icons/greybackup.png';
@@ -252,6 +254,9 @@ class AppAssets {
   static const String userIcon2 = 'assets/icons/v2/user_icon_2.png';
   static const String emailIcon = 'assets/icons/v2/email_icon.png';
   static const String pinArtImage = 'assets/icons/v2/set_pin.png';
+  static const String error_account_locked_logo = 'assets/icons/v2/error_account_locked.png';
+  static const String account_locked_icon = 'assets/icons/v2/account_locked_icon.png';
+
   ///Fonts
   static const String sFProDisplayFont = 'SFProDisplay';
 }

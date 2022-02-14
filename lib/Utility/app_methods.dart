@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 // import 'package:connectivity/connectivity.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -62,6 +63,7 @@ void equalPressed() {
     ContextModel cm = ContextModel();
     double eval = exp.evaluate(EvaluationType.REAL, cm);
     if (finaluserinput.length > 16) {
+      ///
       return;
     }
     calculatedAmountNotifier.value = eval.isNaN || eval.isInfinite ? 0 : eval;
@@ -79,8 +81,8 @@ bool documentLifecycle(String document) {
 }
 
 Widget titleName({required Color color}) {
-  return RichText(text: TextSpan(
-    children: [
+  return RichText(
+    text: TextSpan(children: [
       TextSpan(
         text: 'urban ',
         style: TextStyle(
@@ -91,31 +93,27 @@ Widget titleName({required Color color}) {
       ),
       TextSpan(
         text: 'ledger',
-        style: TextStyle(
-          fontSize: 30,
-          color: color,
-          fontWeight: FontWeight.bold
-        ),
+        style:
+            TextStyle(fontSize: 30, color: color, fontWeight: FontWeight.bold),
       ),
-    ]
-  ),);
+    ]),
+  );
 }
 
 Widget gradientBackground({required Widget child}) {
   return Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [
-                  AppTheme.purpleStartColor,
-                  AppTheme.purpleEndColor,
-                ],
-                ),
-          ),
-          child: child
-        );
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppTheme.purpleStartColor,
+            AppTheme.purpleEndColor,
+          ],
+        ),
+      ),
+      child: child);
 }
 
-Future<bool> allChecker(BuildContext context) async {
+Future<bool> allChecker(BuildContext context,{bool? showLoader}) async {
   calculatePremiumDate();
   if (Repository().hiveQueries.userData.bankStatus == false) {
     MerchantBankNotAdded.showBankNotAddedDialog(context, 'userBankNotAdded');
@@ -136,8 +134,10 @@ Future<bool> allChecker(BuildContext context) async {
     MerchantBankNotAdded.showBankNotAddedDialog(context, 'userKYCPending');
     return false;
   } else if (Repository().hiveQueries.userData.kycStatus == 2) {
+    if(showLoader != false)
     CustomLoadingDialog.showLoadingDialog(context);
     await KycAPI.kycApiProvider.kycCheker().then((value) {
+      if(showLoader != false)
       Navigator.of(context).pop();
       MerchantBankNotAdded.showBankNotAddedDialog(
           context, 'userKYCVerificationPending');
@@ -407,3 +407,13 @@ List<T?> map<T>(List list, Function handler) {
   }
   return result;
 }
+
+Future<String?> getFileSize(String message) async {
+    int fileSize = File(message).lengthSync();
+    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    var i = (log(fileSize) / log(1024)).floor();
+    String fileSizewith =
+        (((fileSize / pow(1024, i)).toStringAsFixed(0)) + ' ' + suffixes[i]);
+    debugPrint(fileSizewith);
+    return fileSizewith;
+  }

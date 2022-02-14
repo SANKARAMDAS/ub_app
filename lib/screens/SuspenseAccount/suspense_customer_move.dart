@@ -201,7 +201,7 @@ class _SuspenseAccountCustomerScreenState
                   alignment: Alignment.topCenter)),
           child: loading == true
               ? Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                 )
               : Column(
                   mainAxisSize: MainAxisSize.max,
@@ -244,7 +244,7 @@ class _SuspenseAccountCustomerScreenState
                                                 backgroundColor:
                                                     MaterialStateProperty.all<
                                                             Color>(
-                                                        Color(0xff1058ff)),
+                                                        AppTheme.electricBlue),
                                                 shape: MaterialStateProperty
                                                     .all<OutlinedBorder>(
                                                         RoundedRectangleBorder(
@@ -374,7 +374,7 @@ class _SuspenseAccountCustomerScreenState
                           );
                         }
                         return const Center(
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                         );
                       },
                     ).flexible,
@@ -1019,6 +1019,7 @@ class _SuspenseAccountCustomerScreenState
                                         bold: FontWeight.w500,
                                       ),
                                       style: ElevatedButton.styleFrom(
+                                        primary: AppTheme.electricBlue,
                                         padding: EdgeInsets.all(15),
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(10)),
@@ -1060,7 +1061,7 @@ class _SuspenseAccountCustomerScreenState
     AlertDialog alert=AlertDialog(
       content: new Row(
         children: [
-          CircularProgressIndicator(),
+          CircularProgressIndicator(color: AppTheme.electricBlue,),
           Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
         ],),
     );
@@ -1167,7 +1168,7 @@ class _SuspenseAccountCustomerScreenState
                                       .selectedBusinessForUnrecognized
                                       .businessName,
                                   bold: FontWeight.w600,
-                                  color: Theme.of(context).primaryColor,
+                                  color: AppTheme.electricBlue,
                                   size: 18,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -1354,7 +1355,7 @@ class _SuspenseAccountCustomerScreenState
                                             .businesses[index]
                                             .businessName,
                                         bold: FontWeight.w600,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.electricBlue,
                                         size: 18,
                                         overflow: TextOverflow.ellipsis,
                                       ),

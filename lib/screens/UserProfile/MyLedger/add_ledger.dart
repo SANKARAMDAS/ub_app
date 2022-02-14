@@ -61,6 +61,7 @@ class _AddLedgerState extends State<AddLedger> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
+                primary: AppTheme.electricBlue,
                 padding: EdgeInsets.all(15),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -211,10 +212,20 @@ class CustomTextField extends StatelessWidget {
       textCapitalization: TextCapitalization.words,
       decoration: InputDecoration(
           labelText: label,
+          labelStyle: TextStyle(
+            color: AppTheme.electricBlue,
+          ),
           prefixIcon: prefixIcon,
           border: OutlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).primaryColor),
-              borderRadius: BorderRadius.circular(10))),
+              borderSide: BorderSide(color: AppTheme.electricBlue),
+              borderRadius: BorderRadius.circular(10)),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.electricBlue),
+              borderRadius: BorderRadius.circular(10)),
+              enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.electricBlue),
+              borderRadius: BorderRadius.circular(10)),
+          ),
     );
   }
 }

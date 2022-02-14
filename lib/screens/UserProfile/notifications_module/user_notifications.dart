@@ -62,12 +62,21 @@ class _UserNotificationsState extends State<UserNotifications> {
                     if(state is FetchedNotificationListState){
                       return  state.notificationList.length > 0? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               InkWell(
-                                child: Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),onTap: (){
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  color:AppTheme.electricBlue,
+                                  child:Icon(Icons.arrow_back_ios_rounded,color: Colors.white,)
+                                ),
+                                
+                                onTap: (){
                                 Navigator.of(context).pop();
                               },),
                               SizedBox(width: 8,),
@@ -100,7 +109,7 @@ class _UserNotificationsState extends State<UserNotifications> {
                         ],);
 
                     }
-                    return Container(child:Center(child: CircularProgressIndicator()));
+                    return Container(child:Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,)));
                     // return widget here based on BlocA's state
                   }
               )),
@@ -208,7 +217,7 @@ class _UserNotificationsState extends State<UserNotifications> {
                   ],));
 
                 }
-                return Container(child:Center(child: CircularProgressIndicator()));
+                return Container(child:Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,)));
               // return widget here based on BlocA's state
               }
           ))
@@ -556,7 +565,11 @@ class _UserNotificationsState extends State<UserNotifications> {
   }
 
   Widget customListItem(NotificationData data){
-    return Row(
+  DateTime currentDateTime =  new DateTime.now();
+ // DateTime time=  currentDateTime.subtract(new Duration(days:currentDateTime.difference(data.createdAt!).inDays,hours: currentDateTime.difference(data.createdAt!).inHours,minutes:currentDateTime.difference(data.createdAt!).inMinutes,seconds: currentDateTime.difference(data.createdAt!).inSeconds));
+    DateTime time = data.createdAt!;
+
+  return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Expanded(
@@ -605,7 +618,8 @@ class _UserNotificationsState extends State<UserNotifications> {
           padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
           child: CustomText(
             // "${DateFormat('dd MMM yyyy | hh:mm aa').format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))}"
-            timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))
+            //timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))
+            timeago.format(time)
             ,
             size: 12,
             color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
@@ -658,7 +672,3 @@ class _NotificationDescription extends StatelessWidget {
     );
   }
 }
-
-
-
-

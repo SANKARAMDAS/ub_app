@@ -211,7 +211,7 @@ class _ScanQRState extends State<ScanQR> {
   //           child: Expanded(
   //             child: OutlineButton(
   //               padding: EdgeInsets.all(15),
-  //               borderSide: BorderSide(color: Color(0xff1058ff), width: 2),
+  //               borderSide: BorderSide(color: AppTheme.electricBlue, width: 2),
   //               color: Colors.white,
   //               onPressed: () async {
   //                 setState(() {

@@ -196,6 +196,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                               fontWeight: FontWeight.w500),
                           focusedBorder: InputBorder.none,
                           enabledBorder: InputBorder.none),
+                      cursorColor: AppTheme.electricBlue,
                     ),
                     Suffix: Column(
                       children: [
@@ -273,9 +274,9 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                               state.fetchedContacts, '', context);
                         }
                         if (state is LoadingImportContacts)
-                          return Center(child: CircularProgressIndicator());
+                          return Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,));
 
-                        return Center(child: CircularProgressIndicator());
+                        return Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,));
                       },
                     ) /*.flexible*/,
                   ),
@@ -354,7 +355,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                 ),
               )
             : RefreshIndicator(
-                    color: Theme.of(context).primaryColor,
+                    color: AppTheme.electricBlue,
                     onRefresh: () async {
                       final count = await checkContactPermUpdateData(true);
                       if (count > 0) {
@@ -541,6 +542,7 @@ class _ImportContactsListWidgetState extends State<ImportContactsListWidget> {
                         CustomText(
                           getName(widget.contacts[index].name.trim(),
                               widget.contacts[index].mobileNo.trim()),
+                              color: AppTheme.blackColor
                         ),
                         CustomText(
                           widget.contacts[index].mobileNo,

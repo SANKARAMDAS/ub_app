@@ -709,6 +709,7 @@ class _UrbanLedgerPremiumState extends State<UrbanLedgerPremium> {
                         child: ElevatedButton(
                           onPressed: agree ? _doSomething : null,
                           style: ElevatedButton.styleFrom(
+                            primary: AppTheme.electricBlue,
                             padding: EdgeInsets.all(18),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),

@@ -9,7 +9,8 @@ import 'package:urbanledger/screens/Components/custom_widgets.dart';
 import 'package:urbanledger/screens/UserProfile/MyLedger/business_provider.dart';
 
 class CashbookAnalytics extends StatefulWidget {
-  const CashbookAnalytics({Key? key}) : super(key: key);
+  final isSelected;
+  const CashbookAnalytics({Key? key, this.isSelected}) : super(key: key);
 
   @override
   _CashbookAnalyticsState createState() => _CashbookAnalyticsState();
@@ -35,12 +36,15 @@ class _CashbookAnalyticsState extends State<CashbookAnalytics> {
 
   ///Custom Filters Are ['Day','Date','Month','Year']
   String selectedCustomFilter = 'Day';
+  bool isCountfound = false;
   bool _selectedQR = true;
   bool _selectedRevenue = false;
   // final List<charts.Series> seriesList;
 
   @override
   void initState() {
+    isCountfound = widget.isSelected;
+    print("abbafdfa");
     getlinkAndAmountData();
     super.initState();
   }
@@ -48,12 +52,16 @@ class _CashbookAnalyticsState extends State<CashbookAnalytics> {
   Future<void> getlinkAndAmountData() async {
     if (selectedFilter == 'Week') {
       await thisWeek();
+      isCountfound = true;
     } else if (selectedFilter == 'Month') {
       await thisMonth();
+      isCountfound = true;
     } else if (selectedFilter == 'Year') {
       await thisYear();
+      isCountfound = true;
     } else {
       await custom();
+      isCountfound = true;
     }
   }
 
@@ -468,7 +476,7 @@ class _CashbookAnalyticsState extends State<CashbookAnalytics> {
                                       7),
                                   showAxisLine: true),
                             ),
-                          ): Image.asset(AppAssets.barChartIcon),),
+                          ):  isCountfound == true ? Image.asset(AppAssets.barChartIcon) : SizedBox(height: 0, width:0),),
                     ),
                     Row(
                       // mainAxisSize: MainAxisSize.min,

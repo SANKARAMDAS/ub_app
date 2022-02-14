@@ -7,7 +7,11 @@ import 'package:urbanledger/chat_module/utils/custom_shared_preferences.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
 
 class CustomerVisualization extends StatefulWidget {
-  const CustomerVisualization({Key? key}) : super(key: key);
+  final isSelected;
+  const CustomerVisualization({
+    Key? key,
+    this.isSelected,
+  }) : super(key: key);
 
   @override
   _CustomerVisualizationState createState() => _CustomerVisualizationState();
@@ -32,8 +36,12 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
   ///Custom Filters Are ['Day','Date','Month','Year']
   String selectedCustomFilter = 'Day';
 
+  bool isCountfound = false;
+
   @override
   void initState() {
+    isCountfound = widget.isSelected;
+    print("abbafdfa");
     getCustomerData();
     super.initState();
   }
@@ -41,12 +49,16 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
   Future<void> getCustomerData() async {
     if (selectedFilter == 'Week') {
       await thisWeek();
+      isCountfound = true;
     } else if (selectedFilter == 'Month') {
       await thisMonth();
+      isCountfound = true;
     } else if (selectedFilter == 'Year') {
       await thisYear();
+      isCountfound = true;
     } else {
       await custom();
+      isCountfound = true;
     }
   }
 
@@ -55,8 +67,9 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
     _end = DateTime.now()
         .date
         .add(const Duration(hours: 23, minutes: 59, seconds: 59));
-        await CustomSharedPreferences.setString('_startDate', _start.toIso8601String());
-        await CustomSharedPreferences.setString('_endDate', _end.toIso8601String());
+    await CustomSharedPreferences.setString(
+        '_startDate', _start.toIso8601String());
+    await CustomSharedPreferences.setString('_endDate', _end.toIso8601String());
     customerData =
         await _repository.queries.getCustomerCountForThisMonth(_start, _end);
     countAmount = await _repository.queries.getCustomerCounts(_start, _end);
@@ -74,11 +87,12 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
         // .add(Duration(days: DateTime.daysPerWeek - DateTime.now().weekday))
         .date
         .add(const Duration(hours: 23, minutes: 59, seconds: 59));
-        await CustomSharedPreferences.setString('_startDate', _start.toIso8601String());
-        await CustomSharedPreferences.setString('_endDate', _end.toIso8601String());
+    await CustomSharedPreferences.setString(
+        '_startDate', _start.toIso8601String());
+    await CustomSharedPreferences.setString('_endDate', _end.toIso8601String());
     customerData =
         await _repository.queries.getCustomerCountForThisMonth(_start, _end);
-    debugPrint('qqqqqqqq:'+customerData.toString());
+    debugPrint('qqqqqqqq:' + customerData.toString());
     countAmount = await _repository.queries.getCustomerCounts(_start, _end);
     count = countAmount['COUNT'];
     debugPrint('qwerty : ' + customerData.toString());
@@ -91,8 +105,9 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
     _end = (DateTime.now())
         .date
         .add(const Duration(hours: 23, minutes: 59, seconds: 59));
-        await CustomSharedPreferences.setString('_startDate', _start.toIso8601String());
-        await CustomSharedPreferences.setString('_endDate', _end.toIso8601String());
+    await CustomSharedPreferences.setString(
+        '_startDate', _start.toIso8601String());
+    await CustomSharedPreferences.setString('_endDate', _end.toIso8601String());
     customerData =
         await _repository.queries.getCustomerCountForThisYear(_start, _end);
     countAmount = await _repository.queries.getCustomerCounts(_start, _end);
@@ -105,8 +120,10 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
   Future<void> custom() async {
     if (_end.difference(_start).inDays <= 7) {
       selectedCustomFilter = 'Day';
-      await CustomSharedPreferences.setString('_startDate', _start.toIso8601String());
-        await CustomSharedPreferences.setString('_endDate', _end.toIso8601String());
+      await CustomSharedPreferences.setString(
+          '_startDate', _start.toIso8601String());
+      await CustomSharedPreferences.setString(
+          '_endDate', _end.toIso8601String());
       customerData =
           await _repository.queries.getCustomerCountForThisMonth(_start, _end);
       initDate = customerData.first['DAY'];
@@ -119,8 +136,10 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
       if (_end.toIso8601String().substring(0, 4) !=
           _start.toIso8601String().substring(0, 4)) {
         selectedCustomFilter = 'Years';
-        await CustomSharedPreferences.setString('_startDate', _start.toIso8601String());
-        await CustomSharedPreferences.setString('_endDate', _end.toIso8601String());
+        await CustomSharedPreferences.setString(
+            '_startDate', _start.toIso8601String());
+        await CustomSharedPreferences.setString(
+            '_endDate', _end.toIso8601String());
         customerData = await _repository.queries
             .getCustomerCountForMoreYears(_start, _end);
         countAmount = await _repository.queries.getCustomerCounts(_start, _end);
@@ -130,8 +149,10 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
         return;
       } else {
         selectedCustomFilter = 'Date';
-        await CustomSharedPreferences.setString('_startDate', _start.toIso8601String());
-        await CustomSharedPreferences.setString('_endDate', _end.toIso8601String());
+        await CustomSharedPreferences.setString(
+            '_startDate', _start.toIso8601String());
+        await CustomSharedPreferences.setString(
+            '_endDate', _end.toIso8601String());
         customerData = await _repository.queries
             .getCustomerCountForThisMonth(_start, _end);
         countAmount = await _repository.queries.getCustomerCounts(_start, _end);
@@ -144,8 +165,10 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
       if (_end.toIso8601String().substring(0, 4) !=
           _start.toIso8601String().substring(0, 4)) {
         selectedCustomFilter = 'Years';
-        await CustomSharedPreferences.setString('_startDate', _start.toIso8601String());
-        await CustomSharedPreferences.setString('_endDate', _end.toIso8601String());
+        await CustomSharedPreferences.setString(
+            '_startDate', _start.toIso8601String());
+        await CustomSharedPreferences.setString(
+            '_endDate', _end.toIso8601String());
         customerData = await _repository.queries
             .getCustomerCountForMoreYears(_start, _end);
         countAmount = await _repository.queries.getCustomerCounts(_start, _end);
@@ -155,8 +178,10 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
         return;
       } else {
         selectedCustomFilter = 'Month';
-        await CustomSharedPreferences.setString('_startDate', _start.toIso8601String());
-        await CustomSharedPreferences.setString('_endDate', _end.toIso8601String());
+        await CustomSharedPreferences.setString(
+            '_startDate', _start.toIso8601String());
+        await CustomSharedPreferences.setString(
+            '_endDate', _end.toIso8601String());
         customerData =
             await _repository.queries.getCustomerCountForThisYear(_start, _end);
         countAmount = await _repository.queries.getCustomerCounts(_start, _end);
@@ -167,8 +192,10 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
       }
     } else if (_end.difference(_start).inDays >= 365) {
       selectedCustomFilter = 'Years';
-      await CustomSharedPreferences.setString('_startDate', _start.toIso8601String());
-        await CustomSharedPreferences.setString('_endDate', _end.toIso8601String());
+      await CustomSharedPreferences.setString(
+          '_startDate', _start.toIso8601String());
+      await CustomSharedPreferences.setString(
+          '_endDate', _end.toIso8601String());
       customerData =
           await _repository.queries.getCustomerCountForMoreYears(_start, _end);
       countAmount = await _repository.queries.getCustomerCounts(_start, _end);
@@ -178,8 +205,10 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
       return;
     } else {
       selectedCustomFilter = 'Year';
-      await CustomSharedPreferences.setString('_startDate', _start.toIso8601String());
-        await CustomSharedPreferences.setString('_endDate', _end.toIso8601String());
+      await CustomSharedPreferences.setString(
+          '_startDate', _start.toIso8601String());
+      await CustomSharedPreferences.setString(
+          '_endDate', _end.toIso8601String());
       customerData =
           await _repository.queries.getCustomerCountForYears(_start, _end);
       countAmount = await _repository.queries.getCustomerCounts(_start, _end);
@@ -319,7 +348,7 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
                         // height: 100,
                         padding:
                             EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                        child: count > 0
+                        child:  count > 0
                             ? Scrollbar(
                                 child: charts.BarChart(
                                   _createChartData(),
@@ -333,7 +362,7 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
                                   //         outsideLabelStyleSpec:
                                   //             charts.TextStyleSpec(
                                   //                 color: charts.Color.fromHex(
-                                  //                     code: '#1058FF'))),
+                                  //                     code: '#7C4DFF'))),
                                   // domainAxis: new charts.OrdinalAxisSpec(),
                                   behaviors: [
                                     new charts.SlidingViewport(),
@@ -361,7 +390,7 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
                                       showAxisLine: true),
                                 ),
                               )
-                            : Image.asset(AppAssets.barChartIcon),
+                            : isCountfound == true ? Image.asset(AppAssets.barChartIcon) : SizedBox(height: 0, width:0),
                       ),
                     ),
                     Row(
@@ -587,7 +616,7 @@ class _CustomerVisualizationState extends State<CustomerVisualization> {
     return [
       new charts.Series<CustomerVisualModel, String>(
           id: 'Customer Visualization Data',
-          colorFn: (_, __) => charts.Color.fromHex(code: '#1058FF'),
+          colorFn: (_, __) => charts.Color.fromHex(code: '#7C4DFF'),
           domainFn: (CustomerVisualModel c, _) => c.xDomain,
           measureFn: (CustomerVisualModel c, _) => c.customerCount,
           data: data,

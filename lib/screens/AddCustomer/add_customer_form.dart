@@ -332,7 +332,7 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(15),
-                  primary: !isLoading ? Theme.of(context).primaryColor : AppTheme.coolGrey,
+                  primary: !isLoading ? AppTheme.electricBlue : AppTheme.coolGrey,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
@@ -394,6 +394,7 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
                           if (response != null) {
                             if (await checkConnectivity) {
                               if (_customerModel.mobileNo!.isNotEmpty) {
+                                CustomLoadingDialog.showLoadingDialog(context);
                                 final Messages msg =
                                     Messages(messages: '', messageType: 100);
                                 var jsondata = jsonEncode(msg);
@@ -461,6 +462,7 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
         .saveCustomer(_customerModel,context,AddCustomers.ADD_NEW_CUSTOMER)
         .catchError((e) {
       debugPrint(e.toString());
+      Navigator.of(context).pop();
       setState(() {
         isLoading = false;
       });
@@ -472,10 +474,12 @@ class _AddCustomerFormState extends State<AddCustomerForm> {
       if (_customerModel.chatId.toString().isNotEmpty) {
         await _repository.queries.updateCustomerIsChanged(
             0, _customerModel.customerId!, _customerModel.chatId);
+            Navigator.of(context).pop();
       }
     } else {
       await _repository.queries.updateCustomerIsChanged(
           1, _customerModel.customerId!, _customerModel.chatId);
+          Navigator.of(context).pop();
     }
   }
 }

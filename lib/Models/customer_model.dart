@@ -20,6 +20,8 @@ class CustomerModel {
 
   static const columnUpdatedDate = 'UPDATEDDATE';
 
+  static const columnUpdatedAt = 'UPDATEDAT';
+
   static const columnCreatedDate = 'CREATEDDATE';
 
   static const columnTransactionType = 'TRANSACTIONTYPE';
@@ -39,6 +41,7 @@ class CustomerModel {
   Uint8List? avatar;
   Future<bool>? isAdded;
   DateTime? updatedDate;
+  DateTime? updatedAt;
   double? transactionAmount;
   TransactionType? transactionType;
   bool? isChanged;
@@ -55,8 +58,9 @@ class CustomerModel {
         columnChatId: chatId,
         columnAvatar: avatar,
         columnTransactionAmount: removeDecimalif0(transactionAmount ?? 0),
-        columnUpdatedDate:
-            updatedDate?.toIso8601String() ?? DateTime.now().toIso8601String(),
+        columnUpdatedDate: updatedAt?.toIso8601String() != null ? updatedAt?.toIso8601String() : DateTime.now().toIso8601String(),
+        columnUpdatedAt: 
+            updatedAt?.toIso8601String() != null ? updatedAt?.toIso8601String() : DateTime.now().toIso8601String(),
         columnCreatedDate:
             createdDate?.toIso8601String() ?? DateTime.now().toIso8601String(),
         columnTransactionType: transactionType == null
@@ -87,9 +91,13 @@ class CustomerModel {
     customerModel.avatar = element[CustomerModel.columnAvatar];
     customerModel.transactionAmount =
         double.tryParse(element[CustomerModel.columnTransactionAmount]) ?? 0;
-    customerModel.updatedDate =
-        DateTime.tryParse(element[CustomerModel.columnUpdatedDate]) ??
+    customerModel.updatedAt =element[CustomerModel.columnUpdatedAt]!=null?
+        DateTime.tryParse(element[CustomerModel.columnUpdatedAt]):
             DateTime.now();
+    customerModel.updatedDate =
+    element[CustomerModel.columnUpdatedAt]!=null?
+    DateTime.tryParse(element[CustomerModel.columnUpdatedAt]):
+    DateTime.now();
     customerModel.createdDate =
         DateTime.tryParse(element[CustomerModel.columnCreatedDate]) ??
             DateTime.now();
@@ -115,8 +123,8 @@ class CustomerModel {
         "business": businessId,
         "chat_id": chatId,
         'transactionAmount': transactionAmount ?? 0,
-        'updatedDate':
-            updatedDate?.toIso8601String() ?? DateTime.now().toIso8601String(),
+        'updatedAt':
+            updatedAt?.toIso8601String() != null ? updatedAt?.toIso8601String() : DateTime.now().toIso8601String(),
         'transactionType': transactionType == null
             ? null
             : transactionType == TransactionType.Pay

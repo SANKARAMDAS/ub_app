@@ -39,7 +39,6 @@ class _UpgradeSubscriptionState extends State<UpgradeSubscription> {
   String? planId;
   String? cardId;
   PremiumStartOrderSession? OSession;
-  bool isLoading = false;
 
   final GlobalKey<State> key = GlobalKey<State>();
 
@@ -48,19 +47,23 @@ class _UpgradeSubscriptionState extends State<UpgradeSubscription> {
     // TODO: implement initState
     super.initState();
     getCar();
-    Osess();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // executes after build
+      Osess();
+    });
   }
 
   Osess() async {
 
-    setState(() {
-      isLoading = true;
-    });
 
+    CustomLoadingDialog.showLoadingDialog(
+        context,key);
     OSession = await FreemiumAPI.freemiumApi.startOrderSessionPremiumPLan();
     setState(() {
-      isLoading = false;
+
     });
+    Navigator.of(context).pop();
+
 
   }
 
@@ -100,8 +103,9 @@ class _UpgradeSubscriptionState extends State<UpgradeSubscription> {
         return true;
       },
       child: Scaffold(
+        key: key,
         backgroundColor: AppTheme.paleGrey,
-        bottomNavigationBar: isLoading?Container():Container(
+        bottomNavigationBar: Container(
           margin: EdgeInsets.only(bottom: 20),
           child: Consumer<AddCardsProvider>(
             builder: (context, card, child) {
@@ -173,6 +177,7 @@ class _UpgradeSubscriptionState extends State<UpgradeSubscription> {
                               text1: 'Pay using'.toUpperCase(),
                               textSize1: 16,
                               textColor1: Colors.white,
+                              backgroundColor: AppTheme.electricBlue,
                               text2:
                                   '${fprov.cardNumber != null ? fprov.cardNumber : cardNo.toString()}',
                               textSize2: 16,
@@ -689,7 +694,7 @@ class _UpgradeSubscriptionState extends State<UpgradeSubscription> {
                                     Text(
                                       '${widget.planModel[i].name} Subscription',
                                       style: TextStyle(
-                                          color: Color(0xff1058ff),
+                                          color: AppTheme.electricBlue,
                                           fontWeight:
                                               FontWeight.w700, //FontWeight.w500
                                           fontSize: 18),

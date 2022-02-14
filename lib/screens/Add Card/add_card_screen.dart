@@ -1,9 +1,11 @@
 //import 'package:card_scanner/card_scanner.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:urbanledger/Card_module/credit_card_input_form.dart';
 import 'package:urbanledger/Card_module/model/card_info.dart';
 import 'package:urbanledger/Utility/app_constants.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
 import 'package:urbanledger/screens/Components/extensions.dart';
 import 'package:urbanledger/screens/Components/new_custom_button.dart';
@@ -34,8 +36,8 @@ class _AddCardScreenState extends State<AddCardScreen> {
   Future<void> scanCard() async {
     var cardDetails = await CardScanner.scanCard(scanOptions: scanOptions);
     if (!mounted) return;
-     print('rrt : '+cardDetails.toString());
-     print('rrt : '+cardDetails!.cardHolderName);
+    print('rrt : ' + cardDetails.toString());
+    print('rrt : ' + cardDetails!.cardHolderName);
     setState(() {
       _cardDetails = cardDetails;
       Navigator.push(
@@ -46,7 +48,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     cardName: _cardDetails.cardHolderName,
                     cardValid: _cardDetails.expiryDate,
                   )));
-       print(cardDetails);
+      print(cardDetails);
     });
   }
 
@@ -75,7 +77,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
       //     ),
       //   ),
       // ),
-      
+
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -122,8 +124,29 @@ class _AddCardScreenState extends State<AddCardScreen> {
 
                         Spacer(),
                         InkWell(
-                          onTap: () {
-                            scanCard();
+                          onTap: () async {
+                            print("oioioio");
+                            var status = await Permission.photos.status;
+                            if (status.isDenied) {
+                              print("=====");
+                              // Permission.camera.request();
+
+                              final status = await Permission.camera.request();
+                              if (status == PermissionStatus.granted) {
+                                print('Permission Granted');
+                                 scanCard();
+                              } else if (status == PermissionStatus.denied) {
+                                print('Permission denied');
+                              } else if (status ==
+                                  PermissionStatus.permanentlyDenied) {
+                                print('Permission Permanently Denied');
+                                await openAppSettings();
+                              }
+                            } else {
+                              scanCard();
+                            }
+
+                            print(status);
                           },
                           child: Row(
                             children: [
@@ -285,7 +308,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
     gradient: LinearGradient(
         colors: [
           const Color(0xFF0000),
-          const Color(0xFF1058FF),
+          AppTheme.electricBlue,
         ],
         begin: const FractionalOffset(0.0, 0.0),
         end: const FractionalOffset(1.0, 0.0),

@@ -35,6 +35,7 @@ class _BackupInformationScreenState extends State<BackupInformationScreen> {
                         bold: FontWeight.w500,
                       ),
                 style: ElevatedButton.styleFrom(
+                  primary: AppTheme.electricBlue,
                   padding: isLoading ? EdgeInsets.zero : EdgeInsets.all(15),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),

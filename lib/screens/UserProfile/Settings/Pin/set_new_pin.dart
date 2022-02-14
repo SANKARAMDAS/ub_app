@@ -49,22 +49,26 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
     return Scaffold(
       backgroundColor: AppTheme.paleGrey,
       appBar: AppBar(
-          title: CustomText('PIN Setup'),
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              size: 22,
-            ),
-            onPressed: () async {
+        title: Text('PIN Setup'),
+        leading: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: IconButton(
+            onPressed: () {
               Navigator.of(context).pop();
             },
-          )),
+            icon: Icon(
+              Icons.arrow_back_ios_rounded,
+              size: 22,
+            ),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Stack(
           children: [
             Container(
               clipBehavior: Clip.none,
-              height: height * 0.3,
+              height: height * 0.23,
               width: double.infinity,
               alignment: Alignment.topCenter,
               decoration: BoxDecoration(
@@ -75,7 +79,7 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
             ),
             Column(
               children: <Widget>[
-                (height * 0.07).heightBox,
+                (height * 0.047).heightBox,
                 if (!widget.showConfirmPinState)
                   ValueListenableBuilder<String>(
                       valueListenable: setPinNotifier,
@@ -232,16 +236,19 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
                           ),
                         ),
                       ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.06,
+                ),
                 Image.asset(
                   widget.showConfirmPinState
                       ? AppAssets.confirmpinImage
                       : AppAssets.setpinImage,
-                  height: height * 0.3,
+                  height: height * 0.34,
                 ),
                 Spacer(),
                 Container(
                   child: keyBoard(),
-                  height: height * 0.30,
+                  height: height * 0.25,
                 )
               ],
             ),
@@ -354,19 +361,17 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
       if (setPinNotifier.value.length < 4) {
         setPinNotifier.value = setPinNotifier.value + str;
         if (setPinNotifier.value.length == 4) {
-          if(await PincodeStrenth().checkPincodeStrenth(setPinNotifier.value)){
+          if (await PincodeStrenth()
+              .checkPincodeStrenth(setPinNotifier.value)) {
             setState(() {
               showError = true;
             });
-             showWeakPinDialog(context);
-
-          }
-          else{
+            showWeakPinDialog(context);
+          } else {
             Navigator.of(context).pushNamed(AppRoutes.setNewPinRoute,
                 arguments: SetPinRouteArgs(
                     setPinNotifier.value, true, widget.isResetPinState, false));
           }
-
         }
       }
     } else {
@@ -386,7 +391,9 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
               await Future.delayed(Duration(seconds: 1));
             } */
             LoginModel loginModel = LoginModel(
-              mobileNo: repository.hiveQueries.userData.mobileNo,
+              mobileNo: repository.hiveQueries.userData.mobileNo
+                  .trim()
+                  .replaceAll('+', ''),
               pin: confirmPinNotifier.value,
               status: true,
             );
@@ -426,8 +433,8 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
     }
   }
 
-  showWeakPinDialog(BuildContext ctx){
-    return  showGeneralDialog(
+  showWeakPinDialog(BuildContext ctx) {
+    return showGeneralDialog(
       barrierLabel: "Barrier",
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.5),
@@ -437,89 +444,108 @@ class _SetNewPinScreenState extends State<SetNewPinScreen> {
         return Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: MediaQuery.of(ctx).size.height*0.3 ,
-            child: SizedBox.expand(child: ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),child: Scaffold(body: Container(child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                    padding: EdgeInsets.only(top:16),
-                    alignment: Alignment.center,
-                    child:  Text('Weak PIN',style: TextStyle(color: Colors.red,fontSize: 20,fontWeight: FontWeight.w500))),
-                SizedBox(height: 8,),
-                Image.asset(
-                  AppAssets.weak_pin,
-                  height: 50,
-                  width: 50,
-                ),
-                SizedBox(height: 8,),
-
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal:40),
-                  child: CustomText('The PIN you have entered can be easily guessed. Do you want to proceed with this PIN?'
-                    ,
-                    size: 18,
-                    centerAlign: true,
-                    color: AppTheme.brownishGrey,
-                    bold: FontWeight.w400,
-                  ),
-                ),
-                SizedBox(height: 8,),
-
-              ],)),
-              bottomNavigationBar: Row(children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                        onPressed: () async {
-
-                          Navigator.of(ctx).pop();
-                      Navigator.of(ctx).pushNamed(AppRoutes.setNewPinRoute,
-                              arguments: SetPinRouteArgs(
-                                  setPinNotifier.value, true, widget.isResetPinState, false));
-
-                        },
-                        child: CustomText(
-                          'YES',
-                          size: (18),
-                          bold: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.all(15),
-                          primary: AppTheme.electricBlue,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        )),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          setPinNotifier.value = '';
-                          Navigator.of(ctx).pop();
-                        },
-                        child: CustomText(
-                          'NO',
-                          size: (18),
-                          bold: FontWeight.w500,
-                        ),
-                        style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.all(15),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            elevation: 0
-                        )),
-                  ),
-                )
-              ],)
-
-              ,))),
+            height: MediaQuery.of(ctx).size.height * 0.3,
+            child: SizedBox.expand(
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: Scaffold(
+                      body: Container(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                              padding: EdgeInsets.only(top: 16),
+                              alignment: Alignment.center,
+                              child: Text('Weak PIN',
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w500))),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Image.asset(
+                            AppAssets.weak_pin,
+                            height: 50,
+                            width: 50,
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 40),
+                            child: CustomText(
+                              'The PIN you have entered can be easily guessed. Do you want to proceed with this PIN?',
+                              size: 18,
+                              centerAlign: true,
+                              color: AppTheme.brownishGrey,
+                              bold: FontWeight.w400,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                        ],
+                      )),
+                      bottomNavigationBar: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ElevatedButton(
+                                  onPressed: () async {
+                                    Navigator.of(ctx).pop();
+                                    Navigator.of(ctx).pushNamed(
+                                        AppRoutes.setNewPinRoute,
+                                        arguments: SetPinRouteArgs(
+                                            setPinNotifier.value,
+                                            true,
+                                            widget.isResetPinState,
+                                            false));
+                                  },
+                                  child: CustomText(
+                                    'YES',
+                                    size: (18),
+                                    bold: FontWeight.w500,
+                                    color: Colors.white,
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.all(15),
+                                    primary: AppTheme.electricBlue,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                  )),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    setPinNotifier.value = '';
+                                    Navigator.of(ctx).pop();
+                                  },
+                                  child: CustomText(
+                                    'NO',
+                                    size: (18),
+                                    color: AppTheme.whiteColor,
+                                    bold: FontWeight.w500,
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                      primary: AppTheme.electricBlue,
+                                      padding: EdgeInsets.all(15),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      elevation: 0)),
+                            ),
+                          )
+                        ],
+                      ),
+                    ))),
             margin: EdgeInsets.only(bottom: 12, left: 16, right: 16),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -569,7 +595,7 @@ class PinField extends StatelessWidget {
         // padding: const EdgeInsets.only(left: 15.0, right: 15),
         padding: EdgeInsets.all(10),
         child: new Container(
-          height: 75,
+          height: 70,
           width: 50,
           alignment: Alignment.center,
           decoration: new BoxDecoration(

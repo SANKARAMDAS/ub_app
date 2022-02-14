@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:urbanledger/Utility/app_services.dart';
 
 class MyButton extends StatelessWidget {
   final String title;
@@ -19,7 +20,7 @@ class MyButton extends StatelessWidget {
       child: Container(
         height: 45,
         child: Material(
-          color: Theme.of(context).primaryColor,
+          color: AppTheme.electricBlue,
           borderRadius: BorderRadius.circular(30),
           child: InkWell(
             borderRadius: BorderRadius.circular(30),

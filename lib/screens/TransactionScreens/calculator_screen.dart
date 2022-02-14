@@ -53,6 +53,7 @@ class _CalculatorState extends State<CalculatorScreen> {
   bool isLoading = false;
   bool isCalcSheetOpen = false;
   FocusNode newFocus = FocusNode();
+  Offset? _gesturePosition;
 
   @override
   void initState() {
@@ -117,29 +118,38 @@ class _CalculatorState extends State<CalculatorScreen> {
       isHightSubtracted = true;
     }
     hideCalculator = viewInsetsBottom != 0.0;
-    return WillPopScope(
-      onWillPop: () async {
-        if (isLoading) return false;
-        if (isCalcSheetOpen) {
-          isCalcSheetOpen = false;
-          Navigator.pop(context);
-          return false;
-        }
-        if (widget.transactionModel != null) {
-          final bool? response = await showExitWithoutSavingDialog();
-          return response!;
-        }
-        return true;
-      },
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
+    return 
+       GestureDetector(
+          onPanUpdate: (details) {
+      // Swiping in right direction.
+      if (details.delta.dx > 0) {
+        Navigator.of(context).pop();
+      }
 
-          if (isCalcSheetOpen) {
-            isCalcSheetOpen = false;
-            Navigator.pop(context);
-          }
-        },
+      // Swiping in left direction.
+      if (details.delta.dx < 0) {
+
+      }
+    },
+      //  onHorizontalDragStart: (details) {
+      //     if (isCalcSheetOpen && details.localPosition.dx < 50) {
+      //       _gesturePosition = details.localPosition;
+      //     }
+      //   },
+        // onHorizontalDragUpdate: (details) {
+        //   if (isCalcSheetOpen && details.delta.dx < 0) {
+        //     _gesturePosition = null;
+        //   }
+        // },
+        // onHorizontalDragCancel: () {
+        //   _gesturePosition = null;
+        // },
+        // onHorizontalDragEnd: (details) {
+        //   if (_gesturePosition != null) {
+        //     _gesturePosition = null;
+        //    //TODO handle back
+        //   }
+        // }, 
         child: Scaffold(
             backgroundColor: AppTheme.paleGrey,
             appBar: AppBar(
@@ -177,18 +187,19 @@ class _CalculatorState extends State<CalculatorScreen> {
                   }),
             ),
             body: Container(
+
               height: height,
               width: double.maxFinite,
               child: Stack(
                 children: [
                   Container(
                     clipBehavior: Clip.none,
-                    height: height * 0.245,
+                    // height: height * 0.245,
                     width: double.infinity,
                     alignment: Alignment.topCenter,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            fit: BoxFit.fill,
+                            fit: BoxFit.fitWidth,
                             image: AssetImage(AppAssets.backgroundImage),
                             alignment: Alignment.topCenter)),
                   ),
@@ -404,10 +415,15 @@ class _CalculatorState extends State<CalculatorScreen> {
                                             MainAxisAlignment.end,
                                         children: [
                                           ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                              primary: AppTheme.electricBlue,
+                                            ),
                                             icon: Icon(Icons.today_rounded),
                                             label: CustomText(
                                                 DateFormat('EEE, dd MMM yyyy')
-                                                    .format(_selectedDate!)),
+                                                    .format(_selectedDate!),
+                                                    color: AppTheme.whiteColor,
+                                                    ),
                                             onPressed: () async {
                                               final selectedDate =
                                                   (await showCustomDatePicker(
@@ -583,7 +599,7 @@ class _CalculatorState extends State<CalculatorScreen> {
                 ],
               ),
             )),
-      ),
+      
     );
   }
 
@@ -617,7 +633,7 @@ class _CalculatorState extends State<CalculatorScreen> {
                             borderRadius: BorderRadius.circular(10)),
                         primary: calculationString.isEmpty
                             ? AppTheme.disabledBlue
-                            : Theme.of(context).primaryColor,
+                            : AppTheme.electricBlue,
                       ),
                       onPressed: calculatedAmount < 0.1
                           ? null
@@ -1305,7 +1321,7 @@ class _CalculatorState extends State<CalculatorScreen> {
             await showDeleteImageDialog(index);
           },
           child: DottedBorder(
-            color: Theme.of(context).primaryColor,
+            color: AppTheme.electricBlue,
             radius: Radius.circular(10),
             dashPattern: [5, 5, 5, 5],
             borderType: BorderType.RRect,

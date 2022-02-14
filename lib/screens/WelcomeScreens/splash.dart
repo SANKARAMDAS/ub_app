@@ -325,7 +325,7 @@ void onStart() async {
       if (repository.hiveQueries.isAuthenticated!) {
         // debugPrint('qqqqqqqqqqqqqqqqqqqqqqqqqq: '+repository.hiveQueries.userData.toString());
         LoginModel loginModel = LoginModel(
-                                    mobileNo: repository.hiveQueries.userData.mobileNo);
+                                    mobileNo: repository.hiveQueries.userData.mobileNo.trim().replaceAll('+', ''));
                                 bool isLogin = await Repository()
                                     .queries
                                     .isLoginUser(loginModel);
@@ -391,7 +391,6 @@ void onStart() async {
 
   @override
   Widget build(BuildContext context) {
-    
     deviceHeight = MediaQuery.of(context).size.height;
     initMethod();
     // timer = Timer(Duration(milliseconds: 2000), () {
@@ -420,14 +419,33 @@ void onStart() async {
     //   timer.cancel();
     // });
     return Scaffold(
-      // extendBodyBehindAppBar: true,
-      backgroundColor: AppTheme.splashBGColor,
-      body: Container(
-        margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width*0.2),
-        alignment: Alignment.center,
-        child: Image.asset(AppAssets.splashLogo),
-        // child: Text('qwert')
-      )
+      extendBodyBehindAppBar: true,
+      body: Stack(alignment: Alignment.topCenter, children: [
+        AppAssets.backgroundImage.background,
+        /* Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: double.infinity,
+            height: 20,
+            color: AppTheme.brownishGrey,
+          ),
+        ), */
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // ULLogoWidget(
+            //   height: 80,
+            // ),
+            Image.asset(AppAssets.portraitLogo, width: MediaQuery.of(context).size.width*0.4),
+            // CustomText(
+            //   'Track. Remind. Pay.',
+            //   size: 22,
+            //   bold: FontWeight.w500,
+            //   color: AppTheme.brownishGrey,
+            // ),
+          ],
+        ),
+      ]),
     );
   }
 }

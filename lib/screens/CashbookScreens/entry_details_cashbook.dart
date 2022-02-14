@@ -87,7 +87,7 @@ class _CashbookEntryDetailsState extends State<CashbookEntryDetails> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(
-          bottom: 25,
+          bottom: 40,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -196,7 +196,7 @@ class _CashbookEntryDetailsState extends State<CashbookEntryDetails> {
                                       EntryType.IN
                                   ? 'IN'
                                   : 'OUT',
-                              color: Theme.of(context).primaryColor,
+                              color: AppTheme.electricBlue,
                               size: 23,
                               bold: FontWeight.w500,
                             ),
@@ -379,7 +379,7 @@ class _CashbookEntryDetailsState extends State<CashbookEntryDetails> {
       Padding(
         padding: const EdgeInsets.all(4.0),
         child: DottedBorder(
-          color: Theme.of(context).primaryColor,
+          color: AppTheme.electricBlue,
           radius: Radius.circular(4),
           dashPattern: [5, 5, 5, 5],
           borderType: BorderType.RRect,

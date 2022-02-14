@@ -171,7 +171,7 @@ class _GlobalReportState extends State<GlobalReport> {
                       20.0.heightBox,
                       Container(
                         decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
+                            color: AppTheme.electricBlue,
                             borderRadius: BorderRadius.circular(15)),
                         padding: EdgeInsets.only(
                             left: 15, right: 15, top: 5, bottom: 5),
@@ -411,7 +411,7 @@ class _GlobalReportState extends State<GlobalReport> {
                 isLoading
                     ? Expanded(
                         child: Center(
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                         ),
                       )
                     : ListView.builder(
@@ -1189,7 +1189,7 @@ class _GlobalReportState extends State<GlobalReport> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 0,
                   groupValue: tempRadioOption,
                   onChanged: (value) {
@@ -1207,7 +1207,7 @@ class _GlobalReportState extends State<GlobalReport> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 1,
                   groupValue: tempRadioOption,
                   onChanged: (value) {
@@ -1227,7 +1227,7 @@ class _GlobalReportState extends State<GlobalReport> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: isLoading
-                      ? Center(child: CircularProgressIndicator())
+                      ? Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,))
                       : NewCustomButton(
                           text: 'DOWNLOAD',
                           textSize: 18,

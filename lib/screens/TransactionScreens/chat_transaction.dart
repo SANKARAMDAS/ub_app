@@ -465,7 +465,7 @@
 //                                         child: Icon(
 //                                           Icons.done_all_outlined,
 //                                           size: 18,
-//                                           color: Theme.of(context).primaryColor,
+//                                           color: AppTheme.electricBlue,
 //                                         ),
 //                                       )
 //                                     : Container(),
@@ -987,7 +987,7 @@
 //                                         child: Icon(
 //                                           Icons.done_all_outlined,
 //                                           size: 18,
-//                                           color: Theme.of(context).primaryColor,
+//                                           color: AppTheme.electricBlue,
 //                                         ),
 //                                       )
 //                                     : Container(),
@@ -1216,7 +1216,7 @@
 //                                             Icons.done_all_outlined,
 //                                             size: 18,
 //                                             color:
-//                                                 Theme.of(context).primaryColor,
+//                                                 AppTheme.electricBlue,
 //                                           ),
 //                                         )
 //                                       : Container(),
@@ -1313,7 +1313,7 @@
 //                                         child: Icon(
 //                                           Icons.done_all_outlined,
 //                                           size: 18,
-//                                           color: Theme.of(context).primaryColor,
+//                                           color: AppTheme.electricBlue,
 //                                         ),
 //                                       )
 //                                     : Container(),
@@ -1494,7 +1494,7 @@
 //                                         child: Icon(
 //                                           Icons.done_all_outlined,
 //                                           size: 18,
-//                                           color: Theme.of(context).primaryColor,
+//                                           color: AppTheme.electricBlue,
 //                                         ),
 //                                       )
 //                                     : Container(),
@@ -1829,7 +1829,7 @@
 //         decoration: BoxDecoration(
 //             color: Colors.white,
 //             border: Border.all(
-//               color: Theme.of(context).primaryColor,
+//               color: AppTheme.electricBlue,
 //               width: 0.5,
 //             ),
 //             borderRadius: BorderRadius.only(
@@ -1849,7 +1849,7 @@
 //               Text(
 //                 'Receive',
 //                 style: TextStyle(
-//                     color: Theme.of(context).primaryColor,
+//                     color: AppTheme.electricBlue,
 //                     fontSize: 16,
 //                     fontWeight: FontWeight.w500),
 //               ),
@@ -1859,7 +1859,7 @@
 //               Image.asset(
 //                 'assets/icons/in.png',
 //                 scale: 1.2,
-//                 color: Theme.of(context).primaryColor,
+//                 color: AppTheme.electricBlue,
 //                 height: 19,
 //               ),
 //             ],
@@ -1873,7 +1873,7 @@
 //                   style: TextStyle(
 //                     fontSize: 12,
 //                     fontWeight: FontWeight.bold,
-//                     color: Theme.of(context).primaryColor,
+//                     color: AppTheme.electricBlue,
 //                   ),
 //                 ),
 //                 TextSpan(
@@ -1881,7 +1881,7 @@
 //                   style: TextStyle(
 //                     fontSize: 18,
 //                     fontWeight: FontWeight.bold,
-//                     color: Theme.of(context).primaryColor,
+//                     color: AppTheme.electricBlue,
 //                   ),
 //                 ),
 //               ],
@@ -1895,7 +1895,7 @@
 //         decoration: BoxDecoration(
 //             color: Colors.white,
 //             border: Border.all(
-//               color: Theme.of(context).primaryColor,
+//               color: AppTheme.electricBlue,
 //               width: 0.5,
 //             ),
 //             borderRadius: BorderRadius.only(
@@ -1915,7 +1915,7 @@
 //                 Text(
 //                   'Collection',
 //                   style: TextStyle(
-//                       color: Theme.of(context).primaryColor,
+//                       color: AppTheme.electricBlue,
 //                       fontSize: 16,
 //                       fontWeight: FontWeight.w500),
 //                 ),
@@ -1929,7 +1929,7 @@
 //                     text: 'SET DATE',
 //                     style: TextStyle(
 //                         fontSize: 14,
-//                         color: Theme.of(context).primaryColor,
+//                         color: AppTheme.electricBlue,
 //                         fontWeight: FontWeight.w500),
 //                   ),
 //                   WidgetSpan(
@@ -1938,7 +1938,7 @@
 //                       child: Icon(
 //                         Icons.calendar_today_outlined,
 //                         size: 14,
-//                         color: Theme.of(context).primaryColor,
+//                         color: AppTheme.electricBlue,
 //                       ),
 //                     ),
 //                   ),
@@ -1981,7 +1981,7 @@
 //                                 child: Icon(
 //                                   Icons.done_all_outlined,
 //                                   size: 18,
-//                                   color: Theme.of(context).primaryColor,
+//                                   color: AppTheme.electricBlue,
 //                                 ),
 //                               )
 //                             : Container(),
@@ -2038,7 +2038,7 @@
 //                                       child: Icon(
 //                                         Icons.done_all_outlined,
 //                                         size: 18,
-//                                         color: Theme.of(context).primaryColor,
+//                                         color: AppTheme.electricBlue,
 //                                       ),
 //                                     )
 //                                   : Container(),
@@ -2176,7 +2176,7 @@
 //                                   child: Icon(
 //                                     Icons.card_giftcard_outlined,
 //                                     size: 10,
-//                                     color: Theme.of(context).primaryColor,
+//                                     color: AppTheme.electricBlue,
 //                                   ),
 //                                 ),
 //                               ),
@@ -2202,7 +2202,7 @@
 //                                 child: Icon(
 //                                   Icons.done_all_outlined,
 //                                   size: 18,
-//                                   color: Theme.of(context).primaryColor,
+//                                   color: AppTheme.electricBlue,
 //                                 ),
 //                               )
 //                             : Container(),
@@ -2332,7 +2332,7 @@
 //                                 child: Icon(
 //                                   Icons.done_all_outlined,
 //                                   size: 18,
-//                                   color: Theme.of(context).primaryColor,
+//                                   color: AppTheme.electricBlue,
 //                                 ),
 //                               )
 //                             : Container(),
@@ -2528,7 +2528,7 @@
 //               child: Icon(
 //                 Icons.sentiment_satisfied_alt_rounded,
 //                 size: 22,
-//                 color: Theme.of(context).primaryColor,
+//                 color: AppTheme.electricBlue,
 //               ),
 //             ),
 //             Container(
@@ -2743,14 +2743,14 @@
 //               child: Icon(
 //                 Icons.mic_none_outlined,
 //                 size: 18,
-//                 color: Theme.of(context).primaryColor,
+//                 color: AppTheme.electricBlue,
 //               ),
 //             ),
 //             Container(
 //               child: Icon(
 //                 Icons.camera_alt_outlined,
 //                 size: 18,
-//                 color: Theme.of(context).primaryColor,
+//                 color: AppTheme.electricBlue,
 //               ),
 //             ),
 //             CircleAvatar(

@@ -93,7 +93,7 @@ class AnalyticsAPI {
       final response = await postRequest(
           endpoint: url,
           headers: apiAuthHeaderWithOnlyToken(),
-          body: jsonEncode(data));
+          body: data);
       if (response.statusCode == 200) {
         Map<String, dynamic> res = {
           "status": jsonDecode(response.body)['status'],

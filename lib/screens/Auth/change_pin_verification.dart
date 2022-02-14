@@ -147,7 +147,7 @@ class _ChangePinVerificationState extends State<ChangePinVerification>
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     padding: EdgeInsets.all(15),
-                    side: BorderSide(color: isResendOtpClickable?Color(0xff1058ff):Colors.grey, width: 2),
+                    side: BorderSide(color: isResendOtpClickable?AppTheme.electricBlue:Colors.grey, width: 2),
                     // color: Colors.white,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
@@ -260,10 +260,12 @@ class _ChangePinVerificationState extends State<ChangePinVerification>
                     ),
                   ),
                   (deviceHeight * 0.09).heightBox,
-                  ULLogoWidget(
-                    height: 80,
-                  ),
+                  Image.asset(AppAssets.portraitLogo, width: MediaQuery.of(context).size.width*0.4),
                   (deviceHeight * 0.09).heightBox,
+                  // ULLogoWidget(
+                  //   height: 80,
+                  // ),
+                  // (deviceHeight * 0.09).heightBox,
                   Center(
                     child: RichText(
                       textAlign: TextAlign.center,
@@ -654,7 +656,7 @@ class Countdown extends AnimatedWidget {
       "$timerText",
       style: TextStyle(
         fontSize: 110,
-        color: Theme.of(context).primaryColor,
+        color: AppTheme.electricBlue,
       ),
     );*/
 

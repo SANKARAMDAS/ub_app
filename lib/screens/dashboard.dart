@@ -10,7 +10,7 @@ class DashBoard extends StatefulWidget {
   _DashBoardState createState() => _DashBoardState();
 }
 
-final Color dark = const Color(0xff1058ff);
+final Color dark = AppTheme.electricBlue;
 final Color normal = const Color(0xff89acff);
 final Color light = const Color(0xffd6e2ff);
 final Color barBackgroundColor = const Color(0xff72d8bf);
@@ -242,7 +242,7 @@ class _DashBoardState extends State<DashBoard> {
                               text: TextSpan(
                                   text: '$currencyAED ',
                                   style: TextStyle(
-                                      color: Color(0xff1058ff),
+                                      color: AppTheme.electricBlue,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w500),
                                   children: [
@@ -250,7 +250,7 @@ class _DashBoardState extends State<DashBoard> {
                                         text: '10,567',
                                         style: TextStyle(
                                             fontSize: 20,
-                                            color: Color(0xff1058ff),
+                                            color: AppTheme.electricBlue,
                                             fontWeight: FontWeight.bold)),
                                   ]),
                             ),

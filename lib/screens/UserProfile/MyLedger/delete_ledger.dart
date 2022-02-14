@@ -179,11 +179,11 @@ class _DeleteLedgerState extends State<DeleteLedger> {
                         fillColor: Colors.transparent,
                         // enabledBorder: OutlineInputBorder(
                         //     borderSide: BorderSide(
-                        //         color: Theme.of(context).primaryColor),
+                        //         color: AppTheme.electricBlue),
                         //     borderRadius: BorderRadius.circular(15)),
                         border: OutlineInputBorder(
                             borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor),
+                                color: AppTheme.electricBlue),
                             borderRadius: BorderRadius.circular(15)),
                         hintText: 'Enter your Business name for delete Ledger',
                         hintStyle: TextStyle(

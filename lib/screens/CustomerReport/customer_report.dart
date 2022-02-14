@@ -70,6 +70,8 @@ class _CustomerReportState extends State<CustomerReport> {
           backgroundColor: AppTheme.paleGrey,
           bottomNavigationBar: bottomDownloadButton(context),
           appBar: AppBar(
+            backgroundColor: AppTheme.electricBlue,
+            elevation: 0,
             title: const Text('View Report'),
             leading: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -127,7 +129,7 @@ class _CustomerReportState extends State<CustomerReport> {
         decoration: BoxDecoration(
             color: Colors.white,
             border: Border.all(
-              color: Theme.of(context).primaryColor,
+              color: AppTheme.electricBlue,
               width: 0.5,
             ),
             borderRadius: BorderRadius.only(
@@ -147,7 +149,7 @@ class _CustomerReportState extends State<CustomerReport> {
                   Text(
                     'Net Balance',
                     style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                        color: AppTheme.electricBlue,
                         fontSize: 18,
                         fontWeight: FontWeight.w500),
                   ),
@@ -166,7 +168,7 @@ class _CustomerReportState extends State<CustomerReport> {
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w700,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.electricBlue,
                                       ),
                                     ),
                                     TextSpan(
@@ -180,7 +182,7 @@ class _CustomerReportState extends State<CustomerReport> {
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
-                                        color: Theme.of(context).primaryColor,
+                                        color: AppTheme.electricBlue,
                                       ),
                                     )
                                   ],
@@ -195,7 +197,7 @@ class _CustomerReportState extends State<CustomerReport> {
               thickness: 1,
               indent: 0,
               endIndent: 0,
-              color: Theme.of(context).primaryColor,
+              color: AppTheme.electricBlue,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15.0, right: 15),
@@ -231,7 +233,7 @@ class _CustomerReportState extends State<CustomerReport> {
                               .format(startDate!)
                               .toUpperCase(),
                       style: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                          color: AppTheme.electricBlue,
                           fontSize: 18,
                           fontWeight: FontWeight.w500),
                     ),
@@ -239,7 +241,7 @@ class _CustomerReportState extends State<CustomerReport> {
                   RichText(
                     text: TextSpan(
                       style: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                          color: AppTheme.electricBlue,
                           fontSize: 18,
                           fontWeight: FontWeight.w500),
                       children: [
@@ -281,7 +283,7 @@ class _CustomerReportState extends State<CustomerReport> {
                             child: Image.asset(
                               AppAssets.dateIcon,
                               height: 18,
-                              color: Theme.of(context).primaryColor,
+                              color: AppTheme.electricBlue,
                             ),
                           ),
                         ),
@@ -358,7 +360,7 @@ class _CustomerReportState extends State<CustomerReport> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 0,
                   groupValue: tempRadioOption,
                   onChanged: (value) {
@@ -378,7 +380,7 @@ class _CustomerReportState extends State<CustomerReport> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 1,
                   groupValue: tempRadioOption,
                   onChanged: (value) {
@@ -398,7 +400,7 @@ class _CustomerReportState extends State<CustomerReport> {
                 ),
                 RadioListTile(
                   dense: true,
-                  activeColor: Theme.of(context).primaryColor,
+                  activeColor: AppTheme.electricBlue,
                   value: 2,
                   groupValue: tempRadioOption,
                   onChanged: (value) {
@@ -462,7 +464,7 @@ class _CustomerReportState extends State<CustomerReport> {
                         horizontal: 30.0, vertical: 10),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColor,
+                        primary: AppTheme.electricBlue,
                         padding: EdgeInsets.all(15),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
@@ -795,7 +797,7 @@ class _CustomerReportState extends State<CustomerReport> {
                           CustomText(
                             getSelectedFilterName(_selectedFilter),
                             size: 16,
-                            color: Theme.of(context).primaryColor,
+                            color: AppTheme.electricBlue,
                             bold: FontWeight.w500,
                           ),
                           Icon(
@@ -908,7 +910,7 @@ class _CustomerReportState extends State<CustomerReport> {
           ).flexible;
         }
         return Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(color: AppTheme.electricBlue,),
         );
       },
     );
@@ -971,6 +973,7 @@ class _CustomerReportState extends State<CustomerReport> {
             padding: EdgeInsets.fromLTRB(20, 10, 20, isPlatformiOS() ? 20: 10),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
+                primary: AppTheme.electricBlue,
                 padding: EdgeInsets.all(15),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),

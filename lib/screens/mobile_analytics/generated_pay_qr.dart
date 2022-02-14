@@ -7,7 +7,8 @@ import 'package:urbanledger/chat_module/utils/custom_shared_preferences.dart';
 import 'package:urbanledger/screens/Components/custom_widgets.dart';
 
 class GeneratedPayQR extends StatefulWidget {
-  const GeneratedPayQR({Key? key}) : super(key: key);
+  final isSelected;
+  const GeneratedPayQR({Key? key, this.isSelected,}) : super(key: key);
 
   @override
   _GeneratedPayQRState createState() => _GeneratedPayQRState();
@@ -35,9 +36,13 @@ class _GeneratedPayQRState extends State<GeneratedPayQR> {
   String selectedCustomFilter = 'Day';
   bool _selectedQR = true;
   bool _selectedRevenue = false;
+   bool isCountfound = false;
+
 
   @override
   void initState() {
+     isCountfound = widget.isSelected;
+    print("abbQRGenerate");
     getlinkAndAmountData();
     super.initState();
   }
@@ -45,12 +50,16 @@ class _GeneratedPayQRState extends State<GeneratedPayQR> {
   Future<void> getlinkAndAmountData() async {
     if (selectedFilter == 'Week') {
       await thisWeek();
+      isCountfound = true;
     } else if (selectedFilter == 'Month') {
       await thisMonth();
+      isCountfound = true;
     } else if (selectedFilter == 'Year') {
       await thisYear();
+      isCountfound = true;
     } else {
       await custom();
+      isCountfound = true;
     }
   }
 
@@ -401,7 +410,7 @@ class _GeneratedPayQRState extends State<GeneratedPayQR> {
                                   //             charts.BarLabelPosition.outside,
                                   //         outsideLabelStyleSpec: charts.TextStyleSpec(
                                   //             color: charts.Color.fromHex(
-                                  //                 code: '#1058FF'))),
+                                  //                 code: '#7C4DFF'))),
                                   // domainAxis: new charts.OrdinalAxisSpec(),
                                   behaviors: [
                                     new charts.SlidingViewport(),
@@ -429,7 +438,7 @@ class _GeneratedPayQRState extends State<GeneratedPayQR> {
                                       showAxisLine: true),
                                 ),
                               )
-                            : Image.asset(AppAssets.barChartIcon),
+                            : isCountfound == true ? Image.asset(AppAssets.barChartIcon) : SizedBox(height: 0, width:0),
                       ),
                     ),
                     Row(
@@ -785,7 +794,7 @@ class _GeneratedPayQRState extends State<GeneratedPayQR> {
     return [
       new charts.Series<LinkGenModel, String>(
           id: 'QR generated',
-          colorFn: (_, __) => charts.Color.fromHex(code: '#1058FF'),
+          colorFn: (_, __) => charts.Color.fromHex(code: '#7C4DFF'),
           domainFn: (LinkGenModel c, _) => c.xDomain,
           measureFn: (LinkGenModel c, _) => c.linkCount,
           data: data,

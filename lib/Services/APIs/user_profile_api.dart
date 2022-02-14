@@ -26,14 +26,14 @@ class UserProfileAPI {
     final response = await postRequest(
         endpoint: url, headers: apiAuthHeaderWithOnlyToken(), body: bodyMap);
     if (response.statusCode == 200) {
-      debugPrint(response.body);
+      debugPrint("hhhh"+response.body);
       final map = jsonDecode(response.body);
       LoginModel loginModel = LoginModel(
         userId: map['customerData']['_id'],
         userName: map['customerData']['first_name'] +
             ' ' +
             map['customerData']['last_name'],
-        mobileNo: map['customerData']['mobile_no'],
+        mobileNo: map['customerData']['mobile_no'].toString().trim().replaceAll('+', ''),
         status: true,
       );
       debugPrint('dddd:' + loginModel.toJson().toString());
@@ -60,7 +60,7 @@ class UserProfileAPI {
         userName: map['customerData']['first_name'] +
             ' ' +
             map['customerData']['last_name'],
-        mobileNo: map['customerData']['mobile_no'],
+        mobileNo: map['customerData']['mobile_no'].toString().trim().replaceAll('+', ''),
         status: true,
       );
       debugPrint('dddd:' + loginModel.toJson().toString());
