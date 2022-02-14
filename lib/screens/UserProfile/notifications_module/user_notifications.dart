@@ -22,8 +22,8 @@ import 'package:urbanledger/screens/UserProfile/MyLedger/business_provider.dart'
 import 'package:uuid/uuid.dart';
 
 class UserNotifications extends StatefulWidget {
-  final List<NotificationData>? dataList;
-  const UserNotifications({Key? key, this.dataList}) : super(key: key);
+  //final List<NotificationData>? dataList;
+  const UserNotifications({Key? key}) : super(key: key);
 
 
   @override
@@ -79,8 +79,8 @@ class _UserNotificationsState extends State<UserNotifications> {
                                 onTap: (){
                                 Navigator.of(context).pop();
                               },),
-                              SizedBox(width: 4,),
-                              Text('Notification (${widget.dataList?.length})',style: TextStyle(color: Colors.white,fontSize: 20)),
+                              SizedBox(width: 8,),
+                              Text('Notification (${state.notificationList.length})',style: TextStyle(color: Colors.white,fontSize: 20)),
                             ],
                           ),
 
@@ -118,6 +118,7 @@ class _UserNotificationsState extends State<UserNotifications> {
                 // do stuff here based on BlocA's state
               },
               buildWhen: (previous, current) {
+                print('current ${current.toString()}');
                 return current is FetchedNotificationListState;
                 // return true/false to determine whether or not
                 // to rebuild the widget with state
@@ -129,7 +130,10 @@ class _UserNotificationsState extends State<UserNotifications> {
                       Expanded(
                         child: ListView.builder(
                             padding: EdgeInsets.zero,
-                            itemBuilder:(ctx,i)=>listItem(widget.dataList![i],i),itemCount: widget.dataList?.length),
+                            itemBuilder:(ctx,i){
+                              print('notification load');
+                              return listItem(state.notificationList[i],i);
+                            },itemCount: state.notificationList.length),
                       ),
                         Container(
                           color: Colors.white,
@@ -160,7 +164,7 @@ class _UserNotificationsState extends State<UserNotifications> {
                           },))
                     ],
                   ):Container(child:Column(children: [
-                    Expanded(
+                    Flexible(
                       child: Stack(
 
                         children: [
@@ -188,7 +192,6 @@ class _UserNotificationsState extends State<UserNotifications> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-
 
                             child: ElevatedButton(
 
@@ -612,7 +615,7 @@ class _UserNotificationsState extends State<UserNotifications> {
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
           child: CustomText(
             // "${DateFormat('dd MMM yyyy | hh:mm aa').format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))}"
             //timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))
