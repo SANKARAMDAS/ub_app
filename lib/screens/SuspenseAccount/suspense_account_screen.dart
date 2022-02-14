@@ -609,7 +609,7 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
                         );
                       }
                       return Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                       );
                     },
                   ).flexible,
@@ -1957,7 +1957,7 @@ class _SuspenseAccountScreenState extends State<_SuspenseAccountScreen> {
     bool bottomsheetLoading = false;
 
     loading == true
-        ? CircularProgressIndicator()
+        ? CircularProgressIndicator(color: AppTheme.electricBlue,)
         : showModalBottomSheet(
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(

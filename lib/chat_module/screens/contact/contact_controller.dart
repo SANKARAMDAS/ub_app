@@ -93,20 +93,23 @@ class ContactController extends StateControl {
   }
 
   // ignore: non_constant_identifier_names
-  sendMessage(
+  sendMessage({
       String? id,
       String? chatId,
       String? name,
-      String phone,
+      required String phone,
       double? amount,
       String? details,
+      String? fileName,
+      String? fileSize,
+      String? duration,
       String? dateTime,
       String? contactName,
       String? contactNo,
       Uint8List? avatar,
       String? requestId,
-      int messageType,
-      String? transactionId) async {
+      required int messageType,
+      String? transactionId}) async {
     debugPrint('customer id  ' + id.toString());
     debugPrint(chatId);
     debugPrint(name);
@@ -130,6 +133,9 @@ class ContactController extends StateControl {
       final Messages msg = Messages(
           amount: amount,
           details: details,
+          fileName: fileName,
+          fileSize: fileSize,
+          duration: duration,
           messages: message,
           dateTime: dateTime,
           contactName: contactName,
@@ -183,6 +189,9 @@ class ContactController extends StateControl {
       final Messages msg = Messages(
           amount: amount,
           details: details,
+          fileName: fileName,
+          fileSize: fileSize,
+          duration: duration,
           messages: message,
           dateTime: dateTime,
           contactName: contactName,
@@ -214,6 +223,11 @@ class ContactController extends StateControl {
               .selectedBusiness
               .businessId);
     }
+  }
+
+  renameAudioFile(String fileName, String _id) {
+    final _provider = Provider.of<ChatsProvider>(context, listen: false);
+    _provider.updateAudioFilename(fileName, _id);
   }
 
   declinePayment(Map<String, dynamic> data) async {

@@ -1,5 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:urbanledger/Utility/app_theme.dart';
 import 'package:urbanledger/screens/Components/custom_loading_dialog.dart';
 import 'package:urbanledger/screens/Components/custom_text_widget.dart';
 import 'package:urbanledger/screens/Components/ul_logo_widget.dart';
+import 'package:urbanledger/screens/arguments/account_locked_argument.dart';
 import 'package:urbanledger/screens/mobile_analytics/analytics_events.dart';
 import '../../chat_module/data/repositories/login_repository.dart';
 
@@ -55,7 +57,8 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
   late bool _serviceEnabled;
   final location = Location();
   bool isResendOtpClickable = false;
-  int _resendOtpCount = 30;
+  bool isWrongOtpEntered = false;
+  int otpAttemptLeft = 3;
   // late Timer _timer;
 
   late AnimationController _controller;
@@ -231,17 +234,28 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                                             0,
                                             0))
                                     .catchError((e) {
-                                    oneController.text = ' ';
-                                    twoController.text = ' ';
-                                    threeController.text = ' ';
-                                    fourController.text = ' ';
-                                    fiveController.text = ' ';
-                                    sixController.text = ' ';
-                                    debugPrint('KKKKKKKKKKKKK');
-                                    setState(() {});
-                                    e.toString().showSnackBar(context);
-                                    Navigator.of(context).pop();
-                                    return 'Incorrect';
+                                      print('otp response '+jsonEncode(e));
+                                    if(e['count']==3){
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, AppRoutes.accountLockedRoute ,(Route<dynamic> route) => false,arguments: AccountLockedArgument(e['message']));
+
+                                    }
+                                    else{
+                                      oneController.text = ' ';
+                                      twoController.text = ' ';
+                                      threeController.text = ' ';
+                                      fourController.text = ' ';
+                                      fiveController.text = ' ';
+                                      sixController.text = ' ';
+                                      debugPrint('KKKKKKKKKKKKK');
+                                      isWrongOtpEntered = true;
+                                      int otpCount = e['count'];
+                                      otpAttemptLeft = 3-otpCount;
+                                      setState(() {});
+                                      // e.toString().showSnackBar(context);
+                                      Navigator.of(context).pop();
+                                      return 'Incorrect';
+                                    }
                                   });
                             if (status.isNotEmpty) {
                               if (status == 'Incorrect') return;
@@ -339,7 +353,7 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                   // ULLogoWidget(
                   //   height: 80,
                   // ),
-                  Image.asset(AppAssets.portraitLogo, width: MediaQuery.of(context).size.width*0.4),
+                  Image.asset(AppAssets.landscapeLogo, width: MediaQuery.of(context).size.width*0.6),
                   (deviceHeight * 0.09).heightBox,
                   Center(
                     child: RichText(
@@ -450,7 +464,6 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                             clearTextControllers();
                             setState(() {
                               isResendOtpClickable = false;
-                              _resendOtpCount = 30;
                             });
                             //startTimer();
 
@@ -478,8 +491,20 @@ class _VerificationScreenState extends State<VerificationScreen> with SingleTick
                       ],
                     ),
                   ),
-                  
-                  (deviceHeight * 0.09).heightBox,
+                  (deviceHeight * 0.02).heightBox,
+                  if(isWrongOtpEntered)
+                  Center(
+                    child: CustomText(
+                      'You have entered an invalid OTP.\nYou have $otpAttemptLeft more attempts',
+                      centerAlign: true,
+                      size: (14),
+                      color: AppTheme.redColor,
+                      bold: FontWeight.w500,
+                    ),
+                  ),
+
+
+                  (deviceHeight * 0.02).heightBox,
                   Center(
                     child: CustomText(
                       'Sit tight and relax while we try to read the\nOTP from your device',

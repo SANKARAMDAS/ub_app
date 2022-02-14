@@ -165,7 +165,7 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                               Container(
                                 padding: EdgeInsets.symmetric(horizontal: 15),
                                 child: Text(
-                                  'Complete KYC',
+                                  repository.hiveQueries.userData.kycStatus2 != 'Approved' || repository.hiveQueries.userData.kycStatus2 == ''  ? 'Complete KYC' : 'Update KYC',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'SFProDisplay',
@@ -477,6 +477,8 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                           ),
                         ),
                       ),
+                      repository.hiveQueries.userData.kycStatus2 != 'Approved' || repository.hiveQueries.userData.kycStatus2 == ''
+                      ?
                       Container(
                         padding: EdgeInsets.all(10),
                         width: double.maxFinite,
@@ -496,11 +498,12 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                           controlAffinity: ListTileControlAffinity
                               .leading, //  <-- leading Checkbox
                         ),
-                      ),
+                      ):Container(),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.07,
                       ),
-                      Container(
+                      repository.hiveQueries.userData.kycStatus2 != 'Approved' || repository.hiveQueries.userData.kycStatus2 == ''
+                      ? Container(
                         padding: const EdgeInsets.only(top: 5.0),
                         width: double.infinity,
                         margin: const EdgeInsets.symmetric(
@@ -578,7 +581,7 @@ class _ManageKycScreen3State extends State<ManageKycScreen3> {
                               size: 18,
                               bold: FontWeight.w500),
                         ),
-                      ),
+                      ):Container(),
                     ],
                   ),
                 ),

@@ -144,7 +144,7 @@ class _RewardsState extends State<Rewards> {
                 },
                 child: isLoading == true
                     ? Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                       )
                     : Column(
                         children: [

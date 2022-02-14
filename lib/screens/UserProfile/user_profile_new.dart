@@ -442,7 +442,7 @@ class _UserProfileNewState extends State<UserProfileNew> {
                                     },builder: (ctx,state){
                                       if(state is FetchingUserProfileState){
 
-                                        return Center(child:CircularProgressIndicator());
+                                        return Center(child:CircularProgressIndicator(color: AppTheme.electricBlue,));
                                       }
                                       if (state is FetchedUserProfileState) {
                                         if(state.userProfile !=null){

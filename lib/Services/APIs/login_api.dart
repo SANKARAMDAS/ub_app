@@ -29,6 +29,7 @@ class LoginAPI {
       const url = "auth/customer/verification/request";
       final response =
       await postRequest(endpoint: url, body: {"mobile_no": "$mobileNo"});
+      debugPrint(response.toString());
       if (response.statusCode == 200) {
         final map = jsonDecode(response.body);
         if (map['status']) {
@@ -163,7 +164,8 @@ class LoginAPI {
         }
 
       }
-      return Future.error(jsonDecode(response.body)['message']);
+      print(jsonDecode(response.body)['message']);
+      return Future.error(jsonDecode(response.body));
     } catch (e) {
       return Future.error('Please check your internet connection or try again later.');
     }

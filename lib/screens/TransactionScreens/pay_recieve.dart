@@ -250,7 +250,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                               padding: EdgeInsets.only(
                                   top:
                                       MediaQuery.of(context).size.height * 0.2),
-                              child: CircularProgressIndicator())
+                              child: CircularProgressIndicator(color: AppTheme.electricBlue,))
                           : Expanded(
                               child: TabBarView(
                                 controller: _tabController,
@@ -553,7 +553,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                                                   return SliverToBoxAdapter(
                                                     child: Center(
                                                       child:
-                                                          CircularProgressIndicator(),
+                                                          CircularProgressIndicator(color: AppTheme.electricBlue,),
                                                     ),
                                                   );
                                                 },
@@ -864,7 +864,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                                             return SliverToBoxAdapter(
                                               child: Center(
                                                   child:
-                                                      CircularProgressIndicator()),
+                                                      CircularProgressIndicator(color: AppTheme.electricBlue,)),
                                             );
                                           },
                                         ),
@@ -1869,15 +1869,30 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                           debugPrint(cData.contactData?.name?.split(' ')[0]);
                           debugPrint(cData.chatId);
                           //    debugPrint(cid.customerInfo?.id.toString());
-                          var avatar = cData.profilePic!.isNotEmpty &&
-                                  cData.profilePic != null &&
-                                  cData.profilePic != 'null'
-                              ? (await NetworkAssetBundle(
-                                          Uri.parse(cData.profilePic!))
-                                      .load(cData.profilePic!))
+                          var avatar;
+                          try{
+                            /*avatar = cData.profilePic!.isNotEmpty &&
+                                cData.profilePic != null &&
+                                cData.profilePic != 'null'
+                                ? (await NetworkAssetBundle(
+                                Uri.parse(cData.profilePic!))
+                                .load(cData.profilePic!))
+                                .buffer
+                                .asUint8List()
+                                : [];*/
+                            if(cData.profilePic!=null){
+                              avatar=(await NetworkAssetBundle(
+                                  Uri.parse(cData.profilePic!))
+                                  .load(cData.profilePic!))
                                   .buffer
-                                  .asUint8List()
-                              : null;
+                                  .asUint8List();
+                            }
+
+                          }
+                          catch(e){
+                            print(e);
+                            Navigator.of(context).pop();
+                          }
                           _customerModel
                             ..name = getName(
                                 cData.contactData?.name?.split(' ')[0],
@@ -1895,7 +1910,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                           });
                           final uniqueId = Uuid().v1();
                           if (localCustId.isEmpty) {
-                            var avatar = cData.profilePic!.isNotEmpty &&
+                           /* var avatar = cData.profilePic!.isNotEmpty &&
                                     cData.profilePic != null &&
                                     cData.profilePic != 'null'
                                 ? (await NetworkAssetBundle(
@@ -1903,7 +1918,7 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                                         .load(cData.profilePic!))
                                     .buffer
                                     .asUint8List()
-                                : null;
+                                : null;*/
                             final customer = CustomerModel()
                               ..name = getName(
                                   cData.contactData?.name?.split(' ')[0].trim(),
@@ -2109,15 +2124,30 @@ class _PayRequestScreenState extends State<PayRequestScreen>
                             // var cid = await repository.customerApi.getCustomerID(
                             //     mobileNumber:
                             //         widget.contacts[index].mobileNo.toString());
-                            var avatar = cData.profilePic!.isNotEmpty &&
-                                    cData.profilePic != null &&
-                                    cData.profilePic != 'null'
+                            var avatar;
+                            try{
+                              /*avatar = cData.profilePic!.isNotEmpty &&
+                                cData.profilePic != null &&
+                                cData.profilePic != 'null'
                                 ? (await NetworkAssetBundle(
-                                            Uri.parse(cData.profilePic!))
-                                        .load(cData.profilePic!))
+                                Uri.parse(cData.profilePic!))
+                                .load(cData.profilePic!))
+                                .buffer
+                                .asUint8List()
+                                : [];*/
+                              if(cData.profilePic!=null){
+                                avatar=(await NetworkAssetBundle(
+                                    Uri.parse(cData.profilePic!))
+                                    .load(cData.profilePic!))
                                     .buffer
-                                    .asUint8List()
-                                : null;
+                                    .asUint8List();
+                              }
+
+                            }
+                            catch(e){
+                              print(e);
+                              Navigator.of(context).pop();
+                            }
                             _customerModel
                               ..name = getName(
                                   cData.contactData?.name?.split(' ')[0],
@@ -2976,7 +3006,7 @@ class _ImportContactsListWidgetState extends State<ImportContactsListWidget> {
     return isLoading == true
         ? SliverToBoxAdapter(
             child: Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: AppTheme.electricBlue,),
             ),
           )
         : /*ListView.builder(

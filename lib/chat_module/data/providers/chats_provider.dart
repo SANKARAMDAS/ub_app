@@ -220,6 +220,14 @@ class ChatsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  updateAudioFilename(String fileName, String _id) async {
+    debugPrint('asdfg');
+    await DBProvider.db.updateAudioFileName(fileName, _id);
+    updateChats();
+    setSelectedChat(selectedChat);
+    notifyListeners();
+  }
+
   payRequest(String? request) async {
     await DBProvider.db.pay(request);
     updateChats();

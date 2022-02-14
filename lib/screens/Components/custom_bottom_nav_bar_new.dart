@@ -409,7 +409,7 @@ class _CustomBottomNavBarNewState extends State<CustomBottomNavBarNew> {
               ),
               isLoading == true
                   ? Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                     )
                   : InkWell(
                       onTap: () async {

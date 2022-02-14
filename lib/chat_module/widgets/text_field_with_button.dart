@@ -43,7 +43,13 @@ class TextFieldWithButton extends StatefulWidget {
   final Function? onEmojiTap;
   final bool showEmojiKeyboard;
   final BuildContext context;
-  final Function(double amount, String? details, int paymentType)? sendMessage;
+  final Function(
+      double amount,
+      String? details,
+      String? fileName,
+      String? fileSize,
+      String? duration,
+      int paymentType)? sendMessage;
   final Function(String? contactName, String? contactNo, int messageType)?
       sendContact;
   final Function audioImm;
@@ -132,7 +138,7 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
 //       isLoading = false;
 //     });
 //   }
-  
+
   getRecentBankAcc() async {
     if (mounted) {
       setState(() {
@@ -642,6 +648,7 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
   Future<void> _stop() async {
     _timer?.cancel();
     await Record.stop();
+    await Record.stop();
     setState(() {
       _isRecording = false;
       // onRecord = false;
@@ -650,9 +657,20 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
   }
 
   Future<void> _sendAudio() async {
+    final fileSize = await getFileSize(path.toString());
+    final fileName = path!.lastSplit('/').toString();
+    debugPrint('CCCC' + path!.lastSplit('/').toString());
+    debugPrint('0${_minuteDuration.toString()}:${_secondDuration.toString()}');
+    String _second = _secondDuration.toString().length == 1 ? '0$_secondDuration':'$_secondDuration';
     final uploadApiResponse =
         await repository.ledgerApi.uploadAttachment(path.toString());
-    widget.sendMessage!(0.0, uploadApiResponse, 10);
+    widget.sendMessage!(
+         0.0,
+         uploadApiResponse,
+         fileName,
+         fileSize,
+         '0${_minuteDuration.toString()}' +':' + '${_second.toString()}',
+         10);
   }
 
   void _startTimer() {
@@ -732,23 +750,38 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                           if ((await File(item!).length()) <= 10000000) {
                             switch (fileName) {
                               case 'pdf':
+                                final fileSize = await getFileSize(item);
+                                final fileName = path.lastSplit('/').toString();
+                                debugPrint(
+                                    'CCCC' + path.lastSplit('/').toString());
                                 widget.documentAttachment(true);
                                 final uploadApiResponse = await repository
                                     .ledgerApi
                                     .uploadAttachment(item);
-                                widget.sendMessage!(0.0, uploadApiResponse, 7);
+                                widget.sendMessage!(0.0, uploadApiResponse,
+                                    fileName, fileSize,'00:00', 7);
                                 break;
                               case 'doc':
+                                final fileSize = await getFileSize(item);
+                                final fileName = path.lastSplit('/').toString();
+                                debugPrint(
+                                    'CCCC' + path.lastSplit('/').toString());
                                 final uploadApiResponse = await repository
                                     .ledgerApi
                                     .uploadAttachment(item);
-                                widget.sendMessage!(0.0, uploadApiResponse, 8);
+                                widget.sendMessage!(0.0, uploadApiResponse,
+                                    fileName, fileSize,'00:00', 8);
                                 break;
                               case 'docx':
+                                final fileSize = await getFileSize(item);
+                                final fileName = path.lastSplit('/').toString();
+                                debugPrint(
+                                    'CCCC' + path.lastSplit('/').toString());
                                 final uploadApiResponse = await repository
                                     .ledgerApi
                                     .uploadAttachment(item);
-                                widget.sendMessage!(0.0, uploadApiResponse, 8);
+                                widget.sendMessage!(0.0, uploadApiResponse,
+                                    fileName, fileSize,'00:00', 8);
                                 break;
                               // case 'xls':
                               //   debugPrint(fileName);
@@ -808,39 +841,50 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                           .replaceAll(']', '')
                           .replaceAll('[', '');
                       var fileName = (path.split('.').last);
-                      // if (result == null) return;
-                      debugPrint('ok ${result.count}');
                       if (result.count <= 5) {
                         for (var item in result.paths) {
                           if ((await File(item!).length()) <= 10000000) {
-                            debugPrint('ok');
                             switch (fileName) {
                               case 'png':
+                                final fileSize = await getFileSize(item);
+                                final fileName = path.lastSplit('/').toString();
+                                debugPrint(
+                                    'CCCC' + path.lastSplit('/').toString());
                                 widget.galleryAttachment(true, File(item));
                                 debugPrint(fileName);
                                 final uploadApiResponse = await repository
                                     .ledgerApi
                                     .uploadAttachment(item);
                                 debugPrint(uploadApiResponse);
-                                widget.sendMessage!(0.0, uploadApiResponse, 6);
+                                widget.sendMessage!(0.0, uploadApiResponse,
+                                    fileName, fileSize,'00:00', 6);
                                 break;
                               case 'jpg':
+                                final fileSize = await getFileSize(item);
+                                final fileName = path.lastSplit('/').toString();
+                                debugPrint(
+                                    'CCCC' + path.lastSplit('/').toString());
                                 widget.galleryAttachment(true, File(item));
                                 debugPrint(fileName);
                                 final uploadApiResponse = await repository
                                     .ledgerApi
                                     .uploadAttachment(item);
                                 debugPrint(uploadApiResponse);
-                                widget.sendMessage!(0.0, uploadApiResponse, 6);
+                                widget.sendMessage!(0.0, uploadApiResponse,
+                                    fileName, fileSize,'00:00', 6);
                                 break;
                               case 'jpeg':
+                                final fileSize = await getFileSize(item);
+                                final fileName = path.lastSplit('/').toString();
+                                debugPrint(
+                                    'CCCC' + path.lastSplit('/').toString());
                                 widget.galleryAttachment(true, File(item));
                                 debugPrint(fileName);
                                 final uploadApiResponse = await repository
                                     .ledgerApi
                                     .uploadAttachment(item);
-                                debugPrint(uploadApiResponse);
-                                widget.sendMessage!(0.0, uploadApiResponse, 6);
+                                widget.sendMessage!(0.0, uploadApiResponse,
+                                    fileName, fileSize,'00:00', 6);
                                 break;
                               default:
                                 break;
@@ -1406,10 +1450,13 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
         widget.cameraAttachmentFn(true, _image);
       }
     });
-
+    final fileSize = await getFileSize(_image!.path);
+    final fileName = _image!.path.lastSplit('/').toString();
+    debugPrint('sss' + fileSize.toString());
+    debugPrint('CCCC' + _image!.path.lastSplit('/').toString());
     final uploadApiResponse =
         await repository.ledgerApi.uploadAttachment(_image!.path);
-    widget.sendMessage!(0.0, uploadApiResponse, 6);
+    widget.sendMessage!(0.0, uploadApiResponse, fileName, fileSize,'00:00', 6);
     _image = null;
   }
 
@@ -1529,7 +1576,7 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
       context: context,
       builder: (BuildContext bc) {
         return isLoading == true
-            ? Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,))
             : Container(
                 height: MediaQuery.of(context).size.height * 0.12,
                 decoration: BoxDecoration(
@@ -1629,13 +1676,11 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                                 Navigator.of(context).pop(true);
 
                                 merchantBankNotAddedModalSheet(
-                                    text:
-                                        Constants.merchentKYCBANKPREMNotadd);
+                                    text: Constants.merchentKYCBANKPREMNotadd);
                               } else if (Cid.customerInfo?.kycStatus == false) {
                                 Navigator.of(context).pop(true);
                                 merchantBankNotAddedModalSheet(
-                                    text:
-                                        Constants.merchentKYCBANKPREMNotadd);
+                                    text: Constants.merchentKYCBANKPREMNotadd);
                               }
                               // else if (Repository()
                               //             .hiveQueries
@@ -1656,8 +1701,7 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                                 Navigator.of(context).pop(true);
 
                                 merchantBankNotAddedModalSheet(
-                                    text:
-                                        Constants.merchentKYCBANKPREMNotadd);
+                                    text: Constants.merchentKYCBANKPREMNotadd);
                               } else {
                                 // Navigator.of(context).pop(true);
                                 // showBankAccountDialog();
@@ -1744,33 +1788,30 @@ class _TextFieldWithButtonState extends State<TextFieldWithButton>
                                 ..chatId = widget.chatId
                                 ..mobileNo = phone;
 
-                                if (await allChecker(context)) {
+                              if (await allChecker(context)) {
+                                // Navigator.of(context).pop(true);
+                                _customerModel.chatId = widget.chatId;
 
-                                  // Navigator.of(context).pop(true);
-                                  _customerModel.chatId = widget.chatId;
+                                var anaylticsEvents = AnalyticsEvents(context);
+                                await anaylticsEvents.initCurrentUser();
+                                await anaylticsEvents.chatPayRequestEvent();
+                                print(widget.customerId);
 
-                                  var anaylticsEvents =
-                                      AnalyticsEvents(context);
-                                  await anaylticsEvents.initCurrentUser();
-                                  await anaylticsEvents.chatPayRequestEvent();
-                                  print(widget.customerId);
-
-                                  Navigator.of(context).popAndPushNamed(
-                                      AppRoutes.requestTransactionRoute,
-                                      arguments: ReceiveTransactionArgs(
-                                          _customerModel, widget.customerId!));
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) =>
-                                  //         ReceiveTransactionScreen(
-                                  //       model: _customerModel,
-                                  //       customerId: localCustomerId,
-                                  //     ),
-                                  //   ),
-                                  // );
-                                  debugPrint(uid);
-                                
+                                Navigator.of(context).popAndPushNamed(
+                                    AppRoutes.requestTransactionRoute,
+                                    arguments: ReceiveTransactionArgs(
+                                        _customerModel, widget.customerId!));
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) =>
+                                //         ReceiveTransactionScreen(
+                                //       model: _customerModel,
+                                //       customerId: localCustomerId,
+                                //     ),
+                                //   ),
+                                // );
+                                debugPrint(uid);
                               }
                             },
                             text: 'Request'.toUpperCase(),

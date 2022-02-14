@@ -254,6 +254,9 @@ class AppAssets {
   static const String userIcon2 = 'assets/icons/v2/user_icon_2.png';
   static const String emailIcon = 'assets/icons/v2/email_icon.png';
   static const String pinArtImage = 'assets/icons/v2/set_pin.png';
+  static const String error_account_locked_logo = 'assets/icons/v2/error_account_locked.png';
+  static const String account_locked_icon = 'assets/icons/v2/account_locked_icon.png';
+
   ///Fonts
   static const String sFProDisplayFont = 'SFProDisplay';
 }

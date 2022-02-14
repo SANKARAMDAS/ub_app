@@ -91,12 +91,13 @@ class CustomerModel {
     customerModel.avatar = element[CustomerModel.columnAvatar];
     customerModel.transactionAmount =
         double.tryParse(element[CustomerModel.columnTransactionAmount]) ?? 0;
-    customerModel.updatedAt =
-        DateTime.tryParse(element[CustomerModel.columnUpdatedAt]) ??
+    customerModel.updatedAt =element[CustomerModel.columnUpdatedAt]!=null?
+        DateTime.tryParse(element[CustomerModel.columnUpdatedAt]):
             DateTime.now();
     customerModel.updatedDate =
-        DateTime.tryParse(element[CustomerModel.columnUpdatedAt]) ??
-            DateTime.now();
+    element[CustomerModel.columnUpdatedAt]!=null?
+    DateTime.tryParse(element[CustomerModel.columnUpdatedAt]):
+    DateTime.now();
     customerModel.createdDate =
         DateTime.tryParse(element[CustomerModel.columnCreatedDate]) ??
             DateTime.now();

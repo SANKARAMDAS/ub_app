@@ -120,13 +120,25 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
         return true;
       },
       child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-          if (isCalcSheetOpen) {
-            isCalcSheetOpen = false;
-            Navigator.pop(context);
-          }
-        },
+
+           onPanUpdate: (details) {
+      // Swiping in right direction.
+      if (details.delta.dx > 0) {
+        Navigator.of(context).pop();
+      }
+
+      // Swiping in left direction.
+      if (details.delta.dx < 0) {
+
+      }
+    },
+        // onTap: () {
+        //   FocusScope.of(context).unfocus();
+        //   if (isCalcSheetOpen) {
+        //     isCalcSheetOpen = false;
+        //     Navigator.pop(context);
+        //   }
+        // },
         child: Scaffold(
           backgroundColor: AppTheme.paleGrey,
           appBar: AppBar(

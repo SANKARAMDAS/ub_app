@@ -25,6 +25,7 @@ class UserNotifications extends StatefulWidget {
   final List<NotificationData>? dataList;
   const UserNotifications({Key? key, this.dataList}) : super(key: key);
 
+
   @override
   _UserNotificationsState createState() => _UserNotificationsState();
 }
@@ -39,295 +40,226 @@ class _UserNotificationsState extends State<UserNotifications> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       key: key,
       body: Container(
         color: Colors.white,
-        child: Column(
-          children: [
-            Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                color: AppTheme.electricBlue,
-                child:
-                    BlocConsumer<NotificationListCubit, NotificationListState>(
-                        listener: (context, state) {
-                  // do stuff here based on BlocA's state
-                }, buildWhen: (previous, current) {
-                  return current is FetchedNotificationListState;
-                  // return true/false to determine whether or not
-                  // to rebuild the widget with state
-                }, builder: (context, state) {
-                  if (state is FetchedNotificationListState) {
-                    return state.notificationList.length > 0
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(children: [
+          Container(
+              padding: EdgeInsets.symmetric(horizontal: 12,vertical: 16),
+              color: AppTheme.electricBlue,
+              child: BlocConsumer<NotificationListCubit, NotificationListState>(
+                  listener: (context, state) {
+                    // do stuff here based on BlocA's state
+                  },
+                  buildWhen: (previous, current) {
+                    return current is FetchedNotificationListState;
+                    // return true/false to determine whether or not
+                    // to rebuild the widget with state
+                  },
+                  builder: (context, state) {
+                    if(state is FetchedNotificationListState){
+                      return  state.notificationList.length > 0? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  InkWell(
-                                    child: Icon(
-                                      Icons.arrow_back_ios_rounded,
-                                      color: Colors.white,
-                                    ),
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                      'Notification (${widget.dataList?.length})',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 20)),
-                                ],
-                              ),
-                              selectedList.length > 0
-                                  ? Text(
-                                      selectedList.length > 1
-                                          ? '${selectedList.length} items selected'
-                                          : '${selectedList.length} item selected',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                    )
-                                  : InkWell(
-                                      child: Text(
-                                        'Mark all as Read',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 16),
-                                      ),
-                                      onTap: () {
-                                        BlocProvider.of<NotificationListCubit>(
-                                                context,
-                                                listen: false)
-                                            .markAllAsRead();
-                                      },
-                                    ),
+                              InkWell(
+                                child: Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),onTap: (){
+                                Navigator.of(context).pop();
+                              },),
+                              SizedBox(width: 8,),
+                              Text('Notification (${widget.dataList?.length})',style: TextStyle(color: Colors.white,fontSize: 20)),
                             ],
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ),
+
+                          selectedList.length >0?Text(selectedList.length>1?'${selectedList.length} items selected':'${selectedList.length} item selected',style: TextStyle(color: Colors.white,fontSize: 16),):InkWell(child: Text('Mark all as Read',style: TextStyle(color: Colors.white,fontSize: 16),),onTap: (){
+                            BlocProvider.of<NotificationListCubit>(context,listen:false).markAllAsRead();
+
+                          },),
+
+                        ],):Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  InkWell(
-                                    child: Icon(
-                                      Icons.arrow_back_ios_rounded,
-                                      color: Colors.white,
-                                    ),
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text('Notification (0)',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 20)),
-                                ],
-                              ),
-                              Container()
+                              InkWell(
+                                child: Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),onTap: (){
+                                Navigator.of(context).pop();
+                              },),
+                              SizedBox(width: 8,),
+                              Text('Notification (0)',style: TextStyle(color: Colors.white,fontSize: 20)),
                             ],
-                          );
+                          ),
+
+                         Container()
+
+                        ],);
+
+                    }
+                    return Container(child:Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,)));
+                    // return widget here based on BlocA's state
                   }
-                  return Container(
-                      child: Center(child: CircularProgressIndicator()));
-                  // return widget here based on BlocA's state
-                })),
-            Expanded(
-                child:
-                    BlocConsumer<NotificationListCubit, NotificationListState>(
-                        listener: (context, state) {
-              // do stuff here based on BlocA's state
-            }, buildWhen: (previous, current) {
-              return current is FetchedNotificationListState;
-              // return true/false to determine whether or not
-              // to rebuild the widget with state
-            }, builder: (context, state) {
-              if (state is FetchedNotificationListState) {
-                return state.notificationList.length > 0
-                    ? Column(
+              )),
+          Expanded(child:BlocConsumer<NotificationListCubit, NotificationListState>(
+              listener: (context, state) {
+                // do stuff here based on BlocA's state
+              },
+              buildWhen: (previous, current) {
+                return current is FetchedNotificationListState;
+                // return true/false to determine whether or not
+                // to rebuild the widget with state
+              },
+              builder: (context, state) {
+                if(state is FetchedNotificationListState){
+                  return  state.notificationList.length > 0?Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemBuilder:(ctx,i)=>listItem(widget.dataList![i],i),itemCount: widget.dataList?.length),
+                      ),
+                        Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.all(20),
+                          child:selectedList.length>0?InkWell(
+                            child: Image.asset(
+                              AppAssets.delete_notification_icon,
+                              height: 45,
+                              width: 45,
+                            ),onTap: () async {
+                            await BlocProvider.of<NotificationListCubit>(context,listen:false).deleteNotifications(selectedList);
+                            setState(() {
+                              selectedList = [];
+                            });
+                          },):InkWell(
+                            child: Container(
+                                child: CustomText(
+                                  'Clear all',
+                                  bold: FontWeight.w600,
+                                  size: 20,
+                                  color: AppTheme.brownishGrey,
+                                  centerAlign: true,
+                                )),onTap: () async {
+                            await BlocProvider.of<NotificationListCubit>(context,listen:false).clearAllNotification();
+                            setState(() {
+                              selectedList = [];
+                            });
+                          },))
+                    ],
+                  ):Container(child:Column(children: [
+                    Expanded(
+                      child: Stack(
+
                         children: [
-                          Expanded(
-                            child: ListView.builder(
-                                padding: EdgeInsets.zero,
-                                itemBuilder: (ctx, i) =>
-                                    listItem(widget.dataList![i], i),
-                                itemCount: widget.dataList?.length),
+                          Image.asset(
+                            AppAssets.notification_empty,
                           ),
+                          Positioned(
+                            bottom:0,
+                            left:0,
+                            right:0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 40),
+                              child: Text('Currently you have no notifications',textAlign: TextAlign.center,style: TextStyle(fontSize: 24,fontWeight: FontWeight.w500,color:AppTheme.brownishGrey,),),
+                            ),
+                          ),
+                        ],
+                        clipBehavior: Clip.none,
+                      ),
+                      flex: 7,
+                    ),
+
+                    Expanded(
+                      flex:3,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
                           Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.all(20),
-                              child: selectedList.length > 0
-                                  ? InkWell(
-                                      child: Image.asset(
-                                        AppAssets.delete_notification_icon,
-                                        height: 45,
-                                        width: 45,
-                                      ),
-                                      onTap: () async {
-                                        await BlocProvider.of<
-                                                    NotificationListCubit>(
-                                                context,
-                                                listen: false)
-                                            .deleteNotifications(selectedList);
-                                        setState(() {
-                                          selectedList = [];
-                                        });
-                                      },
-                                    )
-                                  : InkWell(
-                                      child: Container(
-                                          child: CustomText(
-                                        'Clear all',
-                                        bold: FontWeight.w600,
-                                        size: 20,
-                                        color: AppTheme.brownishGrey,
-                                        centerAlign: true,
-                                      )),
-                                      onTap: () async {
-                                        await BlocProvider.of<
-                                                    NotificationListCubit>(
-                                                context,
-                                                listen: false)
-                                            .clearAllNotification();
-                                        setState(() {
-                                          selectedList = [];
-                                        });
-                                      },
-                                    ))
-                        ],
-                      )
-                    : Container(
-                        child: Column(
-                        children: [
-                          Expanded(
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  right: 0,
-                                  // top: 5.0,
-                                  child: Image.asset(
-                                    AppAssets.notification_empty_new,
-                                  ),
+
+
+                            child: ElevatedButton(
+
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                               },
+                                child: CustomText(
+                                  'BACK',
+                                  size: (18),
+                                  bold: FontWeight.w500,
                                 ),
-                                Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  right: 0,
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 40),
-                                    child: Text(
-                                      'Currently you have no notifications',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500,
-                                        color: AppTheme.brownishGrey,
-                                      ),
-                                    ),
-                                  ),
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(horizontal: 48,vertical:12),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
                                 ),
-                              ],
-                              clipBehavior: Clip.none,
+
                             ),
-                            flex: 7,
                           ),
-                          Expanded(
-                            flex: 3,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: CustomText(
-                                      'BACK',
-                                      size: (18),
-                                      color: Colors.white,
-                                      bold: FontWeight.w500,
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      primary: AppTheme.electricBlue,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 48, vertical: 12),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
                         ],
-                      ));
-              }
-              return Container(
-                  child: Center(child: CircularProgressIndicator()));
+                      ),
+                    )
+                  ],));
+
+                }
+                return Container(child:Center(child: CircularProgressIndicator(color: AppTheme.electricBlue,)));
               // return widget here based on BlocA's state
-            }))
-            // AppBar(title: Text('Notifications(03)'),backgroundColor: AppTheme.electricBlue,)
-          ],
-        ),
-      ),
+              }
+          ))
+          // AppBar(title: Text('Notifications(03)'),backgroundColor: AppTheme.electricBlue,)
+        ],),),
     );
   }
 
   Future<void> onNotificationTap(NotificationData message) async {
     CustomerModel _customerModel = CustomerModel();
     switch (message.data?.type) {
-      // code commented Waiting for client confimation
-      // case 'ledger_gave':
-      //   _customerModel
-      //     ..customerId = message.data['customerId']
-      //     ..mobileNo = message.data['mobile_no']
-      //     ..name = message.data['name']
-      //     ..chatId = message.data['chatId']
-      //     ..businessId = message.data['businessId'];
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => PayTransactionScreen(
-      //         model: _customerModel,
-      //         customerId: message.data['customerId'],
-      //         amount: message.data['amount'],
-      //       ),
-      //     ),
-      //   );
-      //   break;
-      // case 'update_ledger_gave':
-      //   _customerModel
-      //     ..customerId = message.data['customerId']
-      //     ..mobileNo = message.data['mobile_no']
-      //     ..name = message.data['name']
-      //     ..chatId = message.data['chatId']
-      //     ..businessId = message.data['businessId'];
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => PayTransactionScreen(
-      //         model: _customerModel,
-      //         customerId: message.data['customerId'],
-      //         amount: message.data['amount'],
-      //       ),
-      //     ),
-      //   );
-      //   break;
-      // case 'delete_ledger_gave':
-      //   Navigator.of(context).pushNamed(AppRoutes.mainRoute);
-      //   break;
+    // code commented Waiting for client confimation
+    // case 'ledger_gave':
+    //   _customerModel
+    //     ..customerId = message.data['customerId']
+    //     ..mobileNo = message.data['mobile_no']
+    //     ..name = message.data['name']
+    //     ..chatId = message.data['chatId']
+    //     ..businessId = message.data['businessId'];
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => PayTransactionScreen(
+    //         model: _customerModel,
+    //         customerId: message.data['customerId'],
+    //         amount: message.data['amount'],
+    //       ),
+    //     ),
+    //   );
+    //   break;
+    // case 'update_ledger_gave':
+    //   _customerModel
+    //     ..customerId = message.data['customerId']
+    //     ..mobileNo = message.data['mobile_no']
+    //     ..name = message.data['name']
+    //     ..chatId = message.data['chatId']
+    //     ..businessId = message.data['businessId'];
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => PayTransactionScreen(
+    //         model: _customerModel,
+    //         customerId: message.data['customerId'],
+    //         amount: message.data['amount'],
+    //       ),
+    //     ),
+    //   );
+    //   break;
+    // case 'delete_ledger_gave':
+    //   Navigator.of(context).pushNamed(AppRoutes.mainRoute);
+    //   break;
       case 'payment':
         debugPrint('payment .... ... ');
-        paymentNotification(message.data?.transactionId ?? '');
+        paymentNotification(message.data?.transactionId??'');
         Navigator.of(context).pushNamed(AppRoutes.paymentDetailsRoute,
             arguments: TransactionDetailsArgs(
               urbanledgerId: message.data?.urbanledgerId,
@@ -340,7 +272,7 @@ class _UserNotificationsState extends State<UserNotifications> {
               paymentMethod: message.data?.paymentMethod,
               amount: message.data?.amount.toString(),
               cardImage:
-                  message.data?.cardImage?.toString().replaceAll(' ', ''),
+              message.data?.cardImage?.toString().replaceAll(' ', ''),
               endingWith: message.data?.endingWith,
               customerName: message.data?.customerName,
               mobileNo: message.data?.fromMobileNumber,
@@ -357,10 +289,9 @@ class _UserNotificationsState extends State<UserNotifications> {
       case 'payment_request':
         CustomLoadingDialog.showLoadingDialog(context);
         debugPrint('payment_request : ');
-        double amount = double.parse(message.data?.amount.toString() ?? '0.0');
+        double amount = double.parse(message.data?.amount.toString()??'0.0');
         var cid = await repository.customerApi
-            .getCustomerID(
-                mobileNumber: message.data?.fromMobileNumber.toString())
+            .getCustomerID(mobileNumber: message.data?.fromMobileNumber.toString())
             .timeout(Duration(seconds: 30), onTimeout: () async {
           Navigator.of(context).pop();
           return Future.value(null);
@@ -372,13 +303,13 @@ class _UserNotificationsState extends State<UserNotifications> {
           ..chatId = message.data['chatId']
           ..businessId = message.data['businessId'];*/
         final localCustId =
-            await repository.queries.getCustomerId(_customerModel.mobileNo!);
+        await repository.queries.getCustomerId(_customerModel.mobileNo!);
         // final localCustId = '76aeff10-f8f8-11eb-bd60-0d0a52481fd7';
         final uniqueId = Uuid().v1();
         if (localCustId.isEmpty) {
           final customer = CustomerModel()
             ..name =
-                getName(_customerModel.name!.trim(), _customerModel.mobileNo!)
+            getName(_customerModel.name!.trim(), _customerModel.mobileNo!)
             ..mobileNo = (_customerModel.mobileNo!)
             ..avatar = _customerModel.avatar
             ..customerId = uniqueId
@@ -403,7 +334,7 @@ class _UserNotificationsState extends State<UserNotifications> {
         // );
 
         Map<String, dynamic> isTransaction =
-            await repository.paymentThroughQRApi.getTransactionLimit(context);
+        await repository.paymentThroughQRApi.getTransactionLimit(context);
         if (!(isTransaction)['isError']) {
           // Navigator.of(context).pop(true);
           // showBankAccountDialog();
@@ -474,25 +405,29 @@ class _UserNotificationsState extends State<UserNotifications> {
     }
   }
 
-  redirectToPremiumPurchase() async {
+  redirectToPremiumPurchase()async{
     if (await kycChecker(context)) {
-      await calculatePremiumDate();
+    await calculatePremiumDate();
 
-      if (Repository().hiveQueries.userData.premiumStatus == 0) {
-        Navigator.of(context).pushNamed(AppRoutes.urbanLedgerPremiumRoute);
+    if (Repository().hiveQueries.userData.premiumStatus ==
+    0) {
+    Navigator.of(context)
+        .pushNamed(AppRoutes.urbanLedgerPremiumRoute);
 
-        // CustomLoadingDialog.showLoadingDialog(context, key);
-      } else {
-        Navigator.of(context).pushNamed(AppRoutes.upgrdUnsubsRoute);
+    // CustomLoadingDialog.showLoadingDialog(context, key);
+    } else {
+    Navigator.of(context)
+        .pushNamed(AppRoutes.upgrdUnsubsRoute);
 
-        // CustomLoadingDialog.showLoadingDialog(context, key);
-      }
+    // CustomLoadingDialog.showLoadingDialog(context, key);
+    }
     }
   }
 
   paymentNotification(String transactionId) async {
+
     Map<String?, dynamic>? response =
-        await _chatRepository.getTransactionDetails(transactionId);
+    await _chatRepository.getTransactionDetails(transactionId);
     debugPrint(response.toString());
     // Navigator.of(context).popAndPushNamed(
     //                 AppRoutes.paymentDetailsRoute,
@@ -514,56 +449,62 @@ class _UserNotificationsState extends State<UserNotifications> {
     //                     mobileNo: widget.customerModel.mobileNo,
     //                     paymentStatus: message.paymentStatus));
   }
-
-  Widget listItem(NotificationData data, int index) {
+  Widget listItem(NotificationData data,int index){
     return Dismissible(
+
       key: Key(data.id.toString()),
       // Provide a function that tells the app
       // what to do after an item has been swiped away.
       onDismissed: (direction) async {
         // Remove the item from the data source.
         setState(() {
-          selectedList.removeWhere((element) => element == data);
+          selectedList.removeWhere((element) =>element ==data);
         });
-        await BlocProvider.of<NotificationListCubit>(context, listen: false)
-            .clearNotification(index);
+        await BlocProvider.of<NotificationListCubit>(context,listen:false).clearNotification(index);
+
+
+
 
         // Then show a snackbar.
-        /*  ScaffoldMessenger.of(context)
+      /*  ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Item cleared.')));*/
       },
       child: GestureDetector(
-        onLongPress: selectedList.length <= 1
-            ? () {
-                /*setState(() {
+        onLongPress: selectedList.length<=1?(){
+          /*setState(() {
             data.isSelected = !data.isSelected;
             data.isSelected?++itemSelectedCount:--itemSelectedCount;
           });*/
 
-                setState(() {
-                  if (selectedList.contains(data)) {
-                    selectedList.remove(data);
-                  } else {
-                    selectedList.add(data);
-                  }
-                });
-              }
-            : () {},
-        onTap: selectedList.length > 0
-            ? () {
-                setState(() {
-                  if (selectedList.contains(data)) {
-                    selectedList.remove(data);
-                  } else {
-                    selectedList.add(data);
-                  }
-                });
-              }
-            : () {
-                BlocProvider.of<NotificationListCubit>(context, listen: false)
-                    .markAsRead(index);
-                onNotificationTap(data);
-              },
+          setState(() {
+            if(selectedList.contains(data)){
+              selectedList.remove(data);
+            }
+            else{
+              selectedList.add(data);
+            }
+
+          });
+
+
+        }:(){
+
+        },
+        onTap: selectedList.length>0?(){
+          setState(() {
+            if(selectedList.contains(data)){
+              selectedList.remove(data);
+            }
+            else{
+              selectedList.add(data);
+            }
+
+          });
+
+        }:(){
+          BlocProvider.of<NotificationListCubit>(context,listen:false).markAsRead(index);
+          onNotificationTap(data);
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           // crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -574,18 +515,17 @@ class _UserNotificationsState extends State<UserNotifications> {
               padding: EdgeInsets.symmetric(
                   horizontal: 0, vertical: 18), //horizonal-4
               decoration: BoxDecoration(
-                color: selectedList.contains(data)
-                    ? Colors.grey[200]
-                    : Colors.white,
+                color:  selectedList.contains(data) ?Colors.grey[200]:Colors.white,
               ),
               child: GestureDetector(
-                  // onTap: () {
-                  //   showTranactionBottomSheet(context, data[index]);
-                  // },
-                  /*
+                // onTap: () {
+                //   showTranactionBottomSheet(context, data[index]);
+                // },
+                /*
 
                        */
-                  child: customListItem(data)),
+                child: customListItem(data)
+              ),
             ),
             Container(
               color: Colors.white,
@@ -602,15 +542,22 @@ class _UserNotificationsState extends State<UserNotifications> {
     );
   }
 
-  Widget appbar(BuildContext context) {
+
+
+
+  Widget appbar(BuildContext context){
     return AppBar(
       title: Text('Notification(03)'),
     );
+
   }
 
   Widget customListItem(NotificationData data){
+  DateTime currentDateTime =  new DateTime.now();
+ // DateTime time=  currentDateTime.subtract(new Duration(days:currentDateTime.difference(data.createdAt!).inDays,hours: currentDateTime.difference(data.createdAt!).inHours,minutes:currentDateTime.difference(data.createdAt!).inMinutes,seconds: currentDateTime.difference(data.createdAt!).inSeconds));
     DateTime time = data.createdAt!;
-    return Row(
+
+  return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Expanded(
@@ -624,29 +571,26 @@ class _UserNotificationsState extends State<UserNotifications> {
                 children: [
                   Positioned(
                     top: 10,
-                    left: 10,
+                    left:10,
                     child: Image.asset(
-                      data.read ?? false
-                          ? AppAssets.notification_unselected
-                          : AppAssets.notification_selected,
+                      data.read??false?AppAssets.notification_unselected:AppAssets.notification_selected,
                       height: 60,
                       width: 60,
                     ),
                   ),
-                  if (selectedList.length > 0)
+                  if(selectedList.length>0)
                     Positioned(
-                      top: 30,
-                      left: 30,
+                      top:30,
+                      left:30,
                       child: Container(
                         child: Image.asset(
-                          selectedList.contains(data)
-                              ? AppAssets.check_selected
-                              : AppAssets.check_unselected,
+                         selectedList.contains(data)?AppAssets.check_selected:AppAssets.check_unselected,
                           height: 60,
                           width: 60,
                         ),
                       ),
                     ),
+
                 ],
               ),
             ),
@@ -659,14 +603,14 @@ class _UserNotificationsState extends State<UserNotifications> {
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
           child: CustomText(
             // "${DateFormat('dd MMM yyyy | hh:mm aa').format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))}"
+            //timeago.format(DateFormat("yyyy-MM-dd hh:mm:ss").parse('${data.createdAt}'))
             timeago.format(time)
             ,
             size: 12,
-            color:
-                data.read ?? false ? Colors.grey[500] : AppTheme.brownishGrey,
+            color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
             bold: FontWeight.w600,
           ),
         ),
@@ -674,6 +618,11 @@ class _UserNotificationsState extends State<UserNotifications> {
     );
   }
 }
+
+
+
+
+
 
 class _NotificationDescription extends StatelessWidget {
   const _NotificationDescription({
@@ -695,18 +644,17 @@ class _NotificationDescription extends StatelessWidget {
             '${data.title}',
             bold: FontWeight.w600,
             size: 20,
-            color:
-                data.read ?? false ? Colors.grey[500] : AppTheme.brownishGrey,
+            color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 2.0)),
           CustomText(
             '${data.body}',
             size: 16,
-            color:
-                data.read ?? false ? Colors.grey[500] : AppTheme.brownishGrey,
+            color: data.read??false?Colors.grey[500]:AppTheme.brownishGrey,
             bold: FontWeight.w400,
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 1.0)),
+      
         ],
       ),
     );

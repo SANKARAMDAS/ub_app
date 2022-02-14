@@ -1034,19 +1034,19 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                             customerModel: _customerData,
                             sendMessage: (amount, details, paymentType) {
                               _contactController.sendMessage(
-                                  _customerData.customerId,
-                                  _customerData.chatId,
-                                  _customerData.name,
-                                  _customerData.mobileNo!,
-                                  amount,
-                                  details,
-                                  null,
-                                  null,
-                                  null,
-                                  null,
-                                  null,
-                                  paymentType!,
-                                  null);
+                                  id: _customerData.customerId,
+                                  chatId: _customerData.chatId,
+                                  name: _customerData.name,
+                                  phone: _customerData.mobileNo!,
+                                  amount: amount,
+                                  details: details,
+                                  dateTime: null,
+                                  contactName: null,
+                                  contactNo: null,
+                                  avatar: null,
+                                  requestId: null,
+                                  messageType: paymentType!,
+                                  transactionId: null);
                             },
                           ),
                           // Container(),
@@ -1587,19 +1587,20 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                                 .getRequestId(data);
                                         if (requestId.isNotEmpty) {
                                           _contactController.sendMessage(
-                                              _customerData.customerId,
-                                              _customerData.chatId,
-                                              _customerData.name,
-                                              _customerData.mobileNo!,
-                                              amount,
-                                              null,
-                                              _selectedDate.toString(),
-                                              null,
-                                              null,
-                                              null,
-                                              requestId,
-                                              3,
-                                              null);
+                                              id: _customerData.customerId,
+                                              chatId: _customerData.chatId,
+                                              name: _customerData.name,
+                                              phone: _customerData.mobileNo!,
+                                              amount: amount,
+                                              details: null,
+                                              dateTime:
+                                                  _selectedDate.toString(),
+                                              contactName: null,
+                                              contactNo: null,
+                                              avatar: null,
+                                              requestId: requestId,
+                                              messageType: 3,
+                                              transactionId: null);
                                           setState(() {
                                             isLoad = false;
                                           });
@@ -1682,8 +1683,8 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                       itemCount:
                           _contactController.selectedChat?.messages.length ?? 0,
                       itemBuilder: (BuildContext context, int index) {
-                        // print(
-                        //     'message count ${_contactController.selectedChat?.messages.length.toString()}');
+                        print(
+                            'message count ${_contactController.selectedChat?.messages[index].messageType}');
                         return _contactController.selectedChat?.messages[index]
                                     .messageType ==
                                 0
@@ -1932,40 +1933,44 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                   customerName: _customerData.name,
                   phoneNo: _customerData.mobileNo,
                   onSubmit: () => _contactController.sendMessage(
-                      _customerData.customerId,
-                      _customerData.chatId,
-                      _customerData.name,
-                      _customerData.mobileNo!,
-                      null,
-                      null,
-                      null,
-                      null,
-                      null,
-                      null,
-                      null,
-                      0,
-                      null),
+                      id: _customerData.customerId,
+                      chatId: _customerData.chatId,
+                      name: _customerData.name,
+                      phone: _customerData.mobileNo!,
+                      amount: null,
+                      details: null,
+                      dateTime: null,
+                      contactName: null,
+                      contactNo: null,
+                      avatar: null,
+                      requestId: null,
+                      messageType: 0,
+                      transactionId: null),
                   textEditingController: _contactController.textController,
                   onEmojiTap: (bool showEmojiKeyboard) {
                     _contactController.showEmojiKeyboard = !showEmojiKeyboard;
                   },
                   showEmojiKeyboard: _contactController.showEmojiKeyboard,
                   context: context,
-                  sendMessage: (amount, details, paymentType) {
+                  sendMessage: (amount, details, fileName, fileSize, duration,
+                      paymentType) {
                     _contactController.sendMessage(
-                        _customerData.customerId,
-                        _customerData.chatId,
-                        _customerData.name,
-                        _customerData.mobileNo!,
-                        amount,
-                        details,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        paymentType,
-                        null);
+                        id: _customerData.customerId,
+                        chatId: _customerData.chatId,
+                        name: _customerData.name,
+                        phone: _customerData.mobileNo!,
+                        amount: amount,
+                        details: details,
+                        fileName: fileName,
+                        fileSize: fileSize,
+                        duration: duration,
+                        dateTime: null,
+                        contactName: null,
+                        contactNo: null,
+                        avatar: null,
+                        requestId: null,
+                        messageType: paymentType,
+                        transactionId: null);
                   },
                   audioImm: () {
                     setState(() {
@@ -1996,19 +2001,19 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                   },
                   sendContact: (contactName, contactNo, messageType) {
                     _contactController.sendMessage(
-                        _customerData.customerId,
-                        _customerData.chatId,
-                        _customerData.name,
-                        _customerData.mobileNo!,
-                        null,
-                        null,
-                        null,
-                        contactName,
-                        contactNo,
-                        null,
-                        null,
-                        messageType,
-                        null);
+                        id: _customerData.customerId,
+                        chatId: _customerData.chatId,
+                        name: _customerData.name,
+                        phone: _customerData.mobileNo!,
+                        amount: null,
+                        details: null,
+                        dateTime: null,
+                        contactName: contactName,
+                        contactNo: contactNo,
+                        avatar: null,
+                        requestId: null,
+                        messageType: messageType,
+                        transactionId: null);
                   },
                 ),
               ],
@@ -3514,21 +3519,21 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                       Navigator.of(context).pop(true);
 
                                       merchantBankNotAddedModalSheet(
-                                          text:
-                                              Constants.merchentKYCBANKPREMNotadd);
+                                          text: Constants
+                                              .merchentKYCBANKPREMNotadd);
                                     } else if (cid.customerInfo?.kycStatus ==
                                         false) {
                                       Navigator.of(context).pop(true);
                                       merchantBankNotAddedModalSheet(
-                                          text:
-                                              Constants.merchentKYCBANKPREMNotadd);
+                                          text: Constants
+                                              .merchentKYCBANKPREMNotadd);
                                     } else if (merchantSubscriptionPlan ==
                                         false) {
                                       Navigator.of(context).pop(true);
                                       debugPrint('Checket');
                                       merchantBankNotAddedModalSheet(
-                                          text:
-                                              Constants.merchentKYCBANKPREMNotadd);
+                                          text: Constants
+                                              .merchentKYCBANKPREMNotadd);
                                     } else {
                                       // showBankAccountDialog();
                                       var cid = await repository.customerApi
@@ -4027,11 +4032,11 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                           String request = message.requestId!;
                           Map<String, dynamic> requestDetails = await repository
                               .paymentThroughQRApi
-                              .getQRData(request).catchError((e){
-                                Navigator.of(context).pop();
-                                'w $e'.showSnackBar(context);
-                              })
-                              .timeout(Duration(seconds: 30),
+                              .getQRData(request)
+                              .catchError((e) {
+                            Navigator.of(context).pop();
+                            'w $e'.showSnackBar(context);
+                          }).timeout(Duration(seconds: 30),
                                   onTimeout: () async {
                             Navigator.of(context).pop();
                             // return Future.value(null);
@@ -4464,23 +4469,20 @@ class _TransactionListScreenState extends State<TransactionListScreen>
   }
 
   Future<bool> checkDownload(String fileName) async {
-    if (Platform.isAndroid) {
-      var documentDirectory = await getExternalStorageDirectory();
-      if (await File('${documentDirectory?.path}/$fileName').exists()) {
-        // _isDownload[fileName] = true;
-        return true;
-      } else {
-        return false;
-      }
+    final documentDirectory = await Directory(Platform.isIOS
+            ? (await getApplicationDocumentsDirectory()).path
+            : (await getExternalStorageDirectories())!.first.path)
+        .create();
+    final documentPath = documentDirectory.path+'/';
+    debugPrint('FFF : $fileName');
+    if(await File('$documentPath$fileName').exists()) {
+      debugPrint('FFF : 1 $fileName');
+      return true;
     } else {
-      var documentDirectory = await getApplicationDocumentsDirectory();
-      if (await File('${documentDirectory.path}/$fileName').exists()) {
-        // _isDownload[fileName] = true;
-        return true;
-      } else {
-        return false;
-      }
+      debugPrint('FFF : 2 $fileName');
+      return false;
     }
+    
   }
 
   Future<String> checkDuration(String message) async {
@@ -4546,9 +4548,9 @@ class _TransactionListScreenState extends State<TransactionListScreen>
       String twoDigitSeconds = twoDigits(_duration.inSeconds.remainder(60));
       return _duration;
       // return '$m:$s';
-    } else if (await File('$documentPath' + message.substring(36, 49) + '.aac')
+    } else if (await File('$documentPath' + message!.substring(36, 49) + '.aac')
         .exists()) {
-      debugPrint('message' + message);
+      // debugPrint('message' + message);
       var _duration = await _player
           .setFilePath('$documentPath' + message.substring(36, 49) + '.aac');
       _player.dispose();
@@ -4632,11 +4634,29 @@ class _TransactionListScreenState extends State<TransactionListScreen>
     return "$twoDigitMinutes:$twoDigitSeconds";
   }
 
+  Future<String?> isExist(Message message) async {
+    final documentDirectory = await Directory(Platform.isIOS
+            ? (await getApplicationDocumentsDirectory()).path
+            : (await getExternalStorageDirectories())!.first.path)
+        .create();
+    final documentPath = documentDirectory.path;
+    if (await File(documentPath + '/' + message.fileName!).exists()) {
+      return message.fileName!;
+    } else if (await File(documentPath + '/' + message.details!).exists()) {
+      return message.details!;
+    } else {
+      return null;
+    }
+  }
+
 // 2015566031619167248099
   Widget renderAudio(BuildContext context, Message message, int index) {
+    debugPrint('AAAAAAU');
     _audio = false;
     double? testValue = 00;
     String audio = message.details.toString().substring(36, 49);
+    String fileName =
+        message.fileName! != null ? message.fileName! : message.details!;
     // if(message.from == _contactController.myUser!.id)
     // final documentDirectory = await Directory(Platform.isIOS
     //         ? (await getApplicationDocumentsDirectory()).path
@@ -4714,7 +4734,10 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                             width: 5,
                           ),
                           FutureBuilder<bool>(
-                            future: checkDownload(message.details!),
+                            future: checkDownload(message.from ==
+                                        _contactController.myUser!.id
+                                    ? message.fileName!
+                                    : message.details!),
                             builder: (context, snapshot) {
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -4726,8 +4749,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                   //   size: 26,
                                   // ),
                                   // if(_isDownload[message.details] ?? false)
-                                  message.from !=
-                                              _contactController.myUser!.id &&
+                                  
                                           snapshot.data == false
                                       ? GestureDetector(
                                           onTap: () async {
@@ -4778,13 +4800,22 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                                                     .details!] =
                                                                 false;
                                                           }));
+                                              if (message.id!.isNotEmpty) {
+                                                _contactController
+                                                    .renameAudioFile(
+                                                        message.details!,
+                                                        message.id!);
+                                              }
                                             }
                                             // await audioPlayer.play(path2,
                                             //     isLocal: false);
                                             // await repository.ledgerApi.networkAudio(message.details!);
                                           },
                                           child: (_isDownload[
-                                                      message.details] ??
+                                                      message.from ==
+                                        _contactController.myUser!.id
+                                    ? message.fileName!
+                                    : message.details!] ??
                                                   false)
                                               ? CircularProgressIndicator(
                                                   backgroundColor: Colors.white)
@@ -4795,12 +4826,6 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                         )
                                       : GestureDetector(
                                           onTap: () async {
-                                            // setState(() {
-                                            //   _isPlaying = !_isPlaying;
-                                            //   _isPlaying
-                                            //       ? _animationController.forward()
-                                            //       : _animationController.reverse();
-                                            // });
                                             final documentDirectory =
                                                 await Directory(Platform.isIOS
                                                         ? (await getApplicationDocumentsDirectory())
@@ -4809,23 +4834,47 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                                             .first
                                                             .path)
                                                     .create();
-                                            final documentPath =
-                                                documentDirectory.path;
-                                            if (_isPlaying != message.details) {
-                                              audioPlayer.pause();
-                                              setState(() {
-                                                _isPlaying = message.details;
-                                              });
-                                              if (message.from ==
-                                                  _contactController
-                                                      .myUser!.id) {
-                                                // audioPlayer.play('$path/'+message.details!.substring(36, 49)+'.aac',
-                                                // isLocal: true);
+                                            // if (message.from == _contactController.myUser!.id) {
+                                            //   if(_isPlaying == message.fileName) {
+                                            //     await audioPlayer.stop();
+                                            //   setState(() {
+                                            //     _isPlaying = null;
+                                            //   });
+                                            //   return;
+                                            //   } else {
+                                            //     await audioPlayer.stop();
+                                            //   setState(() {
+                                            //     _isPlaying = null;
+                                            //   });
+                                            //   return;
+                                            //   }
+                                            // } else {
+                                            //   await audioPlayer.stop();
+                                            //   setState(() {
+                                            //     _isPlaying = null;
+                                            //   });
+                                            //   return;
+                                            // }
+                                            if (await File(
+                                                    documentDirectory.path +
+                                                        '/' +
+                                                        message.fileName!)
+                                                .exists()) {
+                                              debugPrint('DDDDS: 1' +
+                                                  documentDirectory.path +
+                                                  '/' +
+                                                  message.fileName!);
+
+                                              if (_isPlaying !=
+                                                  message.fileName!) {
+                                                audioPlayer.pause();
+                                                setState(() {
+                                                  _isPlaying =
+                                                      message.fileName!;
+                                                });
                                                 audioPlayer.setFilePath(
-                                                    '$documentPath/' +
-                                                        message.details!
-                                                            .substring(36, 49) +
-                                                        '.aac');
+                                                    '${documentDirectory.path}/' +
+                                                        message.fileName!);
                                                 audioPlayer.play();
                                                 audioPlayer.playerStateStream
                                                     .listen((state) {
@@ -4860,17 +4909,27 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                                     }
                                                   }
                                                 });
-                                                // .whenComplete(() {
-                                                //   audioPlayer.stop();
-                                                //   setState((){
-                                                //     _isPlaying = null;
-                                                //   });
-                                                // });
                                               } else {
-                                                // audioPlayer.play('$path/'+message.details!,
-                                                // isLocal: true);
+                                                await audioPlayer.stop();
+                                                setState(() {
+                                                  _isPlaying = null;
+                                                });
+                                                return;
+                                              }
+                                            } else if (await File(
+                                                    documentDirectory.path +
+                                                        '/' +
+                                                        message.details!)
+                                                .exists()) {
+                                              debugPrint('DDDDS: 2');
+                                              if (_isPlaying !=
+                                                  message.details!) {
+                                                audioPlayer.pause();
+                                                setState(() {
+                                                  _isPlaying = message.details!;
+                                                });
                                                 audioPlayer.setFilePath(
-                                                    '$documentPath/' +
+                                                    '${documentDirectory.path}/' +
                                                         message.details!);
                                                 audioPlayer.play();
                                                 audioPlayer.playerStateStream
@@ -4906,34 +4965,30 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                                     }
                                                   }
                                                 });
-                                                // .whenComplete(() {
-                                                //   audioPlayer.stop();
-                                                //   setState((){
-                                                //     _isPlaying = null;
-                                                //   });
-                                                // });
+                                              } else {
+                                                await audioPlayer.stop();
+                                                setState(() {
+                                                  _isPlaying = null;
+                                                });
+                                                return;
                                               }
-                                              // debugPrint(_isPlaying.toString()+ 'playing'+message.details!);
                                             } else {
                                               await audioPlayer.stop();
                                               setState(() {
                                                 _isPlaying = null;
                                               });
-                                              // debugPrint(_isPlaying.toString()+ 'stop'+message.details!);
                                             }
-                                            // int response = await audioPlayer.play(path!,
-                                            //     isLocal: true);
-
-                                            debugPrint('zxcv' +
-                                                '$documentPath/' +
-                                                message.details!
-                                                    .substring(36, 49) +
-                                                '.aac');
                                           },
                                           child: Image.asset(
-                                            _isPlaying == message.details
-                                                ? AppAssets.stopAudioIcon
-                                                : AppAssets.playAudioIcon,
+                                            message.from ==
+                                                    _contactController
+                                                        .myUser!.id
+                                                ? _isPlaying == message.fileName
+                                                    ? AppAssets.stopAudioIcon
+                                                    : AppAssets.playAudioIcon
+                                                : _isPlaying == message.details
+                                                    ? AppAssets.stopAudioIcon
+                                                    : AppAssets.playAudioIcon,
                                             width: 24,
                                           )
                                           // child: AnimatedIcon(
@@ -4948,21 +5003,15 @@ class _TransactionListScreenState extends State<TransactionListScreen>
 
                                   // visualization-01
                                   // message.from != _contactController.myUser!.id
-                                  // ?
-                                  FutureBuilder<String>(
-                                    future: checkDuration(message.details!),
-                                    initialData: '00:00',
-                                    builder: (context, snapshot1) {
-                                      return Visibility(
-                                        child: Text(
-                                          '${snapshot1.data}',
-                                          style: TextStyle(
-                                              color: AppTheme.greyish,
-                                              fontSize: 8),
-                                        ),
-                                      );
-                                    },
+                                  // ?{
+                                  Visibility(
+                                    child: Text(
+                                      '${message.duration}',
+                                      style: TextStyle(
+                                          color: AppTheme.greyish, fontSize: 8),
+                                    ),
                                   )
+
                                   // :FutureBuilder<String?>(
                                   //   future: checkDuration2(message.details!),
                                   //   builder: (context, snapshot1) {
@@ -4993,7 +5042,10 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                               (BuildContext context, StateSetter setState) {
                             setState(() {});
                             return FutureBuilder<Duration>(
-                                future: checkDuration2(message.details!),
+                                future: checkDuration2(message.from ==
+                                        _contactController.myUser!.id
+                                    ? message.fileName!
+                                    : message.details!),
                                 builder: (context, snapshot) {
                                   // double max=100.0;
                                   // if(snapshot.hasData){
@@ -5018,7 +5070,11 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                               min: 0,
                                               max: 1,
                                               value: snapshot
-                                                      .data?[message.details]
+                                                      .data?[message.from ==
+                                                              _contactController
+                                                                  .myUser!.id
+                                                          ? message.fileName!
+                                                          : message.details!]
                                                       ?.percentage ??
                                                   testValue!,
                                               onChanged: (value) {
@@ -5564,7 +5620,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                   children: [
                     Padding(
                       padding: EdgeInsets.all(4),
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                     ),
                     // Padding(
                     //   padding: EdgeInsets.all(4),
@@ -5847,7 +5903,6 @@ class _TransactionListScreenState extends State<TransactionListScreen>
   }
 
   Future<String?> getSize(String message) async {
-    
     final apiResponse = await repository.ledgerApi.networkImageToFile2(message);
     int fileSize = File(apiResponse).lengthSync();
     debugPrint('SSS : ' + fileSize.toString());
@@ -5862,6 +5917,8 @@ class _TransactionListScreenState extends State<TransactionListScreen>
   Widget renderDocument(BuildContext context, Message message, int index) {
     _document = false;
     String type = message.message!.details!.split('.').last;
+    String fileName =
+        message.fileName != null ? message.fileName! : message.details!;
     if (_contactController.myUser == null) return Container();
     return _document == false
         ? Column(
@@ -5894,11 +5951,23 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                     GestureDetector(
                         onTap: () async {
                           debugPrint(filePath);
+
                           if (isPlatformiOS()) {
                             var documentDirectory =
                                 await (getApplicationDocumentsDirectory());
-                            String path = documentDirectory!.absolute.path+'/';
-                            if (await File(path + message.details!).exists()) {
+                            String path =
+                                documentDirectory!.absolute.path + '/';
+
+                            if (await File(path + message.fileName!).exists()) {
+                              debugPrint('yesss');
+                              // await PdfDocument.openFile(path+message.details!);
+                              File(path + message.fileName!)
+                                  .open(mode: FileMode.read);
+                              final _result =
+                                  await OpenFile.open(path + message.fileName!);
+                              print(_result.message);
+                            } else if (await File(path + message.details!)
+                                .exists()) {
                               debugPrint('yesss');
                               // await PdfDocument.openFile(path+message.details!);
                               File(path + message.details!)
@@ -5906,24 +5975,30 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                               final _result =
                                   await OpenFile.open(path + message.details!);
                               print(_result.message);
-                            } else {
-                              debugPrint('noooo');
                             }
                           } else {
                             var documentDirectory =
                                 await (getExternalStorageDirectory());
-                            String path = documentDirectory!.absolute.path+'/';
-                            debugPrint('yesss'+path+message.details.toString());
-                            if (await File(path + message.details!).exists()) {
-                              
+                            String path =
+                                documentDirectory!.absolute.path + '/';
+                            debugPrint('yesss' + path + fileName.toString());
+                            if (await File(path + message.fileName!).exists()) {
+                              debugPrint('yesss');
+                              // await PdfDocument.openFile(path+message.details!);
+                              File(path + message.fileName!)
+                                  .open(mode: FileMode.read);
+                              final _result =
+                                  await OpenFile.open(path + message.fileName!);
+                              print(_result.message);
+                            } else if (await File(path + message.details!)
+                                .exists()) {
+                              debugPrint('yesss');
                               // await PdfDocument.openFile(path+message.details!);
                               File(path + message.details!)
                                   .open(mode: FileMode.read);
                               final _result =
                                   await OpenFile.open(path + message.details!);
                               print(_result.message);
-                            } else {
-                              debugPrint('noooo');
                             }
                           }
                           // var documentDirectory =
@@ -6040,7 +6115,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                           SizedBox(width: 5),
                                           Flexible(
                                             child: Text(
-                                              '${message.details}',
+                                              '${fileName}',
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   color: AppTheme.brownishGrey),
@@ -6067,21 +6142,18 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 5, top: 5, right: 55, bottom: 5),
-                                    child: FutureBuilder<String?>(
-                                      future: getSize(message.details!),
-                                      builder: (context, snapshot1) {
-                                        return Text(
-                                          '$type - ${snapshot1.data}'
-                                              .toUpperCase(),
-                                          style: TextStyle(
-                                              fontSize: 10,
-                                              color: AppTheme.greyish),
-                                        );
-                                      },
-                                    ),
-                                  ),
+                                      padding: EdgeInsets.only(
+                                          left: 5,
+                                          top: 5,
+                                          right: 55,
+                                          bottom: 5),
+                                      child: Text(
+                                        '$type - ${message.fileSize}'
+                                            .toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            color: AppTheme.greyish),
+                                      )),
                                   SizedBox(width: 10),
                                   Padding(
                                     padding: EdgeInsets.only(
@@ -6171,7 +6243,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                 child: Container(
                                   padding: EdgeInsets.symmetric(vertical: 30),
                                   child: Center(
-                                    child: CircularProgressIndicator(),
+                                    child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                                   ),
                                 )),
                             Align(
@@ -6597,7 +6669,7 @@ class _TransactionListScreenState extends State<TransactionListScreen>
                                     padding: EdgeInsets.symmetric(
                                         vertical: 50, horizontal: 70),
                                     child: Center(
-                                        child: CircularProgressIndicator()))),
+                                        child: CircularProgressIndicator(color: AppTheme.electricBlue,)))),
                         Align(
                           alignment: Alignment.topCenter,
                           child: Container(

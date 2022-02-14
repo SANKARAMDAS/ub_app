@@ -711,22 +711,35 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 )),
             body: loading == true
                 ? Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                   )
                 : ListView(
                     children: [
                       appBar,
                       // userDetails,
                       const SizedBox(height: 30),
+                    /*  CustomList(
+                        icon: theImage,
+                        text: 'Test Screen',
+                        onSubmit: () {
+                          //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.accountLockedRoute);
+                        },
+                      ),
+                      divider,*/
 
                       CustomList(
                         icon: theImage,
-                        text: 'Complete Your KYC',
+                        text: repository.hiveQueries.userData.kycStatus2 == 'Initiated' || repository.hiveQueries.userData.kycStatus2 == ''  ? 'Complete Your KYC' : 'Update Your KYC',
                         onSubmit: () {
                           //Navigator.pushNamed(context, AppRoutes.userProfileRoute);
                           Navigator.pushReplacementNamed(
                               context, AppRoutes.manageKyc1Route);
                         },
+                        status: repository.hiveQueries.userData.kycStatus2
+                            .toString(),
+                        isKyc: repository.hiveQueries.userData.kycStatus2 == ''  ? false:true,
                       ),
                       divider,
 
@@ -856,6 +869,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 context, AppRoutes.mobileAnalyticsRoute);
                           }
                         },
+                        isKyc: false,
                       ),
 
                       divider,
@@ -867,6 +881,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           Navigator.pushNamed(
                               context, AppRoutes.suspenseAccountRoute);
                         },
+                        isKyc: false,
                       ),
 
                       // Padding
@@ -884,6 +899,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               .pushNamed(AppRoutes.cardListRoute);
                           CustomLoadingDialog.showLoadingDialog(context, key);
                         },
+                        isKyc: false,
                       ),
                       divider,
 
@@ -901,6 +917,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               .pushNamed(AppRoutes.profileBankAccountRoute);
                           CustomLoadingDialog.showLoadingDialog(context, key);
                         },
+                        isKyc: false,
                       ),
                       divider,
 
@@ -1035,6 +1052,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           Navigator.pushNamed(
                               context, AppRoutes.settlementHistoryRoute);
                         },
+                        isKyc: false,
                       ),
 
                       divider,
@@ -1593,7 +1611,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
                   // isLoading == true
                   //     ? Center(
-                  //         child: CircularProgressIndicator(),
+                  //         child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                   //       )
                   //     : GestureDetector(
                   //         onTap: () async {
@@ -1788,12 +1806,15 @@ class CustomList extends StatelessWidget {
   final String text;
   final Widget icon;
   final Function? onSubmit;
+  final String? status;
+  final bool isKyc;
 
-  const CustomList({
-    required this.text,
-    required this.icon,
-    this.onSubmit,
-  });
+  const CustomList(
+      {required this.text,
+      required this.icon,
+      this.onSubmit,
+      this.status,
+      required this.isKyc});
 
   @override
   Widget build(BuildContext context) {
@@ -1819,12 +1840,72 @@ class CustomList extends StatelessWidget {
             // ),
           ],
         ),
-        title: Text(
-          text,
-          style: TextStyle(
-              color: AppTheme.brownishGrey,
-              fontSize: 16,
-              fontWeight: FontWeight.bold),
+        title: Row(
+          children: [
+            Text(
+              text,
+              style: TextStyle(
+                  color: AppTheme.brownishGrey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
+            Spacer(),
+            isKyc == true
+                ? Container(
+                    margin: EdgeInsets.only(left: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        color: status == 'Approved'
+                            ? AppTheme.activeGreenBG
+                            : status == 'Initiated'
+                            ? AppTheme.activePurpleBG
+                            : status == 'In progress'
+                                ? AppTheme.activeYellowBG
+                                : status == 'Expired'
+                                    ? AppTheme.activeRedBG
+                                    : AppTheme.activeRedBG),
+                    child: Text(
+                      '$status',
+                      style: TextStyle(
+                          color: status == 'Approved'
+                              ? AppTheme.activeGreen
+                              : status == 'Initiated'
+                              ? AppTheme.electricBlue
+                              : status == 'In progress'
+                                  ? AppTheme.activeYellow
+                                  : status == 'Expired'
+                                      ? AppTheme.activeRed
+                                      : AppTheme.activeRed,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  )
+                : Container(),
+            isKyc == true
+                ? Container(
+                    margin: EdgeInsets.only(left: 10),
+                    // padding: EdgeInsets.all(7),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: AppTheme.whiteColor),
+                    child: Container(
+                      margin: EdgeInsets.all(2),
+                      padding: EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: status == 'Approved'
+                              ? AppTheme.activeGreen
+                              : status == 'Initiated'
+                              ? AppTheme.electricBlue
+                              : status == 'In progress'
+                                  ? AppTheme.activeYellow
+                                  : status == 'Expired'
+                                      ? AppTheme.activeRed
+                                      : AppTheme.activeRed),
+                    ))
+                : Container(),
+                Spacer(),
+          ],
         ),
         trailing: const Icon(
           Icons.chevron_right_rounded,

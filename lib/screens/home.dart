@@ -74,8 +74,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       });
     });
 
-
-
     // _contactController = ContactController(
     //   context: context,
     // );
@@ -759,7 +757,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     alignment: Alignment.topCenter)),
             child: loading == true
                 ? Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                   )
                 : Column(
                     mainAxisSize: MainAxisSize.max,
@@ -859,9 +857,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                             child: ElevatedButton(
                                               style: ButtonStyle(
                                                   backgroundColor:
-                                                      MaterialStateProperty.all<
-                                                              Color>(
-                                                          AppTheme.electricBlue),
+                                                      MaterialStateProperty
+                                                          .all<Color>(AppTheme
+                                                              .electricBlue),
                                                   shape: MaterialStateProperty
                                                       .all<OutlinedBorder>(
                                                           RoundedRectangleBorder(
@@ -1018,7 +1016,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             );
                           }
                           return const Center(
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(color: AppTheme.electricBlue,),
                           );
                         },
                       ).flexible,
@@ -1091,8 +1089,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               Container(
                 child: ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(AppTheme.electricBlue),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          AppTheme.electricBlue),
                       shape: MaterialStateProperty.all<OutlinedBorder>(
                           RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
@@ -1293,10 +1291,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     15.0.widthBox,
                     InkWell(
                       onTap: () async {
-                              if (await kycAndPremium(context)) {
-                                switchBusinessSheet;
-                              }
-                            },
+                        if (await kycAndPremium(context)) {
+                          switchBusinessSheet;
+                        }
+                      },
                       child: Container(
                         // width: screenWidth(context) * 0.5,
                         // color: Colors.amber,
@@ -2548,7 +2546,6 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
     // TODO: implement initState
     super.initState();
     fetchContacts();
-
   }
 
   @override
@@ -2704,23 +2701,20 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                     Navigator.of(context).pop(true);
 
                     merchantBankNotAddedModalSheet(
-                        text:
-                            Constants.merchentKYCBANKPREMNotadd);
+                        text: Constants.merchentKYCBANKPREMNotadd);
                   } else if (cid.customerInfo?.kycStatus == false) {
                     Navigator.of(context).pop(true);
                     merchantBankNotAddedModalSheet(
-                        text:
-                            Constants.merchentKYCBANKPREMNotadd);
+                        text: Constants.merchentKYCBANKPREMNotadd);
                   } else if (merchantSubscriptionPlan == false) {
                     Navigator.of(context).pop(true);
                     debugPrint('Checket');
                     merchantBankNotAddedModalSheet(
-                        text:
-                            Constants.merchentKYCBANKPREMNotadd);
+                        text: Constants.merchentKYCBANKPREMNotadd);
                   } else {
                     if (widget._customerList[index].transactionType == null ||
-                      widget._customerList[index].transactionAmount == 0) {
-                        var anaylticsEvents = AnalyticsEvents(context);
+                        widget._customerList[index].transactionAmount == 0) {
+                      var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
                         Navigator.of(context).pop();
                         'Please check your internet connection or try again later.'
@@ -2734,51 +2728,21 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                             .showSnackBar(context);
                       });
                       Navigator.of(context).pop();
-                        Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PayTransactionScreen(
-                          model: _customerModel,
-                                customerId: localCustId.isEmpty
-                                    ? uniqueId
-                                    : localCustId,
-                                type: 'DIRECT',
-                                suspense: false,
-                                through: 'DIRECT'
-                        ),
-                      ),
-                    );
-                  } else if (widget._customerList[index].transactionType ==
-                      TransactionType.Pay) {
-                        var anaylticsEvents = AnalyticsEvents(context);
-                      await anaylticsEvents.initCurrentUser().catchError((e) {
-                        Navigator.of(context).pop();
-                        'Please check your internet connection or try again later.'
-                            .showSnackBar(context);
-                      });
-                      await anaylticsEvents
-                          .customerDetailsPayEvent()
-                          .catchError((e) {
-                        Navigator.of(context).pop();
-                        'Please check your internet connection or try again later.'
-                            .showSnackBar(context);
-                      });
-                      Navigator.of(context).pop();
-                        Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PayTransactionScreen(
-                          model: _customerModel,
-                          customerId:
-                              localCustId.isEmpty ? uniqueId : localCustId,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PayTransactionScreen(
+                              model: _customerModel,
+                              customerId:
+                                  localCustId.isEmpty ? uniqueId : localCustId,
                               type: 'DIRECT',
-                                suspense: false,
-                                through: 'DIRECT'
+                              suspense: false,
+                              through: 'DIRECT'),
                         ),
-                      ),
-                    );
-                  } else {
-                    var anaylticsEvents = AnalyticsEvents(context);
+                      );
+                    } else if (widget._customerList[index].transactionType ==
+                        TransactionType.Pay) {
+                      var anaylticsEvents = AnalyticsEvents(context);
                       await anaylticsEvents.initCurrentUser().catchError((e) {
                         Navigator.of(context).pop();
                         'Please check your internet connection or try again later.'
@@ -2792,23 +2756,50 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                             .showSnackBar(context);
                       });
                       Navigator.of(context).pop();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PayTransactionScreen(
-                            model: _customerModel,
-                            customerId:
-                                localCustId.isEmpty ? uniqueId : localCustId,
-                            amount:
-                                (widget._customerList[index].transactionAmount)!
-                                    .getFormattedCurrency
-                                    .replaceAll('-', ''),
-                                    type: 'DIRECT',
-                                suspense: false,
-                                through: 'DIRECT'),
-                      ),
-                    );
-                  }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PayTransactionScreen(
+                              model: _customerModel,
+                              customerId:
+                                  localCustId.isEmpty ? uniqueId : localCustId,
+                              type: 'DIRECT',
+                              suspense: false,
+                              through: 'DIRECT'),
+                        ),
+                      );
+                    } else {
+                      var anaylticsEvents = AnalyticsEvents(context);
+                      await anaylticsEvents.initCurrentUser().catchError((e) {
+                        Navigator.of(context).pop();
+                        'Please check your internet connection or try again later.'
+                            .showSnackBar(context);
+                      });
+                      await anaylticsEvents
+                          .customerDetailsPayEvent()
+                          .catchError((e) {
+                        Navigator.of(context).pop();
+                        'Please check your internet connection or try again later.'
+                            .showSnackBar(context);
+                      });
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PayTransactionScreen(
+                              model: _customerModel,
+                              customerId:
+                                  localCustId.isEmpty ? uniqueId : localCustId,
+                              amount: (widget
+                                      ._customerList[index].transactionAmount)!
+                                  .getFormattedCurrency
+                                  .replaceAll('-', ''),
+                              type: 'DIRECT',
+                              suspense: false,
+                              through: 'DIRECT'),
+                        ),
+                      );
+                    }
 
                     // if (widget._customerList[index].transactionType == null ||
                     //     widget._customerList[index].transactionAmount == 0) {
@@ -3036,76 +3027,76 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                   //       text:
                   //           'We have requested your merchant to Switch to Premium now to enjoy the benefits.');
                   // }
-                  debugPrint("zzzzzzzzz : "+Repository().hiveQueries.userData.kycStatus.toString());
+                  debugPrint("zzzzzzzzz : " +
+                      Repository().hiveQueries.userData.kycStatus.toString());
                   if (await allChecker(context) == true)
-                  // else 
+                  // else
                   {
-                  // CustomLoadingDialog.showLoadingDialog(context, key);
-                  // var cid = await repository.customerApi.getCustomerID(
-                  //     mobileNumber:
-                  //         widget._customerList[index].mobileNo.toString());
-                  _customerModel
-                    ..name = getName(widget._customerList[index].name,
-                        widget._customerList[index].mobileNo)
-                    ..mobileNo = widget._customerList[index].mobileNo
-                    // ..ulId = cid.customerInfo?.id.toString()
-                    ..avatar = widget._customerList[index].avatar
-                    ..chatId = widget._customerList[index].chatId;
-                  final localCustId = await repository.queries
-                      .getCustomerId(widget._customerList[index].mobileNo!);
-                  // Navigator.of(context).pop(true);
+                    // CustomLoadingDialog.showLoadingDialog(context, key);
+                    // var cid = await repository.customerApi.getCustomerID(
+                    //     mobileNumber:
+                    //         widget._customerList[index].mobileNo.toString());
+                    _customerModel
+                      ..name = getName(widget._customerList[index].name,
+                          widget._customerList[index].mobileNo)
+                      ..mobileNo = widget._customerList[index].mobileNo
+                      // ..ulId = cid.customerInfo?.id.toString()
+                      ..avatar = widget._customerList[index].avatar
+                      ..chatId = widget._customerList[index].chatId;
+                    final localCustId = await repository.queries
+                        .getCustomerId(widget._customerList[index].mobileNo!);
+                    // Navigator.of(context).pop(true);
 
-                  if (widget._customerList[index].transactionType == null ||
-                      widget._customerList[index].transactionAmount == 0) {
-                    var anaylticsEvents = AnalyticsEvents(context);
-                    await anaylticsEvents.initCurrentUser();
-                    await anaylticsEvents.customerDetailsPayRequestEvent();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ReceiveTransactionScreen(
-                          model: _customerModel,
-                          customerId: localCustId,
-                        ),
-                      ),
-                    );
-                  } else if (widget._customerList[index].transactionType ==
-                      TransactionType.Pay) {
-                    var anaylticsEvents = AnalyticsEvents(context);
-                    await anaylticsEvents.initCurrentUser();
-                    await anaylticsEvents.customerDetailsPayRequestEvent();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ReceiveTransactionScreen(
+                    if (widget._customerList[index].transactionType == null ||
+                        widget._customerList[index].transactionAmount == 0) {
+                      var anaylticsEvents = AnalyticsEvents(context);
+                      await anaylticsEvents.initCurrentUser();
+                      await anaylticsEvents.customerDetailsPayRequestEvent();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ReceiveTransactionScreen(
                             model: _customerModel,
                             customerId: localCustId,
-                            amount:
-                                (widget._customerList[index].transactionAmount)!
-                                    .getFormattedCurrency
-                                    .replaceAll('-', '')),
-                      ),
-                    );
-                  } else {
-                    var anaylticsEvents = AnalyticsEvents(context);
-                    await anaylticsEvents.initCurrentUser();
-                    await anaylticsEvents.customerDetailsPayRequestEvent();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ReceiveTransactionScreen(
-                          model: _customerModel,
-                          customerId: localCustId,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    } else if (widget._customerList[index].transactionType ==
+                        TransactionType.Pay) {
+                      var anaylticsEvents = AnalyticsEvents(context);
+                      await anaylticsEvents.initCurrentUser();
+                      await anaylticsEvents.customerDetailsPayRequestEvent();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ReceiveTransactionScreen(
+                              model: _customerModel,
+                              customerId: localCustId,
+                              amount: (widget
+                                      ._customerList[index].transactionAmount)!
+                                  .getFormattedCurrency
+                                  .replaceAll('-', '')),
+                        ),
+                      );
+                    } else {
+                      var anaylticsEvents = AnalyticsEvents(context);
+                      await anaylticsEvents.initCurrentUser();
+                      await anaylticsEvents.customerDetailsPayRequestEvent();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ReceiveTransactionScreen(
+                            model: _customerModel,
+                            customerId: localCustId,
+                          ),
+                        ),
+                      );
+                    }
+                    // Navigator.of(context).pushNamed(
+                    //     AppRoutes.requestTransactionRoute,
+                    //     arguments:
+                    //         ReceiveTransactionArgs(_customerModel, localCustId));
                   }
-                  // Navigator.of(context).pushNamed(
-                  //     AppRoutes.requestTransactionRoute,
-                  //     arguments:
-                  //         ReceiveTransactionArgs(_customerModel, localCustId));
-                  } 
-                  
                 } else {
                   // Navigator.of(context).pop();
                   'Please check your internet connection or try again later.'
@@ -3214,7 +3205,6 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
                       AppRoutes.transactionListRoute,
                       arguments: TransactionListArgs(
                           false, widget._customerList[index]));
-
                 },
               ),
             ),
@@ -3232,18 +3222,14 @@ class _CustomerListWidgetState extends State<CustomerListWidget> {
     final _customerList =
         await repository.customerApi.getAllCustomers(selectedBusinessId);
 
-
-
-  /*  await Future.forEach<CustomerModel>(_customerList,
+    /*  await Future.forEach<CustomerModel>(_customerList,
         (element) async => await repository.queries.insertCustomer(element));*/
     BlocProvider.of<ContactsCubit>(context, listen: false)
         .getContacts(selectedBusinessId);
     setState(() {});
     _customerList.forEach((e) async {
       await repository.queries.updateCustomerDetails(
-          e.transactionAmount!,
-          e.transactionType,
-          e.customerId);
+          e.transactionAmount!, e.transactionType, e.customerId);
 
       final _ledgerTransactionList =
           await repository.ledgerApi.getLedger(e.customerId);

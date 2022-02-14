@@ -20,6 +20,7 @@ import 'package:urbanledger/screens/Add%20Card/saved_cards.dart';
 import 'package:urbanledger/screens/AddBankAccount/bank_accounts.dart';
 import 'package:urbanledger/screens/AddCustomer/add_customer.dart';
 import 'package:urbanledger/screens/AddCustomer/add_customer_form.dart';
+import 'package:urbanledger/screens/Auth/account_locked.dart';
 import 'package:urbanledger/screens/Auth/change_pin_verification.dart';
 import 'package:urbanledger/screens/Auth/set_pin.dart';
 import 'package:urbanledger/screens/CashbookScreens/add_entry.dart';
@@ -119,6 +120,9 @@ class Router {
       case (AppRoutes.rewardsRoute):
         return MaterialPageRoute(
             builder: (_) => Rewards(), settings: routeSettings);
+      case (AppRoutes.accountLockedRoute):
+        return MaterialPageRoute(
+            builder: (_) => AccountLocked(), settings: routeSettings);
 
       case (AppRoutes.premiumtranactionlistRoute):
         return MaterialPageRoute(
