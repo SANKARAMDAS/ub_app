@@ -20,6 +20,7 @@ class RenameLedger extends StatefulWidget {
 
 class _RenameLedgerState extends State<RenameLedger> {
   final repository = Repository();
+  final FocusNode focusNode= FocusNode();
 
   final TextEditingController controller = TextEditingController();
 
@@ -152,6 +153,7 @@ class _RenameLedgerState extends State<RenameLedger> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextField(
+                        focusNode: focusNode,
                         controller: controller,
                         label: 'Ledger Name',
                         onChanged: (value) {
@@ -196,7 +198,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final bool? enabled;
   final void Function(String)? onChanged;
-  // final FocusNode? focusNode;
+  final FocusNode? focusNode;
 
   const CustomTextField({
     Key? key,
@@ -205,13 +207,13 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.enabled,
     this.onChanged,
-    // this.focusNode,
+    this.focusNode,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      // focusNode: focusNode,
+      focusNode: focusNode,
       cursorColor: AppTheme.electricBlue,
       controller: controller,
       enabled: enabled,
@@ -220,9 +222,9 @@ class CustomTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         labelStyle: TextStyle(
-            color: //focusNode!.hasFocus ?
-
-                AppTheme.coolGrey),
+            color: focusNode!.hasFocus
+                ? AppTheme.electricBlue
+                : AppTheme.coolGrey),
         prefixIcon: prefixIcon,
         //   border: OutlineInputBorder(
         //     borderSide: BorderSide(color: AppTheme.electricBlue),
