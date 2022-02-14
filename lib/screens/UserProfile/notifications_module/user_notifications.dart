@@ -165,29 +165,32 @@ class _UserNotificationsState extends State<UserNotifications> {
                     ],
                   ):Container(child:Column(children: [
                     Flexible(
-                      child: Stack(
+                      child: Column(
 
                         children: [
-                          Image.asset(
-                            AppAssets.notification_empty,
-                          ),
-                          Positioned(
-                            bottom:0,
-                            left:0,
-                            right:0,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 40),
-                              child: Text('Currently you have no notifications',textAlign: TextAlign.center,style: TextStyle(fontSize: 24,fontWeight: FontWeight.w500,color:AppTheme.brownishGrey,),),
+                          Expanded(
+                            child: Image.asset(
+                              AppAssets.notification_empty_v2,
+                             // height: MediaQuery.of(context).size.height*0.8,
                             ),
                           ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                                  child: Text('Currently you have no notifications',textAlign: TextAlign.center,style: TextStyle(fontSize: 24,fontWeight: FontWeight.w500,color:AppTheme.brownishGrey,),),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
-                        clipBehavior: Clip.none,
                       ),
-                      flex: 7,
+                      flex: 8,
                     ),
 
                     Expanded(
-                      flex:3,
+                      flex:2,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -201,12 +204,15 @@ class _UserNotificationsState extends State<UserNotifications> {
                                 child: CustomText(
                                   'BACK',
                                   size: (18),
+                                  color: Colors.white,
                                   bold: FontWeight.w500,
                                 ),
                                 style: ElevatedButton.styleFrom(
                                   padding: EdgeInsets.symmetric(horizontal: 48,vertical:12),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
+                                  primary: AppTheme.electricBlue
+
                                 ),
 
                             ),
